@@ -4,7 +4,7 @@ import { useEffect } from "react";
 function App() {
   return (
     <div>
-      <div className="flex place-items-center">HelloCanBo</div>
+      <div className="flex place-items-center bg-slate-500">HelloCanBo</div>
       <Button type="primary">Button</Button>
       <DemoComponent />
     </div>

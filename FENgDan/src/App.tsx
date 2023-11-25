@@ -5,7 +5,7 @@ import { useEffect } from "react";
 function App() {
   return (
     <div>
-      <div className="flex place-items-center">HelloNgDan</div>
+      <div className="flex place-items-center bg-blue-500">HelloNgDan</div>
       <Button type="primary">Button</Button>
       <DemoComponent />
     </div>
