@@ -4,7 +4,7 @@ import { DemoComponent } from "frontend";
 function App() {
   return (
     <div>
-      HelloNgDan
+      <div className="flex place-items-center">HelloNgDan</div>
       <Button type="primary">Button</Button>
       <DemoComponent />
     </div>
