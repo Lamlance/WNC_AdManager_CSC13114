@@ -1,13 +1,14 @@
-import { Button } from "antd";
-import { DemoComponent } from "@admanager/frontend";
 import { useEffect } from "react";
+import "./App.css";
+import "maplibre-gl/dist/maplibre-gl.css";
+import AdsMap from "./components/AdsMap";
 
 function App() {
   return (
-    <div>
-      <div className="flex place-items-center bg-blue-500">HelloNgDan</div>
-      <Button type="primary">Button</Button>
-      <DemoComponent />
+    <div className=" relative">
+      <div className=" h-screen w-screen">
+        <AdsMap />
+      </div>
     </div>
   );
 }
