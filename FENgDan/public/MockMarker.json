@@ -60,6 +60,20 @@
         "type": "Point",
         "coordinates": [106.68933125710065, 10.786348139095901, 0]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Công viên Lê Văn Tám",
+        "address": "QMQV+6GM, Đ. Võ Thị Sáu, Đa Kao, Quận 1, Thành phố Hồ Chí Minh",
+        "land_type": "Đất công",
+        "ad_type": "Cổ động chính trị",
+        "legal": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.69374081349183, 10.788340066532463, 0]
+      }
     }
   ]
 }

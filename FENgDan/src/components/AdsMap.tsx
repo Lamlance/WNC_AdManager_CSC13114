@@ -5,6 +5,14 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { AdsMarkerInfoSchema } from "../data/mock_markers";
 import { z } from "zod";
 import { Switch } from "antd";
+import { AddClusterPoints } from "../utils/AddClusterPoint";
+
+const ADS_INFO = {
+  DataSourceId: "ads_data",
+  ClusterId: "ads_cluster",
+  ClusterCountId: "ads_cluster_count",
+  UnclusterId: "ads_unclustered_point",
+} as const;
 
 function AdsMap() {
   const mapEleRef = useRef<HTMLDivElement>(null);
@@ -39,66 +47,51 @@ function AdsMap() {
         .addTo(map);
     }
 
-    map.addSource("ads_data", {
-      type: "geojson",
-      data: "http://localhost:5173/MockMarker.json",
-      cluster: true,
-      clusterMaxZoom: 14,
-      clusterRadius: 50,
-    });
-    map.addLayer({
-      id: "ads_cluster",
-      type: "circle",
-      source: "ads_data",
-      filter: ["has", "point_count"],
-      paint: {
-        "circle-color": [
-          "step",
-          ["get", "point_count"],
-          "#51bbd6",
-          100,
-          "#f1f075",
-          750,
-          "#f28cb1",
-        ],
-        "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
+    AddClusterPoints(map, {
+      DataSource: {
+        id: ADS_INFO.DataSourceId,
+        url: "http://localhost:5173/MockMarker.json",
       },
-    });
-    map.addLayer({
-      id: "ads_cluster_count",
-      type: "symbol",
-      source: "ads_data",
-      filter: ["has", "point_count"],
-      layout: {
-        "text-field": "{point_count_abbreviated}",
-        "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-        "text-size": 12,
+      Cluster: {
+        id: ADS_INFO.ClusterId,
+        paint: {
+          "circle-color": [
+            "step",
+            ["get", "point_count"],
+            "#51bbd6",
+            100,
+            "#f1f075",
+            750,
+            "#f28cb1",
+          ],
+          "circle-radius": [
+            "step",
+            ["get", "point_count"],
+            20,
+            100,
+            30,
+            750,
+            40,
+          ],
+        },
       },
-    });
-    map.addLayer({
-      id: "ads_unclustered_point",
-      type: "circle",
-      source: "ads_data",
-      filter: ["!", ["has", "point_count"]],
-      paint: {
-        "circle-color": "#11b4da",
-        "circle-radius": 8,
-        "circle-stroke-width": 1,
-        "circle-stroke-color": "#fff",
+      ClusterCount: {
+        id: ADS_INFO.ClusterCountId,
+        layout: {
+          "text-field": "{point_count_abbreviated}",
+          "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+          "text-size": 12,
+        },
       },
-    });
-
-    map.on("click", "ads_unclustered_point", function (e) {
-      const points = e.features?.[0].geometry;
-      if (!points) return;
-
-      const [lng, lat, hi] = (points as GeoJSON.Point).coordinates.slice();
-      const marker_data = AdsMarkerInfoSchema.safeParse(
-        e.features?.[0].properties,
-      );
-
-      if (marker_data.success == false) return;
-      //make_info_maker(marker_data.data, [lng, lat]);
+      Uncluster: {
+        id: ADS_INFO.UnclusterId,
+        paint: {
+          "circle-color": "#11b4da",
+          "circle-radius": 8,
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#fff",
+        },
+      },
     });
 
     map.on("mouseenter", "ads_unclustered_point", function (e) {
@@ -116,13 +109,6 @@ function AdsMap() {
     });
     map.on("mouseleave", "ads_unclustered_point", function () {
       popup?.remove();
-    });
-
-    map.on("mouseenter", "ads_cluster", function () {
-      map.getCanvas().style.cursor = "pointer";
-    });
-    map.on("mouseleave", "ads_cluster", function () {
-      map.getCanvas().style.cursor = "";
     });
   }
 
@@ -165,11 +151,17 @@ function AdsMap() {
     if (!mapRef.current) return;
     const visible = is_check ? "visible" : "none";
     mapRef.current.setLayoutProperty(
-      "ads_unclustered_point",
+      ADS_INFO.UnclusterId,
       "visibility",
       visible,
     );
-    mapRef.current.setLayoutProperty("ads_cluster", "visibility", visible);
+    mapRef.current.setLayoutProperty(
+      ADS_INFO.ClusterCountId,
+      "visibility",
+      visible,
+    );
+    mapRef.current.setLayoutProperty(ADS_INFO.ClusterId, "visibility", visible);
+
     setAdsVisible(is_check);
   }
 
