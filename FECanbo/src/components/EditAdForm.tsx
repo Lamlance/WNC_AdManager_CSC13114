@@ -90,7 +90,9 @@ function EditAdForm() {
 
         <div className="grid grid-cols-2 gap-5 px-5 ">
           <div className=" flex">
-            <div className="w-32 font-semibold">Loại quảng cáo : </div>
+            <div className=" w-24 translate-y-[-5px] font-semibold lg:w-32 lg:translate-y-0">
+              Loại quảng cáo :{" "}
+            </div>
             <Space.Compact className=" w-2/3">
               <Select defaultValue="" style={{ width: "100%" }}>
                 {AdTableType.map((value) => {
@@ -104,7 +106,7 @@ function EditAdForm() {
             </Space.Compact>
           </div>
           <div className=" flex">
-            <div className=" w-32 font-semibold">Phân loại : </div>
+            <div className=" w-24 font-semibold lg:w-32">Phân loại : </div>
             <Space.Compact className=" w-2/3">
               <Select defaultValue="" style={{ width: "80%" }}>
                 {LocateType.map((value) => {
@@ -118,7 +120,7 @@ function EditAdForm() {
             </Space.Compact>
           </div>
           <div className=" flex">
-            <div className=" w-32 font-semibold">Hình thức : </div>
+            <div className=" w-24 font-semibold lg:w-32">Hình thức : </div>
             <Space.Compact className=" w-2/3">
               <Select defaultValue="" style={{ width: "100%" }}>
                 {AdType.map((value) => {
@@ -132,31 +134,33 @@ function EditAdForm() {
             </Space.Compact>
           </div>
           <div className=" flex">
-            <div className=" w-32  font-semibold">Kích thước : </div>
-            <InputNumber className="h-8 " min={1} max={10} />
+            <div className=" w-24  font-semibold lg:w-32">Kích thước : </div>
+            <InputNumber className="h-8 w-12 " min={1} max={10} />
             <span className="mx-2">x</span>
-            <InputNumber className="h-8 " min={1} max={10} />
+            <InputNumber className="h-8 w-12" min={1} max={10} />
             <span className="mx-2">(mxm)</span>
           </div>
           <div className=" flex">
-            <div className=" w-32 font-semibold">Ngày hết hạn : </div>
+            <div className=" w-24 translate-y-[-5px] font-semibold lg:w-32 lg:translate-y-0">
+              Ngày hết hạn :{" "}
+            </div>
             <Form.Item className="" name="date-picker" {...config}>
               <DatePicker />
             </Form.Item>
           </div>
           <div className=" flex">
-            <div className=" w-32 font-semibold">Số lượng : </div>
+            <div className=" w-24 font-semibold lg:w-32">Số lượng : </div>
             <InputNumber className="h-8 " min={1} max={10} />
 
             <div className="ml-1">trụ/bảng</div>
           </div>
         </div>
         <div className=" flex px-5">
-          <div className="w-32  font-semibold"> Địa chỉ : </div>
+          <div className="w-24 font-semibold lg:w-32"> Địa chỉ : </div>
           <Input className="w-3/4" />
         </div>
         <div className="mt-5 flex px-5">
-          <div className="w-40 font-semibold"> Hình ảnh : </div>
+          <div className="w-28 font-semibold lg:w-40"> Hình ảnh : </div>
           <Upload
             action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
             listType="picture-card"
