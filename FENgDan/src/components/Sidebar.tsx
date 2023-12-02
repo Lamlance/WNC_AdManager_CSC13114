@@ -11,7 +11,7 @@ import AdsInfor from "./AdsInfor";
 
 const { Header, Sider, Content } = Layout;
 
-const Sidebar: React.FC = () => {
+function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -66,6 +66,6 @@ const Sidebar: React.FC = () => {
       </Layout>
     </Layout>
   );
-};
+}
 
 export default Sidebar;
