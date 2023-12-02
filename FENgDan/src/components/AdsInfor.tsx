@@ -14,11 +14,14 @@ function AdsInfor() {
   };
 
   return (
-    <div className="ads-info-container">
+    <div className="ads-info-container relative">
       <EnvironmentOutlined onMouseEnter={handleMouseEnter} />
 
       {isHovered && (
-        <div className="ads-info-popup" onMouseLeave={handleMouseLeave}>
+        <div
+          className="ads-info-popup absolute rounded bg-red-500 p-4"
+          onMouseLeave={handleMouseLeave}
+        >
           <div className="ads-info-content">
             <p className="text-xl font-bold">Trụ, cụm Pano</p>
             <p className="ads_info_location text-xl">
@@ -43,6 +46,15 @@ function AdsInfor() {
             <p className="mt-1 text-xl font-bold italic">Đã quy hoạch</p>
 
             <AdsDetail />
+
+            <div className="mt-4 flex justify-end">
+              <button className="mr-2 bg-blue-500 px-4 py-2 text-white">
+                Register
+              </button>
+              <button className="bg-green-500 px-4 py-2 text-white">
+                Report
+              </button>
+            </div>
           </div>
         </div>
       )}
