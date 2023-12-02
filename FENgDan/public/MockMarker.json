@@ -1,0 +1,79 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nhà thờ Tân Định",
+        "address": "289 Hai Bà Trưng, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
+        "land_type": "Đất cơ sở tôn giáo",
+        "ad_type": "Quảng bá tôn giáo",
+        "legal": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6907045481163, 10.788361134367696, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Chợ tân định",
+        "address": "336 Hai Bà Trưng, Phường Tân Định, Quận 1, Thành phố Hồ Chí Minh",
+        "land_type": "Chợ",
+        "ad_type": "Quảng cáo thương mại",
+        "legal": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.68980332588731, 10.789963089539278, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "THPT Nguyễn Thị Diệu",
+        "address": "12 Trần Quốc Toản, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
+        "land_type": "Đất công",
+        "ad_type": "Cổ động chính trị",
+        "legal": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.68880554413374, 10.789583679873315, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Viện Pasteur Thành phố Hồ Chí Minh",
+        "address": "167 Pasteur, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
+        "land_type": "Đất công",
+        "ad_type": "Cổ động y tế",
+        "legal": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.68933125710065, 10.786348139095901, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Công viên Lê Văn Tám",
+        "address": "QMQV+6GM, Đ. Võ Thị Sáu, Đa Kao, Quận 1, Thành phố Hồ Chí Minh",
+        "land_type": "Đất công",
+        "ad_type": "Cổ động chính trị",
+        "legal": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.69374081349183, 10.788340066532463, 0]
+      }
+    }
+  ]
+}
