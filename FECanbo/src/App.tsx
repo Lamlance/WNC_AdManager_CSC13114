@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AdRequest } from "./types";
-import { Outlet, Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes, redirect } from "react-router-dom";
 import AdsRequest from "./components/ads-request/AdsRequest";
 import { Button, Layout, Menu } from "antd";
 import {
@@ -98,11 +98,38 @@ const App = () => {
 
 const PageLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const items = [
+    {
+      key: "1",
+      icon: <UserOutlined />,
+      label: "Yêu cầu cấp phép",
+      title: "/",
+    },
+    {
+      key: "2",
+      icon: <VideoCameraOutlined />,
+      label: "Thông tin điểm quảng cáo",
+      title: "/advertisements",
+    },
+    {
+      key: "3",
+      icon: <UploadOutlined />,
+      label: "Báo cáo từ người dân",
+      title: "/reports",
+    },
+  ];
+
   return (
     <Layout>
-      <Sider trigger={null} collapsedWidth={0} width={280} collapsible collapsed={collapsed}>
-        <div className="flex flex-row justify-center my-3">
-          <span className="text-white font-bold text-base"> Ads Manager </span>
+      <Sider
+        trigger={null}
+        collapsedWidth={0}
+        width={280}
+        collapsible
+        collapsed={collapsed}
+      >
+        <div className="my-3 flex flex-row justify-center">
+          <span className="text-base font-bold text-white"> Ads Manager </span>
         </div>
         <Menu
           theme="dark"
@@ -111,23 +138,12 @@ const PageLayout = () => {
             fontSize: "16px",
           }}
           defaultSelectedKeys={["1"]}
-          items={[
-            {
-              key: "1",
-              icon: <UserOutlined />,
-              label: "Yêu cầu cấp phép",
-            },
-            {
-              key: "2",
-              icon: <VideoCameraOutlined />,
-              label: "Thông tin điểm quảng cáo",
-            },
-            {
-              key: "3",
-              icon: <UploadOutlined />,
-              label: "Báo cáo từ người dân",
-            },
-          ]}
+          items={items}
+          onSelect={({ key }) => {
+            const redirectURL = items?.find((item) => item?.key == key)?.title;
+            console.log(redirectURL)
+            return redirectURL === undefined ? redirect("/") : redirect(redirectURL);
+          }}
         />
       </Sider>
       <Layout>
