@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@admanager/frontend": "*",
+    "@ant-design/icons": "^5.2.6",
     "antd": "^5.11.4",
     "dotenv": "^16.3.1",
     "maplibre-gl": "^3.6.2",
