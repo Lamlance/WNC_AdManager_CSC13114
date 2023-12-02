@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Modal } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { Modal } from "antd";
+import { useState } from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface AdvertisementProps {
