@@ -22,7 +22,7 @@ function Sidebar() {
 
   return (
     <div>
-      <Layout className="z-10 bg-transparent">
+      <Layout className=" absolute left-0 right-0 z-10 bg-transparent">
         <Sider
           className={`${collapsed ? "hidden" : "visible"}`}
           trigger={null}
@@ -63,7 +63,7 @@ function Sidebar() {
           </Header>
         </Layout>
       </Layout>
-      <div className=" absolute bottom-0 left-0 right-0 top-0 -z-10">
+      <div className=" absolute bottom-0 left-0 right-0 top-0 z-0">
         <AdsMap onAdMarkerClick={onAdMarkerClick} />
       </div>
     </div>
