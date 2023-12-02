@@ -1,5 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AdRequest } from "./types";
+import { Outlet, Route, Routes } from "react-router-dom";
+import AdsRequest from "./components/ads-request/AdsRequest";
+import { Button, Layout, Menu } from "antd";
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  UploadOutlined,
+  UserOutlined,
+  VideoCameraOutlined,
+} from "@ant-design/icons";
+
+const { Header, Sider, Content } = Layout;
 
 const data: AdRequest[] = [
   {
@@ -50,10 +62,99 @@ const data: AdRequest[] = [
 ];
 
 const App = () => {
+  const [selectedAds, setSelectedAds] = useState<AdRequest | null>(null);
+
+  const showDetails = (record: AdRequest) => {
+    setSelectedAds(record);
+  };
+
+  useEffect(() => {
+    if (data.length > 0) {
+      setSelectedAds(data[0]);
+    }
+  }, []);
+
   return (
-    <div>
-      Hello everyone!!
-    </div>
+    <Routes>
+      <Route path="/" element={<PageLayout />}>
+        <Route
+          index
+          element={
+            <>
+              <AdsRequest
+                data={data}
+                onRowClick={showDetails}
+                selectedAd={selectedAds}
+              />
+            </>
+          }
+        />
+        <Route path="advertisements" element={<></>} />
+        <Route path="reports" element={<></>} />
+      </Route>
+    </Routes>
+  );
+};
+
+const PageLayout = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  return (
+    <Layout>
+      <Sider trigger={null} collapsedWidth={0} width={280} collapsible collapsed={collapsed}>
+        <div className="flex flex-row justify-center my-3">
+          <span className="text-white font-bold text-base"> Ads Manager </span>
+        </div>
+        <Menu
+          theme="dark"
+          mode="inline"
+          style={{
+            fontSize: "16px",
+          }}
+          defaultSelectedKeys={["1"]}
+          items={[
+            {
+              key: "1",
+              icon: <UserOutlined />,
+              label: "Yêu cầu cấp phép",
+            },
+            {
+              key: "2",
+              icon: <VideoCameraOutlined />,
+              label: "Thông tin điểm quảng cáo",
+            },
+            {
+              key: "3",
+              icon: <UploadOutlined />,
+              label: "Báo cáo từ người dân",
+            },
+          ]}
+        />
+      </Sider>
+      <Layout>
+        <Header style={{ padding: 0, background: "#ffffff" }}>
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              fontSize: "16px",
+              width: 64,
+              height: 64,
+              background: "#ffffff",
+            }}
+          />
+        </Header>
+        <Content
+          style={{
+            margin: "24px 16px",
+            padding: 24,
+            minHeight: 280,
+          }}
+        >
+          <Outlet />
+        </Content>
+      </Layout>
+    </Layout>
   );
 };
 
