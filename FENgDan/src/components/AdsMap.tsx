@@ -98,6 +98,19 @@ function AdsMap({}: AdsMapProps) {
       },
     });
 
+    map.on("click", "ads_unclustered_point", function (e) {
+      const points = e.features?.[0].geometry;
+      if (!points) return;
+      const marker_data = AdsMarkerInfoSchema.safeParse(
+        e.features?.[0].properties,
+      );
+
+      if (marker_data.success == false) return;
+      make_info_maker(marker_data.data, [lng, lat]);
+
+      console.log("You click a mark", marker_data.data.name);
+    });
+
     map.on("mouseenter", "ads_unclustered_point", function (e) {
       const points = e.features?.[0].geometry;
       if (!points) return;
