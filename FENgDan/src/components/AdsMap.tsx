@@ -14,7 +14,11 @@ const ADS_INFO = {
   UnclusterId: "ads_unclustered_point",
 } as const;
 
-function AdsMap() {
+interface AdsMapProps {
+  onAdMarkerClick?: () => void;
+}
+
+function AdsMap({}: AdsMapProps) {
   const mapEleRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
   const [lng, setLng] = useState(106.69379445290143);
