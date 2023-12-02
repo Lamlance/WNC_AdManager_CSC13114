@@ -1,7 +1,7 @@
 // AdTable.tsx
 import React from "react";
 import { Table } from "antd";
-import { AdRequest } from "../src/types";
+import { AdRequest } from "../types";
 
 const columns = [
   {

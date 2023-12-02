@@ -2,9 +2,9 @@
 import React from "react";
 import { Row, Col, Button } from "antd";
 import { DemoComponent } from "@admanager/frontend";
-import AdsRequestTable from "../Components/AdsRequestTable"
-import AdsRequestDetail from "../Components/AdsRequestDetail";
-import { AdRequest } from "../src/types";
+import AdsRequestTable from "./AdsRequestTable"
+import AdsRequestDetail from "./AdsRequestDetail";
+import { AdRequest } from "../types";
 
 
 interface MainContentSectionProps {

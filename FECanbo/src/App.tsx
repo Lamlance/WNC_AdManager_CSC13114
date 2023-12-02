@@ -3,7 +3,7 @@ import { DemoComponent} from "@admanager/frontend";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AdRequest } from "./types";
-import AdsRequest from "../Components/AdsRequest";
+import AdsRequest from "./components/AdsRequest";
 const data: AdRequest[] = [
   {
     requestId: "1",

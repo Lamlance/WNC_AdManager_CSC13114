@@ -1,6 +1,6 @@
 import React from "react";
 import { Drawer } from "antd";
-import { AdRequest } from "../src/types";
+import { AdRequest } from "../types";
 
 interface AdDetailsSectionProps {
   ad: AdRequest | null;
