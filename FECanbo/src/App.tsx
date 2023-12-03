@@ -34,7 +34,7 @@ const data: AdRequest[] = [
   {
     requestId: "2",
     panoContent: "Quảng cáo",
-    panoTitle: "Quảng cáo trà sữa Phúc Long",
+    panoTitle: "Quảng cáo trà sữa Phúc Lon",
     position: "42 Võ Thị Sáu, Quận 3, Phường Võ Thị Sáu",
     bookingAgency: "TNVH HN",
     email: "pthn@gmail.com",
