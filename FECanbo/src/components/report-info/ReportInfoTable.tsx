@@ -33,7 +33,7 @@ const columns = [
   },
 ];
 
-const AdsInfoTable = () => {
+const ReportInfoTable = () => {
   return (
     <Table
       columns={columns}
@@ -43,4 +43,4 @@ const AdsInfoTable = () => {
   );
 };
 
-export default AdsInfoTable;
+export default ReportInfoTable;

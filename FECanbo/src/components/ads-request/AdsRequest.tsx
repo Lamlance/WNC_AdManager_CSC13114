@@ -17,8 +17,10 @@ const AdsRequest: React.FC<MainContentSectionProps> = ({
   selectedAd,
 }) => {
   return (
-    <Row gutter={16}>
-      <Col span={16}>
+    <Row gutter={20} style={{
+      minHeight: "100vh"
+    }}>
+      <Col span={17}>
         <AdsRequestTable data={data} onRowClick={onRowClick} />
       </Col>
       <Col span={6}>

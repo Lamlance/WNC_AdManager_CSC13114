@@ -10,6 +10,8 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
+import AdsInfo from "./components/ads-info/AdsInfo";
+import ReportInfo from "./components/report-info/ReportInfo";
 
 const { Header, Sider, Content } = Layout;
 
@@ -80,17 +82,15 @@ const App = () => {
         <Route
           index
           element={
-            <>
-              <AdsRequest
-                data={data}
-                onRowClick={showDetails}
-                selectedAd={selectedAds}
-              />
-            </>
+            <AdsRequest
+              data={data}
+              onRowClick={showDetails}
+              selectedAd={selectedAds}
+            />
           }
         />
-        <Route path="advertisements" element={<></>} />
-        <Route path="reports" element={<></>} />
+        <Route path="advertisements" element={<AdsInfo />} />
+        <Route path="reports" element={<ReportInfo />} />
       </Route>
     </Routes>
   );
@@ -130,7 +130,7 @@ const PageLayout = () => {
         collapsible
         collapsed={collapsed}
       >
-        <div className="my-3 flex flex-row justify-center">
+        <div className="my-4 flex flex-row justify-center">
           <span className="text-base font-bold text-white"> Ads Manager </span>
         </div>
         <Menu
@@ -143,12 +143,18 @@ const PageLayout = () => {
           items={items}
           onSelect={({ key }) => {
             const redirectURL = items?.find((item) => item?.key == key)?.title;
-            console.log(redirectURL)
-            return redirectURL === undefined ? navigate("/") : navigate(redirectURL);
+            console.log(redirectURL);
+            return redirectURL === undefined
+              ? navigate("/")
+              : navigate(redirectURL);
           }}
         />
       </Sider>
-      <Layout>
+      <Layout
+        style={{
+          background: "#ffffff",
+        }}
+      >
         <Header style={{ padding: 0, background: "#ffffff" }}>
           <Button
             type="text"
@@ -156,8 +162,8 @@ const PageLayout = () => {
             onClick={() => setCollapsed(!collapsed)}
             style={{
               fontSize: "16px",
-              width: 64,
-              height: 64,
+              width: 50,
+              height: 50,
               background: "#ffffff",
             }}
           />
@@ -167,6 +173,7 @@ const PageLayout = () => {
             margin: "24px 16px",
             padding: 24,
             minHeight: 280,
+            background: "#ffffff",
           }}
         >
           <Outlet />
