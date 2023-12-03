@@ -1,7 +1,4 @@
-// AdTable.tsx
-import React from "react";
 import { Table } from "antd";
-import { AdRequest } from "../src/types";
 
 const columns = [
   {
@@ -36,22 +33,14 @@ const columns = [
   },
 ];
 
-interface AdsRequestTableProps {
-  data: AdRequest[];
-  onRowClick: (record: AdRequest) => void;
-}
-
-const AdsRequestTable: React.FC<AdsRequestTableProps> = ({ data, onRowClick }) => {
+const AdsInfoTable = () => {
   return (
     <Table
       columns={columns}
-      dataSource={data}
-      onRow={(record) => ({
-        onClick: () => onRowClick(record),
-      })}
+      dataSource={[]}
       pagination={{ pageSize: 5 }}
     />
   );
 };
 
-export default AdsRequestTable;
+export default AdsInfoTable;
