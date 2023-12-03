@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AdRequest } from "./types";
-import { Outlet, Route, Routes, redirect } from "react-router-dom";
+import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import AdsRequest from "./components/ads-request/AdsRequest";
 import { Button, Layout, Menu } from "antd";
 import {
@@ -98,6 +98,8 @@ const App = () => {
 
 const PageLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+
   const items = [
     {
       key: "1",
@@ -142,7 +144,7 @@ const PageLayout = () => {
           onSelect={({ key }) => {
             const redirectURL = items?.find((item) => item?.key == key)?.title;
             console.log(redirectURL)
-            return redirectURL === undefined ? redirect("/") : redirect(redirectURL);
+            return redirectURL === undefined ? navigate("/") : navigate(redirectURL);
           }}
         />
       </Sider>
