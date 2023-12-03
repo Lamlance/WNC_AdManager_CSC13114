@@ -11,7 +11,6 @@ const ReportInfo = () => {
             <ReportInfoTable />
           </Col>
           <Col span={6}>
-            <ReportInfoDetail />
           </Col>
         </Row>
       );

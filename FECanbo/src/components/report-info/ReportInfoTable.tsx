@@ -2,32 +2,32 @@ import { Table } from "antd";
 
 const columns = [
   {
-    title: "Pano ID",
-    dataIndex: "requestId",
-    key: "requestId",
+    title: "Người báo cáo",
+    dataIndex: "reporterInfo",
+    key: "reporterInfo",
   },
   {
-    title: "NỘI DUNG PANO",
-    dataIndex: "panoContent",
-    key: "panoContent",
+    title: "Địa chỉ quảng cáo",
+    dataIndex: "adsAddress",
+    key: "adsAddress",
   },
   {
-    title: "VỊ TRÍ ĐẶT",
-    dataIndex: "position",
-    key: "position",
+    title: "Loại hình quảng cáo",
+    dataIndex: "adsType",
+    key: "adsType",
   },
   {
-    title: "CÔNG TY ĐẶT QUẢNG CÁO",
-    dataIndex: "bookingAgency",
-    key: "bookingAgency",
+    title: "Loại hình báo cáo",
+    dataIndex: "reportType",
+    key: "reportType",
   },
   {
-    title: "THỜI GIAN ĐẶT",
-    dataIndex: "rentalPeriod",
-    key: "rentalPeriod",
+    title: "Thời gian báo cáo",
+    dataIndex: "reportTime",
+    key: "reportTime",
   },
   {
-    title: "TRẠNG THÁI",
+    title: "Trạng thái",
     dataIndex: "status",
     key: "status",
   },

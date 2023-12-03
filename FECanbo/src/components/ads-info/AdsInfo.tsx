@@ -11,7 +11,6 @@ const AdsInfo = () => {
         <AdsInfoTable />
       </Col>
       <Col span={6}>
-        <AdsInfoDetail />
       </Col>
     </Row>
   );

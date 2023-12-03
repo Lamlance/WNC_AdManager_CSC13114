@@ -2,35 +2,30 @@ import { Table } from "antd";
 
 const columns = [
   {
-    title: "Pano ID",
-    dataIndex: "requestId",
-    key: "requestId",
+    title: "Loại hình quảng cáo",
+    dataIndex: "adsType",
+    key: "adsType",
   },
   {
-    title: "NỘI DUNG PANO",
-    dataIndex: "panoContent",
-    key: "panoContent",
+    title: "Địa chỉ",
+    dataIndex: "address",
+    key: "address",
   },
   {
-    title: "VỊ TRÍ ĐẶT",
-    dataIndex: "position",
-    key: "position",
+    title: "Thông tin chung",
+    dataIndex: "generalInfo",
+    key: "generalInfo",
   },
   {
-    title: "CÔNG TY ĐẶT QUẢNG CÁO",
-    dataIndex: "bookingAgency",
-    key: "bookingAgency",
+    title: "Điểm đặt",
+    dataIndex: "placeType",
+    key: "placeType",
   },
   {
-    title: "THỜI GIAN ĐẶT",
-    dataIndex: "rentalPeriod",
-    key: "rentalPeriod",
-  },
-  {
-    title: "TRẠNG THÁI",
+    title: "Trạng thái",
     dataIndex: "status",
     key: "status",
-  },
+  }
 ];
 
 const AdsInfoTable = () => {
