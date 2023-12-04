@@ -1,4 +1,5 @@
 import { Table } from "antd";
+import { ReportInfoRecord } from "../../types";
 
 const columns = [
   {
@@ -33,11 +34,22 @@ const columns = [
   },
 ];
 
-const ReportInfoTable = () => {
+interface ReportInfoTableProps {
+  data: ReportInfoRecord[];
+  onRowClick: (record: ReportInfoRecord) => void;
+}
+
+const ReportInfoTable = ({
+  data,
+  onRowClick
+} : ReportInfoTableProps) => {
   return (
     <Table
       columns={columns}
-      dataSource={[]}
+      dataSource={data}
+      onRow={(record) => ({
+        onClick: () => onRowClick(record),
+      })}
       pagination={{ pageSize: 5 }}
     />
   );

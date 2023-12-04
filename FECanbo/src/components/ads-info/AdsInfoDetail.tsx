@@ -1,17 +1,4 @@
-interface AdsInfoDetailProps {
-  adsType: string;
-  address: string;
-  generalInfo: {
-    size: {
-      width: number;
-      height: number;
-    };
-    number: number;
-  };
-  contentType: string;
-  placeType: string;
-  status: string;
-}
+import { AdsInfoRecord } from "../../types";
 
 const AdsInfoDetail = ({
   adsType,
@@ -20,7 +7,7 @@ const AdsInfoDetail = ({
   contentType,
   placeType,
   status,
-}: AdsInfoDetailProps) => {
+}: AdsInfoRecord) => {
   return (
     <div>
       <p> Loại quảng cáo: {adsType} </p>

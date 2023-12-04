@@ -1,4 +1,10 @@
 import { Table } from "antd";
+import { AdsInfoRecord } from "../../types";
+
+interface AdsInfoTableProps {
+  data: AdsInfoRecord[],
+  onRowClick: (record: AdsInfoRecord) => void;
+}
 
 const columns = [
   {
@@ -28,12 +34,18 @@ const columns = [
   }
 ];
 
-const AdsInfoTable = () => {
+const AdsInfoTable = ({
+  data,
+  onRowClick
+} : AdsInfoTableProps) => {
   return (
     <Table
       columns={columns}
-      dataSource={[]}
+      dataSource={data}
       pagination={{ pageSize: 5 }}
+      onRow={(record) => ({
+        onClick: () => onRowClick(record),
+      })}
     />
   );
 };
