@@ -12,4 +12,5 @@ export interface AdRequest {
   rentalPeriod: string;
   status: string;
   image: string;
+  tags: string[];
 }

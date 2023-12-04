@@ -30,6 +30,7 @@ const data: AdRequest[] = [
     rentalPeriod: "12/11/2022 - 12/11/2024",
     status: "Đang xử lý",
     image: "",
+    tags: ["nice", "developer"],
   },
   {
     requestId: "2",
@@ -45,6 +46,7 @@ const data: AdRequest[] = [
     rentalPeriod: "12/11/2022 - 12/11/2024",
     status: "Đã phê duyệt",
     image: "",
+    tags: ["nice", "developer"],
   },
   {
     requestId: "3",
@@ -60,6 +62,7 @@ const data: AdRequest[] = [
     rentalPeriod: "12/11/2022 - 12/11/2024",
     status: "Đã hủy",
     image: "",
+    tags: ["nice", "developer"],
   },
 ];
 
