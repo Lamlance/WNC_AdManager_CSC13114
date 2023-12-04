@@ -2,10 +2,9 @@
 import React from "react";
 import { Row, Col, Button } from "antd";
 import { DemoComponent } from "@admanager/frontend";
-import AdsRequestTable from "../Components/AdsRequestTable"
-import AdsRequestDetail from "../Components/AdsRequestDetail";
-import { AdRequest } from "../src/types";
-
+import AdsRequestTable from "./AdsRequestTable";
+import AdsRequestDetail from "./AdsRequestDetail";
+import { AdRequest } from "../types";
 
 interface MainContentSectionProps {
   data: AdRequest[];
@@ -13,13 +12,14 @@ interface MainContentSectionProps {
   selectedAd: AdRequest | null;
 }
 
-const AdsRequest: React.FC<MainContentSectionProps> = ({ data, onRowClick, selectedAd }) => {
+const AdsRequest: React.FC<MainContentSectionProps> = ({
+  data,
+  onRowClick,
+  selectedAd,
+}) => {
   return (
     <Row gutter={16}>
-      <Col span={16}>
-        <Button type="primary">Button</Button>
-        <DemoComponent />
-
+      <Col span={17}>
         <AdsRequestTable data={data} onRowClick={onRowClick} />
       </Col>
       <Col span={6}>
