@@ -1,33 +1,34 @@
-import Sidebar from "./components/Sidebar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
-import "maplibre-gl/dist/maplibre-gl.css";
 import AdsMap from "./components/AdsMap";
+import Sidebar from "./components/Sidebar";
+
 function App() {
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+
+  const handleAdMarkerClick = () => {
+    setSidebarVisible(!sidebarVisible);
+  };
   return (
-    <div>
-      {/* <div className="flex place-items-center bg-blue-500">HelloNgDan</div>
-      <Button type="primary">Button</Button>
-      <DemoComponent /> */}
-      <Sidebar />
+    <div className=" h-screen w-screen">
+      <AdsMap onAdMarkerClick={handleAdMarkerClick} />
+      {sidebarVisible && <Sidebar />}
     </div>
   );
 }
 
-export default App;
-
-// export default function () {
-//   useEffect(() => {
-//     const head = document.querySelector("head");
-//     if (!head) {
-//       return;
-//     }
-//     const tailWindStyleTag = [...head.querySelectorAll("style")].find((style) =>
-//       style.innerHTML.includes("tailwind"),
-//     );
-//     if (tailWindStyleTag) {
-//       head.insertAdjacentElement("afterbegin", tailWindStyleTag);
-//     }
-//   }, []);
-//   return <App />;
-// }
+export default function () {
+  useEffect(() => {
+    const head = document.querySelector("head");
+    if (!head) {
+      return;
+    }
+    const tailWindStyleTag = [...head.querySelectorAll("style")].find((style) =>
+      style.innerHTML.includes("tailwind"),
+    );
+    if (tailWindStyleTag) {
+      head.insertAdjacentElement("afterbegin", tailWindStyleTag);
+    }
+  }, []);
+  return <App />;
+}

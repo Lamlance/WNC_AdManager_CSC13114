@@ -14,7 +14,11 @@ const ADS_INFO = {
   UnclusterId: "ads_unclustered_point",
 } as const;
 
-function AdsMap() {
+interface AdsMapProps {
+  onAdMarkerClick?: () => void;
+}
+
+function AdsMap({ onAdMarkerClick }: AdsMapProps) {
   const mapEleRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
   const [lng, setLng] = useState(106.69379445290143);
@@ -94,6 +98,22 @@ function AdsMap() {
       },
     });
 
+    map.on("click", "ads_unclustered_point", function (e) {
+      const points = e.features?.[0].geometry;
+      if (!points) return;
+      const marker_data = AdsMarkerInfoSchema.safeParse(
+        e.features?.[0].properties,
+      );
+
+      if (marker_data.success == false) return;
+      make_info_maker(marker_data.data, [lng, lat]);
+
+      console.log("You click a mark", marker_data.data.name);
+      if (onAdMarkerClick) {
+        onAdMarkerClick();
+      }
+    });
+
     map.on("mouseenter", "ads_unclustered_point", function (e) {
       const points = e.features?.[0].geometry;
       if (!points) return;
@@ -113,8 +133,8 @@ function AdsMap() {
   }
 
   function initialize_map(container: HTMLElement) {
-    if (!!mapRef.current) return;
-    const token = (import.meta as any).env?.VITE_LOCATION_IQ_KEY;
+    if (mapRef.current) return;
+    const token = (import.meta as any).env.VITE_LOCATION_IQ_KEY;
     if (!token) return;
 
     const url = `https://tiles.locationiq.com/v3/streets/vector.json?key=${token}`;
