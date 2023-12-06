@@ -62,15 +62,15 @@ const QuangCao = pgTable("QuangCao", {
     .references(() => LoaiViTri.id_loai_vt),
 });
 
-const Relation_QuangCao = relations(QuangCao, ({ one }) => ({
-  dia_diem: one(DiaDiem),
-  hinh_thuc: one(HinhThucQC),
-  loai_vt: one(LoaiViTri),
-}));
+// const Relation_QuangCao = relations(QuangCao, ({ one }) => ({
+//   dia_diem: one(DiaDiem),
+//   hinh_thuc: one(HinhThucQC),
+//   loai_vt: one(LoaiViTri),
+// }));
 
-const Relation_DiaDiem = relations(DiaDiem, ({ one, many }) => ({
-  dia_diem: many(DiaDiem),
-}));
+// const Relation_DiaDiem = relations(DiaDiem, ({ one, many }) => ({
+//   dia_diem: many(DiaDiem),
+// }));
 
 // const Relation_Phuong = relations(Phuong, ({ one, many }) => ({
 //   quan: one(Quan),
@@ -89,8 +89,8 @@ export {
   Quan,
   DiaDiem,
   QuangCao,
-  Relation_QuangCao,
-  Relation_DiaDiem,
+  // Relation_QuangCao,
+  // Relation_DiaDiem,
   //Relation_Phuong,
   //Relation_Quan,
 };
