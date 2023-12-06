@@ -1,6 +1,7 @@
 import React from "react";
 import { Select, Space, Input, Button, } from "antd";
 const { Option } = Select;
+import { SearchOutlined } from "@ant-design/icons";
 
 function EditAdForm() {
   const status = ["Đã quy hoạch", "Chưa quy hoạch"];
@@ -31,7 +32,8 @@ function EditAdForm() {
         <div className="mx-10 mb-5 flex justify-between" >
           <div className=" flex w-1/2">
             <div className="w-2/5 font-bold text-base pt-2 "> Vị trí : </div>
-            <Input className="w-3/5 max-h-7.5"></Input>
+            <Input className="w-1/2"></Input>
+            <Button className="w-1/12 p-0 pb-2 justify-center items-center"><SearchOutlined /></Button>
           </div>
           <div className="flex w-5/12 justify-end">
             <div className="w-1/3 font-bold text-base pt-2 "> Trạng thái : </div>
