@@ -1,6 +1,7 @@
 {
   "name": "wnc-admanager-csc13114",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,6 +12,8 @@
   "workspaces": [
     "packages/frontend",
     "FECanbo",
-    "FENgDan"
+    "FENgDan",
+    "packages/backend",
+    "BECanbo"
   ]
 }
