@@ -1,10 +1,19 @@
-import { Button, Row, Col } from "antd";
-import { DemoComponent} from "@admanager/frontend";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { AdRequest } from "./types";
-import AdsRequest from "./components/AdsRequest";
-import WysiwygAntDesignExample from "./components/AdsRequestForm";
+import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import AdsRequest from "./components/ads-request/AdsRequest";
+import { Button, Layout, Menu } from "antd";
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  UploadOutlined,
+  UserOutlined,
+  VideoCameraOutlined,
+} from "@ant-design/icons";
+import AdsInfo from "./components/ads-info/AdsInfo";
+import ReportInfo from "./components/report-info/ReportInfo";
+
+const { Header, Sider, Content } = Layout;
 const data: AdRequest[] = [
   {
     requestId: "1",
@@ -56,28 +65,125 @@ const data: AdRequest[] = [
   },
 ];
 
-function App() {
-
-  const [selectedAd, setSelectedAd] = useState<AdRequest | null>(null);
-  const [drawerVisible, setDrawerVisible] = useState(true);
+const App = () => {
+  const [selectedAds, setSelectedAds] = useState<AdRequest | null>(null);
 
   const showDetails = (record: AdRequest) => {
-    setSelectedAd(record);
+    setSelectedAds(record);
   };
 
   useEffect(() => {
     if (data.length > 0) {
-      setSelectedAd(data[0]);
+      setSelectedAds(data[0]);
     }
   }, []);
 
   return (
-    <div>
-      {/* <AdsRequest data={data} onRowClick={showDetails} selectedAd={selectedAd}></AdsRequest> */}
-      <WysiwygAntDesignExample></WysiwygAntDesignExample>
-    </div>
+    <Routes>
+      <Route path="/" element={<PageLayout />}>
+        <Route
+          index
+          element={
+            <AdsRequest
+              data={data}
+              onRowClick={showDetails}
+              selectedAd={selectedAds}
+            />
+          }
+        />
+        <Route path="advertisements" element={<AdsInfo />} />
+        <Route path="reports" element={<ReportInfo />} />
+      </Route>
+    </Routes>
   );
-}
+};
+
+const PageLayout = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+
+  const items = [
+    {
+      key: "1",
+      icon: <UserOutlined />,
+      label: "Yêu cầu cấp phép",
+      title: "/",
+    },
+    {
+      key: "2",
+      icon: <VideoCameraOutlined />,
+      label: "Thông tin điểm quảng cáo",
+      title: "/advertisements",
+    },
+    {
+      key: "3",
+      icon: <UploadOutlined />,
+      label: "Báo cáo từ người dân",
+      title: "/reports",
+    },
+  ];
+
+  return (
+    <Layout>
+      <Sider
+        trigger={null}
+        collapsedWidth={0}
+        width={280}
+        collapsible
+        collapsed={collapsed}
+      >
+        <div className="my-4 flex flex-row justify-center">
+          <span className="text-base font-bold text-white"> Ads Manager </span>
+        </div>
+        <Menu
+          theme="dark"
+          mode="inline"
+          style={{
+            fontSize: "16px",
+          }}
+          defaultSelectedKeys={["1"]}
+          items={items}
+          onSelect={({ key }) => {
+            const redirectURL = items?.find((item) => item?.key == key)?.title;
+            console.log(redirectURL);
+            return redirectURL === undefined
+              ? navigate("/")
+              : navigate(redirectURL);
+          }}
+        />
+      </Sider>
+      <Layout
+        style={{
+          background: "#ffffff",
+        }}
+      >
+        <Header style={{ padding: 0, background: "#ffffff" }}>
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              fontSize: "16px",
+              width: 50,
+              height: 50,
+              background: "#ffffff",
+            }}
+          />
+        </Header>
+        <Content
+          style={{
+            margin: "24px 16px",
+            padding: 24,
+            minHeight: 280,
+            background: "#ffffff",
+          }}
+        >
+          <Outlet />
+        </Content>
+      </Layout>
+    </Layout>
+  );
+};
 
 export default function () {
   useEffect(() => {
