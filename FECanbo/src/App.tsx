@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AdRequest } from "./types";
 import AdsRequest from "./components/AdsRequest";
+import WysiwygAntDesignExample from "./components/AdsRequestForm";
 const data: AdRequest[] = [
   {
     requestId: "1",
@@ -72,7 +73,8 @@ function App() {
 
   return (
     <div>
-      <AdsRequest data={data} onRowClick={showDetails} selectedAd={selectedAd}></AdsRequest>
+      {/* <AdsRequest data={data} onRowClick={showDetails} selectedAd={selectedAd}></AdsRequest> */}
+      <WysiwygAntDesignExample></WysiwygAntDesignExample>
     </div>
   );
 }
