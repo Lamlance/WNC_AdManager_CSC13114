@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import {
   integer,
   pgEnum,
@@ -9,26 +8,34 @@ import {
   uuid,
   boolean,
   doublePrecision,
+  primaryKey,
+  real,
+  date,
 } from "drizzle-orm/pg-core";
 
 const LoaiViTri = pgTable("LoaiViTri", {
   id_loai_vt: serial("id").primaryKey(),
-  loai_vitri: varchar("loai_vitri", { length: 124 }).notNull(),
+  loai_vitri: varchar("loai_vitri", { length: 255 }).notNull(),
 });
 
 const HinhThucQC = pgTable("HinhThucQC", {
   id_htqc: serial("id").primaryKey(),
-  hinh_thuc_qc: varchar("hinh_thuc_qc", { length: 124 }).notNull(),
+  hinh_thuc_qc: varchar("hinh_thuc_qc", { length: 255 }).notNull(),
+});
+
+const LoaiBangQC = pgTable("LoaiBangQC", {
+  id_loai_bang_qc: serial("id_loai_bang_qc").primaryKey(),
+  loai_bang_qc: varchar("loai_bang_qc", { length: 255 }).notNull(),
 });
 
 const Quan = pgTable("Quan", {
   id_quan: serial("id").primaryKey(),
-  ten_quan: varchar("ten_quan", { length: 124 }).notNull(),
+  ten_quan: varchar("ten_quan", { length: 255 }).notNull(),
 });
 
 const Phuong = pgTable("Phuong", {
   id_phuong: serial("id").primaryKey(),
-  ten_phuong: varchar("ten_phuong", { length: 124 }).notNull(),
+  ten_phuong: varchar("ten_phuong", { length: 255 }).notNull(),
   id_quan: integer("id_quan")
     .notNull()
     .references(() => Quan.id_quan),
@@ -36,18 +43,31 @@ const Phuong = pgTable("Phuong", {
 
 const DiaDiem = pgTable("DiaDiem", {
   id_dia_diem: serial("id").primaryKey(),
-  ten_dia_diem: varchar("ten_dia_diem", { length: 256 }).notNull(),
-  dia_chi: varchar("dia_chi", { length: 256 }).notNull(),
+  ten_dia_diem: varchar("ten_dia_diem", { length: 255 }).notNull(),
+  dia_chi: varchar("dia_chi", { length: 255 }).notNull(),
   lng: doublePrecision("kinh_do").notNull(),
   lat: doublePrecision("vi_do").notNull(),
 
   id_phuong: integer("id_phuong").references(() => Phuong.id_phuong),
-  id_quan: integer("id_quan").references(() => Quan.id_quan),
 });
 
 const QuangCao = pgTable("QuangCao", {
   id_quang_cao: uuid("id").primaryKey().defaultRandom(),
   quy_hoach: boolean("quy_hoach").notNull().default(false),
+
+  ngay_hieu_luc: date("ngay_hieu_luc"),
+  ngay_het_han: date("ngay_het_han"),
+
+  hinh_1: varchar("hinh_1", { length: 255 }),
+  hinh_2: varchar("hinh_2", { length: 255 }),
+
+  so_luong: integer("so_luong").default(1),
+  chieu_dai_m: real("chieu_dai_m"),
+  chieu_rong_m: real("chieu_rong_m"),
+
+  id_loai_bang_qc: integer("id_bang_loai_qc")
+    .notNull()
+    .references(() => LoaiBangQC.id_loai_bang_qc),
 
   id_dia_diem: integer("id_dia_diem")
     .notNull()
@@ -62,35 +82,4 @@ const QuangCao = pgTable("QuangCao", {
     .references(() => LoaiViTri.id_loai_vt),
 });
 
-// const Relation_QuangCao = relations(QuangCao, ({ one }) => ({
-//   dia_diem: one(DiaDiem),
-//   hinh_thuc: one(HinhThucQC),
-//   loai_vt: one(LoaiViTri),
-// }));
-
-// const Relation_DiaDiem = relations(DiaDiem, ({ one, many }) => ({
-//   dia_diem: many(DiaDiem),
-// }));
-
-// const Relation_Phuong = relations(Phuong, ({ one, many }) => ({
-//   quan: one(Quan),
-//   dia_diem: many(DiaDiem),
-// }));
-
-// const Relation_Quan = relations(Quan, ({ one, many }) => ({
-//   phuong: one(Quan),
-//   dia_diem: many(DiaDiem),
-// }));
-
-export {
-  LoaiViTri,
-  HinhThucQC,
-  Phuong,
-  Quan,
-  DiaDiem,
-  QuangCao,
-  // Relation_QuangCao,
-  // Relation_DiaDiem,
-  //Relation_Phuong,
-  //Relation_Quan,
-};
+export { LoaiViTri, HinhThucQC, Phuong, Quan, DiaDiem, QuangCao, LoaiBangQC };

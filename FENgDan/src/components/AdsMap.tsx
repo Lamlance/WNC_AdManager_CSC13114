@@ -34,27 +34,33 @@ function AdsMap({}: AdsMapProps) {
       data: z.infer<typeof AdsMarkerInfoSchema>,
       coord: [number, number],
     ) {
+      if (data.ads.length <= 0) return;
       popup = new MapLibreGL.Popup()
         .setLngLat(coord)
         .setMaxWidth("500px")
         .setHTML(
           `<div class="text-lg">
-          <h1 class="font-bold">${data.ad_type}</h1>
-          <p>${data.land_type}</p>
-          <p>${data.ad_type}</p>
-          <p>${data.address}</p>
+          <h1 class="font-bold">${data.ads[0].ad_type}</h1>
+          <p>${data.ads[0].land_type}</p>
+          <p>${data.ads[0].ad_type}</p>
+          <p>${data.ads[0].address}</p>
           <h4 class="font-bold italic">${
-            data.legal ? "Đã quy hoạch" : "Chưa quy hoạch"
+            data.ads[0].legal ? "Đã quy hoạch" : "Chưa quy hoạch"
           }</h4>
         </div>`,
         )
         .addTo(map);
     }
 
+    const geo_json_url =
+      (import.meta as any).env?.VITE_GEOJSON_URL ||
+      "http://localhost:5173/MockMarker.json";
+    console.log("Geo json url", geo_json_url);
+
     AddClusterPoints(map, {
       DataSource: {
         id: ADS_INFO.DataSourceId,
-        url: "http://localhost:5173/MockMarker.json",
+        url: geo_json_url,
       },
       Cluster: {
         id: ADS_INFO.ClusterId,
@@ -108,7 +114,7 @@ function AdsMap({}: AdsMapProps) {
       if (marker_data.success == false) return;
       make_info_maker(marker_data.data, [lng, lat]);
 
-      console.log("You click a mark", marker_data.data.name);
+      console.log("You click a mark", marker_data.data.ads[0].name);
     });
 
     map.on("mouseenter", "ads_unclustered_point", function (e) {
@@ -120,7 +126,6 @@ function AdsMap({}: AdsMapProps) {
       const marker_data = AdsMarkerInfoSchema.safeParse(
         e.features?.[0].properties,
       );
-
       if (marker_data.success == false) return;
       make_info_maker(marker_data.data, [lng, lat]);
     });

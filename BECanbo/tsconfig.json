@@ -5,6 +5,7 @@
     "target": "ESNext",
     "moduleResolution": "Node",
     "outDir": "dist",
+    "lib": ["ESNext"],
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": false,
@@ -14,6 +15,8 @@
     "inlineSourceMap": true
   },
   "ts-node": {
+    "experimentalSpecifierResolution": "node",
+    "transpileOnly": true,
     "esm": true
   },
   "lib": ["esnext"]

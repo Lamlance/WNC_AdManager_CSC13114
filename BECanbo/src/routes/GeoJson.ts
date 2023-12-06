@@ -3,14 +3,19 @@ import { Router } from "express";
 import { CallAndCatchAsync } from "../utils/CallCatch.js";
 import { eq } from "drizzle-orm";
 
+type AdsProperty = {
+  name: string;
+  address: string;
+  land_type: string;
+  ad_type: string;
+  legal: boolean;
+  panel_type: string;
+};
+
 type GeoJsonFeature = {
   type: "Feature";
   properties: {
-    name: string;
-    address: string;
-    land_type: string;
-    ad_type: string;
-    legal: boolean;
+    ads: AdsProperty[];
   };
   geometry: {
     type: "Point";
@@ -28,12 +33,13 @@ type GeoJson = {
 };
 
 async function GetQuangCaoData() {
-  return await dbConn
+  const data = await dbConn
     .select({
       dia_diem: AdsSchema.DiaDiem,
       quang_cao: AdsSchema.QuangCao,
       loai_vitri: AdsSchema.LoaiViTri.loai_vitri,
       hinh_thuc: AdsSchema.HinhThucQC.hinh_thuc_qc,
+      bang_qc: AdsSchema.LoaiBangQC.loai_bang_qc,
     })
     .from(AdsSchema.QuangCao)
     .innerJoin(
@@ -47,22 +53,43 @@ async function GetQuangCaoData() {
     .innerJoin(
       AdsSchema.HinhThucQC,
       eq(AdsSchema.HinhThucQC.id_htqc, AdsSchema.QuangCao.id_hinh_thuc)
+    )
+    .innerJoin(
+      AdsSchema.LoaiBangQC,
+      eq(
+        AdsSchema.LoaiBangQC.id_loai_bang_qc,
+        AdsSchema.QuangCao.id_loai_bang_qc
+      )
     );
 
-  // return await dbConn.query.QuangCao.findMany({
-  //   with: {
-  //     dia_diem: {
-  //       columns: { id_dia_diem: false, id_phuong: false, id_quan: false },
-  //     },
-  //     loai_vt: { columns: { id_loai_vt: false } },
-  //     hinh_thuc: { columns: { id_htqc: false } },
-  //   },
-  //   columns: {
-  //     id_dia_diem: false,
-  //     id_hinh_thuc: false,
-  //     id_loai_vitri: false,
-  //   },
-  // });
+  const grp_by_location: {
+    [key: number]: {
+      ads: AdsProperty[];
+      dd: typeof AdsSchema.DiaDiem.$inferSelect;
+    };
+  } = {};
+
+  for (let i = 0; i < data.length; i++) {
+    const qc = data[i];
+    const prop = {
+      name: qc.dia_diem.ten_dia_diem,
+      address: qc.dia_diem.dia_chi,
+      land_type: qc.loai_vitri,
+      ad_type: qc.hinh_thuc,
+      legal: qc.quang_cao.quy_hoach,
+      panel_type: qc.bang_qc,
+    };
+    if (grp_by_location[qc.dia_diem.id_dia_diem]) {
+      grp_by_location[qc.dia_diem.id_dia_diem].ads.push(prop);
+    } else {
+      grp_by_location[qc.dia_diem.id_dia_diem] = {
+        ads: [prop],
+        dd: qc.dia_diem,
+      };
+    }
+  }
+
+  return grp_by_location;
 }
 
 const GeoJsonRouter = Router();
@@ -81,20 +108,18 @@ GeoJsonRouter.get("/", async function (req, res) {
     features: [],
   };
 
-  for (let i = 0; i < qc_data.data.length; i++) {
-    const qc = qc_data.data[i];
-    const ft = geo_json.features.push({
+  const geo_data = Object.entries(qc_data.data);
+
+  for (let i = 0; i < geo_data.length; i++) {
+    const qc = geo_data[i];
+    geo_json.features.push({
       type: "Feature",
       properties: {
-        name: qc.dia_diem.ten_dia_diem,
-        address: qc.dia_diem.dia_chi,
-        land_type: qc.loai_vitri,
-        ad_type: qc.hinh_thuc,
-        legal: qc.quang_cao.quy_hoach,
+        ads: qc[1].ads,
       },
       geometry: {
         type: "Point",
-        coordinates: [qc.dia_diem.lng, qc.dia_diem.lat, 0],
+        coordinates: [qc[1].dd.lng, qc[1].dd.lat, 0],
       },
     });
   }
