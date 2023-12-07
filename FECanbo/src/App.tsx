@@ -12,7 +12,7 @@ import {
 } from "@ant-design/icons";
 import AdsInfo from "./components/ads-info/AdsInfo";
 import ReportInfo from "./components/report-info/ReportInfo";
-
+import AdsRequestForm from "./components/ads-request/AdsRequestForm";
 const { Header, Sider, Content } = Layout;
 const data: AdRequest[] = [
   {
@@ -92,10 +92,12 @@ const App = () => {
           }
         />
         <Route path="advertisements" element={<AdsInfo />} />
-        <Route path="reports" element={<ReportInfo />} />
+        <Route path="reports" element={<ReportInfo/>} />
       </Route>
     </Routes>
   );
+
+  
 };
 
 const PageLayout = () => {

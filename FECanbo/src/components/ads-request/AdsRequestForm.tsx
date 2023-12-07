@@ -1,8 +1,19 @@
 import React, { useState } from "react";
 import { Modal, Form, Input, Button, DatePicker, Upload, Row, Col } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import type { RcFile, UploadProps } from "antd/es/upload";
+import type { UploadFile } from "antd/es/upload/interface";
 
 const { TextArea } = Input;
+
+const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
 const ModalFormAntDesignExample: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -23,28 +34,43 @@ const ModalFormAntDesignExample: React.FC = () => {
     handleOk();
   };
 
-  const commonLabelCol = { span: 7 };
-  const commonWrapperCol = { span: 17 };
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const uploadProps = {
-    name: "file",
-    action: "https://upload",
-    onChange(info: any) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        console.log(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        console.error(`${info.file.name} file upload failed.`);
-      }
-    },
+  const handleCancelPreview = () => setPreviewOpen(false);
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as RcFile);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1),
+    );
   };
+
+  const handleChangeUpload: UploadProps["onChange"] = ({
+    fileList: newFileList,
+  }) => setFileList(newFileList);
+
+  const commonLabelCol = { span: 8 };
+  const commonWrapperCol = { span: 12 };
+
+  const uploadButton = (
+    <div>
+      <UploadOutlined />
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
 
   return (
     <div>
       <Button type="primary" onClick={showModal}>
-        Open Modal with Form
+        TẠO YÊU CẦU CẤP PHÉP
       </Button>
 
       <Modal
@@ -54,8 +80,8 @@ const ModalFormAntDesignExample: React.FC = () => {
         footer={null}
         onCancel={handleCancel}
       >
-        <Form onFinish={onFinish} layout="horizontal">
-          <Row gutter={16}>
+        <Form onFinish={onFinish} layout="horizontal" labelAlign="left">
+          <Row gutter={15}>
             <Col span={12}>
               <Form.Item
                 name="image"
@@ -63,16 +89,35 @@ const ModalFormAntDesignExample: React.FC = () => {
                 labelCol={commonLabelCol}
                 wrapperCol={commonWrapperCol}
               >
-                <Upload {...uploadProps}>
-                  <Button icon={<UploadOutlined />}>Tải ảnh lên</Button>
+                <Upload
+                  action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                  listType="picture-card"
+                  fileList={fileList}
+                  onPreview={handlePreview}
+                  onChange={handleChangeUpload}
+                >
+                  {fileList.length >= 8 ? null : uploadButton}
                 </Upload>
+                <Modal
+                  open={previewOpen}
+                  title={previewTitle}
+                  footer={null}
+                  onCancel={handleCancelPreview}
+                >
+                  <img
+                    alt="example"
+                    style={{ width: "100%" }}
+                    src={previewImage}
+                  />
+                </Modal>
               </Form.Item>
             </Col>
 
-            <Col span={10}>
+            <Col span={12}>
               <Form.Item
                 name="mapPosition"
                 label="Chọn điểm đặt"
+                rules={[{ required: true, message: "Xin hãy chọn điểm đặt" }]}
                 labelCol={commonLabelCol}
                 wrapperCol={commonWrapperCol}
               >
@@ -81,14 +126,14 @@ const ModalFormAntDesignExample: React.FC = () => {
             </Col>
           </Row>
           <Row>
-            <Col span={20}>
+            <Col span={23}>
               <Form.Item
                 name="additionalInfo"
                 label="Nội dung pano"
-                labelCol={{ span: 5 }}
-                wrapperCol={{ span: 17 }}
+                labelCol={{ span: 4 }}
+                wrapperCol={{ span: 19 }}
               >
-                <TextArea rows={4} />
+                <TextArea rows={5} />
               </Form.Item>
             </Col>
           </Row>
@@ -97,7 +142,7 @@ const ModalFormAntDesignExample: React.FC = () => {
             wrapperCol={commonWrapperCol}
           ></Form.Item>
 
-          <Row gutter={16}>
+          <Row gutter={15}>
             <Col span={12}>
               <Form.Item
                 name="companyName"
@@ -130,7 +175,7 @@ const ModalFormAntDesignExample: React.FC = () => {
             </Col>
           </Row>
 
-          <Row gutter={16}>
+          <Row gutter={15}>
             <Col span={12}>
               <Form.Item
                 name="address"
@@ -157,11 +202,17 @@ const ModalFormAntDesignExample: React.FC = () => {
             </Col>
           </Row>
 
-          <Row gutter={16}>
+          <Row gutter={15}>
             <Col span={12}>
               <Form.Item
                 name="startDate"
                 label="Ngày bắt đầu hợp đồng"
+                rules={[
+                  {
+                    required: true,
+                    message: "Xin hãy chọn ngày bắt đầu hợp đồng!",
+                  },
+                ]}
                 labelCol={commonLabelCol}
                 wrapperCol={commonWrapperCol}
               >
@@ -172,6 +223,12 @@ const ModalFormAntDesignExample: React.FC = () => {
               <Form.Item
                 name="endDate"
                 label="Ngày kết thúc hợp đồng"
+                rules={[
+                  {
+                    required: true,
+                    message: "Xin hãy chọn ngày kết thúc hợp đồng!",
+                  },
+                ]}
                 labelCol={commonLabelCol}
                 wrapperCol={commonWrapperCol}
               >
@@ -180,7 +237,7 @@ const ModalFormAntDesignExample: React.FC = () => {
             </Col>
           </Row>
 
-          <Form.Item wrapperCol={{ offset: commonLabelCol.span + 4, span: 20 }}>
+          <Form.Item className="items-center flex justify-center">
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
