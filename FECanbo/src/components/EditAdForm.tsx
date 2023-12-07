@@ -77,14 +77,34 @@ function EditAdForm() {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancelModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
-    <div className="bg-gray-500">
-      <div className="mx-auto my-auto w-8/12 rounded-lg bg-white">
-        <div className="mr-4 cursor-pointer text-right text-3xl font-semibold ">
-          x
-        </div>
-        <h1 className=" mb-10 mt-5 text-center text-3xl font-semibold">
+    <>
+      <Button type="primary" onClick={showModal}>
+        Open Modal
+      </Button>
+
+      <Modal
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancelModal}
+        footer={null}
+        className="mx-auto my-auto w-8/12 rounded-lg "
+      >
+        <h1 className=" mb-10 mt-5 text-center text-2xl font-semibold">
           CHỈNH SỬA BẢNG QUẢNG CÁO
         </h1>
 
@@ -182,8 +202,8 @@ function EditAdForm() {
         <div className="mt-5 flex items-center justify-center">
           <Button type="primary">Hoàn thành </Button>
         </div>
-      </div>
-    </div>
+      </Modal>
+    </>
   );
 }
 
