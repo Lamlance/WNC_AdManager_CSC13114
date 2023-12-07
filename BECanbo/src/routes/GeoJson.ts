@@ -1,36 +1,7 @@
-import { AdsSchema, dbConn } from "@admanager/backend";
+import { AdsGeoJson, AdsSchema, dbConn } from "@admanager/backend";
 import { Router } from "express";
 import { CallAndCatchAsync } from "../utils/CallCatch.js";
 import { eq } from "drizzle-orm";
-
-type AdsProperty = {
-  name: string;
-  address: string;
-  land_type: string;
-  ad_type: string;
-  legal: boolean;
-  panel_type: string;
-};
-
-type GeoJsonFeature = {
-  type: "Feature";
-  properties: {
-    ads: AdsProperty[];
-  };
-  geometry: {
-    type: "Point";
-    coordinates: [number, number, 0];
-  };
-};
-
-type GeoJson = {
-  type: "FeatureCollection";
-  crs: {
-    type: "name";
-    properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" };
-  };
-  features: GeoJsonFeature[];
-};
 
 async function GetQuangCaoData() {
   const data = await dbConn
@@ -64,7 +35,7 @@ async function GetQuangCaoData() {
 
   const grp_by_location: {
     [key: number]: {
-      ads: AdsProperty[];
+      ads: AdsGeoJson.AdsProperty[];
       dd: typeof AdsSchema.DiaDiem.$inferSelect;
     };
   } = {};
@@ -99,7 +70,7 @@ GeoJsonRouter.get("/", async function (req, res) {
   if (qc_data.success == false)
     return res.status(500).json({ error: qc_data.error });
 
-  const geo_json: GeoJson = {
+  const geo_json: AdsGeoJson.AdsGeoJson = {
     type: "FeatureCollection",
     crs: {
       properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },

@@ -12,7 +12,6 @@ import {
   real,
   date,
 } from "drizzle-orm/pg-core";
-
 const LoaiViTri = pgTable("LoaiViTri", {
   id_loai_vt: serial("id").primaryKey(),
   loai_vitri: varchar("loai_vitri", { length: 255 }).notNull(),

@@ -13,7 +13,6 @@ app.get("/", function (req, res) {
 });
 
 app.use("/geojson", GeoJsonRouter);
-
 app.listen(PORT, function () {
   console.log(`App BECanbo on http://localhost:${PORT}`);
 });

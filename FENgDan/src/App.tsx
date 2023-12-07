@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import "./App.css";
 import "maplibre-gl/dist/maplibre-gl.css";
 import AdsMap from "./components/AdsMap";
+
 function App() {
   return (
     <div>

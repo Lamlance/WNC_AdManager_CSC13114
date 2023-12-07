@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@admanager/backend": "*",
+    "@trpc/server": "^10.44.1",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.29.1",
     "pg": "^8.11.3",
