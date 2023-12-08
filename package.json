@@ -1,6 +1,7 @@
 {
   "name": "wnc-admanager-csc13114",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -16,4 +17,8 @@
   "dependencies": {
     "@heroicons/react": "^2.0.18"
   }
+    "FENgDan",
+    "packages/backend",
+    "BECanbo"
+  ]
 }

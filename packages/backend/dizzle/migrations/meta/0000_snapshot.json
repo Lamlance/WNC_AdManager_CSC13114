@@ -1,0 +1,258 @@
+{
+  "id": "1818efad-457f-45fe-b014-4a2b2a8d028c",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "DiaDiem": {
+      "name": "DiaDiem",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "dia_chi": {
+          "name": "dia_chi",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kinh_do": {
+          "name": "kinh_do",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vi_do": {
+          "name": "vi_do",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_phuong": {
+          "name": "id_phuong",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_quan": {
+          "name": "id_quan",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "DiaDiem_id_phuong_Phuong_id_fk": {
+          "name": "DiaDiem_id_phuong_Phuong_id_fk",
+          "tableFrom": "DiaDiem",
+          "tableTo": "Phuong",
+          "columnsFrom": [
+            "id_phuong"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "DiaDiem_id_quan_Quan_id_fk": {
+          "name": "DiaDiem_id_quan_Quan_id_fk",
+          "tableFrom": "DiaDiem",
+          "tableTo": "Quan",
+          "columnsFrom": [
+            "id_quan"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "HinhThucQC": {
+      "name": "HinhThucQC",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "hinh_thuc_qc": {
+          "name": "hinh_thuc_qc",
+          "type": "varchar(124)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "LoaiViTri": {
+      "name": "LoaiViTri",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "loai_vitri": {
+          "name": "loai_vitri",
+          "type": "varchar(124)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "Phuong": {
+      "name": "Phuong",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ten_phuong": {
+          "name": "ten_phuong",
+          "type": "varchar(124)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "Quan": {
+      "name": "Quan",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ten_quan": {
+          "name": "ten_quan",
+          "type": "varchar(124)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "QuangCao": {
+      "name": "QuangCao",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "id_dia_diem": {
+          "name": "id_dia_diem",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_hinh_thuc": {
+          "name": "id_hinh_thuc",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_loai_vitri": {
+          "name": "id_loai_vitri",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quy_hoach": {
+          "name": "quy_hoach",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "QuangCao_id_dia_diem_DiaDiem_id_fk": {
+          "name": "QuangCao_id_dia_diem_DiaDiem_id_fk",
+          "tableFrom": "QuangCao",
+          "tableTo": "DiaDiem",
+          "columnsFrom": [
+            "id_dia_diem"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "QuangCao_id_hinh_thuc_HinhThucQC_id_fk": {
+          "name": "QuangCao_id_hinh_thuc_HinhThucQC_id_fk",
+          "tableFrom": "QuangCao",
+          "tableTo": "HinhThucQC",
+          "columnsFrom": [
+            "id_hinh_thuc"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "QuangCao_id_loai_vitri_LoaiViTri_id_fk": {
+          "name": "QuangCao_id_loai_vitri_LoaiViTri_id_fk",
+          "tableFrom": "QuangCao",
+          "tableTo": "LoaiViTri",
+          "columnsFrom": [
+            "id_loai_vitri"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}
