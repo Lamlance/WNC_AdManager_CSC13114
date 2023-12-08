@@ -1,13 +1,7 @@
+import { AdsGeoJson } from "@admanager/shared";
 import { CallAndCatch } from "@admanager/frontend";
 import z from "zod";
-const AdDataSchema = z.object({
-  name: z.string(),
-  address: z.string(),
-  land_type: z.string(),
-  ad_type: z.string(),
-  legal: z.coerce.boolean(),
-  panel_type: z.string(),
-});
+
 const AdsMarkerInfoSchema = z.object({
   ads: z.preprocess((val) => {
     if (Array.isArray(val)) return val;
@@ -16,7 +10,7 @@ const AdsMarkerInfoSchema = z.object({
       d: val,
     });
     return data.success ? data.data : [];
-  }, z.array(AdDataSchema).min(1)),
+  }, z.array(AdsGeoJson.AdsPropertySchema).min(1)),
 });
 
 export { AdsMarkerInfoSchema };

@@ -1,19 +1,15 @@
 import { Drawer } from "antd";
-import { useEffect, useState } from "react";
 import Tab from "./Tabs";
+import { useAppDispatch, useAppSelector } from "../Redux/ReduxStore";
+import { setSelectedAdsLocation } from "../Redux/SelectedAdsSlice";
 
-function Sidebar({ openSidebar }) {
-  const [open, setOpen] = useState(false);
+function Sidebar() {
+  const selected = useAppSelector((state) => state.SelectedAds);
+  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (openSidebar) {
-      setOpen(true);
-    }
-  }, [openSidebar]);
-
-  const onClose = () => {
-    setOpen(false);
-  };
+  function on_drawer_close() {
+    dispatch(setSelectedAdsLocation(null));
+  }
 
   return (
     <div>
@@ -21,8 +17,8 @@ function Sidebar({ openSidebar }) {
         title="Basic Drawer"
         placement="left"
         closable={false}
-        onClose={onClose}
-        open={open}
+        onClose={on_drawer_close}
+        open={!!selected ? true : false}
         key="left"
       >
         <Tab />

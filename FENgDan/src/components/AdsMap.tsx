@@ -2,10 +2,12 @@ import MapLibreGL, { Map, Popup } from "maplibre-gl";
 import { useEffect, useRef, useState } from "react";
 import "./AdsMap.css";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { AdsMarkerInfoSchema } from "../data/mock_markers";
 import { z } from "zod";
 import { Switch } from "antd";
 import { AddClusterPoints } from "../utils/AddClusterPoint";
+import { AdsMarkerInfoSchema } from "../models/mock_markers";
+import { useAppDispatch } from "../Redux/ReduxStore";
+import { setSelectedAdsLocation } from "../Redux/SelectedAdsSlice";
 
 const ADS_INFO = {
   DataSourceId: "ads_data",
@@ -14,13 +16,11 @@ const ADS_INFO = {
   UnclusterId: "ads_unclustered_point",
 } as const;
 
-interface AdsMapProps {
-  onAdMarkerClick?: () => void;
-}
-
-function AdsMap({ onAdMarkerClick }: AdsMapProps) {
+function AdsMap() {
   const mapEleRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
+  const dispatch = useAppDispatch();
+
   const [lng, setLng] = useState(106.69379445290143);
   const [lat, setLat] = useState(10.788266281491206);
   const [zoom, setZoom] = useState(14);
@@ -53,7 +53,7 @@ function AdsMap({ onAdMarkerClick }: AdsMapProps) {
     }
 
     const geo_json_url =
-      (import.meta as any).env?.VITE_GEOJSON_URL ||
+      (import.meta as any).env.VITE_GEOJSON_URL ||
       "http://localhost:5173/MockMarker.json";
     console.log("Geo json url", geo_json_url);
 
@@ -114,11 +114,8 @@ function AdsMap({ onAdMarkerClick }: AdsMapProps) {
       if (marker_data.success == false) return;
       make_info_maker(marker_data.data, [lng, lat]);
 
-      console.log("You click a mark", marker_data.data.name);
-      if (onAdMarkerClick) {
-        onAdMarkerClick();
-      }
-
+      console.log("You click a mark", marker_data.data.ads[0].name);
+      dispatch(setSelectedAdsLocation(marker_data.data));
     });
 
     map.on("mouseenter", "ads_unclustered_point", function (e) {

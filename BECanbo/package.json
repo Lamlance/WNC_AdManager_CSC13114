@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@admanager/shared": "*",
     "@admanager/backend": "*",
     "@trpc/server": "^10.44.1",
     "cors": "^2.8.5",

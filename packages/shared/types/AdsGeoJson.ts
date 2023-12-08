@@ -1,11 +1,15 @@
-type AdsProperty = {
-  name: string;
-  address: string;
-  land_type: string;
-  ad_type: string;
-  legal: boolean;
-  panel_type: string;
-};
+import z from "zod";
+
+const AdsPropertySchema = z.object({
+  name: z.string(),
+  address: z.string(),
+  land_type: z.string(),
+  ad_type: z.string(),
+  legal: z.coerce.boolean(),
+  panel_type: z.string(),
+});
+
+type AdsProperty = z.infer<typeof AdsPropertySchema>;
 
 type AdsGeoJsonFeature = {
   type: "Feature";
@@ -28,3 +32,4 @@ type AdsGeoJson = {
 };
 
 export type { AdsProperty, AdsGeoJsonFeature, AdsGeoJson };
+export { AdsPropertySchema };

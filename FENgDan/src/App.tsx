@@ -1,24 +1,17 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./App.css";
 import AdsMap from "./components/AdsMap";
 import Sidebar from "./components/Sidebar";
+import ReduxStore from "./Redux/ReduxStore";
+import { Provider } from "react-redux";
 
 function App() {
-  const [sidebarVisible, setSidebarVisible] = useState(false);
-
-  const openSidebar = () => {
-    setSidebarVisible(true);
-  };
-
-  const closeSidebar = () => {
-    setSidebarVisible(false);
-  };
-
   return (
     <div className="h-screen w-screen">
-      <AdsMap onAdMarkerClick={openSidebar} />
-      {sidebarVisible && <Sidebar openSidebar={closeSidebar} />}
+      <AdsMap />
+      {/* {sidebarVisible && <Sidebar openSidebar={closeSidebar} />} */}
+      <Sidebar />
     </div>
   );
 }
@@ -36,5 +29,9 @@ export default function () {
       head.insertAdjacentElement("afterbegin", tailWindStyleTag);
     }
   }, []);
-  return <App />;
+  return (
+    <Provider store={ReduxStore}>
+      <App />
+    </Provider>
+  );
 }

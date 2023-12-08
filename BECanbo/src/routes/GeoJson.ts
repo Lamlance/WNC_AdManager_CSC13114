@@ -1,7 +1,8 @@
-import { AdsGeoJson, AdsSchema, dbConn } from "@admanager/backend";
+import { AdsSchema, dbConn } from "@admanager/backend";
 import { Router } from "express";
 import { CallAndCatchAsync } from "../utils/CallCatch.js";
 import { eq } from "drizzle-orm";
+import { AdsGeoJson } from "@admanager/shared";
 
 async function GetQuangCaoData() {
   const data = await dbConn
