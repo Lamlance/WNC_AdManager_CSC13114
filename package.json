@@ -12,6 +12,11 @@
   "workspaces": [
     "packages/frontend",
     "FECanbo",
+    "FENgDan"
+  ],
+  "dependencies": {
+    "@heroicons/react": "^2.0.18"
+  }
     "FENgDan",
     "packages/backend",
     "BECanbo"

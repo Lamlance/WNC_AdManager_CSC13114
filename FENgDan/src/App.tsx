@@ -1,16 +1,24 @@
-import Sidebar from "./components/Sidebar";
-import { useEffect } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import { useEffect, useState } from "react";
 import "./App.css";
-import "maplibre-gl/dist/maplibre-gl.css";
 import AdsMap from "./components/AdsMap";
+import Sidebar from "./components/Sidebar";
 
 function App() {
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+
+  const openSidebar = () => {
+    setSidebarVisible(true);
+  };
+
+  const closeSidebar = () => {
+    setSidebarVisible(false);
+  };
+
   return (
-    <div>
-      {/* <div className="flex place-items-center bg-blue-500">HelloNgDan</div>
-      <Button type="primary">Button</Button>
-      <DemoComponent /> */}
-      <Sidebar />
+    <div className="h-screen w-screen">
+      <AdsMap onAdMarkerClick={openSidebar} />
+      {sidebarVisible && <Sidebar openSidebar={closeSidebar} />}
     </div>
   );
 }
