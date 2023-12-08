@@ -1,23 +1,10 @@
 import React, { useState } from "react";
-import {
-  Select,
-  Space,
-  DatePicker,
-  InputNumber,
-  Form,
-  Input,
-  Button,
-} from "antd";
+import { Select, DatePicker, InputNumber, Form, Input, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
 const { Option } = Select;
-const config = {
-  rules: [
-    { type: "object" as const, required: true, message: "Please select time!" },
-  ],
-};
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -26,29 +13,30 @@ const getBase64 = (file: RcFile): Promise<string> =>
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
   });
-function EditAdForm() {
-  const AdTableType = [
-    "Trụ bảng hiflex",
-    "Trụ màn hình điện tử LED",
-    "Trụ hộp đèn",
-    " Bảng hiflex ốp tường",
-    "Màn hình điện tử ốp tường",
-    "Trụ treo băng rôn dọc",
-    "Trụ treo băng rôn ngang",
-    "Trụ/Cụm pano",
-    "Cổng chào",
-    "Trung tâm thương mại",
-  ];
-  const LocateType = [
-    "Đất công/Công viên/Hành lang an toàn giao thông",
-    "Đất tư nhân/Nhà ở riêng lẻ",
-    "Trung tâm thương mại",
-    "Chợ",
-    "Cây xăng",
-    "Nhà chờ xe buýt",
-  ];
-  const AdType = ["Cổ động chính trị", "Quảng cáo thương mại", "Xã hội hoá"];
+type SizeType = Parameters<typeof Form>[0]["size"];
+const AdTableType = [
+  "Trụ bảng hiflex",
+  "Trụ màn hình điện tử LED",
+  "Trụ hộp đèn",
+  " Bảng hiflex ốp tường",
+  "Màn hình điện tử ốp tường",
+  "Trụ treo băng rôn dọc",
+  "Trụ treo băng rôn ngang",
+  "Trụ/Cụm pano",
+  "Cổng chào",
+  "Trung tâm thương mại",
+];
+const LocateType = [
+  "Đất công/Công viên/Hành lang an toàn giao thông",
+  "Đất tư nhân/Nhà ở riêng lẻ",
+  "Trung tâm thương mại",
+  "Chợ",
+  "Cây xăng",
+  "Nhà chờ xe buýt",
+];
+const AdType = ["Cổ động chính trị", "Quảng cáo thương mại", "Xã hội hoá"];
 
+function EditAdForm() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -90,6 +78,13 @@ function EditAdForm() {
   const handleCancelModal = () => {
     setIsModalOpen(false);
   };
+  const [componentSize, setComponentSize] = useState<SizeType | "default">(
+    "default",
+  );
+
+  const onFormLayoutChange = ({ size }: { size: SizeType }) => {
+    setComponentSize(size);
+  };
 
   return (
     <>
@@ -107,14 +102,17 @@ function EditAdForm() {
         <h1 className=" mb-10 mt-5 text-center text-2xl font-semibold">
           CHỈNH SỬA BẢNG QUẢNG CÁO
         </h1>
-
-        <div className="grid grid-cols-2 gap-5 px-5 ">
-          <div className=" flex">
-            <div className=" w-24 translate-y-[-5px] font-semibold lg:w-32 lg:translate-y-0">
-              Loại quảng cáo :{" "}
-            </div>
-            <Space.Compact className=" w-2/3">
-              <Select defaultValue="" style={{ width: "100%" }}>
+        <Form
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          layout="horizontal"
+          initialValues={{ size: componentSize }}
+          onValuesChange={onFormLayoutChange}
+          size={componentSize as SizeType}
+        >
+          <div className="grid grid-cols-2 gap-5  ">
+            <Form.Item label=" Loại quảng cáo">
+              <Select>
                 {AdTableType.map((value) => {
                   return (
                     <Option key={value} value={value}>
@@ -123,26 +121,9 @@ function EditAdForm() {
                   );
                 })}
               </Select>
-            </Space.Compact>
-          </div>
-          <div className=" flex">
-            <div className=" w-24 font-semibold lg:w-32">Phân loại : </div>
-            <Space.Compact className=" w-2/3">
-              <Select defaultValue="" style={{ width: "80%" }}>
-                {LocateType.map((value) => {
-                  return (
-                    <Option key={value} value={value}>
-                      {value}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </Space.Compact>
-          </div>
-          <div className=" flex">
-            <div className=" w-24 font-semibold lg:w-32">Hình thức : </div>
-            <Space.Compact className=" w-2/3">
-              <Select defaultValue="" style={{ width: "100%" }}>
+            </Form.Item>
+            <Form.Item label=" Hình thức">
+              <Select>
                 {AdType.map((value) => {
                   return (
                     <Option key={value} value={value}>
@@ -151,57 +132,68 @@ function EditAdForm() {
                   );
                 })}
               </Select>
-            </Space.Compact>
-          </div>
-          <div className=" flex">
-            <div className=" w-24  font-semibold lg:w-32">Kích thước : </div>
-            <InputNumber className="h-8 w-12 " min={1} max={10} />
-            <span className="mx-2">x</span>
-            <InputNumber className="h-8 w-12" min={1} max={10} />
-            <span className="mx-2">(mxm)</span>
-          </div>
-          <div className=" flex">
-            <div className=" w-24 translate-y-[-5px] font-semibold lg:w-32 lg:translate-y-0">
-              Ngày hết hạn :{" "}
-            </div>
-            <Form.Item className="" name="date-picker" {...config}>
+            </Form.Item>
+            <Form.Item label=" Phân loại">
+              <Select>
+                {LocateType.map((value) => {
+                  return (
+                    <Option key={value} value={value}>
+                      {value}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+            <Form.Item label=" Kích thước">
+              <InputNumber className="h-8 w-12 " min={1} max={10} />
+              <span className="mx-2">x</span>
+              <InputNumber className="h-8 w-12" min={1} max={10} />
+              <span className="mx-2">(mxm)</span>
+            </Form.Item>
+            <Form.Item label="Ngày hết hạn">
               <DatePicker />
             </Form.Item>
+            <Form.Item label="Số lượng">
+              <InputNumber className="h-8 w-12 " min={1} max={10} />
+              <span className="mx-2">trụ/bảng</span>
+            </Form.Item>
           </div>
-          <div className=" flex">
-            <div className=" w-24 font-semibold lg:w-32">Số lượng : </div>
-            <InputNumber className="h-8 " min={1} max={10} />
-
-            <div className="ml-1">trụ/bảng</div>
-          </div>
-        </div>
-        <div className=" flex px-5">
-          <div className="w-24 font-semibold lg:w-32"> Địa chỉ : </div>
-          <Input className="w-3/4" />
-        </div>
-        <div className="mt-5 flex px-5">
-          <div className="w-28 font-semibold lg:w-40"> Hình ảnh : </div>
-          <Upload
-            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-            listType="picture-card"
-            fileList={fileList}
-            onPreview={handlePreview}
-            onChange={handleChange}
+          <Form.Item
+            label="Địa chỉ"
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 20 }}
           >
-            {fileList.length >= 8 ? null : uploadButton}
-          </Upload>
-          <Modal
-            open={previewOpen}
-            title={previewTitle}
-            footer={null}
-            onCancel={handleCancel}
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Hình ảnh"
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 20 }}
           >
-            <img alt="example" style={{ width: "100%" }} src={previewImage} />
-          </Modal>
-        </div>
-        <div className="mt-5 flex items-center justify-center">
-          <Button type="primary">Hoàn thành </Button>
-        </div>
+            <Upload
+              action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+            >
+              {fileList.length >= 8 ? null : uploadButton}
+            </Upload>
+            <Modal
+              open={previewOpen}
+              title={previewTitle}
+              footer={null}
+              onCancel={handleCancel}
+            >
+              <img alt="example" style={{ width: "100%" }} src={previewImage} />
+            </Modal>
+          </Form.Item>
+          <Form.Item className="mt-5 flex items-center justify-center">
+            <Button type="primary" htmlType="submit">
+              Hoàn thành
+            </Button>
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   );
