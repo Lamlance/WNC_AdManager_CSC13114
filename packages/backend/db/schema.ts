@@ -41,7 +41,8 @@ const Phuong = pgTable("Phuong", {
 });
 
 const DiaDiem = pgTable("DiaDiem", {
-  id_dia_diem: serial("id").primaryKey(),
+  id_dia_diem: serial("id_dia_diem").primaryKey(),
+  place_id: varchar("id_ban_do", { length: 255 }),
   ten_dia_diem: varchar("ten_dia_diem", { length: 255 }).notNull(),
   dia_chi: varchar("dia_chi", { length: 255 }).notNull(),
   lng: doublePrecision("kinh_do").notNull(),
@@ -81,4 +82,47 @@ const QuangCao = pgTable("QuangCao", {
     .references(() => LoaiViTri.id_loai_vt),
 });
 
-export { LoaiViTri, HinhThucQC, Phuong, Quan, DiaDiem, QuangCao, LoaiBangQC };
+const LoaiBaoCao = pgTable("LoaiBaoCao", {
+  id_loai_bc: serial("id_loai_bc").primaryKey(),
+  loai_bao_cao: varchar("loai_bao_cao", { length: 255 }).notNull(),
+});
+
+const BaoCao = pgTable("BaoCao", {
+  id_bao_cao: uuid("id_bao_cao").defaultRandom().primaryKey(),
+  ten_nguoi_gui: varchar("ten_nguoi_gui", { length: 255 }).notNull(),
+  email: varchar("email", { length: 127 }),
+  dien_thoai: varchar("dien_thoai", { length: 127 }),
+  noi_dung: varchar("noi_dung", { length: 511 }).notNull(),
+
+  id_loai_bc: integer("id_loai_bc")
+    .notNull()
+    .references(() => LoaiBaoCao.id_loai_bc),
+});
+
+const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
+  id_yeu_cau: serial("id_yeu_cau").primaryKey(),
+  id_diem_dat: serial("id_diem_dat")
+    .notNull()
+    .references(() => DiaDiem.id_dia_diem),
+  noi_dung_qc: varchar("noi_dung_qc", { length: 255 }).notNull(),
+
+  dien_thoai_cty: varchar("dien_thoai_cty", { length: 127 }).notNull(),
+  emial_cty: varchar("dien_thoai_cty", { length: 127 }).notNull(),
+  dia_chi_cty: varchar("dien_thoai_cty", { length: 255 }).notNull(),
+
+  ngay_hieu_luc: date("ngay_hieu_luc").notNull(),
+  ngay_het_han: date("ngay_het_han").notNull(),
+});
+
+export {
+  LoaiViTri,
+  HinhThucQC,
+  Phuong,
+  Quan,
+  DiaDiem,
+  QuangCao,
+  LoaiBangQC,
+  LoaiBaoCao,
+  BaoCao,
+  YeuCauCapPhep,
+};
