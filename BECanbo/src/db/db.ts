@@ -1,6 +1,6 @@
+import { AdsSchema } from "@admanager/backend";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg_pkg from "pg";
-import * as AdsSchema from "./schema.js";
 
 const { Client } = pg_pkg;
 const client = new Client({

@@ -1,11 +1,12 @@
-import { AdsSchema, dbConn } from "@admanager/backend";
+import { AdsSchema } from "@admanager/backend";
 import { Router } from "express";
 import { CallAndCatchAsync } from "../utils/CallCatch.js";
 import { eq } from "drizzle-orm";
 import { AdsGeoJson } from "@admanager/shared";
+import { pg_client } from "../db/db.js";
 
 async function GetQuangCaoData() {
-  const data = await dbConn
+  const data = await pg_client
     .select({
       dia_diem: AdsSchema.DiaDiem,
       quang_cao: AdsSchema.QuangCao,

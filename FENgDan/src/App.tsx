@@ -5,7 +5,6 @@ import AdsMap from "./components/AdsMap";
 import Sidebar from "./components/Sidebar";
 import ReduxStore from "./Redux/ReduxStore";
 import { Provider } from "react-redux";
-
 function App() {
   return (
     <div className="h-screen w-screen">
