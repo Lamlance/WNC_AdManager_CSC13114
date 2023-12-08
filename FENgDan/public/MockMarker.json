@@ -1,18 +1,23 @@
 {
   "type": "FeatureCollection",
   "crs": {
-    "type": "name",
-    "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" }
+    "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" },
+    "type": "name"
   },
   "features": [
     {
       "type": "Feature",
       "properties": {
-        "name": "Nhà thờ Tân Định",
-        "address": "289 Hai Bà Trưng, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
-        "land_type": "Đất cơ sở tôn giáo",
-        "ad_type": "Quảng bá tôn giáo",
-        "legal": 1
+        "ads": [
+          {
+            "name": "Nhà thờ Tân Định",
+            "address": "289 Hai Bà Trưng, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
+            "land_type": "Đất tôn giáo",
+            "ad_type": "Xã hội hoá",
+            "legal": true,
+            "panel_type": "Trụ bảng hiflex"
+          }
+        ]
       },
       "geometry": {
         "type": "Point",
@@ -22,11 +27,16 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Chợ tân định",
-        "address": "336 Hai Bà Trưng, Phường Tân Định, Quận 1, Thành phố Hồ Chí Minh",
-        "land_type": "Chợ",
-        "ad_type": "Quảng cáo thương mại",
-        "legal": 0
+        "ads": [
+          {
+            "name": "Chợ tân định",
+            "address": "336 Hai Bà Trưng, Phường Tân Định, Quận 1, Thành phố Hồ Chí Minh",
+            "land_type": "Chợ",
+            "ad_type": "Quảng cáo thương mại",
+            "legal": false,
+            "panel_type": "Trụ bảng hiflex"
+          }
+        ]
       },
       "geometry": {
         "type": "Point",
@@ -36,11 +46,16 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "THPT Nguyễn Thị Diệu",
-        "address": "12 Trần Quốc Toản, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
-        "land_type": "Đất công",
-        "ad_type": "Cổ động chính trị",
-        "legal": 1
+        "ads": [
+          {
+            "name": "THPT Nguyễn Thị Diệu",
+            "address": "12 Trần Quốc Toản, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
+            "land_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "ad_type": "Cổ động chính trị",
+            "legal": true,
+            "panel_type": "Trụ bảng hiflex"
+          }
+        ]
       },
       "geometry": {
         "type": "Point",
@@ -50,11 +65,16 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Viện Pasteur Thành phố Hồ Chí Minh",
-        "address": "167 Pasteur, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
-        "land_type": "Đất công",
-        "ad_type": "Cổ động y tế",
-        "legal": 1
+        "ads": [
+          {
+            "name": "Viện Pasteur Thành phố Hồ Chí Minh",
+            "address": "167 Pasteur, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
+            "land_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "ad_type": "Xã hội hoá",
+            "legal": true,
+            "panel_type": "Trụ bảng hiflex"
+          }
+        ]
       },
       "geometry": {
         "type": "Point",
@@ -64,11 +84,16 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Công viên Lê Văn Tám",
-        "address": "QMQV+6GM, Đ. Võ Thị Sáu, Đa Kao, Quận 1, Thành phố Hồ Chí Minh",
-        "land_type": "Đất công",
-        "ad_type": "Cổ động chính trị",
-        "legal": 1
+        "ads": [
+          {
+            "name": "Công viên Lê Văn Tám",
+            "address": "QMQV+6GM, Đ. Võ Thị Sáu, Đa Kao, Quận 1, Thành phố Hồ Chí Minh",
+            "land_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "ad_type": "Quảng cáo thương mại",
+            "legal": false,
+            "panel_type": "Trụ bảng hiflex"
+          }
+        ]
       },
       "geometry": {
         "type": "Point",

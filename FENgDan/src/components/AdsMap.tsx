@@ -53,7 +53,7 @@ function AdsMap() {
     }
 
     const geo_json_url =
-      (import.meta as any).env.VITE_GEOJSON_URL ||
+      //(import.meta as any).env.VITE_GEOJSON_URL ||
       "http://localhost:5173/MockMarker.json";
     console.log("Geo json url", geo_json_url);
 
