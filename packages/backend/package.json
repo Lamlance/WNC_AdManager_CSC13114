@@ -22,9 +22,5 @@
   "devDependencies": {
     "@types/pg": "^8.10.9",
     "drizzle-kit": "^0.20.6"
-  },
-  "workspaces": [
-    "types",
-    "backend-types"
-  ]
+  }
 }

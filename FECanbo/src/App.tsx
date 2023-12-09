@@ -22,6 +22,8 @@ const App = () => {
         <Route index element={<AdsRequestPage />} />
         <Route path="advertisements" element={<AdsInfo />} />
         <Route path="reports" element={<ReportInfo />} />
+      </Route>
+      <Route path="vhtt">
         <Route path="editad" element={<EditAdForm />} />
         <Route path="editpoint" element={<EditSetpoint />} />
       </Route>
