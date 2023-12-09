@@ -14,7 +14,7 @@ const getBase64 = (file: RcFile): Promise<string> =>
     reader.onerror = (error) => reject(error);
   });
 
-const ModalFormAntDesignExample: React.FC = () => {
+const AdsRequestForm: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
@@ -237,7 +237,7 @@ const ModalFormAntDesignExample: React.FC = () => {
             </Col>
           </Row>
 
-          <Form.Item className="items-center flex justify-center">
+          <Form.Item className="flex items-center justify-center">
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
@@ -248,4 +248,4 @@ const ModalFormAntDesignExample: React.FC = () => {
   );
 };
 
-export default ModalFormAntDesignExample;
+export default AdsRequestForm;
