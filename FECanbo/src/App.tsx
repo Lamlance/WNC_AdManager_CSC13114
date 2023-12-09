@@ -12,6 +12,7 @@ import {
 } from "@ant-design/icons";
 import AdsInfo from "./components/ads-info/AdsInfo";
 import ReportInfo from "./components/report-info/ReportInfo";
+import EditSetpoint from "./components/vhtt/EditSetpoint";
 import AdsRequestForm from "./components/ads-request/AdsRequestForm";
 import AdsRequestPage from "./components/routes/AdsRequestPage";
 const { Header, Sider, Content } = Layout;
@@ -128,5 +129,6 @@ export default function () {
       head.insertAdjacentElement("afterbegin", tailWindStyleTag);
     }
   }, []);
+  //return <EditSetpoint />;
   return <App />;
 }
