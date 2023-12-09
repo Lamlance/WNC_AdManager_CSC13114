@@ -106,6 +106,7 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
     .references(() => DiaDiem.id_dia_diem),
   noi_dung_qc: varchar("noi_dung_qc", { length: 255 }).notNull(),
 
+  ten_cty: varchar("ten_cty", { length: 255 }).notNull(),
   dien_thoai_cty: varchar("dien_thoai_cty", { length: 127 }).notNull(),
   emial_cty: varchar("dien_thoai_cty", { length: 127 }).notNull(),
   dia_chi_cty: varchar("dien_thoai_cty", { length: 255 }).notNull(),
