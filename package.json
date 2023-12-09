@@ -1,6 +1,7 @@
 {
   "name": "wnc-admanager-csc13114",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,8 +12,12 @@
   "workspaces": [
     "packages/frontend",
     "FECanbo",
-    "FENgDan"
+    "FENgDan",
+    "BEcanbo",
+    "packages/backend",
+    "packages/shared"
   ],
+
   "dependencies": {
     "antd": "^5.11.5",
     "react-hook-form": "^7.48.2"

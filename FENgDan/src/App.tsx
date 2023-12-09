@@ -1,13 +1,16 @@
-import { Button } from "antd";
-import { DemoComponent } from "@admanager/frontend";
+/* eslint-disable react-refresh/only-export-components */
 import { useEffect } from "react";
-
+import "./App.css";
+import AdsMap from "./components/AdsMap";
+import Sidebar from "./components/Sidebar";
+import ReduxStore from "./Redux/ReduxStore";
+import { Provider } from "react-redux";
 function App() {
   return (
-    <div>
-      <div className="flex place-items-center bg-blue-500">HelloNgDan</div>
-      <Button type="primary">Button</Button>
-      <DemoComponent />
+    <div className="h-screen w-screen">
+      <AdsMap />
+      {/* {sidebarVisible && <Sidebar openSidebar={closeSidebar} />} */}
+      <Sidebar />
     </div>
   );
 }
@@ -25,5 +28,9 @@ export default function () {
       head.insertAdjacentElement("afterbegin", tailWindStyleTag);
     }
   }, []);
-  return <App />;
+  return (
+    <Provider store={ReduxStore}>
+      <App />
+    </Provider>
+  );
 }
