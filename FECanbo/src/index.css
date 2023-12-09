@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ant-table-thead .ant-table-cell {
+  background-color: #91caff !important;
+}

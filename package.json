@@ -16,5 +16,10 @@
     "BEcanbo",
     "packages/backend",
     "packages/shared"
-  ]
+  ],
+
+  "dependencies": {
+    "antd": "^5.11.5",
+    "react-hook-form": "^7.48.2"
+  },
 }
