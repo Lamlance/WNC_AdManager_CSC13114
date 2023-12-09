@@ -12,7 +12,7 @@ import {
 } from "@ant-design/icons";
 import AdsInfo from "./components/ads-info/AdsInfo";
 import ReportInfo from "./components/report-info/ReportInfo";
-import EditSetpoint from "./components/EditSetpoint"
+import EditSetpoint from "./components/vhtt/EditSetpoint";
 
 const { Header, Sider, Content } = Layout;
 
