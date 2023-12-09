@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { AdRequest } from "./types";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
-import AdsRequest from "./components/ads-request/AdsRequest";
 import { Button, Layout, Menu } from "antd";
 import {
   MenuFoldOutlined,
@@ -12,18 +10,20 @@ import {
 } from "@ant-design/icons";
 import AdsInfo from "./components/ads-info/AdsInfo";
 import ReportInfo from "./components/report-info/ReportInfo";
-import EditSetpoint from "./components/vhtt/EditSetpoint";
-import AdsRequestForm from "./components/ads-request/AdsRequestForm";
 import AdsRequestPage from "./components/routes/AdsRequestPage";
+import EditAdForm from "./components/vhtt/EditAdForm";
+import EditSetpoint from "./components/vhtt/EditSetpoint";
 const { Header, Sider, Content } = Layout;
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/pq" element={<PageLayout />}>
+      <Route path="/" element={<PageLayout />}>
         <Route index element={<AdsRequestPage />} />
         <Route path="advertisements" element={<AdsInfo />} />
         <Route path="reports" element={<ReportInfo />} />
+        <Route path="editad" element={<EditAdForm />} />
+        <Route path="editpoint" element={<EditSetpoint />} />
       </Route>
     </Routes>
   );
@@ -129,6 +129,5 @@ export default function () {
       head.insertAdjacentElement("afterbegin", tailWindStyleTag);
     }
   }, []);
-  //return <EditSetpoint />;
   return <App />;
 }
