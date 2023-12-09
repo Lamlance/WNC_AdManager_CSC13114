@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "description": "",
-  "main": "index.d.ts",
+  "main": "index.ts",
   "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
