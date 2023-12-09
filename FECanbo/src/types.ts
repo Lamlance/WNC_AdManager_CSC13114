@@ -14,3 +14,29 @@ export interface AdRequest {
   image: string;
   tags: string[];
 }
+
+export interface AdsInfoRecord {
+  adsType: string;
+  address: string;
+  generalInfo: {
+    size: {
+      width: number;
+      height: number;
+    };
+    number: number;
+  };
+  contentType: string;
+  placeType: string;
+  status: string;
+}
+
+export interface ReportInfoRecord {
+  reporterInfo: {
+    name: string;
+    phone: string;
+  };
+  adsAddress: string;
+  reportType: string;
+  reportTime: Date;
+  status: string;
+}
