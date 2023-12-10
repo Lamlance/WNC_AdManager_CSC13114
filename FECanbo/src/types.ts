@@ -14,6 +14,7 @@ export interface AdRequest {
 }
 
 export interface AdsInfoRecord {
+  id: string;
   adsType: string;
   address: string;
   generalInfo: {
@@ -26,15 +27,19 @@ export interface AdsInfoRecord {
   contentType: string;
   placeType: string;
   status: string;
+  effectDate: string;
+  expireDate: string;
 }
 
 export interface ReportInfoRecord {
+  id: string;
   reporterInfo: {
     name: string;
     phone: string;
   };
   adsAddress: string;
   reportType: string;
+  reportContent: string;
   reportTime: Date;
   status: string;
 }
