@@ -3,13 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import "./AdsMap.css";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { z } from "zod";
-import { AutoComplete, Switch } from "antd";
+import { Select, Switch } from "antd";
 import { AddClusterPoints } from "../utils/AddClusterPoint";
 import { AdsMarkerInfoSchema } from "../models/mock_markers";
 import { useAppDispatch } from "../Redux/ReduxStore";
 import { setSelectedAdsLocation } from "../Redux/SelectedAdsSlice";
 import { useLazyGetPlaceDetail, useLazyGetPredicts } from "../Redux/GoongApi";
-import { OptionProps } from "antd/es/select";
 
 const ADS_INFO = {
   DataSourceId: "ads_data",
@@ -49,12 +48,12 @@ function AdsMap() {
         .setMaxWidth("500px")
         .setHTML(
           `<div class="text-lg">
-          <h1 class="font-bold">${data.ads[0].ad_type}</h1>
-          <p>${data.ads[0].land_type}</p>
-          <p>${data.ads[0].ad_type}</p>
-          <p>${data.ads[0].address}</p>
+          <h1 class="font-bold">${data.ads[0].hinh_thuc}</h1>
+          <p>${data.ads[0].loai_vitri}</p>
+          <p>${data.ads[0].hinh_thuc}</p>
+          <p>${data.ads[0].dia_chi}</p>
           <h4 class="font-bold italic">${
-            data.ads[0].legal ? "Đã quy hoạch" : "Chưa quy hoạch"
+            data.ads[0].quy_hoach ? "Đã quy hoạch" : "Chưa quy hoạch"
           }</h4>
         </div>`,
         )
@@ -123,7 +122,7 @@ function AdsMap() {
       if (marker_data.success == false) return;
       make_info_maker(marker_data.data, [lng, lat]);
 
-      console.log("You click a mark", marker_data.data.ads[0].name);
+      console.log("You click a mark", marker_data.data.ads[0].ten_dia_diem);
       dispatch(setSelectedAdsLocation(marker_data.data));
     });
 
@@ -165,9 +164,9 @@ function AdsMap() {
         Number(mapRef.current.getCenter().lat.toFixed(4)),
         Number(mapRef.current.getZoom().toFixed(2)),
       ];
-      if (!!lng && !Number.isNaN(lng)) setLng(lng);
-      if (!!lat && !Number.isNaN(lat)) setLat(lat);
-      if (!!zoom && !Number.isNaN(zoom)) setZoom(zoom);
+      //if (!!lng && !Number.isNaN(lng)) setLng(lng);
+      //if (!!lat && !Number.isNaN(lat)) setLat(lat);
+      //if (!!zoom && !Number.isNaN(zoom)) setZoom(zoom);
     });
 
     map.once("load", function () {
@@ -198,11 +197,9 @@ function AdsMap() {
     setAdsVisible(is_check);
   }
 
-  console.log(predictResult);
-
   function on_search_location(srch: string) {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    if (!srch) return;
+    if (!srch || srch.split(" ").length < 2) return;
     timeoutRef.current = setTimeout(function () {
       console.log("Now searching: ", srch);
       getPredicts({
@@ -218,8 +215,9 @@ function AdsMap() {
   }, []);
 
   function get_suggest_option() {
-    if (!predictResult.currentData || !predictResult.currentData.predictions)
-      return [];
+    if (!predictResult.currentData || !predictResult.currentData.predictions) {
+      return [{ value: "Loading", key: "Loading", disabled: true }];
+    }
     return predictResult.currentData.predictions.map((p) => ({
       value: p.description,
       key: p.place_id,
@@ -233,6 +231,7 @@ function AdsMap() {
     });
     if (!result.data) return;
     const { lng, lat } = result.data.result.geometry.location;
+    console.log(lng, lat);
     selectMarkerRef.current.setLngLat([lng, lat]);
   }
 
@@ -240,14 +239,15 @@ function AdsMap() {
     <div className=" relative h-full w-full">
       <div id="locationIQ_map" ref={mapEleRef} className=" h-full w-full"></div>
       <div className=" absolute left-4 right-4 top-4">
-        <AutoComplete
+        <Select
+          showSearch
           placeholder={"Search for location"}
           options={get_suggest_option()}
-          onChange={on_search_location}
+          onSearch={on_search_location}
           className=" w-1/2"
           onSelect={on_suggest_select}
           allowClear
-        />
+        ></Select>
       </div>
       <div className=" absolute bottom-2 left-4 right-4 flex flex-row bg-white bg-opacity-80 p-2">
         <div className="flex flex-row gap-x-2">

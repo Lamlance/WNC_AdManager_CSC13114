@@ -44,13 +44,12 @@ async function GetQuangCaoData() {
 
   for (let i = 0; i < data.length; i++) {
     const qc = data[i];
-    const prop = {
-      name: qc.dia_diem.ten_dia_diem,
-      address: qc.dia_diem.dia_chi,
-      land_type: qc.loai_vitri,
-      ad_type: qc.hinh_thuc,
-      legal: qc.quang_cao.quy_hoach,
-      panel_type: qc.bang_qc,
+    const prop: AdsGeoJson.AdsProperty = {
+      ...qc.quang_cao,
+      ...qc.dia_diem,
+      loai_vitri: qc.loai_vitri,
+      hinh_thuc: qc.hinh_thuc,
+      bang_qc: qc.bang_qc,
     };
     if (grp_by_location[qc.dia_diem.id_dia_diem]) {
       grp_by_location[qc.dia_diem.id_dia_diem].ads.push(prop);
