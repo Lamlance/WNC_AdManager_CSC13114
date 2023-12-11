@@ -13,6 +13,7 @@ import ReportInfo from "./components/report-info/ReportInfo";
 import AdsRequestPage from "./components/routes/AdsRequestPage";
 import EditAdForm from "./components/vhtt/EditAdForm";
 import EditSetpoint from "./components/vhtt/EditSetpoint";
+import CreateAccount from "./components/vhtt/CreateAccount";
 const { Header, Sider, Content } = Layout;
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
       <Route path="vhtt">
         <Route path="editad" element={<EditAdForm />} />
         <Route path="editpoint" element={<EditSetpoint />} />
+        <Route path="createaccount" element={<CreateAccount />} />
       </Route>
     </Routes>
   );
