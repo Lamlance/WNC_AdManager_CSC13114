@@ -6,9 +6,7 @@ const GoongPredict = z.object({
   place_id: z.string(),
 });
 type GoongPredictType = z.infer<typeof GoongPredict>;
-type GoongPredictRespond = {
-  predictions: GoongPredictType[];
-};
+type GoongPredictRespond = { predictions: GoongPredictType[] };
 type GoongPlaceIdRespond = {
   result: {
     place_id: string;
@@ -17,10 +15,20 @@ type GoongPlaceIdRespond = {
     geometry: { location: { lat: number; lng: number } };
   };
 };
-type GoongKey = { key: string };
+type GoongRevGeocodeRespond = {
+  results: {
+    address_components: { long_name: string; short_name: string }[];
+    formatted_address: string;
+    geometry: { location: { lat: number; lng: number } };
+    place_id: string;
+  }[];
+};
 
+type GoongKey = { key: string };
 type GoongQueryPredict = GoongKey & { input: string };
 type GoongPlaceQuery = GoongKey & { place_id: string };
+type GoongRevGeoQuery = GoongKey & { lat: number; lng: number };
+
 const GoongApi = createApi({
   reducerPath: "GoongApi",
   baseQuery: fetchBaseQuery({ baseUrl: "https://rsapi.goong.io/" }),
@@ -41,6 +49,12 @@ const GoongApi = createApi({
         params: { api_key: key, place_id },
       }),
     }),
+    revGeocode: builder.query<GoongRevGeocodeRespond, GoongRevGeoQuery>({
+      query: ({ key, lat, lng }) => ({
+        url: "/Geocode",
+        params: { api_key: key, latlng: `${lat},${lng}` },
+      }),
+    }),
   }),
 });
 
@@ -49,6 +63,8 @@ export const {
   useGetPredictsQuery: useGetPredicts,
   useLazyGetPlaceDetailQuery: useLazyGetPlaceDetail,
   useGetPlaceDetailQuery: useGetPlaceDetail,
+  useLazyRevGeocodeQuery: useLazyRevGeocode,
+  useRevGeocodeQuery: useRevGeocode,
 } = GoongApi;
 
 export default GoongApi;
