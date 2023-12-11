@@ -131,5 +131,6 @@ export default function () {
       head.insertAdjacentElement("afterbegin", tailWindStyleTag);
     }
   }, []);
-  return <App />;
+  // return <App />;
+  return <EditSetpoint />;
 }
