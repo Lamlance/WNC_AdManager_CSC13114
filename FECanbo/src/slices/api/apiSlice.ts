@@ -1,14 +1,14 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const apiSlice = createApi({
     reducerPath: "api",
-    baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
-    endpoints: builder => ({
-        getAllAdsInfo: builder.query({
-            query: () => "/quang-cao"
+    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:4030/api" }),
+    endpoints: (builder) => ({
+        getAllAdsInfo: builder.query<any, void>({
+            query: () => "/quang-cao",
         }),
         getAnAdsInfo: builder.query({
-            query: (id) => `/quang-cao/${id}`
+            query: (id) => `/quang-cao/${id}`,
         }),
         getAllAdsRequest: builder.query({
             query: () => "/don-dang-ky-quang-cao"
@@ -23,4 +23,6 @@ export const apiSlice = createApi({
             query: (id) => `/bao-cao-nguoi-dan/${id}` 
         })
     })
-})
+});
+
+export const { useGetAllAdsInfoQuery } = apiSlice;

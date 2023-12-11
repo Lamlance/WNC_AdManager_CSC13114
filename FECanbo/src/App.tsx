@@ -10,9 +10,9 @@ import {
 } from "@ant-design/icons";
 import AdsInfo from "./components/ads-info/AdsInfo";
 import ReportInfo from "./components/report-info/ReportInfo";
-import AdsRequestPage from "./components/routes/AdsRequestPage";
 import EditAdForm from "./components/vhtt/EditAdForm";
 import EditSetpoint from "./components/vhtt/EditSetpoint";
+import AdsRequestPage from "./components/routes/AdsRequestPage";
 const { Header, Sider, Content } = Layout;
 
 const App = () => {
@@ -78,7 +78,6 @@ const PageLayout = () => {
           items={items}
           onSelect={({ key }) => {
             const redirectURL = items?.find((item) => item?.key == key)?.title;
-            console.log(redirectURL);
             return redirectURL === undefined
               ? navigate("/")
               : navigate(redirectURL);
