@@ -1,65 +1,63 @@
 import { useEffect, useState } from "react";
-import { AdRequest } from "../../types";
-import AdsRequest from "../ads-request/AdsRequest";
-import AdsRequestForm from "../ads-request/AdsRequestForm";
-import { Button } from "antd";
+import { AdRequest } from "../types";
+import AdsRequest from "../components/ads-request/AdsRequest";
+
 const data: AdRequest[] = [
   {
     requestId: "1",
     panoContent: "Quảng cáo",
+    panoTitle: "Quảng cáo trà sữa Phúc Long",
     position: "42 Võ Thị Sáu, Quận 3, Phường Võ Thị Sáu",
-    companyName: "TNVH HN",
+    bookingAgency: "TNVH HN",
     email: "pthn@gmail.com",
     phoneNumber: "19001001",
     address: "227 NCV, Q5, HCM",
-    effectedDate: "12/11/2022 ",
-    expiredDate: "22/12/2023",
+    panoDetailedContent:
+      "Trà sữa Phúc Long không đặc biệt và hơi mắc nhưng uống cũng được",
+    rentalPeriod: "12/11/2022 - 12/11/2024",
     status: "Đang xử lý",
     image: "",
+    tags: ["nice", "developer"],
   },
   {
     requestId: "2",
     panoContent: "Quảng cáo",
+    panoTitle: "Quảng cáo trà sữa Phúc Long",
     position: "42 Võ Thị Sáu, Quận 3, Phường Võ Thị Sáu",
-    companyName: "TNVH HN",
+    bookingAgency: "TNVH HN",
     email: "pthn@gmail.com",
     phoneNumber: "19001001",
     address: "227 NCV, Q5, HCM",
-    effectedDate: "12/11/2022 ",
-    expiredDate: "22/12/2023",
+    panoDetailedContent:
+      "Trà sữa Phúc Long không đặc biệt và hơi mắc nhưng uống cũng được",
+    rentalPeriod: "12/11/2022 - 12/11/2024",
     status: "Đã phê duyệt",
     image: "",
+    tags: ["nice", "developer"],
   },
   {
     requestId: "3",
     panoContent: "Quảng cáo",
+    panoTitle: "Quảng cáo trà sữa Phúc Long",
     position: "42 Võ Thị Sáu, Quận 3, Phường Võ Thị Sáu",
-    companyName: "TNVH HN",
+    bookingAgency: "TNVH HN",
     email: "pthn@gmail.com",
     phoneNumber: "19001001",
     address: "227 NCV, Q5, HCM",
-    effectedDate: "12/11/2022 ",
-    expiredDate: "22/12/2023",
+    panoDetailedContent:
+      "Trà sữa Phúc Long không đặc biệt và hơi mắc nhưng uống cũng được",
+    rentalPeriod: "12/11/2022 - 12/11/2024",
     status: "Đã hủy",
     image: "",
+    tags: ["nice", "developer"],
   },
 ];
 
 function AdsRequestPage() {
   const [selectedAds, setSelectedAds] = useState<AdRequest | null>(null);
-  const [isFormVisible, setIsFormVisible] = useState(false);
 
   const showDetails = (record: AdRequest) => {
     setSelectedAds(record);
-  };
-
-  const showForm = () => {
-    console.log("Button clicked - showForm");
-    setIsFormVisible(true);
-  };
-
-  const closeForm = () => {
-    setIsFormVisible(false);
   };
 
   useEffect(() => {
@@ -69,25 +67,7 @@ function AdsRequestPage() {
   }, []);
 
   return (
-    <>
-      <Button
-        onClick={showForm}
-        style={{
-          marginBottom: 16,
-          backgroundColor: "#1890ff",
-          color: "#fff",
-        }}
-      >
-        Thêm yêu cầu
-      </Button>
-      <AdsRequest
-        data={data}
-        onRowClick={showDetails}
-        selectedAd={selectedAds}
-      />
-
-      <AdsRequestForm isVisible={isFormVisible} onCancel={closeForm} />
-    </>
+    <AdsRequest data={data} onRowClick={showDetails} selectedAd={selectedAds} />
   );
 }
 export default AdsRequestPage;
