@@ -10,19 +10,19 @@ export const apiSlice = createApi({
         getAnAdsInfo: builder.query({
             query: (id) => `/quang-cao/${id}`,
         }),
-        getAllAdsRequest: builder.query({
-            query: () => "/don-dang-ky-quang-cao"
+        getAllAdsRequest: builder.query<any, void>({
+            query: () => "/yeu-cau-cap-phep"
         }),
         getAnAdsRequest: builder.query({
-            query: (id) => `/don-dang-ky-quang-cao/${id}`
+            query: (id) => `/yeu-cau-cap-phep/${id}`
         }),
-        getAllReportInfo: builder.query({
-            query: () => "/bao-cao-nguoi-dan/"
+        getAllReportInfo: builder.query<any, void>({
+            query: () => "/bao-cao"
         }),
         getAReportInfo: builder.query({
-            query: (id) => `/bao-cao-nguoi-dan/${id}` 
+            query: (id) => `/bao-cao/${id}` 
         })
     })
 });
 
-export const { useGetAllAdsInfoQuery } = apiSlice;
+export const { useGetAllAdsInfoQuery, useGetAllReportInfoQuery } = apiSlice;

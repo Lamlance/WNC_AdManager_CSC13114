@@ -3,10 +3,12 @@ import ReportInfoTable from "./ReportInfoTable";
 import { ReportInfoRecord } from "../../types";
 import { useState } from "react";
 import ReportInfoDetail from "./ReportInfoDetail";
+import { useGetAllReportInfoQuery } from "../../slices/api/apiSlice";
 
 const data: ReportInfoRecord[] = [];
 
 const ReportInfo = () => {
+  const { data, error, isLoading } = useGetAllReportInfoQuery();
   const [selectedReportInfo, setSelectedReportInfo] =
     useState<ReportInfoRecord | null>(null);
 

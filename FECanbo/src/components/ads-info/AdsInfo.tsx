@@ -9,6 +9,9 @@ const data: AdsInfoRecord[] = [];
 
 const AdsInfo = () => {
   const { data, error, isLoading } = useGetAllAdsInfoQuery();
+  const [selectedAdsInfo, setSelectedAdsInfo] = useState<AdsInfoRecord | null>(
+    null,
+  );
 
   return (
     <>
@@ -32,12 +35,11 @@ const AdsInfo = () => {
           <Col span={17}>
             <AdsInfoTable
               data={data}
-              onRowClick={(record) => {
-              }}
+              onRowClick={(record) => setSelectedAdsInfo(record)}
             />
           </Col>
           <Col span={6}>
-            {/* {selectedAdsInfo && <AdsInfoDetail {...selectedAdsInfo} />} */}
+            {selectedAdsInfo && <AdsInfoDetail {...selectedAdsInfo} />}
           </Col>
         </Row>
       )}
