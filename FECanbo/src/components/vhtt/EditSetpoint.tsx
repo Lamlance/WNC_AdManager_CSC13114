@@ -1,49 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Modal, Input, Button, Form } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import { Link, Routes, Route, useLocation } from 'react-router-dom'
+import usecontext from "../UseReducer/usecontext.js"
 
 function EditSetpoint() {
-  const billboard = [
-    ["Chợ", "cau ket gian duong dai dao", "da quy hoach"],
-    ["Chợ", "buon lau vu khi", "da quy hoach"],
-    ["Chợ", "day ba gia xuong bien", "da quy hoach"],
-    ["Chợ", "hiep dam 1 con heo", "da quy hoach"],
-    [
-      "Chợ",
-      "Lâu gòi k gặp cháu lớn như vậy rồi hả, qua đây chú ôm cái đi , chú nhớ con quá đi",
-      "chau tinh tri",
-    ],
-  ];
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { state, dispath } = useContext(usecontext)
+  const { name, address, lng, lat, isModalOpen } = state;
 
   const showModal = () => {
-    setIsModalOpen(true);
+    dispath({ type: "SHOW_MODAL_OPEN"})
   };
 
   const handleOk = () => {
-    setIsModalOpen(false);
+    dispath({ type: "SHOW_MODAL_CLOSE"})
   };
 
   const handleCancel = () => {
-    setIsModalOpen(false);
+    dispath({ type: "SHOW_MODAL_CLOSE"})
   };
+
+  const handleName = (e: any) => {
+    // setName(e.target.value);
+    console.log('handle name')
+    dispath({ type: "ON_CHANGE_NAME", payload: e.target.value})
+  }
+
+  const handleAddress = (e: any) => {
+    // setAddress(e.target.value);
+    dispath({ type: "ON_CHANGE_ADDRESS", payload: e.target.value})
+  }
 
   return (
     <>
+
       <Button type="primary" onClick={showModal}>
         Open Modal
       </Button>
-      <Modal title = "" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
+      <Modal title="" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
         <Form name="wrap" labelCol={{ flex: '110px' }} labelAlign="left" labelWrap wrapperCol={{ flex: 1 }} colon={false} className="max-w-2xl mt-8">
           <Form.Item label="Tên địa điểm">
-            <Input />
+            <Input onChange={handleName} value={name}/>
           </Form.Item>
           <Form.Item label="Địa chỉ">
-            <Input />
+            <Input onChange={handleAddress} value={address}/>
           </Form.Item>
           <Form.Item label="Vị trí">
-            <Input className="w-11/12"/> <SearchOutlined />
+            <Input className="w-5/6" value={state && state.lng && state.lat ? `${state.lng} x ${state.lat}` : ''} /> <Button><Link to="/vhtt/adsmap" ><SearchOutlined ></SearchOutlined></Link></Button>
+
           </Form.Item>
 
           <Form.Item className="flex justify-center">
@@ -54,6 +59,8 @@ function EditSetpoint() {
         </Form>
 
       </Modal>
+
+
     </>
 
   );

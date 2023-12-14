@@ -13,21 +13,32 @@ import ReportInfo from "./components/report-info/ReportInfo";
 import AdsRequestPage from "./components/routes/AdsRequestPage";
 import EditAdForm from "./components/vhtt/EditAdForm";
 import EditSetpoint from "./components/vhtt/EditSetpoint";
+import AdsMap from "./components/vhtt/AdsMap";
 const { Header, Sider, Content } = Layout;
+import usecontext from "./components/UseReducer/usecontext.js";
+import usereducer from "./components/UseReducer/usereducer.js"
+
 
 const App = () => {
+  const [state, dispath] = usereducer();
+
   return (
-    <Routes>
-      <Route path="/" element={<PageLayout />}>
-        <Route index element={<AdsRequestPage />} />
-        <Route path="advertisements" element={<AdsInfo />} />
-        <Route path="reports" element={<ReportInfo />} />
-      </Route>
-      <Route path="vhtt">
-        <Route path="editad" element={<EditAdForm />} />
-        <Route path="editpoint" element={<EditSetpoint />} />
-      </Route>
-    </Routes>
+    <usecontext.Provider value={{ state, dispath }}>
+      <div className="h-screen w-screen">
+        <Routes>
+          <Route path="/" element={<PageLayout />}>
+            <Route index element={<AdsRequestPage />} />
+            <Route path="advertisements" element={<AdsInfo />} />
+            <Route path="reports" element={<ReportInfo />} />
+          </Route>
+          <Route path="vhtt">
+            <Route path="editad" element={<EditAdForm />} />
+            <Route path="editpoint" element={<EditSetpoint />} />
+            <Route path="adsmap" element={<AdsMap />} />
+          </Route>
+        </Routes>
+      </div>
+    </usecontext.Provider >
   );
 };
 
@@ -131,6 +142,5 @@ export default function () {
       head.insertAdjacentElement("afterbegin", tailWindStyleTag);
     }
   }, []);
-  // return <App />;
-  return <EditSetpoint />;
+  return <App />;
 }
