@@ -10,7 +10,6 @@
       "properties": {
         "ads": [
           {
-            "id_quang_cao": "6f1ae1ac-cd0f-47e9-bf11-e2d77819c61b",
             "quy_hoach": true,
             "ngay_hieu_luc": null,
             "ngay_het_han": null,
@@ -19,18 +18,10 @@
             "so_luong": 1,
             "chieu_dai_m": null,
             "chieu_rong_m": null,
-            "id_loai_bang_qc": 1,
-            "id_dia_diem": 6,
-            "id_hinh_thuc": 6,
-            "id_loai_vitri": 14,
-            "place_id": null,
-            "ten_dia_diem": "Nhà thờ Tân Định",
-            "dia_chi": "289 Hai Bà Trưng, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
-            "lng": 106.6907045481163,
-            "lat": 10.788361134367696,
-            "id_phuong": 7,
             "loai_vitri": "Đất tôn giáo",
             "hinh_thuc": "Xã hội hoá",
+            "ten_dia_diem": "Nhà thờ Tân Định",
+            "dia_chi": "289 Hai Bà Trưng, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
             "bang_qc": "Trụ bảng hiflex"
           }
         ]
@@ -45,7 +36,6 @@
       "properties": {
         "ads": [
           {
-            "id_quang_cao": "d34fcbab-ab29-471b-92e4-00a69468edba",
             "quy_hoach": false,
             "ngay_hieu_luc": null,
             "ngay_het_han": null,
@@ -54,18 +44,10 @@
             "so_luong": 1,
             "chieu_dai_m": null,
             "chieu_rong_m": null,
-            "id_loai_bang_qc": 1,
-            "id_dia_diem": 7,
-            "id_hinh_thuc": 5,
-            "id_loai_vitri": 11,
-            "place_id": null,
-            "ten_dia_diem": "Chợ tân định",
-            "dia_chi": "336 Hai Bà Trưng, Phường Tân Định, Quận 1, Thành phố Hồ Chí Minh",
-            "lng": 106.68980332588731,
-            "lat": 10.789963089539278,
-            "id_phuong": 8,
             "loai_vitri": "Chợ",
             "hinh_thuc": "Quảng cáo thương mại",
+            "ten_dia_diem": "Chợ tân định",
+            "dia_chi": "336 Hai Bà Trưng, Phường Tân Định, Quận 1, Thành phố Hồ Chí Minh",
             "bang_qc": "Trụ bảng hiflex"
           }
         ]
@@ -80,7 +62,6 @@
       "properties": {
         "ads": [
           {
-            "id_quang_cao": "ddfd0907-36e7-406e-b5f2-6d2299b5c5d6",
             "quy_hoach": true,
             "ngay_hieu_luc": null,
             "ngay_het_han": null,
@@ -89,18 +70,10 @@
             "so_luong": 1,
             "chieu_dai_m": null,
             "chieu_rong_m": null,
-            "id_loai_bang_qc": 1,
-            "id_dia_diem": 8,
-            "id_hinh_thuc": 4,
-            "id_loai_vitri": 8,
-            "place_id": null,
-            "ten_dia_diem": "THPT Nguyễn Thị Diệu",
-            "dia_chi": "12 Trần Quốc Toản, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
-            "lng": 106.68880554413374,
-            "lat": 10.789583679873315,
-            "id_phuong": 7,
             "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
             "hinh_thuc": "Cổ động chính trị",
+            "ten_dia_diem": "THPT Nguyễn Thị Diệu",
+            "dia_chi": "12 Trần Quốc Toản, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
             "bang_qc": "Trụ bảng hiflex"
           }
         ]
@@ -115,7 +88,6 @@
       "properties": {
         "ads": [
           {
-            "id_quang_cao": "e91ce15d-0558-4cae-b908-3b41e76e5c11",
             "quy_hoach": true,
             "ngay_hieu_luc": null,
             "ngay_het_han": null,
@@ -124,18 +96,10 @@
             "so_luong": 1,
             "chieu_dai_m": null,
             "chieu_rong_m": null,
-            "id_loai_bang_qc": 1,
-            "id_dia_diem": 9,
-            "id_hinh_thuc": 6,
-            "id_loai_vitri": 8,
-            "place_id": null,
-            "ten_dia_diem": "Viện Pasteur Thành phố Hồ Chí Minh",
-            "dia_chi": "167 Pasteur, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
-            "lng": 106.68933125710065,
-            "lat": 10.786348139095901,
-            "id_phuong": 7,
             "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
             "hinh_thuc": "Xã hội hoá",
+            "ten_dia_diem": "Viện Pasteur Thành phố Hồ Chí Minh",
+            "dia_chi": "167 Pasteur, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
             "bang_qc": "Trụ bảng hiflex"
           }
         ]
@@ -150,7 +114,6 @@
       "properties": {
         "ads": [
           {
-            "id_quang_cao": "c6747331-4b35-453c-8949-1031e2f90efd",
             "quy_hoach": false,
             "ngay_hieu_luc": null,
             "ngay_het_han": null,
@@ -159,18 +122,10 @@
             "so_luong": 1,
             "chieu_dai_m": null,
             "chieu_rong_m": null,
-            "id_loai_bang_qc": 1,
-            "id_dia_diem": 10,
-            "id_hinh_thuc": 5,
-            "id_loai_vitri": 8,
-            "place_id": null,
-            "ten_dia_diem": "Công viên Lê Văn Tám",
-            "dia_chi": "QMQV+6GM, Đ. Võ Thị Sáu, Đa Kao, Quận 1, Thành phố Hồ Chí Minh",
-            "lng": 106.69374081349183,
-            "lat": 10.788340066532463,
-            "id_phuong": 9,
             "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
             "hinh_thuc": "Quảng cáo thương mại",
+            "ten_dia_diem": "Công viên Lê Văn Tám",
+            "dia_chi": "QMQV+6GM, Đ. Võ Thị Sáu, Đa Kao, Quận 1, Thành phố Hồ Chí Minh",
             "bang_qc": "Trụ bảng hiflex"
           }
         ]

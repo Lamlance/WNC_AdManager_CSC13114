@@ -40,13 +40,14 @@ const GoongApi = createApi({
           api_key: key,
           input,
           location: "10.762898516037316, 106.68250571118257",
+          more_compound: true,
         },
       }),
     }),
     getPlaceDetail: builder.query<GoongPlaceIdRespond, GoongPlaceQuery>({
       query: ({ key, place_id }) => ({
         url: "Place/Detail",
-        params: { api_key: key, place_id },
+        params: { api_key: key, place_id, more_compound: true },
       }),
     }),
     revGeocode: builder.query<GoongRevGeocodeRespond, GoongRevGeoQuery>({

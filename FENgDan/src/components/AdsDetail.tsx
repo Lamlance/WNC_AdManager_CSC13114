@@ -2,19 +2,6 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import { useState } from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface AdvertisementProps {
-  id: string;
-  type: string;
-  location: string;
-  detailType: string;
-  size: { width: number; height: number };
-  form: string;
-  category: string;
-  amount: number;
-  registerd: boolean;
-}
-
 function AdsDetail() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 

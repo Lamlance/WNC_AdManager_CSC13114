@@ -51,11 +51,14 @@ async function GetQuangCaoData() {
       hinh_thuc: qc.hinh_thuc,
       bang_qc: qc.bang_qc,
     };
+    const trimProp = AdsGeoJson.AdsPropertySchema.safeParse(prop);
+    if (trimProp.success == false) continue;
+
     if (grp_by_location[qc.dia_diem.id_dia_diem]) {
-      grp_by_location[qc.dia_diem.id_dia_diem].ads.push(prop);
+      grp_by_location[qc.dia_diem.id_dia_diem].ads.push(trimProp.data);
     } else {
       grp_by_location[qc.dia_diem.id_dia_diem] = {
-        ads: [prop],
+        ads: [trimProp.data],
         dd: qc.dia_diem,
       };
     }
