@@ -12,7 +12,7 @@ import AdsInfo from "./components/ads-info/AdsInfo";
 import ReportInfo from "./components/report-info/ReportInfo";
 import EditAdForm from "./components/vhtt/EditAdForm";
 import EditSetpoint from "./components/vhtt/EditSetpoint";
-import AdsRequestPage from "./components/routes/AdsRequestPage";
+import AdsRequestPage from "./routes/AdsRequestPage";
 const { Header, Sider, Content } = Layout;
 
 const App = () => {
