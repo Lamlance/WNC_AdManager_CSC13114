@@ -19,6 +19,7 @@ interface AdsDetailProps {
   handleCancel: () => void;
 }
 
+
 function AdsDetail({ isModalOpen, handleOk, handleCancel }: AdsDetailProps) {
   const customTitle = (
     <div className="text-center text-2xl">

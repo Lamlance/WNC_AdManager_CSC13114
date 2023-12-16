@@ -10,12 +10,19 @@
       "properties": {
         "ads": [
           {
-            "name": "Nhà thờ Tân Định",
-            "address": "289 Hai Bà Trưng, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
-            "land_type": "Đất tôn giáo",
-            "ad_type": "Xã hội hoá",
-            "legal": true,
-            "panel_type": "Trụ bảng hiflex"
+            "quy_hoach": true,
+            "ngay_hieu_luc": null,
+            "ngay_het_han": null,
+            "hinh_1": null,
+            "hinh_2": null,
+            "so_luong": 1,
+            "chieu_dai_m": null,
+            "chieu_rong_m": null,
+            "loai_vitri": "Đất tôn giáo",
+            "hinh_thuc": "Xã hội hoá",
+            "ten_dia_diem": "Nhà thờ Tân Định",
+            "dia_chi": "289 Hai Bà Trưng, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
+            "bang_qc": "Trụ bảng hiflex"
           }
         ]
       },
@@ -29,12 +36,19 @@
       "properties": {
         "ads": [
           {
-            "name": "Chợ tân định",
-            "address": "336 Hai Bà Trưng, Phường Tân Định, Quận 1, Thành phố Hồ Chí Minh",
-            "land_type": "Chợ",
-            "ad_type": "Quảng cáo thương mại",
-            "legal": false,
-            "panel_type": "Trụ bảng hiflex"
+            "quy_hoach": false,
+            "ngay_hieu_luc": null,
+            "ngay_het_han": null,
+            "hinh_1": null,
+            "hinh_2": null,
+            "so_luong": 1,
+            "chieu_dai_m": null,
+            "chieu_rong_m": null,
+            "loai_vitri": "Chợ",
+            "hinh_thuc": "Quảng cáo thương mại",
+            "ten_dia_diem": "Chợ tân định",
+            "dia_chi": "336 Hai Bà Trưng, Phường Tân Định, Quận 1, Thành phố Hồ Chí Minh",
+            "bang_qc": "Trụ bảng hiflex"
           }
         ]
       },
@@ -48,12 +62,19 @@
       "properties": {
         "ads": [
           {
-            "name": "THPT Nguyễn Thị Diệu",
-            "address": "12 Trần Quốc Toản, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
-            "land_type": "Đất công/Công viên/Hành lang an toàn giao thông",
-            "ad_type": "Cổ động chính trị",
-            "legal": true,
-            "panel_type": "Trụ bảng hiflex"
+            "quy_hoach": true,
+            "ngay_hieu_luc": null,
+            "ngay_het_han": null,
+            "hinh_1": null,
+            "hinh_2": null,
+            "so_luong": 1,
+            "chieu_dai_m": null,
+            "chieu_rong_m": null,
+            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "hinh_thuc": "Cổ động chính trị",
+            "ten_dia_diem": "THPT Nguyễn Thị Diệu",
+            "dia_chi": "12 Trần Quốc Toản, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
+            "bang_qc": "Trụ bảng hiflex"
           }
         ]
       },
@@ -67,12 +88,19 @@
       "properties": {
         "ads": [
           {
-            "name": "Viện Pasteur Thành phố Hồ Chí Minh",
-            "address": "167 Pasteur, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
-            "land_type": "Đất công/Công viên/Hành lang an toàn giao thông",
-            "ad_type": "Xã hội hoá",
-            "legal": true,
-            "panel_type": "Trụ bảng hiflex"
+            "quy_hoach": true,
+            "ngay_hieu_luc": null,
+            "ngay_het_han": null,
+            "hinh_1": null,
+            "hinh_2": null,
+            "so_luong": 1,
+            "chieu_dai_m": null,
+            "chieu_rong_m": null,
+            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "hinh_thuc": "Xã hội hoá",
+            "ten_dia_diem": "Viện Pasteur Thành phố Hồ Chí Minh",
+            "dia_chi": "167 Pasteur, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
+            "bang_qc": "Trụ bảng hiflex"
           }
         ]
       },
@@ -86,12 +114,19 @@
       "properties": {
         "ads": [
           {
-            "name": "Công viên Lê Văn Tám",
-            "address": "QMQV+6GM, Đ. Võ Thị Sáu, Đa Kao, Quận 1, Thành phố Hồ Chí Minh",
-            "land_type": "Đất công/Công viên/Hành lang an toàn giao thông",
-            "ad_type": "Quảng cáo thương mại",
-            "legal": false,
-            "panel_type": "Trụ bảng hiflex"
+            "quy_hoach": false,
+            "ngay_hieu_luc": null,
+            "ngay_het_han": null,
+            "hinh_1": null,
+            "hinh_2": null,
+            "so_luong": 1,
+            "chieu_dai_m": null,
+            "chieu_rong_m": null,
+            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "hinh_thuc": "Quảng cáo thương mại",
+            "ten_dia_diem": "Công viên Lê Văn Tám",
+            "dia_chi": "QMQV+6GM, Đ. Võ Thị Sáu, Đa Kao, Quận 1, Thành phố Hồ Chí Minh",
+            "bang_qc": "Trụ bảng hiflex"
           }
         ]
       },

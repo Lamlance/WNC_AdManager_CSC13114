@@ -22,7 +22,7 @@ const AdsRequest: React.FC<MainContentSectionProps> = ({
       <Col span={17}>
         <AdsRequestTable data={data} onRowClick={onRowClick} />
       </Col>
-      <Col span={6}>
+      <Col span={7}>
         <AdsRequestDetail ad={selectedAd} />
       </Col>
     </Row>

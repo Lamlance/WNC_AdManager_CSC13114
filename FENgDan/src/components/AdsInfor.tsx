@@ -1,14 +1,15 @@
 import { Button } from "antd";
-import AdsDetail from "./AdsDetail";
 import ReportModal from "./ReportModal";
 import { useState } from "react";
 import { ReportFormValues } from "../models/report_form_values";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { useAppSelector } from "../Redux/ReduxStore";
+import AdsDetail from "./AdsDetail";
+import { AdsGeoJson } from "@admanager/shared";
 
-function AdsInfor() {
+function AdItem(props: AdsGeoJson.AdsProperty) {
   const [isReportModalVisible, setIsReportModalVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const handleReportClick = () => {
     setIsReportModalVisible(true);
   };
@@ -37,30 +38,26 @@ function AdsInfor() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
   return (
     <div className="ads-info-container relative ">
       <div className="ads-info-popup absolute w-full rounded-xl border-opacity-90 p-4 shadow-lg">
         <div className="ads-info-content">
-          <p className=" text-lg font-bold">Trụ, cụm Pano</p>
-          <p className="ads_info_location text-base">
-            42 Võ Thị Sáu, Quận 3, Phường Võ Thị Sáu
+          <p className=" text-lg font-bold">{props.bang_qc}</p>
+          <p className="ads_info_location text-base">{props.dia_chi}</p>
+          <p className="text-base">
+            <span className="font-semibold">Kích thước: </span>{" "}
+            {`${props.chieu_dai_m}m x ${props.chieu_rong_m}m`}
           </p>
           <p className="text-base">
-            <span className=" font-semibold">Loại bảng: </span> Trụ bảng hiflex
+            <span className="font-semibold">Hình thức: </span> {props.hinh_thuc}
           </p>
           <p className="text-base">
-            <span className="font-semibold">Kích thước: </span> 2.5m x 10m
+            <span className="font-semibold">Phân loại: </span>{" "}
+            {props.loai_vitri}
           </p>
           <p className="text-base">
-            <span className="font-semibold">Hình thức: </span> Quảng cáo thương
-            mại
-          </p>
-          <p className="text-base">
-            <span className="font-semibold">Phân loại: </span> Nhà ở riêng lẻ
-          </p>
-          <p className="text-base">
-            <span className="font-semibold">Số lượng: </span> 2 trụ/bảng
+            <span className="font-semibold">Số lượng: </span>{" "}
+            {`${props.so_luong} trụ/bảng`}
           </p>
           <p className="mt-1 text-base font-bold italic">Đã quy hoạch</p>
 
@@ -102,4 +99,18 @@ function AdsInfor() {
   );
 }
 
-export default AdsInfor;
+function AdsInfos() {
+  const selected = useAppSelector((state) => state.SelectedAds);
+
+  return (
+    <>
+      {!selected ? (
+        <div>No ads data available</div>
+      ) : (
+        selected.ads.map((v) => <AdItem {...v} key={v.dia_chi} />)
+      )}
+    </>
+  );
+}
+
+export default AdsInfos;

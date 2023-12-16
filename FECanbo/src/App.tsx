@@ -10,24 +10,38 @@ import {
 } from "@ant-design/icons";
 import AdsInfo from "./components/ads-info/AdsInfo";
 import ReportInfo from "./components/report-info/ReportInfo";
-import AdsRequestPage from "./components/routes/AdsRequestPage";
 import EditAdForm from "./components/vhtt/EditAdForm";
 import EditSetpoint from "./components/vhtt/EditSetpoint";
+import CreateAccount from "./components/vhtt/CreateAccount";
+import AdsMap from "./components/vhtt/AdsMap";
+import AdsRequestPage from "./routes/AdsRequestPage";
 const { Header, Sider, Content } = Layout;
+import usecontext from "./components/UseReducer/usecontext.js";
+import usereducer from "./components/UseReducer/usereducer.js"
+
 
 const App = () => {
+  const [state, dispath] = usereducer();
+
   return (
-    <Routes>
-      <Route path="/" element={<PageLayout />}>
-        <Route index element={<AdsRequestPage />} />
-        <Route path="advertisements" element={<AdsInfo />} />
-        <Route path="reports" element={<ReportInfo />} />
-      </Route>
-      <Route path="vhtt">
-        <Route path="editad" element={<EditAdForm />} />
-        <Route path="editpoint" element={<EditSetpoint />} />
-      </Route>
-    </Routes>
+
+    <usecontext.Provider value={{ state, dispath }}>
+      <div className="h-screen w-screen">
+        <Routes>
+          <Route path="/" element={<PageLayout />}>
+            <Route index element={<AdsRequestPage />} />
+            <Route path="advertisements" element={<AdsInfo />} />
+            <Route path="reports" element={<ReportInfo />} />
+          </Route>
+          <Route path="vhtt">
+            <Route path="editad" element={<EditAdForm />} />
+            <Route path="editpoint" element={<EditSetpoint />} />
+            <Route path="adsmap" element={<AdsMap />} />
+            <Route path="createaccount" element={<CreateAccount />} />
+          </Route>
+        </Routes>
+      </div>
+    </usecontext.Provider >
   );
 };
 
@@ -78,7 +92,6 @@ const PageLayout = () => {
           items={items}
           onSelect={({ key }) => {
             const redirectURL = items?.find((item) => item?.key == key)?.title;
-            console.log(redirectURL);
             return redirectURL === undefined
               ? navigate("/")
               : navigate(redirectURL);
