@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { AdRequest } from "../../types";
-import AdsRequest from "../ads-request/AdsRequest";
+import { AdRequest } from "../types";
+import AdsRequest from "../components/ads-request/AdsRequest";
 
 const data: AdRequest[] = [
   {

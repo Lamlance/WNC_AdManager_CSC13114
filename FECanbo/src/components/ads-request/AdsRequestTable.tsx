@@ -21,13 +21,15 @@ const columns = [
   },
   {
     title: "CÔNG TY ĐẶT QUẢNG CÁO",
-    dataIndex: "bookingAgency",
-    key: "bookingAgency",
+    dataIndex: "companyName",
+    key: "companyName",
   },
   {
     title: "THỜI GIAN ĐẶT",
-    dataIndex: "rentalPeriod",
-    key: "rentalPeriod",
+    dataIndex: "effectedDate",
+    key: "effectedDate",
+    render: (text: string, record: AdRequest) =>
+      `${record.effectedDate} - ${record.expiredDate}`,
   },
   {
     title: "TRẠNG THÁI",
@@ -41,7 +43,10 @@ interface AdsRequestTableProps {
   onRowClick: (record: AdRequest) => void;
 }
 
-const AdsRequestTable: React.FC<AdsRequestTableProps> = ({ data, onRowClick }) => {
+const AdsRequestTable: React.FC<AdsRequestTableProps> = ({
+  data,
+  onRowClick,
+}) => {
   return (
     <Table
       columns={columns}
