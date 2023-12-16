@@ -8,10 +8,7 @@ const SelectedAdsSlice = createSlice({
   name: "SelectedAdsLocation",
   initialState: initialState,
   reducers: {
-    setSelectedAdsLocation: function (
-      state,
-      payload: PayloadAction<MarkerInfo>,
-    ) {
+    setSelectedAdsLocation: function (_, payload: PayloadAction<MarkerInfo>) {
       return payload.payload;
     },
   },

@@ -4,11 +4,13 @@ import ReportModal from "./ReportModal";
 import { useState } from "react";
 import { ReportFormValues } from "../models/report_form_values";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { useAppSelector } from "../Redux/ReduxStore";
+import AdsDetail from "./AdsDetail";
+import { AdsGeoJson } from "@admanager/shared";
 
-function AdsInfor() {
+function AdItem(props: AdsGeoJson.AdsProperty) {
   const [isReportModalVisible, setIsReportModalVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const handleReportClick = () => {
     setIsReportModalVisible(true);
   };
@@ -37,7 +39,6 @@ function AdsInfor() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
   return (
     <div className="ads-info-container relative ">
       <div className="ads-info-popup absolute w-full rounded-xl border-opacity-90 p-4 shadow-lg">
@@ -63,6 +64,7 @@ function AdsInfor() {
             <span className="font-semibold">Số lượng: </span> 2 trụ/bảng
           </p>
           <p className="mt-1 text-base font-bold italic">Đã quy hoạch</p>
+
 
           <AdsDetail
             isModalOpen={isModalOpen}
@@ -102,4 +104,18 @@ function AdsInfor() {
   );
 }
 
-export default AdsInfor;
+function AdsInfos() {
+  const selected = useAppSelector((state) => state.SelectedAds);
+
+  return (
+    <>
+      {!selected ? (
+        <div>No ads data available</div>
+      ) : (
+        selected.ads.map((v) => <AdItem {...v} key={v.dia_chi} />)
+      )}
+    </>
+  );
+}
+
+export default AdsInfos;
