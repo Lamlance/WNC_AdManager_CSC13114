@@ -16,7 +16,7 @@ function Tab() {
   ];
 
   return (
-    <div className="flex h-full flex-col items-center">
+    <div className="flex h-full w-full flex-col items-center">
       <Tabs
         defaultActiveKey="1"
         items={tabItems}

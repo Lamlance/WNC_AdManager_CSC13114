@@ -1,43 +1,102 @@
+import { Button } from "antd";
+import AdsDetail from "./AdsDetail";
+import ReportModal from "./ReportModal";
+import { useState } from "react";
+import { ReportFormValues } from "../models/report_form_values";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import { useAppSelector } from "../Redux/ReduxStore";
 import AdsDetail from "./AdsDetail";
 import { AdsGeoJson } from "@admanager/shared";
 
 function AdItem(props: AdsGeoJson.AdsProperty) {
-  return (
-    <div className="ads-info-container relative">
-      <div className="ads-info-popup absolute rounded border border-gray-500 p-4">
-        <div className="ads-info-content">
-          <p className="text-xl font-bold">Trụ, cụm Pano</p>
-          <p className="ads_info_location text-xl">{props.dia_chi}</p>
-          <p className="text-xl">
-            <span className="font-bold">Loại bảng: </span> {props.bang_qc}
-          </p>
-          <p className="text-xl">
-            <span className="font-bold">Kích thước: </span> 2.5m x 10m
-          </p>
-          <p className="text-xl">
-            <span className="font-bold">Hình thức: </span> {props.hinh_thuc}
-          </p>
-          <p className="text-xl">
-            <span className="font-bold">Phân loại: </span> {props.loai_vitri}
-          </p>
-          <p className="text-xl">
-            <span className="font-bold">Số lượng: </span> {props.so_luong || 1}{" "}
-            trụ/bảng
-          </p>
-          <p className="mt-1 text-xl font-bold italic">
-            {props.quy_hoach ? "Đã quy hoạch" : "Chưa đã quy hoạch"}
-          </p>
+  const [isReportModalVisible, setIsReportModalVisible] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleReportClick = () => {
+    setIsReportModalVisible(true);
+  };
 
-          <AdsDetail />
+  const handleReportModalCancel = () => {
+    setIsReportModalVisible(false);
+  };
+
+  const handleReportModalSubmit = (values: ReportFormValues) => {
+    console.log("Report form submitted with values:", values);
+    setIsReportModalVisible(false);
+  };
+
+  const handleRegisterClick = () => {
+    console.log("Register button clicked");
+  };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  return (
+    <div className="ads-info-container relative ">
+      <div className="ads-info-popup absolute w-full rounded-xl border-opacity-90 p-4 shadow-lg">
+        <div className="ads-info-content">
+          <p className=" text-lg font-bold">Trụ, cụm Pano</p>
+          <p className="ads_info_location text-base">
+            42 Võ Thị Sáu, Quận 3, Phường Võ Thị Sáu
+          </p>
+          <p className="text-base">
+            <span className=" font-semibold">Loại bảng: </span> Trụ bảng hiflex
+          </p>
+          <p className="text-base">
+            <span className="font-semibold">Kích thước: </span> 2.5m x 10m
+          </p>
+          <p className="text-base">
+            <span className="font-semibold">Hình thức: </span> Quảng cáo thương
+            mại
+          </p>
+          <p className="text-base">
+            <span className="font-semibold">Phân loại: </span> Nhà ở riêng lẻ
+          </p>
+          <p className="text-base">
+            <span className="font-semibold">Số lượng: </span> 2 trụ/bảng
+          </p>
+          <p className="mt-1 text-base font-bold italic">Đã quy hoạch</p>
+
+
+          <AdsDetail
+            isModalOpen={isModalOpen}
+            handleOk={handleOk}
+            handleCancel={handleCancel}
+          />
+
+          <ReportModal
+            visible={isReportModalVisible}
+            onCancel={handleReportModalCancel}
+            onSubmit={handleReportModalSubmit}
+            reportFormValues={{} as ReportFormValues}
+          />
 
           <div className="mt-4 flex justify-end">
-            <button className="mr-2 rounded border border-gray-500 bg-blue-500 p-4 px-4 py-2 text-white">
-              Register
-            </button>
-            <button className="rounded border border-gray-500 bg-green-500 p-4 px-4 py-2 text-white">
-              Report
-            </button>
+            <InfoCircleOutlined
+              onClick={showModal}
+              className=" mt-2 cursor-pointer"
+              style={{ fontSize: "18px", color: "#1677ff" }}
+            />
+            <Button
+              type="primary"
+              danger
+              onClick={handleReportClick}
+              className=" ml-auto mr-2"
+            >
+              Báo cáo vi phạm
+            </Button>
+
+            <Button type="primary" onClick={handleRegisterClick}>
+              Đăng ký
+            </Button>
           </div>
         </div>
       </div>

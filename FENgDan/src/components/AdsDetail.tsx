@@ -1,22 +1,26 @@
-import { InfoCircleOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
-import { useState } from "react";
 
-function AdsDetail() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface AdvertisementProps {
+  id: string;
+  type: string;
+  location: string;
+  detailType: string;
+  size: { width: number; height: number };
+  form: string;
+  category: string;
+  amount: number;
+  registerd: boolean;
+}
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+interface AdsDetailProps {
+  isModalOpen: boolean;
+  handleOk: () => void;
+  handleCancel: () => void;
+}
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
+function AdsDetail({ isModalOpen, handleOk, handleCancel }: AdsDetailProps) {
   const customTitle = (
     <div className="text-center text-2xl">
       <p>Chi tiết bảng quảng cáo</p>
@@ -25,10 +29,6 @@ function AdsDetail() {
 
   return (
     <div>
-      <InfoCircleOutlined
-        onClick={showModal}
-        className="h-10 w-10 cursor-pointer"
-      />
       <Modal
         title={customTitle}
         open={isModalOpen}
