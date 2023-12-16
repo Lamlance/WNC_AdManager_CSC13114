@@ -13,6 +13,7 @@ import ReportInfo from "./components/report-info/ReportInfo";
 import AdsRequestPage from "./components/routes/AdsRequestPage";
 import EditAdForm from "./components/vhtt/EditAdForm";
 import EditSetpoint from "./components/vhtt/EditSetpoint";
+import CreateAccount from "./components/vhtt/CreateAccount";
 import AdsMap from "./components/vhtt/AdsMap";
 const { Header, Sider, Content } = Layout;
 import usecontext from "./components/UseReducer/usecontext.js";
@@ -23,6 +24,7 @@ const App = () => {
   const [state, dispath] = usereducer();
 
   return (
+
     <usecontext.Provider value={{ state, dispath }}>
       <div className="h-screen w-screen">
         <Routes>
@@ -35,6 +37,7 @@ const App = () => {
             <Route path="editad" element={<EditAdForm />} />
             <Route path="editpoint" element={<EditSetpoint />} />
             <Route path="adsmap" element={<AdsMap />} />
+            <Route path="createaccount" element={<CreateAccount />} />
           </Route>
         </Routes>
       </div>
