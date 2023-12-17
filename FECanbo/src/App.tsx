@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { Button, Layout, Menu } from "antd";
+import { ReactElement } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -17,23 +18,22 @@ import CreateAccount from "./components/vhtt/CreateAccount";
 import AdsMap from "./components/vhtt/AdsMap";
 const { Header, Sider, Content } = Layout;
 import usecontext from "./components/UseReducer/usecontext.js";
-import usereducer from "./components/UseReducer/usereducer.js"
-
+import usereducer from "./components/UseReducer/usereducer.js";
 
 const App = () => {
   const [state, dispath] = usereducer();
 
   return (
-
     <usecontext.Provider value={{ state, dispath }}>
       <div className="h-screen w-screen">
         <Routes>
-          <Route path="/" element={<PageLayout />}>
+          <Route path="/" element={<PageLayout items={items} />}>
             <Route index element={<AdsRequestPage />} />
             <Route path="advertisements" element={<AdsInfo />} />
             <Route path="reports" element={<ReportInfo />} />
           </Route>
-          <Route path="vhtt">
+          <Route path="vhtt" element={<PageLayout items={itemVHTTs} />}>
+            <Route index />
             <Route path="editad" element={<EditAdForm />} />
             <Route path="editpoint" element={<EditSetpoint />} />
             <Route path="adsmap" element={<AdsMap />} />
@@ -41,37 +41,66 @@ const App = () => {
           </Route>
         </Routes>
       </div>
-    </usecontext.Provider >
+    </usecontext.Provider>
   );
 };
 
-const PageLayout = () => {
+interface Item {
+  key: string;
+  icon: ReactElement;
+  label: string;
+  title: string;
+}
+interface PageLayoutProps {
+  items: Item[];
+}
+const items: Item[] = [
+  {
+    key: "1",
+    icon: <UserOutlined />,
+    label: "Yêu cầu cấp phép",
+    title: "/",
+  },
+  {
+    key: "2",
+    icon: <VideoCameraOutlined />,
+    label: "Thông tin điểm quảng cáo",
+    title: "/advertisements",
+  },
+  {
+    key: "3",
+    icon: <UploadOutlined />,
+    label: "Báo cáo từ người dân",
+    title: "/reports",
+  },
+];
+const itemVHTTs: Item[] = [
+  {
+    key: "1",
+    icon: <VideoCameraOutlined />,
+    label: "Quản lý",
+    title: "/vhtt",
+  },
+  {
+    key: "2",
+    icon: <VideoCameraOutlined />,
+    label: "Quản lý bảng quảng cáo",
+    title: "editad",
+  },
+  {
+    key: "3",
+    icon: <UploadOutlined />,
+    label: "Quản lý điểm quảng cáo",
+    title: "editpoint",
+  },
+];
+
+const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
 
-  const items = [
-    {
-      key: "1",
-      icon: <UserOutlined />,
-      label: "Yêu cầu cấp phép",
-      title: "/",
-    },
-    {
-      key: "2",
-      icon: <VideoCameraOutlined />,
-      label: "Thông tin điểm quảng cáo",
-      title: "/advertisements",
-    },
-    {
-      key: "3",
-      icon: <UploadOutlined />,
-      label: "Báo cáo từ người dân",
-      title: "/reports",
-    },
-  ];
-
   return (
-    <Layout>
+    <Layout className="min-h-full">
       <Sider
         trigger={null}
         collapsedWidth={0}
