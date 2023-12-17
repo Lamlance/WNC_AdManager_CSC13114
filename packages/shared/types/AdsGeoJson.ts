@@ -1,12 +1,24 @@
 import z from "zod";
 
 const AdsPropertySchema = z.object({
-  name: z.string(),
-  address: z.string(),
-  land_type: z.string(),
-  ad_type: z.string(),
-  legal: z.coerce.boolean(),
-  panel_type: z.string(),
+  quy_hoach: z.coerce.boolean(),
+
+  ngay_hieu_luc: z.string().nullish(),
+  ngay_het_han: z.string().nullish(),
+
+  hinh_1: z.string().nullish(),
+  hinh_2: z.string().nullish(),
+
+  so_luong: z.number().nullish().default(1),
+  chieu_dai_m: z.number().nullish(),
+  chieu_rong_m: z.number().nullish(),
+
+  loai_vitri: z.string(),
+  hinh_thuc: z.string(),
+  ten_dia_diem: z.string(),
+  dia_chi: z.string(),
+
+  bang_qc: z.string(),
 });
 
 type AdsProperty = z.infer<typeof AdsPropertySchema>;

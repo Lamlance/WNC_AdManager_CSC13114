@@ -1,6 +1,5 @@
 import {
   CircleLayerSpecification,
-  LayerSpecification,
   Map,
   SymbolLayerSpecification,
 } from "maplibre-gl";

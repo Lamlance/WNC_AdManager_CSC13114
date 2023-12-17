@@ -2,20 +2,19 @@
 export interface AdRequest {
   requestId: string;
   panoContent: string;
-  panoTitle: string;
   position: string;
-  bookingAgency: string;
+  companyName: string;
   email: string;
   phoneNumber: string;
   address: string;
-  panoDetailedContent: string;
-  rentalPeriod: string;
+  effectedDate: string;
+  expiredDate: string;
   status: string;
   image: string;
-  tags: string[];
 }
 
 export interface AdsInfoRecord {
+  id: string;
   adsType: string;
   address: string;
   generalInfo: {
@@ -28,15 +27,19 @@ export interface AdsInfoRecord {
   contentType: string;
   placeType: string;
   status: string;
+  effectDate: string;
+  expireDate: string;
 }
 
 export interface ReportInfoRecord {
+  id: string;
   reporterInfo: {
     name: string;
     phone: string;
   };
   adsAddress: string;
   reportType: string;
+  reportContent: string;
   reportTime: Date;
   status: string;
 }

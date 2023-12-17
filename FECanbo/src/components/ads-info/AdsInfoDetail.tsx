@@ -10,15 +10,36 @@ const AdsInfoDetail = ({
 }: AdsInfoRecord) => {
   return (
     <div>
-      <p> Loại quảng cáo: {adsType} </p>
-      <p> Địa điểm quảng cáo: {address} </p>
       <p>
-        Kích thước: {generalInfo.size.width} x {generalInfo.size.height}
+        <span className="font-semibold"> Loại quảng cáo: </span>
+        <span> {adsType} </span>
       </p>
-      <p> Số lượng: {generalInfo.number} </p>
-      <p> Hình thức: {contentType} </p>
-      <p> Điểm đặt: {placeType} </p>
-      <p> Trạng thái: {status} </p>
+      <p>
+        <span className="font-semibold"> Địa điểm quảng cáo: </span>
+        <span> {address} </span>
+      </p>
+      <p>
+        <span> Kích thước: </span>
+        <span>
+          {generalInfo.size.width} x {generalInfo.size.height}{" "}
+        </span>
+      </p>
+      <p>
+        <span> Số lượng: </span>
+        <span> {generalInfo.number} </span>
+      </p>
+      <p>
+        <span> Hình thức: </span>
+        <span> {contentType} </span>
+      </p>
+      <p>
+        <span> Điểm đặt: </span>
+        <span> {placeType} </span>
+      </p>
+      <p>
+        <span> Trạng thái: </span> 
+        <span> {status} </span>
+      </p>
     </div>
   );
 };

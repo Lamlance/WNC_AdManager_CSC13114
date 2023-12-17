@@ -65,7 +65,7 @@ const QuangCao = pgTable("QuangCao", {
   chieu_dai_m: real("chieu_dai_m"),
   chieu_rong_m: real("chieu_rong_m"),
 
-  id_loai_bang_qc: integer("id_bang_loai_qc")
+  id_loai_bang_qc: integer("id_loai_bang_qc")
     .notNull()
     .references(() => LoaiBangQC.id_loai_bang_qc),
 

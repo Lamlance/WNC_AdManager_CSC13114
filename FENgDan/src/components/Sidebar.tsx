@@ -18,13 +18,15 @@ function Sidebar() {
         placement="left"
         closable={false}
         onClose={on_drawer_close}
-        open={!!selected ? true : false}
+        open={selected ? true : false}
         key="left"
+        width="30%"
       >
         <Tab />
-        <div className="absolute bottom-0 left-0 right-0 top-0 z-0">
-          {/* <AdsMap onAdMarkerClick={onAdMarkerClick} /> */}
-        </div>
+
+        {/* <div className="absolute bottom-0 left-0 right-0 top-0 z-10">
+          <AdsMap onAdMarkerClick={onAdMarkerClick} />
+        </div> */}
       </Drawer>
     </div>
   );

@@ -18,6 +18,7 @@
     "@admanager/frontend": "*",
     "@ant-design/icons": "^5.2.6",
     "@react-leaflet/core": "^2.1.0",
+    "@reduxjs/toolkit": "^2.0.1",
     "antd": "^5.11.4",
     "leaflet": "^1.9.4",
     "maplibre-gl": "^3.6.2",
