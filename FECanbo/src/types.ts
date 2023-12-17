@@ -2,17 +2,15 @@
 export interface AdRequest {
   requestId: string;
   panoContent: string;
-  panoTitle: string;
   position: string;
-  bookingAgency: string;
+  companyName: string;
   email: string;
   phoneNumber: string;
   address: string;
-  panoDetailedContent: string;
-  rentalPeriod: string;
+  effectedDate: string;
+  expiredDate: string;
   status: string;
   image: string;
-  tags: string[];
 }
 
 export interface AdsInfoRecord {
