@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import AdsMap from "./components/AdsMap";
 import Sidebar from "./components/Sidebar";
