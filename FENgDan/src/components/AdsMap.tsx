@@ -1,31 +1,55 @@
-import MapLibreGL, { Map, Marker, Popup } from "maplibre-gl";
+import MapLibreGL, { Map, Popup } from "maplibre-gl";
 import { useEffect, useReducer, useRef, useState } from "react";
 import "./AdsMap.css";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { z } from "zod";
 import { Switch } from "antd";
-import { AddClusterPoints } from "../utils/AddClusterPoint";
+import { AddClusterPoints, ClusterCreateData } from "../utils/AddClusterPoint";
 import { AdsMarkerInfoSchema } from "../models/mock_markers";
 import { useAppDispatch } from "../Redux/ReduxStore";
 import { setSelectedAdsLocation } from "../Redux/SelectedAdsSlice";
 import MapSearchBar from "./AdsMap/MapSearch";
 import { setDblClick } from "../Redux/MapClickSlice";
 
-const ADS_INFO = {
-  DataSourceId: "ads_data",
-  ClusterId: "ads_cluster",
-  ClusterCountId: "ads_cluster_count",
-  UnclusterId: "ads_unclustered_point",
-  SearchMarker: "search_select_marker",
-} as const;
+interface AdsMapProps {
+  InitialPosition?: {
+    lng: number;
+    lat: number;
+    zoom: number;
+  };
 
-const InitalMapData = {
-  lng: 106.69379445290143,
-  lat: 10.788266281491206,
-  zoom: 14,
+  AdsClusterInfo?: ClusterCreateData;
+  ReportClusterInfo?: ClusterCreateData;
+
+  onMapDblClick?: (lngLat: { lng: number; lat: number }) => void;
+}
+
+const DefaultProps = {
+  InitialPosition: {
+    lng: 106.69379445290143,
+    lat: 10.788266281491206,
+    zoom: 14,
+  },
+  AdsClusterInfo: {
+    DataSource: {
+      id: "ads_data",
+      url: "http://localhost:5173/MockMarker.json",
+    },
+    Cluster: {
+      id: "ads_cluster",
+      color: "#51bbd6",
+    },
+    ClusterCount: { id: "ads_cluster_count" },
+    Uncluster: { id: "ads_unclustered_point", color: "#11b4da" },
+  },
 };
 
-function AdsMap() {
+function AdsMap({
+  InitialPosition = DefaultProps.InitialPosition,
+  AdsClusterInfo = DefaultProps.AdsClusterInfo,
+  ReportClusterInfo,
+  onMapDblClick,
+}: AdsMapProps) {
   const mapEleRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
   const popUpRef = useRef<Popup | null>(null);
@@ -59,87 +83,45 @@ function AdsMap() {
   }
 
   function initialize_ads_markers(map: Map) {
-    const geo_json_url =
-      //(import.meta as any).env.VITE_GEOJSON_URL ||
-      "http://localhost:5173/MockMarker.json";
-    console.log("Geo json url", geo_json_url);
+    // const geo_json_url =
+    //   //(import.meta as any).env.VITE_GEOJSON_URL ||
+    //   "http://localhost:5173/MockMarker.json";
+    // console.log("Geo json url", geo_json_url);
 
-    AddClusterPoints(map, {
-      DataSource: {
-        id: ADS_INFO.DataSourceId,
-        url: geo_json_url,
-      },
-      Cluster: {
-        id: ADS_INFO.ClusterId,
-        paint: {
-          "circle-color": [
-            "step",
-            ["get", "point_count"],
-            "#51bbd6",
-            100,
-            "#f1f075",
-            750,
-            "#f28cb1",
-          ],
-          "circle-radius": [
-            "step",
-            ["get", "point_count"],
-            20,
-            100,
-            30,
-            750,
-            40,
-          ],
-        },
-      },
-      ClusterCount: {
-        id: ADS_INFO.ClusterCountId,
-        layout: {
-          "text-field": "{point_count_abbreviated}",
-          "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-          "text-size": 12,
-        },
-      },
-      Uncluster: {
-        id: ADS_INFO.UnclusterId,
-        paint: {
-          "circle-color": "#11b4da",
-          "circle-radius": 8,
-          "circle-stroke-width": 1,
-          "circle-stroke-color": "#fff",
-        },
-      },
-    });
+    if (AdsClusterInfo) {
+      AddClusterPoints(map, AdsClusterInfo);
+      map.on("click", AdsClusterInfo.Uncluster.id, function (e) {
+        const points = e.features?.[0].geometry;
+        if (!points) return;
+        const marker_data = AdsMarkerInfoSchema.safeParse(
+          e.features?.[0].properties,
+        );
 
-    map.on("click", "ads_unclustered_point", function (e) {
-      const points = e.features?.[0].geometry;
-      if (!points) return;
-      const marker_data = AdsMarkerInfoSchema.safeParse(
-        e.features?.[0].properties,
-      );
+        if (marker_data.success == false) return;
+        make_info_maker(marker_data.data, [e.lngLat.lng, e.lngLat.lat]);
 
-      if (marker_data.success == false) return;
-      make_info_maker(marker_data.data, [e.lngLat.lng, e.lngLat.lat]);
+        console.log("You click a mark", marker_data.data.ads[0].ten_dia_diem);
+        dispatch(setSelectedAdsLocation(marker_data.data));
+      });
 
-      console.log("You click a mark", marker_data.data.ads[0].ten_dia_diem);
-      dispatch(setSelectedAdsLocation(marker_data.data));
-    });
+      map.on("mouseenter", AdsClusterInfo.Uncluster.id, function (e) {
+        const points = e.features?.[0].geometry;
+        if (!points) return;
+        map.getCanvas().style.cursor = "pointer";
 
-    map.on("mouseenter", "ads_unclustered_point", function (e) {
-      const points = e.features?.[0].geometry;
-      if (!points) return;
-      map.getCanvas().style.cursor = "pointer";
+        const [lng, lat] = (points as GeoJSON.Point).coordinates.slice();
+        const marker_data = AdsMarkerInfoSchema.safeParse(
+          e.features?.[0].properties,
+        );
+        if (marker_data.success == false) return;
+        make_info_maker(marker_data.data, [lng, lat]);
+      });
 
-      const [lng, lat] = (points as GeoJSON.Point).coordinates.slice();
-      const marker_data = AdsMarkerInfoSchema.safeParse(
-        e.features?.[0].properties,
-      );
-      if (marker_data.success == false) return;
-      make_info_maker(marker_data.data, [lng, lat]);
-    });
-    map.on("mouseleave", "ads_unclustered_point", function () {
-      popUpRef.current?.remove();
-    });
+      map.on("mouseleave", AdsClusterInfo.Uncluster.id, function () {
+        popUpRef.current?.remove();
+      });
+    }
+    if (ReportClusterInfo) AddClusterPoints(map, ReportClusterInfo);
   }
 
   function initialize_map_control(map: Map) {
@@ -159,21 +141,10 @@ function AdsMap() {
     const map = new MapLibreGL.Map({
       container: container,
       style: url,
-      zoom: InitalMapData.zoom,
-      center: [InitalMapData.lng, InitalMapData.lat],
+      zoom: InitialPosition.zoom,
+      center: [InitialPosition.lng, InitialPosition.lat],
       doubleClickZoom: false,
     });
-    // map.on("move", () => {
-    //   if (!mapRef.current) return;
-    //   // const [lng, lat, zoom] = [
-    //   //   Number(mapRef.current.getCenter().lng.toFixed(4)),
-    //   //   Number(mapRef.current.getCenter().lat.toFixed(4)),
-    //   //   Number(mapRef.current.getZoom().toFixed(2)),
-    //   // ];
-    //   //if (!!lng && !Number.isNaN(lng)) setLng(lng);
-    //   //if (!!lat && !Number.isNaN(lat)) setLat(lat);
-    //   //if (!!zoom && !Number.isNaN(zoom)) setZoom(zoom);
-    // });
 
     map.once("load", function () {
       initialize_ads_markers(map);
@@ -181,6 +152,7 @@ function AdsMap() {
 
       map.on("dblclick", function (e) {
         dispatch(setDblClick({ lng: e.lngLat.lng, lat: e.lngLat.lat }));
+        onMapDblClick?.({ lng: e.lngLat.lng, lat: e.lngLat.lat });
       });
     });
 
@@ -191,26 +163,30 @@ function AdsMap() {
 
   function show_ads_check_handler(is_check: boolean) {
     if (!mapRef.current) return;
+    if (!AdsClusterInfo) return;
     const visible = is_check ? "visible" : "none";
     mapRef.current.setLayoutProperty(
-      ADS_INFO.UnclusterId,
+      AdsClusterInfo.Uncluster.id,
       "visibility",
       visible,
     );
     mapRef.current.setLayoutProperty(
-      ADS_INFO.ClusterCountId,
+      AdsClusterInfo.ClusterCount.id,
       "visibility",
       visible,
     );
-    mapRef.current.setLayoutProperty(ADS_INFO.ClusterId, "visibility", visible);
-
+    mapRef.current.setLayoutProperty(
+      AdsClusterInfo.Cluster.id,
+      "visibility",
+      visible,
+    );
     setAdsVisible(is_check);
   }
 
   useEffect(function () {
     if (!mapEleRef.current) return;
     initialize_map(mapEleRef.current);
-    dispatch(setDblClick({ ...InitalMapData }));
+    dispatch(setDblClick({ ...InitialPosition }));
     forceRefresh();
   }, []);
 
@@ -229,5 +205,4 @@ function AdsMap() {
     </div>
   );
 }
-
 export default AdsMap;
