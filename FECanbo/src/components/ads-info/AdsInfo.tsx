@@ -1,11 +1,9 @@
 import { Row, Col } from "antd";
 import AdsInfoTable from "./AdsInfoTable";
-import { AdsInfoRecord } from "../../types";
+import { AdsInfoRecord } from "../../types/view-model";
 import { useState } from "react";
 import AdsInfoDetail from "./AdsInfoDetail";
 import { useGetAllAdsInfoQuery } from "../../slices/api/apiSlice";
-
-const data: AdsInfoRecord[] = [];
 
 const AdsInfo = () => {
   const { data, error, isLoading } = useGetAllAdsInfoQuery();

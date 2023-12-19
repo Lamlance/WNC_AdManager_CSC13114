@@ -1,4 +1,3 @@
-// types.ts (or a file where you define your types)
 export interface AdRequest {
   id_yeu_cau: string;
   noi_dung_qc: string;

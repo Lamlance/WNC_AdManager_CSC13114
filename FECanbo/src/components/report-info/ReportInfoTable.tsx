@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { ReportInfoRecord } from "../../types";
+import { ReportInfoRecord } from "../../types/view-model";
 
 const columns = [
   {

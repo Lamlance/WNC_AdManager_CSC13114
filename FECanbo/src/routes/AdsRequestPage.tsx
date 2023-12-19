@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AdRequest } from "../types";
+import { AdRequest } from "../types/view-model";
 import AdsRequest from "../components/ads-request/AdsRequest";
 import { Button } from "antd";
 import AdsRequestForm from "../components/ads-request/AdsRequestForm";

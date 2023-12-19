@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { AdsInfoRecord } from "../../types";
+import { AdsInfoRecord } from "../../types/view-model";
 
 interface AdsInfoTableProps {
   data: AdsInfoRecord[],
