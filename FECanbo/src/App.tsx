@@ -8,6 +8,7 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
+
 import AdsInfo from "./components/ads-info/AdsInfo";
 import ReportInfo from "./components/report-info/ReportInfo";
 import EditAdForm from "./components/vhtt/EditAdForm";
@@ -16,32 +17,29 @@ import CreateAccount from "./components/vhtt/CreateAccount";
 import AdsMap from "./components/vhtt/AdsMap";
 import AdsRequestPage from "./routes/AdsRequestPage";
 const { Header, Sider, Content } = Layout;
-import usecontext from "./components/UseReducer/usecontext.js";
-import usereducer from "./components/UseReducer/usereducer.js"
+// import usecontext from "./components/UseReducer/usecontext.js";
+// import usereducer from "./components/UseReducer/usereducer.js"
 
 
 const App = () => {
-  const [state, dispath] = usereducer();
+  // const [state, dispath] = usereducer();
 
   return (
-
-    <usecontext.Provider value={{ state, dispath }}>
-      <div className="h-screen w-screen">
-        <Routes>
-          <Route path="/" element={<PageLayout />}>
-            <Route index element={<AdsRequestPage />} />
-            <Route path="advertisements" element={<AdsInfo />} />
-            <Route path="reports" element={<ReportInfo />} />
-          </Route>
-          <Route path="vhtt">
-            <Route path="editad" element={<EditAdForm />} />
-            <Route path="editpoint" element={<EditSetpoint />} />
-            <Route path="adsmap" element={<AdsMap />} />
-            <Route path="createaccount" element={<CreateAccount />} />
-          </Route>
-        </Routes>
-      </div>
-    </usecontext.Provider >
+    <div className="h-screen w-screen">
+      <Routes>
+        <Route path="/" element={<PageLayout />}>
+          <Route index element={<AdsRequestPage />} />
+          <Route path="advertisements" element={<AdsInfo />} />
+          <Route path="reports" element={<ReportInfo />} />
+        </Route>
+        <Route path="vhtt">
+          <Route path="editad" element={<EditAdForm />} />
+          <Route path="editpoint" element={<EditSetpoint />} />
+          <Route path="adsmap" element={<AdsMap />} />
+          <Route path="createaccount" element={<CreateAccount />} />
+        </Route>
+      </Routes>
+    </div>
   );
 };
 
