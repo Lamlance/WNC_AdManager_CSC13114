@@ -6,7 +6,7 @@ import reportInfoRouter from "./controllers/report-info"
 const router = Router();
 
 router.use("/quang-cao", adsInfoRouter);
-router.use("/yeu-cau-bao-cao", adsRequestRouter);
+router.use("/yeu-cau-quang-cao", adsRequestRouter);
 router.use("/bao-cao", reportInfoRouter);
 
 export default router;

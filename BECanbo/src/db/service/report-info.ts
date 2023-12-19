@@ -10,6 +10,7 @@ export const getALLReportInfo = async () => {
         reporterPhone: BaoCao.dien_thoai,
         reportContent: BaoCao.noi_dung,
         reportType: LoaiBaoCao.loai_bao_cao
+        
     }).from(AdsSchema.BaoCao)
     .innerJoin(
         AdsSchema.LoaiBaoCao,

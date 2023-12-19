@@ -1,6 +1,6 @@
 import { Col, Row } from "antd";
 import ReportInfoTable from "./ReportInfoTable";
-import { ReportInfoRecord } from "../../types";
+import { ReportInfoRecord } from "../../types/view-model";
 import { useState } from "react";
 import ReportInfoDetail from "./ReportInfoDetail";
 import { useGetAllReportInfoQuery } from "../../slices/api/apiSlice";

@@ -1,5 +1,5 @@
 import React from "react";
-import { AdRequest } from "../../types";
+import { AdRequest } from "../../types/view-model";
 
 interface AdDetailsSectionProps {
   ad: AdRequest | null;

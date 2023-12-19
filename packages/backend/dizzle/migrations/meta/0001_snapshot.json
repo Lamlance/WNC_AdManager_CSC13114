@@ -1,0 +1,521 @@
+{
+  "id": "4c84ab97-eb1f-4539-af4f-a1b1a913ff13",
+  "prevId": "1818efad-457f-45fe-b014-4a2b2a8d028c",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "BaoCao": {
+      "name": "BaoCao",
+      "schema": "",
+      "columns": {
+        "id_bao_cao": {
+          "name": "id_bao_cao",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ten_nguoi_gui": {
+          "name": "ten_nguoi_gui",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(127)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dien_thoai": {
+          "name": "dien_thoai",
+          "type": "varchar(127)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "noi_dung": {
+          "name": "noi_dung",
+          "type": "varchar(511)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_loai_bc": {
+          "name": "id_loai_bc",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "BaoCao_id_QuangCao_id_fk": {
+          "name": "BaoCao_id_QuangCao_id_fk",
+          "tableFrom": "BaoCao",
+          "tableTo": "QuangCao",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "BaoCao_id_loai_bc_LoaiBaoCao_id_loai_bc_fk": {
+          "name": "BaoCao_id_loai_bc_LoaiBaoCao_id_loai_bc_fk",
+          "tableFrom": "BaoCao",
+          "tableTo": "LoaiBaoCao",
+          "columnsFrom": [
+            "id_loai_bc"
+          ],
+          "columnsTo": [
+            "id_loai_bc"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "DiaDiem": {
+      "name": "DiaDiem",
+      "schema": "",
+      "columns": {
+        "id_dia_diem": {
+          "name": "id_dia_diem",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "id_ban_do": {
+          "name": "id_ban_do",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ten_dia_diem": {
+          "name": "ten_dia_diem",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dia_chi": {
+          "name": "dia_chi",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kinh_do": {
+          "name": "kinh_do",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vi_do": {
+          "name": "vi_do",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_phuong": {
+          "name": "id_phuong",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "DiaDiem_id_phuong_Phuong_id_fk": {
+          "name": "DiaDiem_id_phuong_Phuong_id_fk",
+          "tableFrom": "DiaDiem",
+          "tableTo": "Phuong",
+          "columnsFrom": [
+            "id_phuong"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "HinhThucQC": {
+      "name": "HinhThucQC",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "hinh_thuc_qc": {
+          "name": "hinh_thuc_qc",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "LoaiBangQC": {
+      "name": "LoaiBangQC",
+      "schema": "",
+      "columns": {
+        "id_loai_bang_qc": {
+          "name": "id_loai_bang_qc",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "loai_bang_qc": {
+          "name": "loai_bang_qc",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "LoaiBaoCao": {
+      "name": "LoaiBaoCao",
+      "schema": "",
+      "columns": {
+        "id_loai_bc": {
+          "name": "id_loai_bc",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "loai_bao_cao": {
+          "name": "loai_bao_cao",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "LoaiViTri": {
+      "name": "LoaiViTri",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "loai_vitri": {
+          "name": "loai_vitri",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "Phuong": {
+      "name": "Phuong",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ten_phuong": {
+          "name": "ten_phuong",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_quan": {
+          "name": "id_quan",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Phuong_id_quan_Quan_id_fk": {
+          "name": "Phuong_id_quan_Quan_id_fk",
+          "tableFrom": "Phuong",
+          "tableTo": "Quan",
+          "columnsFrom": [
+            "id_quan"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "Quan": {
+      "name": "Quan",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ten_quan": {
+          "name": "ten_quan",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "QuangCao": {
+      "name": "QuangCao",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "quy_hoach": {
+          "name": "quy_hoach",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "ngay_hieu_luc": {
+          "name": "ngay_hieu_luc",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ngay_het_han": {
+          "name": "ngay_het_han",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hinh_1": {
+          "name": "hinh_1",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hinh_2": {
+          "name": "hinh_2",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "so_luong": {
+          "name": "so_luong",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 1
+        },
+        "chieu_dai_m": {
+          "name": "chieu_dai_m",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chieu_rong_m": {
+          "name": "chieu_rong_m",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_loai_bang_qc": {
+          "name": "id_loai_bang_qc",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_dia_diem": {
+          "name": "id_dia_diem",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_hinh_thuc": {
+          "name": "id_hinh_thuc",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_loai_vitri": {
+          "name": "id_loai_vitri",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "QuangCao_id_loai_bang_qc_LoaiBangQC_id_loai_bang_qc_fk": {
+          "name": "QuangCao_id_loai_bang_qc_LoaiBangQC_id_loai_bang_qc_fk",
+          "tableFrom": "QuangCao",
+          "tableTo": "LoaiBangQC",
+          "columnsFrom": [
+            "id_loai_bang_qc"
+          ],
+          "columnsTo": [
+            "id_loai_bang_qc"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "QuangCao_id_dia_diem_DiaDiem_id_dia_diem_fk": {
+          "name": "QuangCao_id_dia_diem_DiaDiem_id_dia_diem_fk",
+          "tableFrom": "QuangCao",
+          "tableTo": "DiaDiem",
+          "columnsFrom": [
+            "id_dia_diem"
+          ],
+          "columnsTo": [
+            "id_dia_diem"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "QuangCao_id_hinh_thuc_HinhThucQC_id_fk": {
+          "name": "QuangCao_id_hinh_thuc_HinhThucQC_id_fk",
+          "tableFrom": "QuangCao",
+          "tableTo": "HinhThucQC",
+          "columnsFrom": [
+            "id_hinh_thuc"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "QuangCao_id_loai_vitri_LoaiViTri_id_fk": {
+          "name": "QuangCao_id_loai_vitri_LoaiViTri_id_fk",
+          "tableFrom": "QuangCao",
+          "tableTo": "LoaiViTri",
+          "columnsFrom": [
+            "id_loai_vitri"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "YeuCauCapPhep": {
+      "name": "YeuCauCapPhep",
+      "schema": "",
+      "columns": {
+        "id_yeu_cau": {
+          "name": "id_yeu_cau",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "id_diem_dat": {
+          "name": "id_diem_dat",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "noi_dung_qc": {
+          "name": "noi_dung_qc",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ten_cty": {
+          "name": "ten_cty",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dien_thoai_cty": {
+          "name": "dien_thoai_cty",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ngay_hieu_luc": {
+          "name": "ngay_hieu_luc",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ngay_het_han": {
+          "name": "ngay_het_han",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "YeuCauCapPhep_id_diem_dat_DiaDiem_id_dia_diem_fk": {
+          "name": "YeuCauCapPhep_id_diem_dat_DiaDiem_id_dia_diem_fk",
+          "tableFrom": "YeuCauCapPhep",
+          "tableTo": "DiaDiem",
+          "columnsFrom": [
+            "id_diem_dat"
+          ],
+          "columnsTo": [
+            "id_dia_diem"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

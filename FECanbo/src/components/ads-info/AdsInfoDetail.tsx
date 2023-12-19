@@ -1,4 +1,4 @@
-import { AdsInfoRecord } from "../../types";
+import { AdsInfoRecord } from "../../types/view-model";
 
 const AdsInfoDetail = ({
   adsType,

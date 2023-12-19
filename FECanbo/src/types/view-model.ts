@@ -1,4 +1,3 @@
-// types.ts (or a file where you define your types)
 export interface AdRequest {
   requestId: string;
   panoContent: string;

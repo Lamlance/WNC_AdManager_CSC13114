@@ -52,7 +52,7 @@ const DiaDiem = pgTable("DiaDiem", {
 });
 
 const QuangCao = pgTable("QuangCao", {
-  id_quang_cao: uuid("id").primaryKey().defaultRandom(),
+  id_quang_cao: serial("id").primaryKey(),
   quy_hoach: boolean("quy_hoach").notNull().default(false),
 
   ngay_hieu_luc: date("ngay_hieu_luc"),
@@ -88,11 +88,13 @@ const LoaiBaoCao = pgTable("LoaiBaoCao", {
 });
 
 const BaoCao = pgTable("BaoCao", {
-  id_bao_cao: uuid("id_bao_cao").defaultRandom().primaryKey(),
+  id_bao_cao: serial("id_bao_cao").primaryKey(),
   ten_nguoi_gui: varchar("ten_nguoi_gui", { length: 255 }).notNull(),
   email: varchar("email", { length: 127 }),
   dien_thoai: varchar("dien_thoai", { length: 127 }),
   noi_dung: varchar("noi_dung", { length: 511 }).notNull(),
+  id_quang_cao: integer("id")
+    .references(() => QuangCao.id_quang_cao),
 
   id_loai_bc: integer("id_loai_bc")
     .notNull()
@@ -108,7 +110,7 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
 
   ten_cty: varchar("ten_cty", { length: 255 }).notNull(),
   dien_thoai_cty: varchar("dien_thoai_cty", { length: 127 }).notNull(),
-  emial_cty: varchar("dien_thoai_cty", { length: 127 }).notNull(),
+  email_cty: varchar("dien_thoai_cty", { length: 127 }).notNull(),
   dia_chi_cty: varchar("dien_thoai_cty", { length: 255 }).notNull(),
 
   ngay_hieu_luc: date("ngay_hieu_luc").notNull(),
