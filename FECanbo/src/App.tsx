@@ -12,11 +12,12 @@ import {
 
 import AdsInfo from "./components/ads-info/AdsInfo";
 import ReportInfo from "./components/report-info/ReportInfo";
-import EditAdForm from "./components/vhtt/EditAdForm";
 import EditSetpoint from "./components/vhtt/EditSetpoint";
 import CreateAccount from "./components/vhtt/CreateAccount";
 import AdsMap from "./components/vhtt/AdsMap";
 import AdsRequestPage from "./routes/AdsRequestPage";
+import AdManagement from "./components/vhtt/AdManagement";
+import AdsRequestVHTTPage from "./components/vhtt/ads-request/AdsRequestVHTTPage";
 import EditRequestComponent from "./components/vhtt/EditRequestComponent";
 const { Header, Sider, Content } = Layout;
 
@@ -81,13 +82,25 @@ const itemVHTTs: Item[] = [
     key: "2",
     icon: <VideoCameraOutlined />,
     label: "Quản lý bảng quảng cáo",
-    title: "editad",
+    title: "managead",
   },
   {
     key: "3",
     icon: <UploadOutlined />,
     label: "Quản lý điểm quảng cáo",
     title: "editpoint",
+  },
+  {
+    key: "4",
+    icon: <UploadOutlined />,
+    label: "YÊU CẦU CẤP PHÉP",
+    title: "requestad",
+  },
+  {
+    key: "5",
+    icon: <UploadOutlined />,
+    label: "YÊU CẦU CHỈNH SỬA ",
+    title: "requesteditad",
   },
 ];
 

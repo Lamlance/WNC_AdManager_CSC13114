@@ -29,6 +29,8 @@ export interface AdsInfoRecord {
   status: string;
   effectDate: string;
   expireDate: string;
+  img: string;
+  img2: string;
 }
 
 export interface ReportInfoRecord {
@@ -44,8 +46,24 @@ export interface ReportInfoRecord {
   status: string;
 }
 
+export interface EditAdRequest {
+  id: string;
+  timeRequest: string;
+  reason: string;
+  newinfo: AdsInfoRecord;
+  status: string;
+}
 
-export interface EditRequest {   //yeu cau chinh sua
+export interface EditAdRequest {
+  id: string;
+  timeRequest: string;
+  reason: string;
+  newinfo: AdsInfoRecord;
+  status: string;
+}
+
+export interface EditRequest {
+  //yeu cau chinh sua
   id: string;
   location: string;
   sender: string;
