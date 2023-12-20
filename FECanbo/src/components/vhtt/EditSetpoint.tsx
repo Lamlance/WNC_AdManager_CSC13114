@@ -1,12 +1,9 @@
-import React, { useState, useContext } from "react";
 import { Modal, Input, Button, Form } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { Link, Routes, Route, useLocation } from 'react-router-dom'
-// import usecontext from "../UseReducer/usecontext"
-
+import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../store.ts'
-import { onChangeLocation, onChangeAddress, setLng, setLat, setStatus } from '../../slices/pointSlice.tsx';
+import { onChangeLocation, onChangeAddress } from '../../slices/pointSlice.tsx';
 import { showModalClose } from "../../slices/modalSlice.tsx";
 
 function EditSetpoint() {
@@ -21,8 +18,7 @@ function EditSetpoint() {
 
   return (
     <>
-      <Modal title="" open={isModalOpen} 
-      // onOk={() => dispatch(showModalClose())}
+      <Modal title="" open={isModalOpen} // onOk={() => dispatch(showModalClose())}
        onCancel={() => dispatch(showModalClose())} footer={null}>
         <Form name="wrap" labelCol={{ flex: '110px' }} labelAlign="left" labelWrap wrapperCol={{ flex: 1 }} colon={false} className="max-w-2xl mt-8">
           <Form.Item label="Tên địa điểm">
