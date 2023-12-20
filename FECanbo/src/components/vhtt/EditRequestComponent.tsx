@@ -1,24 +1,28 @@
-import React from "react";
 import { Table } from "antd";
 import { Link } from "react-router-dom";
-import EditSetpoint from "./EditSetpoint";
-
 import { useDispatch } from 'react-redux';
-import { showModalOpen } from "../../slices/modalSlice.tsx";
 
-const data = [
-    { "id": 1, "location": "agribank", "sender": "phuong cau ong lanh quan 1", "address": "159 nguyen thai hoc", "reason": "cau ket gian duong dai dao", lng: 10, lat: 100, "status": "da chinh sua" },
-    { "id": 2, "location": "agribank", "sender": "phuong cau ong lanh", "address": "159 nguyen thai hoc", "reason": "cau ket gian duong dai dao", lng: 10, lat: 100, "status": "da chinh sua" },
-    { "id": 3, "location": "agribank", "sender": "phuong cau ong quan 1", "address": "159 nguyen thai hoc", "reason": "cau ket gian duong dai dao", lng: 10, lat: 100, "status": "da chinh sua" },
-    { "id": 4, "location": "agribank", "sender": "phuong c lanh quan 1", "address": "159 nguyen thai hoc", "reason": "cau ket gian duong dai dao", lng: 10, lat: 100, "status": "da chinh sua" },
+import EditSetpoint from "./EditSetpoint";
+import { showModalOpen } from "../../slices/modalSlice.tsx";
+import { onChangeLocation, onChangeAddress, setLng, setLat } from "../../slices/pointSlice.tsx";
+import { EditRequest } from "../../types.ts";
+
+const data: EditRequest[] = [
+    { "id": "1", "location": "agribank", "sender": "phuong cau ong lanh quan 1", "address": "159 nguyen thai hoc", "reason": "cau ket gian duong dai dao", lng: 10, lat: 100, "status": "da chinh sua" },
+    { "id": "2", "location": "agribank", "sender": "phuong cau ong lanh", "address": "159 nguyen thai hoc", "reason": "cau ket gian duong dai dao", lng: 10, lat: 100, "status": "da chinh sua" },
+    { "id": "3", "location": "agribank", "sender": "phuong cau ong quan 1", "address": "159 nguyen thai hoc", "reason": "cau ket gian duong dai dao", lng: 10, lat: 100, "status": "da chinh sua" },
+    { "id": "4", "location": "agribank", "sender": "phuong c lanh quan 1", "address": "159 nguyen thai hoc", "reason": "cau ket gian duong dai dao", lng: 10, lat: 100, "status": "da chinh sua" },
 ];
 
 function EditRequestComponent() {
 
     const dispatch = useDispatch();
 
-    const showModal = () => {
-        console.log('cc')
+    const showModal = (record: EditRequest) => {
+        dispatch(onChangeLocation(record.location));
+        dispatch(onChangeAddress(record.address));
+        // dispatch(setLng(record.lng));
+        // dispatch(setLat(record.lat));
         dispatch(showModalOpen());
     };
 
@@ -57,7 +61,7 @@ function EditRequestComponent() {
             title: "",
             dataIndex: "detail",
             key: "detail",
-            render: ((text: string, record: any) => (<Link to='#' onClick={showModal}>Chi tiết</Link>)),
+            render: ((text: string, record: EditRequest) => (<Link to='#' onClick={() => showModal(record)}>Chi tiết</Link>)),
         },
     ];
 
