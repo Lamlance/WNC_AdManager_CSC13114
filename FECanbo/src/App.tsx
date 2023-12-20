@@ -16,6 +16,7 @@ import EditSetpoint from "./components/vhtt/EditSetpoint";
 import CreateAccount from "./components/vhtt/CreateAccount";
 import AdsMap from "./components/vhtt/AdsMap";
 import AdsRequestPage from "./routes/AdsRequestPage";
+import EditRequestComponent from "./components/vhtt/EditRequestComponent";
 const { Header, Sider, Content } = Layout;
 // import usecontext from "./components/UseReducer/usecontext.js";
 // import usereducer from "./components/UseReducer/usereducer.js"
@@ -24,6 +25,11 @@ const { Header, Sider, Content } = Layout;
 const App = () => {
   // const [state, dispath] = usereducer();
 
+  // return (
+  //   <div className="h-screen w-screen">
+  //     <EditRequestComponent />
+  //   </div>
+  // );
   return (
     <div className="h-screen w-screen">
       <Routes>
@@ -32,11 +38,12 @@ const App = () => {
           <Route path="advertisements" element={<AdsInfo />} />
           <Route path="reports" element={<ReportInfo />} />
         </Route>
-        <Route path="vhtt">
+        <Route path="vhtt" element={<PageLayoutVHTT />}>
           <Route path="editad" element={<EditAdForm />} />
           <Route path="editpoint" element={<EditSetpoint />} />
           <Route path="adsmap" element={<AdsMap />} />
           <Route path="createaccount" element={<CreateAccount />} />
+          <Route path="editrequest" element={<EditRequestComponent />} />
         </Route>
       </Routes>
     </div>
@@ -101,6 +108,88 @@ const PageLayout = () => {
           background: "#ffffff",
         }}
       >
+        <Header style={{ padding: 0, background: "#ffffff" }}>
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              fontSize: "16px",
+              width: 50,
+              height: 50,
+              background: "#ffffff",
+            }}
+          />
+        </Header>
+        <Content
+          style={{
+            margin: "24px 16px",
+            padding: 24,
+            minHeight: 280,
+            background: "#ffffff",
+          }}
+        >
+          <Outlet />
+        </Content>
+      </Layout>
+    </Layout>
+  );
+};
+
+const PageLayoutVHTT = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+
+  const items = [
+    {
+      key: "1",
+      icon: <UserOutlined />,
+      label: "Mắt thần",
+      title: "/vhtt/adsmap",
+    },
+    {
+      key: "2",
+      icon: <VideoCameraOutlined />,
+      label: "Chỉnh sửa bảng quảng cáo",
+      title: "/vhtt/editad",
+    },
+    {
+      key: "3",
+      icon: <UploadOutlined />,
+      label: "Chỉnh sửa điểm quảng cáo",
+      title: "/vhtt/editpoint",
+    },
+    {
+      key: "4",
+      icon: <UploadOutlined />,
+      label: "Thêm tài khoản",
+      title: "/vhtt/createaccount",
+    },
+    {
+      key: "5",
+      icon: <UploadOutlined />,
+      label: "Yêu cầu chỉnh sửa",
+      title: "/vhtt/editrequest",
+    },
+  ];
+
+  return (
+    <Layout>
+      <Sider trigger={null} collapsedWidth={0} width={280} collapsible collapsed={collapsed}>
+        <div className="my-4 flex flex-row justify-center">
+          <span className="text-base font-bold text-white"> VHTT</span>
+        </div>
+        <Menu theme="dark" mode="inline" style={{fontSize: "16px"}} defaultSelectedKeys={["1"]}
+          items={items}
+          onSelect={({ key }) => {
+            const redirectURL = items?.find((item) => item?.key == key)?.title;
+            return redirectURL === undefined
+              ? navigate("/")
+              : navigate(redirectURL);
+          }}
+        />
+      </Sider>
+      <Layout style={{ background: "#ffffff", }}>
         <Header style={{ padding: 0, background: "#ffffff" }}>
           <Button
             type="text"

@@ -6,10 +6,10 @@ export default {
   driver: "pg",
   dbCredentials: {
     host: "127.0.0.1",
-    port: 6432,
+    port: 5432,
     //port: 6543,
     user: "postgres",
-    password: "postgresql",
+    password: "12345",
     database: "AdsManager",
   },
 } satisfies Config;

@@ -43,3 +43,14 @@ export interface ReportInfoRecord {
   reportTime: Date;
   status: string;
 }
+
+
+export interface EditRequest {   //yeu cau chinh sua
+  id: string;
+  loccation: string;
+  sender: string;
+  address: string;
+  reason: string;
+  lng: number;
+  lat: number;
+}
