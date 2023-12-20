@@ -50,7 +50,6 @@ const dateFormat = "YYYY-MM-DD";
 const today = dayjs().format("YYYY-MM-DD");
 
 const EditAdForm: FC<MyComponentProps> = ({ ad, isModalOpen, onClose }) => {
-  console.log("ad", ad);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -97,11 +96,43 @@ const EditAdForm: FC<MyComponentProps> = ({ ad, isModalOpen, onClose }) => {
     );
   };
 
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
+  const handleChange: UploadProps["onChange"] = async ({
+    fileList: newFileList,
+    file,
+  }) => {
+    if (file && file.type && file.type.startsWith("image/")) {
+      const preview = await getBase64(file.originFileObj as RcFile);
 
-  const handleChange2: UploadProps["onChange"] = ({ fileList: newFileList }) =>
-    setFileList2(newFileList);
+      setFileList([
+        {
+          ...file,
+          status: "done",
+          url: preview,
+        },
+      ]);
+    } else {
+      setFileList(newFileList);
+    }
+  };
+
+  const handleChange2: UploadProps["onChange"] = async ({
+    fileList: newFileList,
+    file,
+  }) => {
+    if (file && file.type && file.type.startsWith("image/")) {
+      const preview = await getBase64(file.originFileObj as RcFile);
+
+      setFileList2([
+        {
+          ...file,
+          status: "done",
+          url: preview,
+        },
+      ]);
+    } else {
+      setFileList2(newFileList);
+    }
+  };
 
   const uploadButton = (
     <div>
@@ -223,7 +254,7 @@ const EditAdForm: FC<MyComponentProps> = ({ ad, isModalOpen, onClose }) => {
                 onPreview={handlePreview}
                 onChange={handleChange}
               >
-                {fileList.length >= 1 ? null : uploadButton}
+                {fileList.length >= 2 ? null : uploadButton}
               </Upload>
               <Modal
                 open={previewOpen}
@@ -246,7 +277,7 @@ const EditAdForm: FC<MyComponentProps> = ({ ad, isModalOpen, onClose }) => {
                 onPreview={handlePreview}
                 onChange={handleChange2}
               >
-                {fileList2.length >= 1 ? null : uploadButton}
+                {fileList2.length >= 2 ? null : uploadButton}
               </Upload>
               <Modal
                 open={previewOpen}
