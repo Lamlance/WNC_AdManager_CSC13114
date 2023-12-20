@@ -5,7 +5,7 @@ import "../../../../FENgDan/src/components/AdsMap.css";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { onChangeName, onChangeAddress, setLng, setLat, showModalClose, showModalOpen } from '../../slices/locationSlice.tsx';
+import { setLng, setLat} from '../../slices/pointSlice.tsx';
 import type { RootState } from '../../store.ts'
 
 
@@ -16,10 +16,10 @@ function AdsMap() {
   const  navigate  = useNavigate()
 
   const dispatch = useDispatch();
-  const location = useSelector((state: RootState) => state.location);
+  const point = useSelector((state: RootState) => state.point);
 
 
-  const { lng, lat } = location;
+  const { lng, lat } = point;
 
   function initialize_map(container: HTMLElement) {
     if (mapRef.current) {
@@ -46,7 +46,7 @@ function AdsMap() {
 
         dispatch(setLng(lng));
         dispatch(setLat(lat));
-        setTimeout(() => { navigate('/vhtt/editpoint')}, 200);
+        setTimeout(() => { navigate('/vhtt/editrequest')}, 200);
       });
     });
 

@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./slices/api/apiSlice";
-import locationSlice from "./slices/locationSlice";
+import pointSlice from "./slices/pointSlice";
+import modalSlice from "./slices/modalSlice";
 
 const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
-    location: locationSlice,
+    point: pointSlice,
+    modal: modalSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),

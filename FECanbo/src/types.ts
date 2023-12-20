@@ -47,10 +47,11 @@ export interface ReportInfoRecord {
 
 export interface EditRequest {   //yeu cau chinh sua
   id: string;
-  loccation: string;
+  location: string;
   sender: string;
   address: string;
   reason: string;
   lng: number;
   lat: number;
+  status: string;
 }

@@ -122,7 +122,8 @@ const YeuCauChinhSua = pgTable("YeuCauChinhSua", {
   dia_chi: varchar("dia_chi", { length: 255 }).notNull(),
   noi_dung: varchar("noi_dung", { length: 255 }).notNull(),  
   lng: doublePrecision("kinh_do").notNull(),
-  lat: doublePrecision("vi_do").notNull()
+  lat: doublePrecision("vi_do").notNull(),
+  trang_thai: varchar("trang_thai", { length: 255 }).notNull(),  
 })
 
 export {
