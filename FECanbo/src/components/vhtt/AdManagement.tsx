@@ -1,56 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import EditAdForm from "./EditAdForm";
 import { AdsInfoRecord } from "../../types";
 import { DeleteOutlined } from "@ant-design/icons";
+import { useGetAllAdsInfoQuery } from "../../slices/api/apiSlice";
 
-const data: AdsInfoRecord[] = [
-  {
-    id: "1",
-    adsType: "Trụ bảng hiflex",
-    address: "Phường 6 quận 3",
-    generalInfo: {
-      size: {
-        width: 2,
-        height: 3,
+function convertAdsData(data: any[]): AdsInfoRecord[] {
+  return data.map((item, index) => {
+    const {
+      ads: {
+        id_quang_cao,
+        id_dia_diem,
+        so_luong,
+        chieu_dai_m,
+        chieu_rong_m,
+        ngay_hieu_luc,
+        ngay_het_han,
+        hinh_1,
+        hinh_2,
+        quy_hoach,
       },
-      number: 2,
-    },
-    contentType: "Cổ động chính trị",
-    placeType: "Trung tâm thương mại",
-    status: "pending",
-    effectDate: "2023-06-12",
-    expireDate: "2023-06-12",
-    img: "https://chupgiare.com/wp-content/uploads/2023/02/Chup-Anh-quang-cao-Spa-de-lam-gi-hoangkhoiproduction.jpg",
-    img2: "https://gtvseo.com/wp-content/uploads/2021/03/anh-quang-cao-facebook-la-gi.jpg",
-  },
-  {
-    id: "2",
-    adsType: "Trụ treo băng rôn dọc",
-    address: "Phường 7 quận 3",
-    generalInfo: {
-      size: {
-        width: 2.5,
-        height: 3.5,
-      },
-      number: 1,
-    },
-    contentType: "Quảng cáo thương mại",
-    placeType: "Nhà chờ xe buýt",
-    status: "pending",
-    effectDate: "2023-05-12",
-    expireDate: "2023-05-12",
-    img: "https://gtvseo.com/wp-content/uploads/2021/03/anh-quang-cao-facebook-la-gi.jpg",
-    img2: "",
-  },
-];
+      place: { dia_chi },
+      placeType: { loai_vitri },
+      contentType: { hinh_thuc_qc },
+      adsType: { loai_bang_qc },
+    } = item;
 
+    return {
+      id: id_quang_cao,
+      adsType: loai_bang_qc,
+      address: dia_chi,
+      generalInfo: {
+        size: {
+          width: chieu_rong_m,
+          height: chieu_dai_m,
+        },
+        number: so_luong,
+      },
+      contentType: hinh_thuc_qc,
+      placeType: loai_vitri,
+      status: quy_hoach ? "Planned" : "Unplanned",
+      effectDate: ngay_hieu_luc,
+      expireDate: ngay_het_han,
+      img: hinh_1,
+      img2: hinh_2,
+    };
+  });
+}
 const AdManagement = () => {
   const columns: ColumnsType<AdsInfoRecord> = [
     {
       title: "ID quảng cáo",
-      width: 120,
+      width: 200,
       dataIndex: "id",
       key: "id",
       fixed: "left",
@@ -117,6 +119,8 @@ const AdManagement = () => {
       ),
     },
   ];
+  const { data, error, isLoading } = useGetAllAdsInfoQuery();
+
   const [selectedAds, setSelectedAds] = useState<AdsInfoRecord | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -130,27 +134,43 @@ const AdManagement = () => {
     setSelectedAds(null);
     setIsModalOpen(true);
   };
+  const convertedData = data ? convertAdsData(data) : [];
+
   const handleDeleteAd = () => {};
   return (
     <>
-      <Button onClick={handleAddAd} type="primary" className="mb-3">
-        Thêm quảng cáo{" "}
-      </Button>
-      <Table
-        columns={columns}
-        dataSource={data}
-        scroll={{ x: 1300 }}
-        onRow={(record) => ({
-          onClick: () => {
-            setSelectedAds(record);
-          },
-        })}
-      />
-      <EditAdForm
-        isModalOpen={isModalOpen}
-        onClose={closeModal}
-        ad={selectedAds}
-      />
+      {error && (
+        <div>
+          <p> There was an error </p>
+        </div>
+      )}
+      {isLoading && (
+        <div>
+          <p> Loading page </p>
+        </div>
+      )}
+      {data && (
+        <>
+          <Button onClick={handleAddAd} type="primary" className="mb-3">
+            Thêm quảng cáo{" "}
+          </Button>
+          <Table
+            columns={columns}
+            dataSource={convertedData}
+            scroll={{ x: 1300 }}
+            onRow={(record) => ({
+              onClick: () => {
+                setSelectedAds(record);
+              },
+            })}
+          />
+          <EditAdForm
+            isModalOpen={isModalOpen}
+            onClose={closeModal}
+            ad={selectedAds}
+          />
+        </>
+      )}
     </>
   );
 };

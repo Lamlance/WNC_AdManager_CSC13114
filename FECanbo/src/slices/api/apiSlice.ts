@@ -41,9 +41,4 @@ export const apiSlice = createApi({
   }),
 });
 
-export const {
-  useGetAllAdsInfoQuery,
-  useGetAllReportInfoQuery,
-  useSubmitAdRequestMutation,
-} = apiSlice;
-export const { reducer } = apiSlice;
+export const { useGetAllAdsInfoQuery, useGetAllReportInfoQuery } = apiSlice;

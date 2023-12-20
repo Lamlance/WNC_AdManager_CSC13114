@@ -6,6 +6,10 @@ import AdsInfoDetail from "./AdsInfoDetail";
 
 const AdsInfo = () => {
   const { data, error, isLoading } = useGetAllAdsInfoQuery();
+  console.log("data", data);
+  const [selectedAdsInfo, setSelectedAdsInfo] = useState<AdsInfoRecord | null>(
+    null,
+  );
 
   return (
     <>
