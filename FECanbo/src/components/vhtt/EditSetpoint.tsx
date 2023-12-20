@@ -5,32 +5,28 @@ import { Link, Routes, Route, useLocation } from 'react-router-dom'
 // import usecontext from "../UseReducer/usecontext"
 
 import { useDispatch, useSelector } from 'react-redux';
-import { onChangeName, onChangeAddress, setLng, setLat, showModalClose, showModalOpen } from '../../slices/locationSlice.tsx';
 import type { RootState } from '../../store.ts'
+import { onChangeLocation, onChangeAddress, setLng, setLat, setStatus } from '../../slices/pointSlice.tsx';
+import { showModalClose } from "../../slices/modalSlice.tsx";
 
 function EditSetpoint() {
 
-  // const { state, dispatch } = useContext(usecontext)
   const dispatch = useDispatch();
-  const location = useSelector((state: RootState) => state.location);
 
-  const { name, address, lng, lat, isModalOpen } = location;
+  const point = useSelector((state: RootState) => state.point);
+  const { location, address, lng, lat } = point;
 
-  const handleShowModal = () => {
-    dispatch(showModalOpen())
-    console.log('cc')
-    console.log(location)
-  }
+  const modal = useSelector((state: RootState) => state.modal);
+  const { isModalOpen } = modal;
+
   return (
     <>
-
-      <Button type="primary" onClick={handleShowModal}>
-        Open Modal
-      </Button>
-      <Modal title="" open={isModalOpen} onOk={() => dispatch(showModalClose())} onCancel={() => dispatch(showModalClose())} footer={null}>
+      <Modal title="" open={isModalOpen} 
+      // onOk={() => dispatch(showModalClose())}
+       onCancel={() => dispatch(showModalClose())} footer={null}>
         <Form name="wrap" labelCol={{ flex: '110px' }} labelAlign="left" labelWrap wrapperCol={{ flex: 1 }} colon={false} className="max-w-2xl mt-8">
           <Form.Item label="Tên địa điểm">
-            <Input onChange={(e) => dispatch(onChangeName(e.target.value))} value={name} />
+            <Input onChange={(e) => dispatch(onChangeLocation(e.target.value))} value={location} />
           </Form.Item>
           <Form.Item label="Địa chỉ">
             <Input onChange={(e) => dispatch(onChangeAddress(e.target.value))} value={address} />

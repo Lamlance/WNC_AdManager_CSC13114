@@ -18,18 +18,9 @@ import AdsMap from "./components/vhtt/AdsMap";
 import AdsRequestPage from "./routes/AdsRequestPage";
 import EditRequestComponent from "./components/vhtt/EditRequestComponent";
 const { Header, Sider, Content } = Layout;
-// import usecontext from "./components/UseReducer/usecontext.js";
-// import usereducer from "./components/UseReducer/usereducer.js"
 
 
 const App = () => {
-  // const [state, dispath] = usereducer();
-
-  // return (
-  //   <div className="h-screen w-screen">
-  //     <EditRequestComponent />
-  //   </div>
-  // );
   return (
     <div className="h-screen w-screen">
       <Routes>
@@ -40,7 +31,7 @@ const App = () => {
         </Route>
         <Route path="vhtt" element={<PageLayoutVHTT />}>
           <Route path="editad" element={<EditAdForm />} />
-          <Route path="editpoint" element={<EditSetpoint />} />
+          {/* <Route path="editpoint" element={<EditSetpoint />} /> */}
           <Route path="adsmap" element={<AdsMap />} />
           <Route path="createaccount" element={<CreateAccount />} />
           <Route path="editrequest" element={<EditRequestComponent />} />
