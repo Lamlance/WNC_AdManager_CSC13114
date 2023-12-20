@@ -9,6 +9,7 @@ const data: AdsInfoRecord[] = [];
 
 const AdsInfo = () => {
   const { data, error, isLoading } = useGetAllAdsInfoQuery();
+  console.log("data", data);
   const [selectedAdsInfo, setSelectedAdsInfo] = useState<AdsInfoRecord | null>(
     null,
   );
