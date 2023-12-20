@@ -1,5 +1,6 @@
 // slices/locationSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { EditRequest } from '../types';
 
 interface LocationState {
   name: string;

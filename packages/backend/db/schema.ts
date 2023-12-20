@@ -120,6 +120,16 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
   hinh_anh: varchar("hinh_1", { length: 255 }),
 });
 
+const YeuCauChinhSua = pgTable("YeuCauChinhSua", {
+  id_yeu_cau: serial("id_yeu_cau").primaryKey(),
+  ten_dia_diem: varchar("ten_dia_diem", { length: 255 }).notNull(),
+  dvi_yeu_cau: varchar("dvi_yeu_cau", { length: 255 }).notNull(),
+  dia_chi: varchar("dia_chi", { length: 255 }).notNull(),
+  noi_dung: varchar("noi_dung", { length: 255 }).notNull(),  
+  lng: doublePrecision("kinh_do").notNull(),
+  lat: doublePrecision("vi_do").notNull()
+})
+
 export {
   LoaiViTri,
   HinhThucQC,
@@ -131,4 +141,5 @@ export {
   LoaiBaoCao,
   BaoCao,
   YeuCauCapPhep,
+  YeuCauChinhSua,
 };
