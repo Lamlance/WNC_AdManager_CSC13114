@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col } from "antd";
 import AdsRequestTable from "./AdsRequestTable";
 import AdsRequestDetail from "./AdsRequestDetail";
-import { AdRequest } from "../../types";
+import { AdRequest } from "../../../types";
 
 interface MainContentSectionProps {
   data: AdRequest[];

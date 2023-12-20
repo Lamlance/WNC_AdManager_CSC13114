@@ -11,14 +11,16 @@ import {
 } from "@ant-design/icons";
 import AdsInfo from "./components/ads-info/AdsInfo";
 import ReportInfo from "./components/report-info/ReportInfo";
-import EditAdForm from "./components/vhtt/EditAdForm";
 import EditSetpoint from "./components/vhtt/EditSetpoint";
 import CreateAccount from "./components/vhtt/CreateAccount";
 import AdsMap from "./components/vhtt/AdsMap";
 import AdsRequestPage from "./routes/AdsRequestPage";
+import AdManagement from "./components/vhtt/AdManagement";
+import AdsRequestVHTTPage from "./components/vhtt/ads-request/AdsRequestVHTTPage";
 const { Header, Sider, Content } = Layout;
 import usecontext from "./components/UseReducer/usecontext.js";
 import usereducer from "./components/UseReducer/usereducer.js";
+import EditRequest from "./components/vhtt/requestedit-ads/EditRequest.js";
 
 const App = () => {
   const [state, dispath] = usereducer();
@@ -34,10 +36,12 @@ const App = () => {
           </Route>
           <Route path="vhtt" element={<PageLayout items={itemVHTTs} />}>
             <Route index />
-            <Route path="editad" element={<EditAdForm />} />
+            <Route path="managead" element={<AdManagement />} />
             <Route path="editpoint" element={<EditSetpoint />} />
             <Route path="adsmap" element={<AdsMap />} />
             <Route path="createaccount" element={<CreateAccount />} />
+            <Route path="requestad" element={<AdsRequestVHTTPage />} />
+            <Route path="requesteditad" element={<EditRequest />} />
           </Route>
         </Routes>
       </div>
@@ -85,13 +89,25 @@ const itemVHTTs: Item[] = [
     key: "2",
     icon: <VideoCameraOutlined />,
     label: "Quản lý bảng quảng cáo",
-    title: "editad",
+    title: "managead",
   },
   {
     key: "3",
     icon: <UploadOutlined />,
     label: "Quản lý điểm quảng cáo",
     title: "editpoint",
+  },
+  {
+    key: "4",
+    icon: <UploadOutlined />,
+    label: "YÊU CẦU CẤP PHÉP",
+    title: "requestad",
+  },
+  {
+    key: "5",
+    icon: <UploadOutlined />,
+    label: "YÊU CẦU CHỈNH SỬA ",
+    title: "requesteditad",
   },
 ];
 

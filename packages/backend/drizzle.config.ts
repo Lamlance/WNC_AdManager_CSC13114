@@ -10,6 +10,6 @@ export default {
     //port: 6543,
     user: "postgres",
     password: "postgresql",
-    database: "AdsManager",
+    database: "adsmanager",
   },
 } satisfies Config;

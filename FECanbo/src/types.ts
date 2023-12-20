@@ -29,6 +29,8 @@ export interface AdsInfoRecord {
   status: string;
   effectDate: string;
   expireDate: string;
+  img: string;
+  img2: string;
 }
 
 export interface ReportInfoRecord {
@@ -41,5 +43,13 @@ export interface ReportInfoRecord {
   reportType: string;
   reportContent: string;
   reportTime: Date;
+  status: string;
+}
+
+export interface EditAdRequest {
+  id: string;
+  timeRequest: string;
+  reason: string;
+  newinfo: AdsInfoRecord;
   status: string;
 }
