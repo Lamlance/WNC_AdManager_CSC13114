@@ -170,7 +170,7 @@ const EditAdForm: FC<MyComponentProps> = ({ ad, isModalOpen, onClose }) => {
         className=" -my-12 mx-auto w-8/12 rounded-lg "
       >
         <h1 className=" mb-10 mt-5 text-center text-2xl font-semibold">
-          {ad ? "CHỈNH SỬA BẢNG QUẢNG CÁO" : "THÊM BẢNG QUẢNG CÁO MỚI"}
+          {ad ? "THÔNG TIN BẢNG QUẢNG CÁO" : "THÊM BẢNG QUẢNG CÁO MỚI"}
         </h1>
         <Form
           labelCol={{ span: 6 }}

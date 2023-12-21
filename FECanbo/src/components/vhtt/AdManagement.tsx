@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import EditAdForm from "./EditAdForm";
@@ -7,7 +7,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { useGetAllAdsInfoQuery } from "../../slices/api/apiSlice";
 
 function convertAdsData(data: any[]): AdsInfoRecord[] {
-  return data.map((item, index) => {
+  return data.map((item) => {
     const {
       ads: {
         id_quang_cao,

@@ -11,6 +11,7 @@ import {
   primaryKey,
   real,
   date,
+  jsonb,
 } from "drizzle-orm/pg-core";
 const LoaiViTri = pgTable("LoaiViTri", {
   id_loai_vt: serial("id").primaryKey(),
@@ -115,6 +116,14 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
   ngay_het_han: date("ngay_het_han").notNull(),
 });
 
+const YeuCauChinhSua = pgTable("YeuCauChinhSua", {
+  id_yeu_cau: serial("id_yeu_cau").primaryKey(),
+  ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
+  thoi_diem_chinh_sua: date("thoi_diem_chinh_sua").notNull(),
+  trang_thai: varchar("trang_thai", { length: 255 }).notNull(),
+  thong_tin_moi: jsonb("thong_tin_moi"),
+});
+
 export {
   LoaiViTri,
   HinhThucQC,
@@ -126,4 +135,5 @@ export {
   LoaiBaoCao,
   BaoCao,
   YeuCauCapPhep,
+  YeuCauChinhSua,
 };
