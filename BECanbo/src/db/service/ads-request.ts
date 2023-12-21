@@ -7,14 +7,14 @@ import { AdRequest } from "../../../../FECanbo/src/types";
 export const getAllAdsRequests = async () => {
   const data = await pg_client
     .select({
-      id: YeuCauCapPhep.id_yeu_cau,
-      place: DiaDiem.dia_chi,
+      place: AdsSchema.DiaDiem,
+      idYeucau: YeuCauCapPhep.id_yeu_cau,
       adsContent: YeuCauCapPhep.noi_dung_qc,
       companyEmail: YeuCauCapPhep.email_cty,
       companyName: YeuCauCapPhep.ten_cty,
       companyPhone: YeuCauCapPhep.dien_thoai_cty,
       effDate: YeuCauCapPhep.ngay_hieu_luc,
-      expDate: YeuCauCapPhep.ngay_het_han,
+      expDate: YeuCauCapPhep.ngay_het_han,,
     })
     .from(YeuCauCapPhep)
     .innerJoin(
@@ -22,6 +22,7 @@ export const getAllAdsRequests = async () => {
       eq(DiaDiem.id_dia_diem, YeuCauCapPhep.id_diem_dat)
     );
 
+  return data;
   return data;
 };
 

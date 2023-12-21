@@ -8,7 +8,7 @@ const client = new Client({
   port: 6432,
   user: "postgres",
   password: "postgresql",
-  database: "AdsManager",
+  database: "adsmanager",
 });
 await client.connect();
 const pg_client = drizzle(client, { schema: AdsSchema });

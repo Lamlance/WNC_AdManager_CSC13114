@@ -323,10 +323,10 @@ VALUES
 -- insert data into QuangCao
 INSERT INTO "QuangCao" (quy_hoach, ngay_hieu_luc, ngay_het_han, hinh_1, hinh_2, so_luong, chieu_dai_m, chieu_rong_m, id_loai_bang_qc, id_dia_diem, id_hinh_thuc, id_loai_vitri)
 VALUES
-(TRUE, '2023-12-17', '2024-12-16', 'hinh_73.jpg', 'hinh_95.jpg', 2, 32, 88, 2, 1, 1, 5),
-(FALSE, '2024-01-10', '2024-06-09', 'video_27.mp4', 'audio_19.mp3', 3, 45, 27, 1, 1, 3, 7),
-(TRUE, '2024-02-07', '2025-01-06', 'image_63.jpg', 'default_poster.png', 24, 72, 8, 3, 1, 3, 1),
-(FALSE, '2024-05-15', '2024-10-14', 'animation_91.gif', 'interactive_08.html', 2, 36, 90, 4, 1, 2, 6);
+(TRUE, '2023-12-17', '2024-12-16', 'hinh_73.jpg', 'hinh_95.jpg', 2, 32, 88, 2, 7, 1, 5),
+(FALSE, '2024-01-10', '2024-06-09', 'video_27.mp4', 'audio_19.mp3', 3, 45, 27, 1, 7, 3, 7),
+(TRUE, '2024-02-07', '2025-01-06', 'image_63.jpg', 'default_poster.png', 24, 72, 8, 3, 7, 3, 1),
+(FALSE, '2024-05-15', '2024-10-14', 'animation_91.gif', 'interactive_08.html', 2, 36, 90, 4, 7, 2, 6);
 
 -- insert data into YeuCauCapPhep
 INSERT INTO "YeuCauCapPhep" (id_diem_dat, noi_dung_qc, ten_cty, email_cty, dien_thoai_cty, dia_chi_cty, ngay_hieu_luc, ngay_het_han)
@@ -352,10 +352,36 @@ VALUES
 -- insert data into BaoCao
 INSERT INTO "BaoCao" (ten_nguoi_gui, email, dien_thoai, noi_dung, id_quang_cao, id_loai_bc)
 VALUES
-('Nguyễn Văn An', 'vanan@example.com', '+84 987654321', 'Báo cáo lỗi hệ thống trên trang chủ', 1, 1),
-('Trần Thị Bích', 'bichtran@gmail.com', '+84 283746510', 'Góp ý cải thiện giao diện ứng dụng', NULL, 2),
-('Lê Minh Cường', 'minhcuong.le@abc.com', '+84 369218045', 'Phản ánh sự cố thanh toán online', 3, 3),
-('Đỗ Thị Dịu', 'diu.do@yahoo.com', '+84 725813906', 'Kiến nghị bổ sung tính năng mới', NULL, 2),
-('Phạm Thị Hoa', 'hoapham@hotmail.com', '+84 812394057', 'Khen ngợi dịch vụ chăm sóc khách hàng', NULL, 1),
-('Đỗ Minh Long', 'minhlong.do@company.com', '+84 125739864', 'Báo cáo vi phạm quy định cộng đồng',  2, 4),
-('Nguyễn Thị Mai', 'mainguyen@web.net', '+84 654208731', 'Cảm ơn về trải nghiệm sử dụng dịch vụ', NULL, 1);
+('Nguyễn Văn An', 'vanan@example.com', '+84 987654321', 'Báo cáo lỗi hệ thống trên trang chủ', 1),
+('Trần Thị Bích', 'bichtran@gmail.com', '+84 283746510', 'Góp ý cải thiện giao diện ứng dụng', 2),
+('Lê Minh Cường', 'minhcuong.le@abc.com', '+84 369218045', 'Phản ánh sự cố thanh toán online', 3),
+('Đỗ Thị Dịu', 'diu.do@yahoo.com', '+84 725813906', 'Kiến nghị bổ sung tính năng mới', 2),
+('Phạm Thị Hoa', 'hoapham@hotmail.com', '+84 812394057', 'Khen ngợi dịch vụ chăm sóc khách hàng', 1),
+('Đỗ Minh Long', 'minhlong.do@company.com', '+84 125739864', 'Báo cáo vi phạm quy định cộng đồng', 4),
+('Nguyễn Thị Mai', 'mainguyen@web.net', '+84 654208731', 'Cảm ơn về trải nghiệm sử dụng dịch vụ', 1);
+
+
+INSERT INTO public."YeuCauChinhSua"(
+  id_yeu_cau, ly_do_chinh_sua, thoi_diem_chinh_sua, trang_thai, thong_tin_moi)
+VALUES (
+  1, 
+  'Thay đổi kích thước bảng quảng cáo', 
+  '2023-06-12', 
+  'đã xử lý',
+  jsonb_build_object(
+    'id', 'e1be2069-8b4c-4253-8390-79862d3e4227',
+    'adsType', 'Trụ bảng hiflex',
+    'address', 'Phường 6 quận 3',
+    'generalInfo', jsonb_build_object(
+      'size', jsonb_build_object('width', 5, 'height', 5),
+      'number', 2
+    ),
+    'contentType', 'Cổ động chính trị',
+    'placeType', 'Trung tâm thương mại',
+    'status', 'đã xử lý',
+    'effectDate', '2023-06-12',
+    'expireDate', '2023-06-12',
+    'img', 'https://chupgiare.com/wp-content/uploads/2023/02/Chup-Anh-quang-cao-Spa-de-lam-gi-hoangkhoiproduction.jpg',
+    'img2', 'https://gtvseo.com/wp-content/uploads/2021/03/anh-quang-cao-facebook-la-gi.jpg'
+  )::jsonb
+);

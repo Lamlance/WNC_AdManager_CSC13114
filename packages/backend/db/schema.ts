@@ -12,6 +12,7 @@ import {
   primaryKey,
   real,
   date,
+  jsonb,
 } from "drizzle-orm/pg-core";
 const LoaiViTri = pgTable("LoaiViTri", {
   id_loai_vt: serial("id").primaryKey(),
@@ -94,10 +95,13 @@ const BaoCao = pgTable("BaoCao", {
   email: varchar("email", { length: 127 }),
   dien_thoai: varchar("dien_thoai", { length: 127 }),
   noi_dung: varchar("noi_dung", { length: 511 }).notNull(),
-  trang_thai: varchar("trang_thai", { length: 255 }).notNull().default("Chưa xử lý"),
-  thoi_diem_bc: date("thoi_diem_bc").notNull().default(sql`CURRENT_TIMESTAMP`),
-  id_quang_cao: integer("id_quang_cao")
-    .references(() => QuangCao.id_quang_cao),
+  trang_thai: varchar("trang_thai", { length: 255 })
+    .notNull()
+    .default("Chưa xử lý"),
+  thoi_diem_bc: date("thoi_diem_bc")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+  id_quang_cao: integer("id_quang_cao").references(() => QuangCao.id_quang_cao),
 
   id_loai_bc: integer("id_loai_bc")
     .notNull()
@@ -122,14 +126,11 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
 
 const YeuCauChinhSua = pgTable("YeuCauChinhSua", {
   id_yeu_cau: serial("id_yeu_cau").primaryKey(),
-  ten_dia_diem: varchar("ten_dia_diem", { length: 255 }).notNull(),
-  dvi_yeu_cau: varchar("dvi_yeu_cau", { length: 255 }).notNull(),
-  dia_chi: varchar("dia_chi", { length: 255 }).notNull(),
-  noi_dung: varchar("noi_dung", { length: 255 }).notNull(),  
-  lng: doublePrecision("kinh_do").notNull(),
-  lat: doublePrecision("vi_do").notNull(),
-  trang_thai: varchar("trang_thai", { length: 255 }).notNull(),  
-})
+  ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
+  thoi_diem_chinh_sua: date("thoi_diem_chinh_sua").notNull(),
+  trang_thai: varchar("trang_thai", { length: 255 }).notNull(),
+  thong_tin_moi: jsonb("thong_tin_moi"),
+});
 
 export {
   LoaiViTri,
