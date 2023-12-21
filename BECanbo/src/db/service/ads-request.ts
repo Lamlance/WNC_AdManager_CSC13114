@@ -10,7 +10,7 @@ export const getAllAdsRequests = async () => {
       id: YeuCauCapPhep.id_yeu_cau,
       place: DiaDiem.dia_chi,
       adsContent: YeuCauCapPhep.noi_dung_qc,
-      companyEmail: YeuCauCapPhep.emial_cty,
+      companyEmail: YeuCauCapPhep.email_cty,
       companyName: YeuCauCapPhep.ten_cty,
       companyPhone: YeuCauCapPhep.dien_thoai_cty,
       effDate: YeuCauCapPhep.ngay_hieu_luc,

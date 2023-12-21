@@ -3,12 +3,12 @@ export interface GetAllAdsReqRequest {
     take?: number;
 }
 
-export interface GetAllReportRequest {
+export interface GetAllReportsRequest {
     take?: number; 
     skip?: number;
 }
 
-export interface getAllAdsRequest {
+export interface GetAllAdsRequest {
     take?: number;
     skip?: number;
 }

@@ -1,15 +1,11 @@
 import { Row, Col } from "antd";
 import AdsInfoTable from "./AdsInfoTable";
-import { AdsInfoRecord } from "../../types/view-model";
-import { useState } from "react";
-import AdsInfoDetail from "./AdsInfoDetail";
 import { useGetAllAdsInfoQuery } from "../../slices/api/apiSlice";
+import { fromAdsResponse2AdsRecord } from "../../types/mapper";
+import AdsInfoDetail from "./AdsInfoDetail";
 
 const AdsInfo = () => {
   const { data, error, isLoading } = useGetAllAdsInfoQuery();
-  const [selectedAdsInfo, setSelectedAdsInfo] = useState<AdsInfoRecord | null>(
-    null,
-  );
 
   return (
     <>
@@ -32,12 +28,11 @@ const AdsInfo = () => {
         >
           <Col span={17}>
             <AdsInfoTable
-              data={data}
-              onRowClick={(record) => setSelectedAdsInfo(record)}
+              data={data.map((adsInfo) => fromAdsResponse2AdsRecord(adsInfo))}
             />
           </Col>
           <Col span={6}>
-            {selectedAdsInfo && <AdsInfoDetail {...selectedAdsInfo} />}
+            {<AdsInfoDetail {...fromAdsResponse2AdsRecord(data[0])} />}
           </Col>
         </Row>
       )}

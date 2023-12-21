@@ -2,8 +2,7 @@ import { Table } from "antd";
 import { AdsInfoRecord } from "../../types/view-model";
 
 interface AdsInfoTableProps {
-  data: AdsInfoRecord[],
-  onRowClick: (record: AdsInfoRecord) => void;
+  data: AdsInfoRecord[]
 }
 
 const columns = [
@@ -18,9 +17,9 @@ const columns = [
     key: "address",
   },
   {
-    title: "Thông tin chung",
-    dataIndex: "generalInfo",
-    key: "generalInfo",
+    title: "Kích thước",
+    dataIndex: "sizeInfo",
+    key: "sizeInfo",
   },
   {
     title: "Điểm đặt",
@@ -28,24 +27,23 @@ const columns = [
     key: "placeType",
   },
   {
-    title: "Trạng thái",
-    dataIndex: "status",
-    key: "status",
+    title: "Hình thức",
+    dataIndex: "contentType",
+    key: "contentType",
   }
 ];
 
 const AdsInfoTable = ({
-  data,
-  onRowClick
+  data
 } : AdsInfoTableProps) => {
   return (
     <Table
       columns={columns}
       dataSource={data}
       pagination={{ pageSize: 5 }}
-      onRow={(record) => ({
-        onClick: () => onRowClick(record),
-      })}
+      // onRow={(record) => ({
+      //   onClick: () => onRowClick(record),
+      // })}
     />
   );
 };
