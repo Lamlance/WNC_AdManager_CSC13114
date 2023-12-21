@@ -59,6 +59,8 @@ const GoongApi = createApi({
   }),
 });
 
+export type { GoongPredictRespond, GoongRevGeocodeRespond };
+
 export const {
   useLazyGetPredictsQuery: useLazyGetPredicts,
   useGetPredictsQuery: useGetPredicts,

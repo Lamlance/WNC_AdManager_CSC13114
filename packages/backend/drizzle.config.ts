@@ -8,6 +8,7 @@ export default {
     host: "127.0.0.1",
     port: 6432,
     //port: 6543,
+
     user: "postgres",
     password: "postgresql",
     database: "AdsManager",
