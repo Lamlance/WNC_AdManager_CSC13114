@@ -1,8 +1,20 @@
 import React, { useState } from "react";
-import { Modal, Form, Input, Button, DatePicker, Upload, Row, Col } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  Button,
+  DatePicker,
+  Upload,
+  Row,
+  Col,
+  message,
+} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
+import { useSubmitAdRequestMutation } from "../../slices/api/apiSlice";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 
 const { TextArea } = Input;
 
@@ -23,23 +35,50 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
   isVisible,
   onCancel,
 }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
+  const [submitAdRequest, { isLoading }] = useSubmitAdRequestMutation();
   const handleOk = () => {
-    setIsModalVisible(false);
+    onCancel();
   };
 
   const handleCancel = () => {
     onCancel();
-    setIsModalVisible(false);
   };
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     console.log("Form values:", values);
+    try {
+      const formData = new FormData();
+      formData.append("image", fileList[0]?.originFileObj as File);
+      formData.append("mapPosition", values.mapPosition);
+      formData.append("additionalInfo", values.additionalInfo);
+      formData.append("companyName", values.companyName);
+      formData.append("email", values.email);
+      formData.append("address", values.address);
+      formData.append("phoneNumber", values.phoneNumber);
+      formData.append("startDate", values.startDate.format("YYYY-MM-DD"));
+      formData.append("endDate", values.endDate.format("YYYY-MM-DD"));
+
+      const response = await submitAdRequest(formData);
+
+      if ("data" in response) {
+        // Check if 'data' property exists
+        if (response.data.success) {
+          message.success("Ad request submitted successfully");
+          handleOk();
+        } else {
+          message.error(
+            `Failed to submit ad request: ${response.data.message}`,
+          );
+        }
+      } else {
+        // Handle error case
+        const error = response.error as FetchBaseQueryError;
+        message.error(`Failed to submit ad request: ${error}`);
+      }
+    } catch (error) {
+      console.error("Error submitting ad request:", error);
+      message.error("Failed to submit ad request. Please try again.");
+    }
     handleOk();
   };
 
@@ -79,7 +118,7 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
   return (
     <Modal
       title="TẠO YÊU CẦU CẤP PHÉP"
-      visible={isModalVisible}
+      open={isVisible}
       width={1200}
       footer={null}
       onCancel={handleCancel}
@@ -241,7 +280,7 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
 
         <Form.Item className="flex items-center justify-center">
           <Button type="primary" htmlType="submit">
-            Submit
+            {isLoading ? "Submitting..." : "Submit"}
           </Button>
         </Form.Item>
       </Form>

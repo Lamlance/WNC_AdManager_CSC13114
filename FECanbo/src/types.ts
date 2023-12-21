@@ -1,16 +1,16 @@
 // types.ts (or a file where you define your types)
 export interface AdRequest {
-  requestId: string;
-  panoContent: string;
-  position: string;
-  companyName: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
-  effectedDate: string;
-  expiredDate: string;
-  status: string;
-  image: string;
+  id_yeu_cau: string;
+  noi_dung_qc: string;
+  id_diem_dat: string;
+  ten_cty: string;
+  email_cty: string;
+  dien_thoai_cty: string;
+  dia_chi_cty: string;
+  ngay_hieu_luc: string;
+  ngay_het_han: string;
+  trang_thai: string;
+  hinh_anh: string;
 }
 
 export interface AdsInfoRecord {

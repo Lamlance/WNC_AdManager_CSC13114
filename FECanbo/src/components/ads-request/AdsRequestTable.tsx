@@ -29,7 +29,7 @@ const columns = [
     dataIndex: "effectedDate",
     key: "effectedDate",
     render: (text: string, record: AdRequest) =>
-      `${record.effectedDate} - ${record.expiredDate}`,
+      `${record.ngay_hieu_luc} - ${record.ngay_het_han}`,
   },
   {
     title: "TRẠNG THÁI",

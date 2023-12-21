@@ -108,11 +108,13 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
 
   ten_cty: varchar("ten_cty", { length: 255 }).notNull(),
   dien_thoai_cty: varchar("dien_thoai_cty", { length: 127 }).notNull(),
-  emial_cty: varchar("dien_thoai_cty", { length: 127 }).notNull(),
+  email_cty: varchar("dien_thoai_cty", { length: 127 }).notNull(),
   dia_chi_cty: varchar("dien_thoai_cty", { length: 255 }).notNull(),
 
   ngay_hieu_luc: date("ngay_hieu_luc").notNull(),
   ngay_het_han: date("ngay_het_han").notNull(),
+  trang_thai: varchar("trang_thai").notNull(),
+  hinh_anh: varchar("hinh_1", { length: 255 })
 });
 
 export {

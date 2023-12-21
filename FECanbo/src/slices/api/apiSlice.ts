@@ -21,8 +21,16 @@ export const apiSlice = createApi({
         }),
         getAReportInfo: builder.query({
             query: (id) => `/bao-cao/${id}` 
-        })
+        }),
+        submitAdRequest: builder.mutation<any, FormData>({
+        query: (formData) => ({
+        url: "/submit-ad-request",
+        method: "POST",
+        body: formData,
+      }),
+    }),
     })
 });
 
-export const { useGetAllAdsInfoQuery, useGetAllReportInfoQuery } = apiSlice;
+export const { useGetAllAdsInfoQuery, useGetAllReportInfoQuery, useSubmitAdRequestMutation } = apiSlice;
+export const { reducer } = apiSlice;
