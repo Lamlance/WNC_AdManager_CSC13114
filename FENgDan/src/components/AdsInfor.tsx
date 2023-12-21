@@ -1,13 +1,18 @@
 import { Button } from "antd";
 import ReportModal from "./ReportModal";
 import { useState } from "react";
-import { ReportFormValues } from "../models/report_form_values";
+import { REPORT_KEY, ReportFormValues } from "../models/report_form_values";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { useAppSelector } from "../Redux/ReduxStore";
 import AdsDetail from "./AdsDetail";
 import { AdsGeoJson } from "@admanager/shared";
 
-function AdItem(props: AdsGeoJson.AdsProperty) {
+interface AdsItemProps {
+  Ad: AdsGeoJson.AdsProperty;
+  Place: AdsGeoJson.PlaceProperty;
+}
+
+function AdItem({ Ad, Place }: AdsItemProps) {
   const [isReportModalVisible, setIsReportModalVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleReportClick = () => {
@@ -20,6 +25,9 @@ function AdItem(props: AdsGeoJson.AdsProperty) {
 
   const handleReportModalSubmit = (values: ReportFormValues) => {
     console.log("Report form submitted with values:", values);
+
+    const oldReport = localStorage.getItem(REPORT_KEY);
+
     setIsReportModalVisible(false);
   };
 
@@ -42,22 +50,21 @@ function AdItem(props: AdsGeoJson.AdsProperty) {
     <div className="ads-info-container relative ">
       <div className="ads-info-popup absolute w-full rounded-xl border-opacity-90 p-4 shadow-lg">
         <div className="ads-info-content">
-          <p className=" text-lg font-bold">{props.bang_qc}</p>
-          <p className="ads_info_location text-base">{props.dia_chi}</p>
+          <p className=" text-lg font-bold">{Ad.bang_qc}</p>
+          <p className="ads_info_location text-base">{Ad.dia_chi}</p>
           <p className="text-base">
             <span className="font-semibold">Kích thước: </span>{" "}
-            {`${props.chieu_dai_m}m x ${props.chieu_rong_m}m`}
+            {`${Ad.chieu_dai_m}m x ${Ad.chieu_rong_m}m`}
           </p>
           <p className="text-base">
-            <span className="font-semibold">Hình thức: </span> {props.hinh_thuc}
+            <span className="font-semibold">Hình thức: </span> {Ad.hinh_thuc}
           </p>
           <p className="text-base">
-            <span className="font-semibold">Phân loại: </span>{" "}
-            {props.loai_vitri}
+            <span className="font-semibold">Phân loại: </span> {Ad.loai_vitri}
           </p>
           <p className="text-base">
             <span className="font-semibold">Số lượng: </span>{" "}
-            {`${props.so_luong} trụ/bảng`}
+            {`${Ad.so_luong} trụ/bảng`}
           </p>
           <p className="mt-1 text-base font-bold italic">Đã quy hoạch</p>
 
@@ -107,7 +114,9 @@ function AdsInfos() {
       {!selected ? (
         <div>No ads data available</div>
       ) : (
-        selected.ads.map((v) => <AdItem {...v} key={v.dia_chi} />)
+        selected.ads.map((v) => (
+          <AdItem Ad={v} Place={selected.place} key={v.dia_chi} />
+        ))
       )}
     </>
   );

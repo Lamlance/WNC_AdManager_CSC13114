@@ -1,17 +1,14 @@
 import { Map } from "maplibre-gl";
-type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
-  T,
-  Exclude<keyof T, Keys>
-> &
-  {
-    [K in Keys]-?: Required<Pick<T, K>> &
-      Partial<Record<Exclude<Keys, K>, undefined>>;
-  }[Keys];
+// type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
+//   T,
+//   Exclude<keyof T, Keys>
+// > &
+//   {
+//     [K in Keys]-?: Required<Pick<T, K>> &
+//       Partial<Record<Exclude<Keys, K>, undefined>>;
+//   }[Keys];
 type ClusterCreateData = {
-  DataSource: RequireOnlyOne<
-    { url?: string; id: string; data?: string },
-    "data" | "url"
-  >;
+  DataSource: { id: string; data: string | GeoJSON.GeoJSON };
   Cluster: {
     id: string;
     color: string;
@@ -29,9 +26,13 @@ type ClusterCreateData = {
 };
 
 function AddClusterPoints(map: Map, data: ClusterCreateData) {
+  if (map.getSource(data.DataSource.id)) {
+    return;
+  }
+
   map.addSource(data.DataSource.id, {
     type: "geojson",
-    data: data.DataSource.url || data.DataSource.data,
+    data: data.DataSource.data,
     cluster: true,
     clusterMaxZoom: 14,
     clusterRadius: 50,

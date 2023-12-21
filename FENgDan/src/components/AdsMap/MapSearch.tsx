@@ -29,7 +29,7 @@ const IdCoordDelimiter = "|^|";
 
 type MapSearchRef = {
   MapRef?: Map | null;
-  refresh: boolean;
+  refresh: number;
 };
 
 function MapSearchBar(props: MapSearchRef) {
@@ -48,7 +48,7 @@ function MapSearchBar(props: MapSearchRef) {
   const markerPopup = useRef<Popup | null>(null);
   const MarkerRef = useRef<Marker | null>(null);
 
-  console.log(predictions.data);
+  //console.log(predictions.data);
 
   function initialize_marker() {
     if (MarkerRef.current || !props.MapRef) return;

@@ -1,7 +1,6 @@
+import { AdsGeoJson } from "@admanager/shared";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import z from "zod";
-import { AdsMarkerInfoSchema } from "../models/mock_markers";
-type MarkerInfo = z.infer<typeof AdsMarkerInfoSchema> | null;
+type MarkerInfo = AdsGeoJson.AdsGeoJsonProperty | null;
 const initialState: MarkerInfo = null as MarkerInfo;
 
 const SelectedAdsSlice = createSlice({

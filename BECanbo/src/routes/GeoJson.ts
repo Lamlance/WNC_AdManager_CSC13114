@@ -87,10 +87,12 @@ GeoJsonRouter.get("/", async function (req, res) {
 
   for (let i = 0; i < geo_data.length; i++) {
     const qc = geo_data[i];
+
     geo_json.features.push({
       type: "Feature",
       properties: {
         ads: qc[1].ads,
+        place: qc[1].dd,
       },
       geometry: {
         type: "Point",
