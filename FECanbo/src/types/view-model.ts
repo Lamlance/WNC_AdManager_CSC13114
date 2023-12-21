@@ -29,6 +29,8 @@ export interface ReportInfoRecord {
   id: number;
   adsId: number;
   reporterInfo: string;
+  reporterName: string;
+  reporterEmail: string;
   adsAddress: string;
   reporterPhone: string;
   reportType: string;

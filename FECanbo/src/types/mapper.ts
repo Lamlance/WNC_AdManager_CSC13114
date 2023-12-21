@@ -22,7 +22,7 @@ export const fromReportResponse2ReportRecord = (
 ) => {
   return {
     id: reportResponse.id,
-    reporterInfo: `${reportResponse.reporterName}\n${reportResponse.reporterEmail}` ,
+    reporterInfo: `${reportResponse.reporterName}\n${reportResponse.reporterEmail}`,
     adsAddress: reportResponse.adsAddress,
     reportType: reportResponse.reportType,
     reportContent: reportResponse.reportContent,
@@ -30,5 +30,7 @@ export const fromReportResponse2ReportRecord = (
     status: reportResponse.status,
     reporterPhone: reportResponse.reporterPhone,
     adsId: reportResponse.adsId,
+    reporterName: reportResponse.reporterName,
+    reporterEmail: reportResponse.reporterEmail,
   } as ReportInfoRecord;
 };

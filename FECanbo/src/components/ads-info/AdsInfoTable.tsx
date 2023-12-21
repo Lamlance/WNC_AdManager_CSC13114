@@ -44,6 +44,7 @@ const AdsInfoTable = ({
       // onRow={(record) => ({
       //   onClick: () => onRowClick(record),
       // })}
+      rowKey="id"
     />
   );
 };
