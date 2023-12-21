@@ -11,28 +11,26 @@
         "ads": [
           {
             "quy_hoach": true,
-            "ngay_hieu_luc": null,
-            "ngay_het_han": null,
-            "hinh_1": null,
-            "hinh_2": null,
+            "ngay_hieu_luc": "2023-01-01",
+            "ngay_het_han": "2023-12-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
             "so_luong": 1,
-            "chieu_dai_m": null,
-            "chieu_rong_m": null,
-            "loai_vitri": "Đất tôn giáo",
-            "hinh_thuc": "Xã hội hoá",
-            "ten_dia_diem": "Nhà thờ Tân Định",
-            "dia_chi": "289 Hai Bà Trưng, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "hinh_thuc": "Cổ động chính trị",
             "bang_qc": "Trụ bảng hiflex"
           }
         ],
         "place": {
-          "id_dia_diem": 6,
+          "id_dia_diem": 1,
           "place_id": null,
           "ten_dia_diem": "Nhà thờ Tân Định",
           "dia_chi": "289 Hai Bà Trưng, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
           "lng": 106.6907045481163,
           "lat": 10.788361134367696,
-          "id_phuong": 7
+          "id_phuong": 19
         }
       },
       "geometry": {
@@ -46,28 +44,26 @@
         "ads": [
           {
             "quy_hoach": false,
-            "ngay_hieu_luc": null,
-            "ngay_het_han": null,
-            "hinh_1": null,
-            "hinh_2": null,
+            "ngay_hieu_luc": "2023-02-01",
+            "ngay_het_han": "2023-11-30",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
             "so_luong": 1,
-            "chieu_dai_m": null,
-            "chieu_rong_m": null,
-            "loai_vitri": "Chợ",
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
             "hinh_thuc": "Quảng cáo thương mại",
-            "ten_dia_diem": "Chợ tân định",
-            "dia_chi": "336 Hai Bà Trưng, Phường Tân Định, Quận 1, Thành phố Hồ Chí Minh",
             "bang_qc": "Trụ bảng hiflex"
           }
         ],
         "place": {
-          "id_dia_diem": 7,
+          "id_dia_diem": 2,
           "place_id": null,
           "ten_dia_diem": "Chợ tân định",
           "dia_chi": "336 Hai Bà Trưng, Phường Tân Định, Quận 1, Thành phố Hồ Chí Minh",
           "lng": 106.68980332588731,
           "lat": 10.789963089539278,
-          "id_phuong": 8
+          "id_phuong": 1
         }
       },
       "geometry": {
@@ -81,28 +77,26 @@
         "ads": [
           {
             "quy_hoach": true,
-            "ngay_hieu_luc": null,
-            "ngay_het_han": null,
-            "hinh_1": null,
-            "hinh_2": null,
+            "ngay_hieu_luc": "2023-03-01",
+            "ngay_het_han": "2023-10-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
             "so_luong": 1,
-            "chieu_dai_m": null,
-            "chieu_rong_m": null,
-            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
-            "hinh_thuc": "Cổ động chính trị",
-            "ten_dia_diem": "THPT Nguyễn Thị Diệu",
-            "dia_chi": "12 Trần Quốc Toản, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
-            "bang_qc": "Trụ bảng hiflex"
+            "chieu_dai_m": 4,
+            "chieu_rong_m": 6,
+            "loai_vitri": "Trung tâm thương mại",
+            "hinh_thuc": "Quảng cáo thương mại",
+            "bang_qc": "Trụ màn hình điện tử LED"
           }
         ],
         "place": {
-          "id_dia_diem": 8,
+          "id_dia_diem": 3,
           "place_id": null,
           "ten_dia_diem": "THPT Nguyễn Thị Diệu",
           "dia_chi": "12 Trần Quốc Toản, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
           "lng": 106.68880554413374,
           "lat": 10.789583679873315,
-          "id_phuong": 7
+          "id_phuong": 19
         }
       },
       "geometry": {
@@ -116,28 +110,26 @@
         "ads": [
           {
             "quy_hoach": true,
-            "ngay_hieu_luc": null,
-            "ngay_het_han": null,
-            "hinh_1": null,
-            "hinh_2": null,
+            "ngay_hieu_luc": "2023-04-01",
+            "ngay_het_han": "2023-09-30",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
             "so_luong": 1,
-            "chieu_dai_m": null,
-            "chieu_rong_m": null,
-            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
-            "hinh_thuc": "Xã hội hoá",
-            "ten_dia_diem": "Viện Pasteur Thành phố Hồ Chí Minh",
-            "dia_chi": "167 Pasteur, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
-            "bang_qc": "Trụ bảng hiflex"
+            "chieu_dai_m": 4,
+            "chieu_rong_m": 6,
+            "loai_vitri": "Nhà chờ xe buýt",
+            "hinh_thuc": "Quảng cáo hướng dẫn",
+            "bang_qc": "Trụ hộp đèn"
           }
         ],
         "place": {
-          "id_dia_diem": 9,
+          "id_dia_diem": 4,
           "place_id": null,
           "ten_dia_diem": "Viện Pasteur Thành phố Hồ Chí Minh",
           "dia_chi": "167 Pasteur, Phường 8, Quận 3, Thành phố Hồ Chí Minh",
           "lng": 106.68933125710065,
           "lat": 10.786348139095901,
-          "id_phuong": 7
+          "id_phuong": 19
         }
       },
       "geometry": {
@@ -151,33 +143,988 @@
         "ads": [
           {
             "quy_hoach": false,
-            "ngay_hieu_luc": null,
-            "ngay_het_han": null,
-            "hinh_1": null,
-            "hinh_2": null,
+            "ngay_hieu_luc": "2023-05-01",
+            "ngay_het_han": "2023-08-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
             "so_luong": 1,
-            "chieu_dai_m": null,
-            "chieu_rong_m": null,
-            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
-            "hinh_thuc": "Quảng cáo thương mại",
-            "ten_dia_diem": "Công viên Lê Văn Tám",
-            "dia_chi": "QMQV+6GM, Đ. Võ Thị Sáu, Đa Kao, Quận 1, Thành phố Hồ Chí Minh",
-            "bang_qc": "Trụ bảng hiflex"
+            "chieu_dai_m": 3,
+            "chieu_rong_m": 5,
+            "loai_vitri": "Đất tôn giáo",
+            "hinh_thuc": "Cổ động chính trị",
+            "bang_qc": "Bảng hiflex ốp tường"
           }
         ],
         "place": {
-          "id_dia_diem": 10,
+          "id_dia_diem": 5,
           "place_id": null,
           "ten_dia_diem": "Công viên Lê Văn Tám",
           "dia_chi": "QMQV+6GM, Đ. Võ Thị Sáu, Đa Kao, Quận 1, Thành phố Hồ Chí Minh",
           "lng": 106.69374081349183,
           "lat": 10.788340066532463,
-          "id_phuong": 9
+          "id_phuong": 2
         }
       },
       "geometry": {
         "type": "Point",
         "coordinates": [106.69374081349183, 10.788340066532463, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2023-06-01",
+            "ngay_het_han": "2023-12-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 2,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "hinh_thuc": "Xã hội hoá",
+            "bang_qc": "Màn hình điện tử ốp tường"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 6,
+          "place_id": null,
+          "ten_dia_diem": "Bưu điện Quận 3",
+          "dia_chi": "2 Bà Huyện Thanh Quan, Phường 6, Quận 3, Thành phố Hồ Chí Minh 72400, Việt Nam",
+          "lng": 106.6903125,
+          "lat": 10.7752899,
+          "id_phuong": 17
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6903125, 10.7752899, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": false,
+            "ngay_hieu_luc": "2023-07-01",
+            "ngay_het_han": "2023-11-30",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 3,
+            "chieu_rong_m": 4,
+            "loai_vitri": "Đất tư nhân/Nhà ở riêng lẻ",
+            "hinh_thuc": "Quảng cáo thương hiệu",
+            "bang_qc": "Trụ/Cụm pano"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 7,
+          "place_id": null,
+          "ten_dia_diem": "Trường THPT Nguyễn Thị Minh Khai",
+          "dia_chi": "275 Đ. Điện Biên Phủ, Võ Thị Sáu, Quận 3, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6824511,
+          "lat": 10.7790508,
+          "id_phuong": 11
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6824511, 10.7790508, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2023-08-01",
+            "ngay_het_han": "2023-10-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Cây xăng",
+            "hinh_thuc": "Cổ động chính trị",
+            "bang_qc": "Trụ màn hình điện tử LED"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 8,
+          "place_id": null,
+          "ten_dia_diem": "Bệnh viện Từ Dũ",
+          "dia_chi": "284 Đ. Cống Quỳnh, Phường Phạm Ngũ Lão, Quận 1, Thành phố Hồ Chí Minh 700000, Việt Nam",
+          "lng": 106.6827805,
+          "lat": 10.7684262,
+          "id_phuong": 10
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6827805, 10.7684262, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2023-09-01",
+            "ngay_het_han": "2023-09-30",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 4,
+            "chieu_rong_m": 6,
+            "loai_vitri": "Chợ",
+            "hinh_thuc": "Quảng cáo thương mại",
+            "bang_qc": "Trụ treo băng rôn dọc"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 9,
+          "place_id": null,
+          "ten_dia_diem": "Nhà thờ Đức Bà",
+          "dia_chi": "01 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000, Việt Nam",
+          "lng": 106.696444,
+          "lat": 10.7797908,
+          "id_phuong": 4
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.696444, 10.7797908, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": false,
+            "ngay_hieu_luc": "2023-10-01",
+            "ngay_het_han": "2023-08-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 3,
+            "chieu_rong_m": 5,
+            "loai_vitri": "Đất tôn giáo",
+            "hinh_thuc": "Quảng cáo hướng dẫn",
+            "bang_qc": "Trụ hộp đèn"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 10,
+          "place_id": null,
+          "ten_dia_diem": "Chợ Bến Thành",
+          "dia_chi": "Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6954459,
+          "lat": 10.7725221,
+          "id_phuong": 3
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6954459, 10.7725221, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2023-11-01",
+            "ngay_het_han": "2023-12-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 2,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "hinh_thuc": "Xã hội hoá",
+            "bang_qc": "Bảng hiflex ốp tường"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 11,
+          "place_id": null,
+          "ten_dia_diem": "Trường THCS Lê Quý Đôn",
+          "dia_chi": "9B Võ Văn Tần, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6782176,
+          "lat": 10.8017396,
+          "id_phuong": 17
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6782176, 10.8017396, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": false,
+            "ngay_hieu_luc": "2023-12-01",
+            "ngay_het_han": "2023-12-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Cây xăng",
+            "hinh_thuc": "Cổ động chính trị",
+            "bang_qc": "Trụ treo băng rôn ngang"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 12,
+          "place_id": null,
+          "ten_dia_diem": "Phở Phượng",
+          "dia_chi": "25 Đ. Hoàng Sa, Đa Kao, Quận 1, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6558776,
+          "lat": 10.7988108,
+          "id_phuong": 2
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6558776, 10.7988108, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2024-01-01",
+            "ngay_het_han": "2024-12-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 4,
+            "chieu_rong_m": 6,
+            "loai_vitri": "Chợ",
+            "hinh_thuc": "Quảng cáo thương mại",
+            "bang_qc": "Cổng chào"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 13,
+          "place_id": null,
+          "ten_dia_diem": "NHÀ HÀNG NGON",
+          "dia_chi": "160 Pasteur, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6782176,
+          "lat": 10.8017396,
+          "id_phuong": 4
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6782176, 10.8017396, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": false,
+            "ngay_hieu_luc": "2024-02-01",
+            "ngay_het_han": "2024-11-30",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 3,
+            "chieu_rong_m": 4,
+            "loai_vitri": "Đất tư nhân/Nhà ở riêng lẻ",
+            "hinh_thuc": "Quảng cáo thương hiệu",
+            "bang_qc": "Trụ bảng hiflex"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 14,
+          "place_id": null,
+          "ten_dia_diem": "Bảo tàng Mỹ thuật Thành phố Hồ Chí Minh",
+          "dia_chi": "97A P. Đức Chính, Phường Nguyễn Thái Bình, Quận 1, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6965406,
+          "lat": 10.7699385,
+          "id_phuong": 9
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6965406, 10.7699385, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2024-03-01",
+            "ngay_het_han": "2024-10-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Nhà chờ xe buýt",
+            "hinh_thuc": "Cổ động chính trị",
+            "bang_qc": "Trung tâm thương mại"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 15,
+          "place_id": null,
+          "ten_dia_diem": "Trường Tiểu học Trần Quốc Thảo",
+          "dia_chi": "6 Võ Văn Tần, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.5928889,
+          "lat": 10.8453367,
+          "id_phuong": 17
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.5928889, 10.8453367, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2024-04-01",
+            "ngay_het_han": "2024-09-30",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 2,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "hinh_thuc": "Xã hội hoá",
+            "bang_qc": "Màn hình điện tử ốp tường"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 16,
+          "place_id": null,
+          "ten_dia_diem": "Trường Đại học Sài Gòn - Cơ Sở 1",
+          "dia_chi": "105 Bà Huyện Thanh Quan, Võ Thị Sáu, Quận 3, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6841781,
+          "lat": 10.7790189,
+          "id_phuong": 11
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6841781, 10.7790189, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": false,
+            "ngay_hieu_luc": "2024-05-01",
+            "ngay_het_han": "2024-08-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 3,
+            "chieu_rong_m": 4,
+            "loai_vitri": "Đất tư nhân/Nhà ở riêng lẻ",
+            "hinh_thuc": "Quảng cáo thương hiệu",
+            "bang_qc": "Trụ/Cụm pano"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 17,
+          "place_id": null,
+          "ten_dia_diem": "Bệnh viện Mắt TP.HCM",
+          "dia_chi": "280 Đ. Điện Biên Phủ, Phường 7, Quận 3, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6841781,
+          "lat": 10.7790189,
+          "id_phuong": 18
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6841781, 10.7790189, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2024-06-01",
+            "ngay_het_han": "2024-07-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Cây xăng",
+            "hinh_thuc": "Cổ động chính trị",
+            "bang_qc": "Trụ màn hình điện tử LED"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 18,
+          "place_id": null,
+          "ten_dia_diem": "The New Gym",
+          "dia_chi": "256 Đ. Điện Biên Phủ, Phường 7, Quận 3, Thành phố Hồ Chí Minh 70000, Việt Nam",
+          "lng": 106.6841781,
+          "lat": 10.7790189,
+          "id_phuong": 18
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6841781, 10.7790189, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2024-07-01",
+            "ngay_het_han": "2024-06-30",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 4,
+            "chieu_rong_m": 6,
+            "loai_vitri": "Chợ",
+            "hinh_thuc": "Quảng cáo thương mại",
+            "bang_qc": "Trụ treo băng rôn dọc"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 19,
+          "place_id": null,
+          "ten_dia_diem": "Nhà Thi Đấu Hồ Xuân Hương",
+          "dia_chi": "2 Hồ Xuân Hương, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6848237,
+          "lat": 10.7781353,
+          "id_phuong": 17
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6848237, 10.7781353, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": false,
+            "ngay_hieu_luc": "2024-08-01",
+            "ngay_het_han": "2024-05-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 3,
+            "chieu_rong_m": 5,
+            "loai_vitri": "Đất tôn giáo",
+            "hinh_thuc": "Quảng cáo hướng dẫn",
+            "bang_qc": "Trụ hộp đèn"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 20,
+          "place_id": null,
+          "ten_dia_diem": "Bệnh viện Da Liễu TP.HCM",
+          "dia_chi": "2 Đ. Nguyễn Thông, Phường 6, Quận 3, Thành phố Hồ Chí Minh 700000, Việt Nam",
+          "lng": 106.6837902,
+          "lat": 10.7770386,
+          "id_phuong": 17
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6837902, 10.7770386, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2024-09-01",
+            "ngay_het_han": "2024-04-30",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 2,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "hinh_thuc": "Xã hội hoá",
+            "bang_qc": "Bảng hiflex ốp tường"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 21,
+          "place_id": null,
+          "ten_dia_diem": "Hanuri Korean Fast Food",
+          "dia_chi": "284 Nguyễn Đình Chiểu, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6838421,
+          "lat": 10.7761962,
+          "id_phuong": 17
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6838421, 10.7761962, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": false,
+            "ngay_hieu_luc": "2024-10-01",
+            "ngay_het_han": "2024-04-30",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Cây xăng",
+            "hinh_thuc": "Cổ động chính trị",
+            "bang_qc": "Trụ treo băng rôn ngang"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 22,
+          "place_id": null,
+          "ten_dia_diem": "THE WISELANDS Coffee",
+          "dia_chi": "185bis Đ. Võ Thị Sáu, Võ Thị Sáu, Quận 3, Thành phố Hồ Chí Minh 700000, Việt Nam",
+          "lng": 106.6859607,
+          "lat": 10.7816084,
+          "id_phuong": 11
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6859607, 10.7816084, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2024-11-01",
+            "ngay_het_han": "2024-03-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 4,
+            "chieu_rong_m": 6,
+            "loai_vitri": "Chợ",
+            "hinh_thuc": "Quảng cáo thương mại",
+            "bang_qc": "Cổng chào"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 23,
+          "place_id": null,
+          "ten_dia_diem": "Sân khấu Kịch QUỐC THẢO",
+          "dia_chi": "81 Trần Quốc Thảo, Võ Thị Sáu, Quận 3, Thành phố Hồ Chí Minh 700000, Việt Nam",
+          "lng": 106.6859607,
+          "lat": 10.7816084,
+          "id_phuong": 11
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6859607, 10.7816084, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": false,
+            "ngay_hieu_luc": "2024-12-01",
+            "ngay_het_han": "2024-03-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 3,
+            "chieu_rong_m": 4,
+            "loai_vitri": "Đất tư nhân/Nhà ở riêng lẻ",
+            "hinh_thuc": "Quảng cáo thương hiệu",
+            "bang_qc": "Trụ bảng hiflex"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 24,
+          "place_id": null,
+          "ten_dia_diem": "Trường THPT Nguyễn Thị Minh Khai",
+          "dia_chi": "70 Đ, Bà Huyện Thanh Quan, Võ Thị Sáu, Quận 3, Thành phố Hồ Chí Minh 70000, Việt Nam",
+          "lng": 106.6843979,
+          "lat": 10.7804384,
+          "id_phuong": 11
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6843979, 10.7804384, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": false,
+            "ngay_hieu_luc": "2025-03-01",
+            "ngay_het_han": "2025-05-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 2,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "hinh_thuc": "Xã hội hoá",
+            "bang_qc": "Trụ hộp đèn"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 26,
+          "place_id": null,
+          "ten_dia_diem": "Trung Tâm Y Tế Quận 3",
+          "dia_chi": "116 Trần Quốc Thảo, Phường 14, Quận 3, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6829988,
+          "lat": 10.7839866,
+          "id_phuong": 25
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6829988, 10.7839866, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2025-06-01",
+            "ngay_het_han": "2025-08-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 3,
+            "chieu_rong_m": 4,
+            "loai_vitri": "Đất tư nhân/Nhà ở riêng lẻ",
+            "hinh_thuc": "Quảng cáo thương hiệu",
+            "bang_qc": "Trụ treo băng rôn dọc"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 27,
+          "place_id": null,
+          "ten_dia_diem": "Phổ Đình Trần Quốc Thảo - Uraetei Yakiniku",
+          "dia_chi": "125A Trần Quốc Thảo, Võ Thị Sáu, Quận 3, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6834119,
+          "lat": 10.7835492,
+          "id_phuong": 11
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6834119, 10.7835492, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": false,
+            "ngay_hieu_luc": "2025-09-01",
+            "ngay_het_han": "2025-12-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Cây xăng",
+            "hinh_thuc": "Cổ động chính trị",
+            "bang_qc": "Cổng chào"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 28,
+          "place_id": null,
+          "ten_dia_diem": "Nhà hàng Mưa Rừng",
+          "dia_chi": "4 Sư Thiện Chiếu, Võ Thị Sáu, Quận 3, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6857025,
+          "lat": 10.7785799,
+          "id_phuong": 11
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6857025, 10.7785799, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2026-01-01",
+            "ngay_het_han": "2026-03-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 4,
+            "chieu_rong_m": 6,
+            "loai_vitri": "Chợ",
+            "hinh_thuc": "Quảng cáo thương mại",
+            "bang_qc": "Trụ màn hình điện tử LED"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 29,
+          "place_id": null,
+          "ten_dia_diem": "Khách sạn Aristo",
+          "dia_chi": "3A Võ Văn Tần, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.693174,
+          "lat": 10.7810386,
+          "id_phuong": 17
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.693174, 10.7810386, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": false,
+            "ngay_hieu_luc": "2026-04-01",
+            "ngay_het_han": "2026-06-30",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 3,
+            "chieu_rong_m": 5,
+            "loai_vitri": "Đất tôn giáo",
+            "hinh_thuc": "Quảng cáo hướng dẫn",
+            "bang_qc": "Màn hình điện tử ốp tường"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 30,
+          "place_id": null,
+          "ten_dia_diem": "Orchids Saigon Hotel",
+          "dia_chi": "192 Pasteur, Phường 6, Quận 3, Thành phố Hồ Chí Minh 700000, Việt Nam",
+          "lng": 106.6965911,
+          "lat": 10.7815023,
+          "id_phuong": 17
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6965911, 10.7815023, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2026-07-01",
+            "ngay_het_han": "2026-09-30",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 2,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "hinh_thuc": "Xã hội hoá",
+            "bang_qc": "Bảng hiflex ốp tường"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 31,
+          "place_id": null,
+          "ten_dia_diem": "Hotel des Arts Saigon MGallery Collection",
+          "dia_chi": "76 78 Đ. Nguyễn Thị Minh Khai, St, Phường 6, Quận 3, Thành phố Hồ Chí Minh 070000, Việt Nam",
+          "lng": 106.6982614,
+          "lat": 10.7832331,
+          "id_phuong": 17
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6982614, 10.7832331, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2026-10-01",
+            "ngay_het_han": "2027-02-28",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Cây xăng",
+            "hinh_thuc": "Cổ động chính trị",
+            "bang_qc": "Trụ treo băng rôn ngang"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 32,
+          "place_id": null,
+          "ten_dia_diem": "Co.opmart Cống Quỳnh",
+          "dia_chi": "189C Đ. Cống Quỳnh, Phường Nguyễn Cư Trinh, Quận 1, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6898401,
+          "lat": 10.7665781,
+          "id_phuong": 8
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6898401, 10.7665781, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": false,
+            "ngay_hieu_luc": "2027-03-01",
+            "ngay_het_han": "2027-05-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 4,
+            "chieu_rong_m": 6,
+            "loai_vitri": "Chợ",
+            "hinh_thuc": "Quảng cáo thương mại",
+            "bang_qc": "Trụ/Cụm pano"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 33,
+          "place_id": null,
+          "ten_dia_diem": "Cinestar Cinema Quốc Thanh",
+          "dia_chi": "271 Đ. Nguyễn Trãi, Phường Nguyễn Cư Trinh, Quận 1, Thành phố Hồ Chí Minh 70000, Việt Nam",
+          "lng": 106.6885726,
+          "lat": 10.7629783,
+          "id_phuong": 8
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6885726, 10.7629783, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2027-06-01",
+            "ngay_het_han": "2027-08-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 3,
+            "chieu_rong_m": 4,
+            "loai_vitri": "Đất tư nhân/Nhà ở riêng lẻ",
+            "hinh_thuc": "Quảng cáo thương hiệu",
+            "bang_qc": "Trụ bảng hiflex"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 34,
+          "place_id": null,
+          "ten_dia_diem": "Trung Tâm Thẩm Mỹ Sky Diamond",
+          "dia_chi": "107F Trương Định, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Việt Nam",
+          "lng": 106.6884957,
+          "lat": 10.7798422,
+          "id_phuong": 17
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.6884957, 10.7798422, 0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ads": [
+          {
+            "quy_hoach": false,
+            "ngay_hieu_luc": "2027-09-01",
+            "ngay_het_han": "2027-12-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 3,
+            "chieu_rong_m": 5,
+            "loai_vitri": "Đất tôn giáo",
+            "hinh_thuc": "Quảng cáo hướng dẫn",
+            "bang_qc": "Cổng chào"
+          }
+        ],
+        "place": {
+          "id_dia_diem": 35,
+          "place_id": null,
+          "ten_dia_diem": "Khách sạn Sofitel Sài Gòn",
+          "dia_chi": "17 Đ. Lê Duẩn, Bến Nghé, Ward, Thành phố Hồ Chí Minh 700000, Việt Nam",
+          "lng": 106.7029276,
+          "lat": 10.7861958,
+          "id_phuong": 4
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.7029276, 10.7861958, 0]
       }
     }
   ]

@@ -46,7 +46,6 @@ async function GetQuangCaoData() {
     const qc = data[i];
     const prop: AdsGeoJson.AdsProperty = {
       ...qc.quang_cao,
-      ...qc.dia_diem,
       loai_vitri: qc.loai_vitri,
       hinh_thuc: qc.hinh_thuc,
       bang_qc: qc.bang_qc,

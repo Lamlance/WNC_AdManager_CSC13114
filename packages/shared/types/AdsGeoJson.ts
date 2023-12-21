@@ -24,12 +24,8 @@ const AdsPropertySchema = z.object({
 
   loai_vitri: z.string(),
   hinh_thuc: z.string(),
-  ten_dia_diem: z.string(),
-  dia_chi: z.string(),
-
   bang_qc: z.string(),
 });
-
 const PlacePropertySchema = z.object({
   ten_dia_diem: z.string(),
   dia_chi: z.string(),
@@ -39,66 +35,68 @@ const PlacePropertySchema = z.object({
   lng: z.number(),
   lat: z.number(),
 });
+const AdsGeoJsonPropertySchema = z.object({
+  ads: z.preprocess(StringParsePreprocess, z.array(AdsPropertySchema).min(1)),
+  place: z.preprocess(StringParsePreprocess, PlacePropertySchema),
+});
 
-const ReportPropertySchema = z.object({
+const ReportFormValuesSchema = z.object({
   reportType: z.string(),
   fullName: z.string(),
   email: z.string(),
   phoneNumber: z.string(),
   description: z.string(),
 });
-
-const AdsGeoJsonPropertySchema = z.object({
-  ads: z.preprocess(StringParsePreprocess, z.array(AdsPropertySchema).min(1)),
-  place: z.preprocess(StringParsePreprocess, PlacePropertySchema),
-});
+const ReportPlaceSchema = PlacePropertySchema.omit({ id_dia_diem: true });
+const ReportGeoJsonPropertySchema = z.preprocess(
+  StringParsePreprocess,
+  ReportFormValuesSchema.merge(ReportPlaceSchema)
+);
 
 type AdsProperty = z.infer<typeof AdsPropertySchema>;
 type PlaceProperty = z.infer<typeof PlacePropertySchema>;
 type AdsGeoJsonProperty = z.infer<typeof AdsGeoJsonPropertySchema>;
-type ReportProperty = z.infer<typeof ReportPropertySchema>;
 
-type AdsGeoJsonFeature = {
+type ReportFormValues = z.infer<typeof ReportFormValuesSchema>;
+type ReportPlace = z.infer<typeof ReportPlaceSchema>;
+type ReportGeoJsonProperty = z.infer<typeof ReportGeoJsonPropertySchema>;
+
+type GeoJsonProperty<P extends object> = {
   type: "Feature";
-  properties: AdsGeoJsonProperty;
+  properties: P;
   geometry: {
     type: "Point";
     coordinates: [number, number, 0];
   };
 };
 
-type ReportGeoJsonFeature = {
-  type: "Feature";
-  // properties: GeoJsonProperty;
-  geometry: {
-    type: "Point";
-    coordinates: [number, number, 0];
-  };
-};
-
-type AdsGeoJson = {
+type GeoJson<P extends object> = {
   type: "FeatureCollection";
   crs: {
     type: "name";
     properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" };
   };
-  features: AdsGeoJsonFeature[];
+  features: GeoJsonProperty<P>[];
 };
 
-type ReportGeoJson = {
-  type: "FeatureCollection";
-  crs: {
-    type: "name";
-    properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" };
-  };
-  features: AdsGeoJsonFeature[];
-};
+type AdsGeoJson = GeoJson<AdsGeoJsonProperty>;
+type ReportGeoJson = GeoJson<ReportGeoJsonProperty>;
 
 export type {
   AdsProperty,
   PlaceProperty,
   AdsGeoJsonProperty,
-  AdsGeoJsonFeature,
   AdsGeoJson,
+  ReportFormValues,
+  ReportPlace,
+  ReportGeoJsonProperty,
+  ReportGeoJson,
 };
-export { AdsPropertySchema, PlacePropertySchema, AdsGeoJsonPropertySchema };
+export {
+  AdsPropertySchema,
+  PlacePropertySchema,
+  AdsGeoJsonPropertySchema,
+  ReportFormValuesSchema,
+  ReportPlaceSchema,
+  ReportGeoJsonPropertySchema,
+};

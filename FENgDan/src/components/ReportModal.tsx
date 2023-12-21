@@ -1,5 +1,8 @@
+import {
+  ReportFormValues,
+  ReportFormValuesSchema,
+} from "@admanager/shared/types/AdsGeoJson";
 import { Modal, Form, Input, Select, Button } from "antd";
-import { ReportFormValues } from "../models/report_form_values";
 
 const { Option } = Select;
 
@@ -7,7 +10,7 @@ interface ReportModalProps {
   visible: boolean;
   onCancel: () => void;
   onSubmit: (values: ReportFormValues) => void;
-  reportFormValues: ReportFormValues;
+  reportFormValues?: ReportFormValues;
 }
 
 function ReportModal({
@@ -19,7 +22,8 @@ function ReportModal({
   const [form] = Form.useForm();
 
   const handleFinish = (values: ReportFormValues) => {
-    onSubmit(values);
+    const data = ReportFormValuesSchema.safeParse(values);
+    if (data.success) onSubmit(values);
     form.resetFields();
     console.log("Submit report clicked", values);
   };
@@ -40,7 +44,7 @@ function ReportModal({
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 18 }}
       >
-        <Form.Item
+        <Form.Item<ReportFormValues>
           name="reportType"
           label="Hình thức báo cáo"
           rules={[
@@ -53,7 +57,7 @@ function ReportModal({
           </Select>
         </Form.Item>
 
-        <Form.Item
+        <Form.Item<ReportFormValues>
           name="fullName"
           label="Họ và tên người báo cáo"
           rules={[{ required: true, message: "Please enter your full name" }]}
@@ -61,7 +65,7 @@ function ReportModal({
           <Input />
         </Form.Item>
 
-        <Form.Item
+        <Form.Item<ReportFormValues>
           name="email"
           label="Email liên lạc"
           rules={[{ required: true, message: "Please enter your email" }]}
@@ -69,7 +73,7 @@ function ReportModal({
           <Input type="email" />
         </Form.Item>
 
-        <Form.Item
+        <Form.Item<ReportFormValues>
           name="phoneNumber"
           label="Điện thoại liên lạc"
           rules={[

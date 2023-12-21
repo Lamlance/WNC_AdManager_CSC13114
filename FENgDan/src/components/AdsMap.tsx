@@ -1,16 +1,15 @@
-import MapLibreGL, { Map, Popup } from "maplibre-gl";
+import MapLibreGL, { Map } from "maplibre-gl";
 import { useEffect, useReducer, useRef, useState } from "react";
 import "./AdsMap.css";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Switch } from "antd";
-import { AddClusterPoints, ClusterCreateData } from "../utils/AddClusterPoint";
+import { ClusterCreateData } from "../utils/AddClusterPoint";
 import { useAppDispatch } from "../Redux/ReduxStore";
 import { setSelectedAdsLocation } from "../Redux/SelectedAdsSlice";
 import MapSearchBar from "./AdsMap/MapSearch";
 import { setDblClick } from "../Redux/MapClickSlice";
 import { AdsGeoJson } from "@admanager/shared";
 import AdsClusterMarker from "./AdsMap/AdsClusterMarker";
-import { infer as ZodInfer } from "zod";
 interface AdsMapProps {
   InitialPosition: {
     lng: number;
@@ -47,10 +46,10 @@ function AdsMap({
       .setMaxWidth("500px")
       .setHTML(
         `<div class="text-lg">
-        <h1 class="font-bold">${data.ads[0].hinh_thuc}</h1>
+        <h1 class="font-bold">${data.place.ten_dia_diem}</h1>
         <p>${data.ads[0].loai_vitri}</p>
         <p>${data.ads[0].hinh_thuc}</p>
-        <p>${data.ads[0].dia_chi}</p>
+        <p>${data.place.dia_chi}</p>
         <h4 class="font-bold italic">${
           data.ads[0].quy_hoach ? "Đã quy hoạch" : "Chưa quy hoạch"
         }</h4>
