@@ -13,11 +13,6 @@ const columns = [
     key: "adsAddress",
   },
   {
-    title: "Loại hình quảng cáo",
-    dataIndex: "adsType",
-    key: "adsType",
-  },
-  {
     title: "Loại hình báo cáo",
     dataIndex: "reportType",
     key: "reportType",
@@ -36,20 +31,18 @@ const columns = [
 
 interface ReportInfoTableProps {
   data: ReportInfoRecord[];
-  onRowClick: (record: ReportInfoRecord) => void;
 }
 
 const ReportInfoTable = ({
-  data,
-  onRowClick
+  data
 } : ReportInfoTableProps) => {
   return (
     <Table
       columns={columns}
       dataSource={data}
-      onRow={(record) => ({
-        onClick: () => onRowClick(record),
-      })}
+      // onRow={(record) => ({
+      //   onClick: () => onRowClick(record),
+      // })}
       pagination={{ pageSize: 5 }}
     />
   );

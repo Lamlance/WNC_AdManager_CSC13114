@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   integer,
   pgEnum,
@@ -93,6 +94,8 @@ const BaoCao = pgTable("BaoCao", {
   email: varchar("email", { length: 127 }),
   dien_thoai: varchar("dien_thoai", { length: 127 }),
   noi_dung: varchar("noi_dung", { length: 511 }).notNull(),
+  trang_thai: varchar("trang_thai", { length: 255 }).notNull().default("Chưa xử lý"),
+  thoi_diem_bc: date("thoi_diem_bc").notNull().default(sql`CURRENT_TIMESTAMP`),
   id_quang_cao: integer("id_quang_cao")
     .references(() => QuangCao.id_quang_cao),
 

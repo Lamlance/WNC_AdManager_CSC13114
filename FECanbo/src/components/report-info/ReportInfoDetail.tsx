@@ -1,30 +1,29 @@
-interface ReportInfoDetailProps {
-  reporterInfo: {
-    name: string;
-    phone: string;
-  };
-  adsAddress: string;
-  reportType: string;
-  reportTime: Date;
-  status: string;
-}
+import { ReportInfoRecord } from "../../types/view-model";
 
 const ReportInfoDetail = ({
+  id,
+  adsId,
   reporterInfo,
   adsAddress,
+  reporterPhone,
   reportType,
+  reportContent,
   reportTime,
-  status,
-}: ReportInfoDetailProps) => {
+  status
+}: ReportInfoRecord) => {
   return (
     <div>
       <p> 
-        <span> Tên người gửi: </span>
-        <span> {reporterInfo.name} </span>
+        <span> Thông tin người gửi: </span>
+        <span> {reporterInfo} </span>
       </p>
       <p> 
         <span> Số điện thoại: </span>
-        <span> {reporterInfo.phone} </span>
+        <span> {reporterPhone} </span>
+      </p>
+      <p> 
+        <span> Nội dung báo cáo </span>
+        <span> {reportContent} </span>
       </p>
       <p> 
         <span> Địa điểm quảng cáo: </span> 
@@ -36,7 +35,7 @@ const ReportInfoDetail = ({
       </p>
       <p> 
         <span> Thời điểm gửi: </span>
-        <span> {reportTime.toLocaleString()} </span>
+        <span> {reportTime} </span>
       </p>
       <p> 
         <span> Trạng thái: </span> 

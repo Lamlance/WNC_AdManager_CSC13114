@@ -16,29 +16,23 @@ export interface AdsInfoRecord {
   id: string;
   adsType: string;
   address: string;
-  generalInfo: {
-    size: {
-      width: number;
-      height: number;
-    };
-    number: number;
-  };
+  sizeInfo: string;
+  num: number;
   contentType: string;
   placeType: string;
-  status: string;
-  effectDate: string;
-  expireDate: string;
+  effDate: string;
+  expDate: string;
+  imageUrls: string[];
 }
 
 export interface ReportInfoRecord {
-  id: string;
-  reporterInfo: {
-    name: string;
-    phone: string;
-  };
+  id: number;
+  adsId: number;
+  reporterInfo: string;
   adsAddress: string;
+  reporterPhone: string;
   reportType: string;
   reportContent: string;
-  reportTime: Date;
+  reportTime: string;
   status: string;
 }

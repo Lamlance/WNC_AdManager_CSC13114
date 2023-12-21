@@ -25,9 +25,20 @@ export interface AdsReqResponse {
     expDate: string;
 }
 
-export type GetAllAdsReqRequest = AdsReqResponse[];
+export type GetAllAdsReqResponse = AdsReqResponse[];
 
-export interface GetAllReportResponse {
-
+export interface ReportResponse {
+    id: number;
+    reporterName: string,
+    reporterEmail: string,
+    adsAddress: string,
+    reporterPhone: string,
+    reportContent: string,
+    reportType: string,
+    reportTime: string;
+    adsId: number;
+    status: string;
 }
+
+export type GetAllReportsResponse = ReportResponse[];
 

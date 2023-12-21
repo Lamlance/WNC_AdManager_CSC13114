@@ -1,12 +1,16 @@
 import { AdsInfoRecord } from "../../types/view-model";
 
 const AdsInfoDetail = ({
+  id,
   adsType,
   address,
-  generalInfo,
+  sizeInfo,
+  num,
   contentType,
   placeType,
-  status,
+  effDate,
+  expDate,
+  imageUrls
 }: AdsInfoRecord) => {
   return (
     <div>
@@ -20,13 +24,11 @@ const AdsInfoDetail = ({
       </p>
       <p>
         <span> Kích thước: </span>
-        <span>
-          {generalInfo.size.width} x {generalInfo.size.height}{" "}
-        </span>
+        <span> {sizeInfo} </span>
       </p>
       <p>
         <span> Số lượng: </span>
-        <span> {generalInfo.number} </span>
+        <span> {num} </span>
       </p>
       <p>
         <span> Hình thức: </span>
@@ -37,10 +39,15 @@ const AdsInfoDetail = ({
         <span> {placeType} </span>
       </p>
       <p>
-        <span> Trạng thái: </span> 
-        <span> {status} </span>
+        <span> Ngày hiệu lực: </span>
+        <span> {effDate} </span>
+      </p>
+      <p>
+        <span> Ngày hết hạn: </span>
+        <span> {expDate} </span>
       </p>
     </div>
+    
   );
 };
 
