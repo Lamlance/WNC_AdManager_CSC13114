@@ -70,7 +70,7 @@ function AddClusterPoints(map: Map, data: ClusterCreateData) {
   map.addLayer({
     id: data.Uncluster.id,
     type: "circle",
-    source: "ads_data",
+    source: data.DataSource.id,
     filter: ["!", ["has", "point_count"]],
     paint: {
       "circle-color": data.Uncluster.color,

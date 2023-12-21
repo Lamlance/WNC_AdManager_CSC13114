@@ -179,11 +179,16 @@ function AdItem({ Ad, Place, onReportSubmit }: AdsItemProps) {
 function AdsInfos() {
   const selected = useAppSelector((state) => state.SelectedAds);
   const onReportSubmit: AdsItemProps["onReportSubmit"] = (report, place) => {
-    const oldReport = z
-      .array(AdsGeoJson.ReportGeoJsonPropertySchema)
-      .safeParse(localStorage.getItem(REPORT_KEY) || "[]");
-    if (oldReport.success == false) return;
-    oldReport.data.push({ ...report, ...place });
+    try {
+      const oldReport = z
+        .array(AdsGeoJson.ReportGeoJsonPropertySchema)
+        .safeParse(JSON.parse(localStorage.getItem(REPORT_KEY) || "[]"));
+      if (oldReport.success == false) return console.log(oldReport.error);
+      oldReport.data.push({ ...report, ...place });
+      localStorage.setItem(REPORT_KEY, JSON.stringify(oldReport.data));
+    } catch (e) {
+      console.warn(e);
+    }
   };
 
   return (

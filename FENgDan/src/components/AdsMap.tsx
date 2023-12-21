@@ -1,4 +1,4 @@
-import MapLibreGL, { Map } from "maplibre-gl";
+import MapLibreGL, { Map, Popup } from "maplibre-gl";
 import { useEffect, useReducer, useRef, useState } from "react";
 import "./AdsMap.css";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -32,6 +32,8 @@ function AdsMap({
   const mapEleRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
   const dispatch = useAppDispatch();
+
+  // console.log(AdsClusterInfo, ReportClusterInfo);
 
   const [_, setAdsVisible] = useState<boolean>(true);
 
@@ -134,6 +136,15 @@ function AdsMap({
             markerData={AdsClusterInfo}
             onMarkerClick={handle_ads_marker_click}
             popUpBuilder={make_info_maker}
+          />
+        )}
+        {!ReportClusterInfo || !mapRef.current || refresh <= 0 ? null : (
+          <AdsClusterMarker<typeof AdsGeoJson.ReportGeoJsonPropertySchema>
+            geoJsonPropertySchema={AdsGeoJson.ReportGeoJsonPropertySchema}
+            mapRef={mapRef}
+            markerData={ReportClusterInfo}
+            onMarkerClick={(v) => console.log(v)}
+            popUpBuilder={() => new Popup()}
           />
         )}
       </div>
