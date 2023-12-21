@@ -27,9 +27,10 @@ function AdsClusterMarker<S extends ZodType>({
   function create_markers() {
     if (!mapRef.current) return;
 
-    const source = mapRef.current.getSource("ads_data") as
+    const source = mapRef.current.getSource(markerData.DataSource.id) as
       | GeoJSONSource
       | undefined;
+    console.log(source, markerData.DataSource.id);
     if (!source) AddClusterPoints(mapRef.current, markerData);
     else if (source.type === "geojson" && markerData.DataSource.data)
       source.setData(markerData.DataSource.data);
