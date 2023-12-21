@@ -93,7 +93,7 @@ const BaoCao = pgTable("BaoCao", {
   email: varchar("email", { length: 127 }),
   dien_thoai: varchar("dien_thoai", { length: 127 }),
   noi_dung: varchar("noi_dung", { length: 511 }).notNull(),
-  id_quang_cao: integer("id")
+  id_quang_cao: integer("id_quang_cao")
     .references(() => QuangCao.id_quang_cao),
 
   id_loai_bc: integer("id_loai_bc")
