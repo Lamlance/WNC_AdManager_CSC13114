@@ -12,8 +12,23 @@ const AdsInfoDetail = ({
   expDate,
   imageUrls
 }: AdsInfoRecord) => {
+  const containerStyle = {
+    padding: "10px",
+    backgroundColor: "#DBF1EA",
+    borderRadius: "8px",
+  };
+
+  const imageStyle = {
+    marginBottom: "10px",
+    img: {
+      width: "100%",
+      borderRadius: "4px",
+    },
+  };
+
   return (
-    <div>
+    <div style={containerStyle}>
+      <h2 className="font-bold"> CHI TIẾT THÔNG TIN ĐIỂM QUẢNG CÁO </h2>
       <p>
         <span className="font-semibold"> Loại quảng cáo: </span>
         <span> {adsType} </span>
@@ -23,28 +38,28 @@ const AdsInfoDetail = ({
         <span> {address} </span>
       </p>
       <p>
-        <span> Kích thước: </span>
+        <span className="font-semibold"> Kích thước: </span>
         <span> {sizeInfo} </span>
       </p>
       <p>
-        <span> Số lượng: </span>
+        <span className="font-semibold"> Số lượng: </span>
         <span> {num} </span>
       </p>
       <p>
-        <span> Hình thức: </span>
+        <span className="font-semibold"> Hình thức: </span>
         <span> {contentType} </span>
       </p>
       <p>
-        <span> Điểm đặt: </span>
+        <span className="font-semibold"> Điểm đặt: </span>
         <span> {placeType} </span>
       </p>
       <p>
-        <span> Ngày hiệu lực: </span>
-        <span> {effDate} </span>
+        <span className="font-semibold"> Ngày hiệu lực: </span>
+        <span className="italic"> {effDate} </span>
       </p>
       <p>
-        <span> Ngày hết hạn: </span>
-        <span> {expDate} </span>
+        <span className="font-semibold"> Ngày hết hạn: </span>
+        <span className="italic"> {expDate} </span>
       </p>
     </div>
     

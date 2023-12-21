@@ -44,6 +44,7 @@ const ReportInfoTable = ({
       //   onClick: () => onRowClick(record),
       // })}
       pagination={{ pageSize: 5 }}
+      rowKey="id"
     />
   );
 };

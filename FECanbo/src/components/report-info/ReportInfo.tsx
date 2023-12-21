@@ -33,7 +33,7 @@ const ReportInfo = () => {
               data={data.map(reportInfo => fromReportResponse2ReportRecord(reportInfo))}
             />
           </Col>
-          <Col span={6}>
+          <Col span={7}>
             {<ReportInfoDetail {...fromReportResponse2ReportRecord(data[0])} />}
           </Col>
         </Row>

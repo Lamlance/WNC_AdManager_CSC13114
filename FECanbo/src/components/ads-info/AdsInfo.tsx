@@ -31,7 +31,7 @@ const AdsInfo = () => {
               data={data.map((adsInfo) => fromAdsResponse2AdsRecord(adsInfo))}
             />
           </Col>
-          <Col span={6}>
+          <Col span={7}>
             {<AdsInfoDetail {...fromAdsResponse2AdsRecord(data[0])} />}
           </Col>
         </Row>
