@@ -88,8 +88,8 @@ function ReportModal({
           <Input.TextArea rows={4} />
         </Form.Item>
 
-        <Form.Item className="text-center">
-          <Button type="primary" htmlType="submit" className=" w-full">
+        <Form.Item className="flex justify-center text-center">
+          <Button type="primary" htmlType="submit">
             Nộp đơn
           </Button>
         </Form.Item>

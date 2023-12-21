@@ -5,3 +5,4 @@ export interface ReportFormValues {
   phoneNumber: string;
   description: string;
 }
+export const REPORT_KEY = "report_key" as const;
