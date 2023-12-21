@@ -329,20 +329,22 @@ VALUES
 (FALSE, '2024-05-15', '2024-10-14', 'animation_91.gif', 'interactive_08.html', 2, 36, 90, 4, 1, 2, 6);
 
 -- insert data into YeuCauCapPhep
-INSERT INTO "YeuCauCapPhep" (id_diem_dat, noi_dung_qc, ten_cty, email_cty, dien_thoai_cty, ngay_hieu_luc, ngay_het_han)
+INSERT INTO "YeuCauCapPhep" (id_diem_dat, noi_dung_qc, ten_cty, email_cty, dien_thoai_cty, dia_chi_cty, ngay_hieu_luc, ngay_het_han)
 VALUES
 ( 1,
 'Nội dung quảng cáo hấp dẫn cho sản phẩm XYZ',
 'Công ty TNHH ABC',
-"abc@company.net",
+'abc@company.net',
 '+84 912345678',
+'225 Nguyen Van Cu, P4, Q5',
 '2024-01-01',
 '2024-12-31'),
 (2,
 'Khuyến mãi lớn, giảm giá 50% tất cả các mặt hàng!',
 'Doanh nghiệp tư nhân DEF',
-"def@org"
+'def@org',
 '+84 246813579',
+'125 Dien Bien Phu, P15, BT',
 '2024-02-14',
 '2024-03-14'
 );
