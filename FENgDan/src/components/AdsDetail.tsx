@@ -1,26 +1,24 @@
 import { Modal } from "antd";
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface AdvertisementProps {
-  id: string;
-  type: string;
-  location: string;
-  detailType: string;
-  size: { width: number; height: number };
-  form: string;
-  category: string;
-  amount: number;
-  registerd: boolean;
-}
+import { useAppSelector } from "../Redux/ReduxStore";
+import { AdsGeoJson } from "@admanager/shared";
 
 interface AdsDetailProps {
   isModalOpen: boolean;
   handleOk: () => void;
   handleCancel: () => void;
+  Ad: AdsGeoJson.AdsProperty;
+  Place: AdsGeoJson.PlaceProperty | AdsGeoJson.ReportPlace;
 }
 
+function AdsDetail({
+  isModalOpen,
+  handleOk,
+  handleCancel,
+  Ad,
+  Place,
+}: AdsDetailProps) {
+  const selected = useAppSelector((state) => state.SelectedAds);
 
-function AdsDetail({ isModalOpen, handleOk, handleCancel }: AdsDetailProps) {
   const customTitle = (
     <div className="text-center text-2xl">
       <p>Chi tiết bảng quảng cáo</p>
@@ -36,10 +34,11 @@ function AdsDetail({ isModalOpen, handleOk, handleCancel }: AdsDetailProps) {
         onCancel={handleCancel}
         width={850}
       >
-        <p className=" text-2xl">Trụ, cụm Pano</p>
-        <p className=" text-xl">42 Võ Thị Sáu, Quận 3, Phường Võ Thị Sáu</p>
+        <p className=" text-2xl font-bold">{Ad.bang_qc}</p>
+        <p className=" text-xl">{Place.dia_chi}</p>
         <p className=" text-xl">
-          <span className=" font-bold">Ngày hết hạn:</span> 25/12/2024
+          <span className=" font-bold">Ngày hết hạn:</span>{" "}
+          {Ad.ngay_het_han || "Không có"}
         </p>
 
         <div className="mt-5 flex justify-center">

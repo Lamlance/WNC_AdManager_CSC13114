@@ -10,6 +10,7 @@ import MapSearchBar from "./AdsMap/MapSearch";
 import { setDblClick } from "../Redux/MapClickSlice";
 import { AdsGeoJson } from "@admanager/shared";
 import AdsClusterMarker from "./AdsMap/AdsClusterMarker";
+import { setSelectedReport } from "../Redux/ReportsDataSlice";
 interface AdsMapProps {
   InitialPosition: {
     lng: number;
@@ -39,7 +40,7 @@ function AdsMap({
 
   const [refresh, forceRefresh] = useReducer((x) => x + 1, 0);
 
-  function make_info_maker(
+  function createAdPopup(
     data: AdsGeoJson.AdsGeoJsonProperty,
     coord: [number, number],
   ) {
@@ -59,8 +60,24 @@ function AdsMap({
       );
   }
 
+  function createReportPopup(
+    data: AdsGeoJson.ReportGeoJsonProperty,
+    coord: [number, number],
+  ) {
+    return new MapLibreGL.Popup().setLngLat(coord).setMaxWidth("500px")
+      .setHTML(`<div class="text-lg">
+        <h1 class="font-bold">${data.dia_chi}</h1>
+        <p>Báo cáo: ${data.reportType}</p>
+        <p class=" line-clamp-4">${data.description}</p>
+      </div>`);
+  }
+
   function handle_ads_marker_click(data: AdsGeoJson.AdsGeoJsonProperty) {
     dispatch(setSelectedAdsLocation(data));
+  }
+
+  function handle_report_marker_click(data: AdsGeoJson.ReportGeoJsonProperty) {
+    dispatch(setSelectedReport(data));
   }
 
   function initialize_map(container: HTMLElement) {
@@ -135,7 +152,7 @@ function AdsMap({
             mapRef={mapRef}
             markerData={AdsClusterInfo}
             onMarkerClick={handle_ads_marker_click}
-            popUpBuilder={make_info_maker}
+            popUpBuilder={createAdPopup}
           />
         )}
         {!ReportClusterInfo || !mapRef.current || refresh <= 0 ? null : (
@@ -143,8 +160,8 @@ function AdsMap({
             geoJsonPropertySchema={AdsGeoJson.ReportGeoJsonPropertySchema}
             mapRef={mapRef}
             markerData={ReportClusterInfo}
-            onMarkerClick={(v) => console.log(v)}
-            popUpBuilder={() => new Popup()}
+            onMarkerClick={handle_report_marker_click}
+            popUpBuilder={createReportPopup}
           />
         )}
       </div>
