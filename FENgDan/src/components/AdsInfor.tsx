@@ -3,10 +3,11 @@ import ReportModal from "./ReportModal";
 import { useState } from "react";
 import { REPORT_KEY } from "../models/report_form_values";
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { useAppSelector } from "../Redux/ReduxStore";
+import { useAppDispatch, useAppSelector } from "../Redux/ReduxStore";
 import AdsDetail from "./AdsDetail";
 import { AdsGeoJson } from "@admanager/shared";
 import { z } from "zod";
+import { addReportData } from "../Redux/ReportsDataSlice";
 
 interface AdsItemProps {
   Ad: AdsGeoJson.AdsProperty;
@@ -23,6 +24,7 @@ interface EmptyAdItemProps extends Omit<AdsItemProps, "Ad"> {}
 function EmptyAdItem({ Place, onReportSubmit }: EmptyAdItemProps) {
   const [isReportModalVisible, setIsReportModalVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleReportClick = () => {
     setIsReportModalVisible(true);
   };
@@ -178,6 +180,8 @@ function AdItem({ Ad, Place, onReportSubmit }: AdsItemProps) {
 
 function AdsInfos() {
   const selected = useAppSelector((state) => state.SelectedAds);
+  const dispatch = useAppDispatch();
+
   const onReportSubmit: AdsItemProps["onReportSubmit"] = (report, place) => {
     try {
       const oldReport = z
@@ -186,6 +190,7 @@ function AdsInfos() {
       if (oldReport.success == false) return console.log(oldReport.error);
       oldReport.data.push({ ...report, ...place });
       localStorage.setItem(REPORT_KEY, JSON.stringify(oldReport.data));
+      dispatch(addReportData([{ ...report, ...place }]));
     } catch (e) {
       console.warn(e);
     }

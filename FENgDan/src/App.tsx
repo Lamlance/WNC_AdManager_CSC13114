@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import AdsMap from "./components/AdsMap";
 import Sidebar from "./components/Sidebar";
-import ReduxStore from "./Redux/ReduxStore";
+import ReduxStore, { useAppDispatch, useAppSelector } from "./Redux/ReduxStore";
 import { Provider } from "react-redux";
 import { useGetAdsGeoJson } from "./Redux/GeoJsonSlice";
 import { AdsGeoJson } from "@admanager/shared";
 import { ClusterCreateData } from "./utils/AddClusterPoint";
 import { REPORT_KEY } from "./models/report_form_values";
 import { z } from "zod";
+import { addReportData } from "./Redux/ReportsDataSlice";
 
 const DefaultMapProps = {
   InitialPosition: {
@@ -26,7 +27,8 @@ const DefaultMapProps = {
 
 function App() {
   const { data, error } = useGetAdsGeoJson();
-  const [reportData, setReportData] = useState<ClusterCreateData>();
+  const reportGeoProperty = useAppSelector((state) => state.ReportsData.data);
+  const dispatch = useAppDispatch();
 
   const AdsDataSoruce = !data
     ? undefined
@@ -43,8 +45,13 @@ function App() {
       .array(AdsGeoJson.ReportGeoJsonPropertySchema)
       .safeParse(JSON.parse(oldReport));
     if (reportData.success == false) return console.warn(reportData.error);
+    dispatch(addReportData(reportData.data));
+  }
+
+  function get_report_cluster_createData() {
+    if (reportGeoProperty.length === 0) return undefined;
     const reportFeature: AdsGeoJson.ReportGeoJson["features"] =
-      reportData.data.map(
+      reportGeoProperty.map(
         (v) =>
           ({
             type: "Feature",
@@ -52,7 +59,6 @@ function App() {
             geometry: { type: "Point", coordinates: [v.lng, v.lat, 0] },
           }) as const,
       );
-
     const ReportGeoJson: AdsGeoJson.ReportGeoJson = {
       type: "FeatureCollection",
       crs: {
@@ -63,14 +69,13 @@ function App() {
       },
       features: reportFeature,
     };
-
     const ReportClusterCreate: ClusterCreateData = {
       DataSource: { id: "report_data", data: ReportGeoJson },
       Cluster: { id: "report_cluster", color: "#FF6961" },
       ClusterCount: { id: "report_cluster_count" },
       Uncluster: { id: "report_unclustered_point", color: "#ff948f" },
     };
-    setReportData(ReportClusterCreate);
+    return ReportClusterCreate;
   }
 
   useEffect(() => {
@@ -86,7 +91,7 @@ function App() {
       <AdsMap
         InitialPosition={DefaultMapProps.InitialPosition}
         AdsClusterInfo={AdsClusterInfo}
-        ReportClusterInfo={reportData}
+        ReportClusterInfo={get_report_cluster_createData()}
       />
       {/* {sidebarVisible && <Sidebar openSidebar={closeSidebar} />} */}
       <Sidebar />
