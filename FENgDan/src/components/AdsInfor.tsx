@@ -142,6 +142,8 @@ function AdItem({ Ad, Place, onReportSubmit }: AdsItemProps) {
           <p className="mt-1 text-base font-bold italic">Đã quy hoạch</p>
 
           <AdsDetail
+            Place={Place}
+            Ad={Ad}
             isModalOpen={isModalOpen}
             handleOk={handleOk}
             handleCancel={handleCancel}
