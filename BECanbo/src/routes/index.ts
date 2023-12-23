@@ -2,6 +2,7 @@ import { Router } from "express"
 import adsInfoRouter from "./controllers/ads-info"
 import adsRequestRouter from "./controllers/ads-request"
 import reportInfoRouter from "./controllers/report-info"
+import authRouter from "./auth"
 
 const router = Router();
 
