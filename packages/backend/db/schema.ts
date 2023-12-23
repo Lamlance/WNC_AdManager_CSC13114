@@ -101,9 +101,7 @@ const BaoCao = pgTable("BaoCao", {
 
 const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
   id_yeu_cau: serial("id_yeu_cau").primaryKey(),
-  id_diem_dat: serial("id_diem_dat")
-    .notNull()
-    .references(() => DiaDiem.id_dia_diem),
+  id_diem_dat: serial("id_diem_dat").references(() => DiaDiem.id_dia_diem),
   noi_dung_qc: varchar("noi_dung_qc", { length: 255 }).notNull(),
 
   ten_cty: varchar("ten_cty", { length: 255 }).notNull(),
@@ -114,7 +112,7 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
   ngay_hieu_luc: date("ngay_hieu_luc").notNull(),
   ngay_het_han: date("ngay_het_han").notNull(),
   trang_thai: varchar("trang_thai").notNull(),
-  hinh_anh: varchar("hinh_1", { length: 255 })
+  hinh_anh: varchar("hinh_1", { length: 255 }),
 });
 
 export {

@@ -12,7 +12,7 @@ export const getAllAdsRequests = async () => {
       companyName: YeuCauCapPhep.ten_cty,
       companyPhone: YeuCauCapPhep.dien_thoai_cty,
       effDate: YeuCauCapPhep.ngay_hieu_luc,
-      expDate: YeuCauCapPhep.ngay_het_han
+      expDate: YeuCauCapPhep.ngay_het_han,
     })
     .from(AdsSchema.YeuCauCapPhep)
     .innerJoin(
@@ -20,7 +20,7 @@ export const getAllAdsRequests = async () => {
       eq(AdsSchema.DiaDiem.id_dia_diem, AdsSchema.YeuCauCapPhep.id_diem_dat)
     );
 
-    return data;
+  return data;
 };
 
 interface SaveAdsRequestData {
@@ -55,20 +55,18 @@ export const saveAdsRequest = async (
     } = requestData;
 
     const [insertedId] = await pg_client
-      .insert({
-        id_diem_dat: parseInt(position),
-        noi_dung_qc: panoContent,
+      .insert(AdsSchema.YeuCauCapPhep)
+      .values({
         ten_cty: companyName,
         dien_thoai_cty: phoneNumber,
         email_cty: email,
         dia_chi_cty: address,
         ngay_hieu_luc: startDate,
         ngay_het_han: endDate,
-        trang_thai: status,
+        trang_thai: "macdin",
         hinh_anh: image,
       })
-      .into(AdsSchema.YeuCauCapPhep)
-      .returning("id_yeu_cau")
+      .returning({ insertedId: AdsSchema.YeuCauCapPhep.id_yeu_cau })
       .execute();
 
     if (!insertedId) {

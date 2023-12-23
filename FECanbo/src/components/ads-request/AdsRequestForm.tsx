@@ -69,6 +69,7 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
           message.error(
             `Failed to submit ad request: ${response.data.message}`,
           );
+          console.log(response);
         }
       } else {
         // Handle error case
