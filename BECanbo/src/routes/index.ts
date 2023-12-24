@@ -1,7 +1,7 @@
 import { Router } from "express";
-import adsInfoRouter from "./controllers/ads-info";
-import adsRequestRouter from "./controllers/ads-request";
-import reportInfoRouter from "./controllers/report-info";
+import adsInfoRouter from "./controllers/ads-info.js";
+import adsRequestRouter from "./controllers/ads-request.js";
+import reportInfoRouter from "./controllers/report-info.js";
 
 const router = Router();
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AdRequest } from "../../../types";
 import AdsRequest from "./AdsRequest";
-import { useGetAllAdsRequestQuery } from "../../../slices/api/apiSlice";
+import { useGetAllAdsReqQuery } from "../../../slices/api/apiSlice";
 
 function convertAdRequestData(data: any[]): AdRequest[] {
   return data.map((item) => {
@@ -44,7 +44,7 @@ function convertAdRequestData(data: any[]): AdRequest[] {
 
 function AdsRequestVHTTPage() {
   const [selectedAds, setSelectedAds] = useState<AdRequest | null>(null);
-  const { data, error, isLoading } = useGetAllAdsRequestQuery();
+  const { data, error, isLoading } = useGetAllAdsReqQuery();
 
   const showDetails = (record: AdRequest) => {
     setSelectedAds(record);

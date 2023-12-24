@@ -1,8 +1,9 @@
 import React from "react";
 import { AdRequest } from "../../types/view-model";
+import { AdsReqApi } from "@admanager/shared";
 
 interface AdDetailsSectionProps {
-  ad: AdRequest | null;
+  ad: AdsReqApi.ManyAdsRequestResponse | null;
 }
 
 const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
@@ -32,36 +33,36 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
               style={imageStyle.img}
             />
           </div>
-          <p className="ad-title">{ad.noi_dung_qc}</p>
-          <p className="font-sans font-semibold">PANO ID: {ad.id_diem_dat}</p>
-          <p className="font-sans font-light italic">{ad.id_diem_dat}</p>
+          <p className="ad-title line-clamp-1">{ad.adsContent}</p>
+          <p className="font-sans font-semibold">PANO ID: {"No diem pano"}</p>
+          <p className="font-sans font-light italic">{"No diem dat"}</p>
           <p>
             <span className="font-semibold">Công ty đặt quảng cáo: </span>
-            <span>{ad.ten_cty}</span>
+            <span>{ad.companyName}</span>
           </p>
           <p>
             <span className="font-semibold">Email: </span>
-            <span>{ad.email_cty}</span>
+            <span>{ad.companyEmail}</span>
           </p>
           <p>
             <span className="font-semibold">SĐT: </span>
-            <span>{ad.dien_thoai_cty}</span>
+            <span>{ad.companyPhone}</span>
           </p>
           <p>
             <span className="font-semibold">Địa chỉ: </span>
-            <span>{ad.dia_chi_cty}</span>
+            <span>{"No cty address"}</span>
           </p>
           <p>
             <span className="font-semibold">Thời gian đặt: </span>
-            <span>{ad.ngay_hieu_luc}</span> - <span>{ad.ngay_het_han}</span>
+            <span>{ad.effDate}</span> - <span>{ad.expDate}</span>
           </p>
           <p>
             <span className="font-semibold">Trạng thái: </span>
-            <span>{ad.trang_thai}</span>
+            <span>{"No status"}</span>
           </p>
           <p>
             <span className="font-semibold">Nội dung: </span>
-            <span>{ad.noi_dung_qc}</span>
+            <span>{ad.adsContent}</span>
           </p>
         </div>
       ) : (

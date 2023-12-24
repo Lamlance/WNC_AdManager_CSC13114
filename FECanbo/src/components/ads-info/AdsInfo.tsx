@@ -1,45 +1,36 @@
 import { Row, Col } from "antd";
 import AdsInfoTable from "./AdsInfoTable";
 import { useGetAllAdsInfoQuery } from "../../slices/api/apiSlice";
-import { fromAdsResponse2AdsRecord } from "../../types/mapper";
-import AdsInfoDetail from "./AdsInfoDetail";
+import AdsInfoSlider from "./AdsInfoDetail";
+import { useState } from "react";
+import { AdsGeoJson } from "@admanager/shared";
 
 const AdsInfo = () => {
   const { data, error, isLoading } = useGetAllAdsInfoQuery();
-  console.log("data", data);
-  const [selectedAdsInfo, setSelectedAdsInfo] = useState<AdsInfoRecord | null>(
-    null,
-  );
+  const [selectedRow, setSelectedRow] =
+    useState<AdsGeoJson.AdsGeoJsonProperty | null>(null);
 
   return (
     <>
-      {error && (
-        <div>
-          <p> There was an error </p>
-        </div>
-      )}
-      {isLoading && (
-        <div>
-          <p> Loading page </p>
-        </div>
-      )}
-      {data && (
-        <Row
-          gutter={20}
-          style={{
-            minHeight: "100vh",
-          }}
-        >
-          <Col span={17}>
-            <AdsInfoTable
-              data={data.map((adsInfo) => fromAdsResponse2AdsRecord(adsInfo))}
-            />
-          </Col>
-          <Col span={7}>
-            {<AdsInfoDetail {...fromAdsResponse2AdsRecord(data[0])} />}
-          </Col>
-        </Row>
-      )}
+      {error && <div>There was an error</div>}
+      {isLoading && <div>Loading data </div>}
+      <Row
+        gutter={20}
+        style={{
+          minHeight: "100vh",
+        }}
+      >
+        <Col span={17}>
+          <AdsInfoTable
+            data={(data || []).map((v) => ({
+              ...v,
+              loai_vi_tri: v.ads[0].loai_vitri,
+            }))}
+            onRowSelect={setSelectedRow}
+          />
+        </Col>
+        <Col span={7}>{selectedRow && <AdsInfoSlider {...selectedRow} />}</Col>
+      </Row>
     </>
   );
 };

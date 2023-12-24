@@ -19,38 +19,9 @@ import AdsRequestPage from "./routes/AdsRequestPage";
 import AdManagement from "./components/vhtt/AdManagement";
 import AdsRequestVHTTPage from "./components/vhtt/ads-request/AdsRequestVHTTPage";
 import EditRequestComponent from "./components/vhtt/EditRequestComponent";
+import AdsRequestTable from "./components/vhtt/ads-request/AdsRequestTable";
+import AdsRequest from "./components/vhtt/ads-request/AdsRequest";
 const { Header, Sider, Content } = Layout;
-
-const App = () => {
-  return (
-    <div className="h-screen w-screen">
-      <Routes>
-        <Route path="/" element={<PageLayout />}>
-          <Route index element={<AdsRequestPage />} />
-          <Route path="advertisements" element={<AdsInfo />} />
-          <Route path="reports" element={<ReportInfo />} />
-        </Route>
-        <Route path="vhtt" element={<PageLayoutVHTT />}>
-          <Route path="editad" element={<EditAdForm />} />
-          {/* <Route path="editpoint" element={<EditSetpoint />} /> */}
-          <Route path="adsmap" element={<AdsMap />} />
-          <Route path="createaccount" element={<CreateAccount />} />
-          <Route path="editrequest" element={<EditRequestComponent />} />
-        </Route>
-      </Routes>
-    </div>
-  );
-};
-
-interface Item {
-  key: string;
-  icon: ReactElement;
-  label: string;
-  title: string;
-}
-interface PageLayoutProps {
-  items: Item[];
-}
 const items: Item[] = [
   {
     key: "1",
@@ -75,34 +46,51 @@ const itemVHTTs: Item[] = [
   {
     key: "1",
     icon: <VideoCameraOutlined />,
-    label: "Quản lý",
-    title: "/vhtt",
-  },
-  {
-    key: "2",
-    icon: <VideoCameraOutlined />,
     label: "Quản lý bảng quảng cáo",
-    title: "managead",
-  },
-  {
-    key: "3",
-    icon: <UploadOutlined />,
-    label: "Quản lý điểm quảng cáo",
-    title: "editpoint",
+    title: "/vhtt",
   },
   {
     key: "4",
     icon: <UploadOutlined />,
     label: "YÊU CẦU CẤP PHÉP",
-    title: "requestad",
+    title: "/vhtt/requestad",
   },
   {
     key: "5",
     icon: <UploadOutlined />,
     label: "YÊU CẦU CHỈNH SỬA ",
-    title: "requesteditad",
+    title: "/vhtt/editrequest",
   },
 ];
+const App = () => {
+  return (
+    <div className="h-screen w-screen">
+      <Routes>
+        <Route path="/" element={<PageLayout items={items} />}>
+          <Route index element={<AdsRequestPage />} />
+          <Route path="advertisements" element={<AdsInfo />} />
+          <Route path="reports" element={<ReportInfo />} />
+        </Route>
+        <Route path="vhtt" element={<PageLayout items={itemVHTTs} />}>
+          <Route index element={<AdManagement />} />
+          <Route path="requestad" element={<AdsRequestVHTTPage />} />
+          <Route path="createaccount" element={<CreateAccount />} />
+          <Route path="editrequest" element={<EditRequestComponent />} />
+        </Route>
+      </Routes>
+    </div>
+  );
+};
+
+interface Item {
+  key: string;
+  icon: ReactElement;
+  label: string;
+  title: string;
+}
+interface PageLayoutProps {
+  items: Item[];
+}
 
 const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
   const [collapsed, setCollapsed] = useState(false);

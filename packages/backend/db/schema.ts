@@ -1,4 +1,3 @@
-import { sql } from "drizzle-orm";
 import {
   integer,
   pgEnum,
@@ -13,6 +12,7 @@ import {
   real,
   date,
   jsonb,
+  timestamp,
 } from "drizzle-orm/pg-core";
 const LoaiViTri = pgTable("LoaiViTri", {
   id_loai_vt: serial("id").primaryKey(),
@@ -54,7 +54,7 @@ const DiaDiem = pgTable("DiaDiem", {
 });
 
 const QuangCao = pgTable("QuangCao", {
-  id_quang_cao: serial("id").primaryKey(),
+  id_quang_cao: uuid("id").primaryKey().defaultRandom(),
   quy_hoach: boolean("quy_hoach").notNull().default(false),
 
   ngay_hieu_luc: date("ngay_hieu_luc"),
@@ -98,10 +98,14 @@ const BaoCao = pgTable("BaoCao", {
   trang_thai: varchar("trang_thai", { length: 255 })
     .notNull()
     .default("Chưa xử lý"),
-  thoi_diem_bc: date("thoi_diem_bc")
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
-  id_quang_cao: integer("id_quang_cao").references(() => QuangCao.id_quang_cao),
+  thoi_diem_bc: timestamp("thoi_diem_bc").notNull().defaultNow(),
+
+  dia_chi: varchar("dia_chi", { length: 255 }).notNull(),
+  id_quang_cao: uuid("id_quang_cao").references(() => QuangCao.id_quang_cao),
+  id_dia_diem: integer("id_dia_diem").references(() => DiaDiem.id_dia_diem),
+
+  lng: doublePrecision("kinh_do").notNull(),
+  lat: doublePrecision("vi_do").notNull(),
 
   id_loai_bc: integer("id_loai_bc")
     .notNull()
@@ -110,7 +114,7 @@ const BaoCao = pgTable("BaoCao", {
 
 const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
   id_yeu_cau: serial("id_yeu_cau").primaryKey(),
-  id_diem_dat: serial("id_diem_dat").references(() => DiaDiem.id_dia_diem),
+  id_diem_dat: integer("id_diem_dat").references(() => DiaDiem.id_dia_diem),
   noi_dung_qc: varchar("noi_dung_qc", { length: 255 }).notNull(),
 
   ten_cty: varchar("ten_cty", { length: 255 }).notNull(),
@@ -120,7 +124,7 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
 
   ngay_hieu_luc: date("ngay_hieu_luc").notNull(),
   ngay_het_han: date("ngay_het_han").notNull(),
-  trang_thai: varchar("trang_thai").notNull(),
+  trang_thai: varchar("trang_thai").notNull().default("Waiting"),
   hinh_anh: varchar("hinh_1", { length: 255 }),
 });
 
@@ -129,7 +133,23 @@ const YeuCauChinhSua = pgTable("YeuCauChinhSua", {
   ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
   thoi_diem_chinh_sua: date("thoi_diem_chinh_sua").notNull(),
   trang_thai: varchar("trang_thai", { length: 255 }).notNull(),
-  thong_tin_moi: jsonb("thong_tin_moi"),
+
+  quy_hoach: boolean("quy_hoach").default(false),
+  ngay_hieu_luc: date("ngay_hieu_luc"),
+  ngay_het_han: date("ngay_het_han"),
+  hinh_1: varchar("hinh_1", { length: 255 }),
+  hinh_2: varchar("hinh_2", { length: 255 }),
+  so_luong: integer("so_luong").default(1),
+  chieu_dai_m: real("chieu_dai_m"),
+  chieu_rong_m: real("chieu_rong_m"),
+  id_loai_bang_qc: integer("id_loai_bang_qc").references(
+    () => LoaiBangQC.id_loai_bang_qc
+  ),
+  id_dia_diem: integer("id_dia_diem").references(() => DiaDiem.id_dia_diem),
+  id_hinh_thuc: integer("id_hinh_thuc").references(() => HinhThucQC.id_htqc),
+  id_loai_vitri: integer("id_loai_vitri").references(
+    () => LoaiViTri.id_loai_vt
+  ),
 });
 
 export {

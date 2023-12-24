@@ -10,6 +10,7 @@ function StringParsePreprocess(v: any) {
 }
 
 const AdsPropertySchema = z.object({
+  id_quang_cao: z.string(),
   quy_hoach: z.coerce.boolean(),
 
   ngay_hieu_luc: z.string().nullish(),
@@ -26,6 +27,7 @@ const AdsPropertySchema = z.object({
   hinh_thuc: z.string(),
   bang_qc: z.string(),
 });
+
 const PlacePropertySchema = z.object({
   ten_dia_diem: z.string(),
   dia_chi: z.string(),
@@ -35,30 +37,45 @@ const PlacePropertySchema = z.object({
   lng: z.number(),
   lat: z.number(),
 });
+
 const AdsGeoJsonPropertySchema = z.object({
   ads: z.preprocess(StringParsePreprocess, z.array(AdsPropertySchema).min(1)),
   place: z.preprocess(StringParsePreprocess, PlacePropertySchema),
 });
 
-const ReportFormValuesSchema = z.object({
-  reportType: z.string(),
-  fullName: z.string(),
-  email: z.string(),
-  phoneNumber: z.string(),
-  description: z.string(),
+const ReportPropertySchema = z.object({
+  id_dia_diem: z.number().nullish(),
+  dia_chi: z.string(),
+  lng: z.number(),
+  lat: z.number(),
+  id_quang_cao: z.string().nullish(),
+  id_loai_bc: z.coerce.number().nullish(),
+  id_bao_cao: z.number(),
+  ten_nguoi_gui: z.string(),
+  email: z.string().nullish(),
+  dien_thoai: z.string().nullish(),
+  noi_dung: z.string(),
+  trang_thai: z.string(),
+  thoi_diem_bc: z.date(),
 });
-const ReportPlaceSchema = PlacePropertySchema.omit({ id_dia_diem: true });
+
 const ReportGeoJsonPropertySchema = z.preprocess(
   StringParsePreprocess,
-  ReportFormValuesSchema.merge(ReportPlaceSchema)
+  z.object({
+    bao_cao: ReportPropertySchema,
+    loai_bao_cao: z.string(),
+    dia_diem: PlacePropertySchema.nullish(),
+    quang_cao: AdsPropertySchema.omit({
+      loai_vitri: true,
+      hinh_thuc: true,
+      bang_qc: true,
+    }).nullish(),
+  })
 );
 
 type AdsProperty = z.infer<typeof AdsPropertySchema>;
 type PlaceProperty = z.infer<typeof PlacePropertySchema>;
 type AdsGeoJsonProperty = z.infer<typeof AdsGeoJsonPropertySchema>;
-
-type ReportFormValues = z.infer<typeof ReportFormValuesSchema>;
-type ReportPlace = z.infer<typeof ReportPlaceSchema>;
 type ReportGeoJsonProperty = z.infer<typeof ReportGeoJsonPropertySchema>;
 
 type GeoJsonProperty<P extends object> = {
@@ -80,23 +97,20 @@ type GeoJson<P extends object> = {
 };
 
 type AdsGeoJson = GeoJson<AdsGeoJsonProperty>;
-type ReportGeoJson = GeoJson<ReportGeoJsonProperty>;
+type ReportGeoJson = GeoJson<ReportGeoJsonProperty[]>;
 
 export type {
   AdsProperty,
   PlaceProperty,
   AdsGeoJsonProperty,
   AdsGeoJson,
-  ReportFormValues,
-  ReportPlace,
   ReportGeoJsonProperty,
   ReportGeoJson,
 };
+
 export {
   AdsPropertySchema,
   PlacePropertySchema,
   AdsGeoJsonPropertySchema,
-  ReportFormValuesSchema,
-  ReportPlaceSchema,
   ReportGeoJsonPropertySchema,
 };

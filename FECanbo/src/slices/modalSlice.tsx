@@ -1,15 +1,15 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface modalState {
   isModalOpen: boolean;
 }
 
 const initialState: modalState = {
-  isModalOpen: false,
+  isModalOpen: true,
 };
 
 const pointSlice = createSlice({
-  name: 'modal',
+  name: "modal",
   initialState,
   reducers: {
     showModalClose: (state) => {
@@ -21,9 +21,6 @@ const pointSlice = createSlice({
   },
 });
 
-export const {
-  showModalOpen,
-  showModalClose,
-} = pointSlice.actions;
+export const { showModalOpen, showModalClose } = pointSlice.actions;
 
 export default pointSlice.reducer;

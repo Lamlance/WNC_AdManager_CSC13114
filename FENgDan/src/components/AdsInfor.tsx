@@ -5,21 +5,30 @@ import { REPORT_KEY } from "../models/report_form_values";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../Redux/ReduxStore";
 import AdsDetail from "./AdsDetail";
-import { AdsGeoJson } from "@admanager/shared";
+import { AdsGeoJson, ReportApi } from "@admanager/shared";
 import { z } from "zod";
 import { addReportData } from "../Redux/ReportsDataSlice";
+import { uploadReportData } from "../Redux/AdsServerApi";
 
-interface AdsItemProps {
-  Ad: AdsGeoJson.AdsProperty;
-  Place: AdsGeoJson.PlaceProperty | AdsGeoJson.ReportPlace;
-
+interface EmptyAdItemProps {
+  Place: ReportApi.ReportPlace;
   onReportSubmit: (
-    report: AdsGeoJson.ReportFormValues,
-    place: AdsGeoJson.PlaceProperty | AdsGeoJson.ReportPlace,
+    report: ReportApi.ReportFormValues,
+    place: AdsGeoJson.PlaceProperty | ReportApi.ReportPlace,
+    ad?: AdsGeoJson.AdsProperty,
   ) => void;
 }
 
-interface EmptyAdItemProps extends Omit<AdsItemProps, "Ad"> {}
+interface AdsItemProps {
+  Ad: AdsGeoJson.AdsProperty;
+  Place: AdsGeoJson.PlaceProperty | ReportApi.ReportPlace;
+
+  onReportSubmit: (
+    report: ReportApi.ReportFormValues,
+    place: AdsGeoJson.PlaceProperty | ReportApi.ReportPlace,
+    ad?: AdsGeoJson.AdsProperty,
+  ) => void;
+}
 
 function EmptyAdItem({ Place, onReportSubmit }: EmptyAdItemProps) {
   const [isReportModalVisible, setIsReportModalVisible] = useState(false);
@@ -37,7 +46,7 @@ function EmptyAdItem({ Place, onReportSubmit }: EmptyAdItemProps) {
     setIsModalOpen(true);
   };
 
-  const handleReportModalSubmit = (values: AdsGeoJson.ReportFormValues) => {
+  const handleReportModalSubmit = (values: ReportApi.ReportFormValues) => {
     console.log("Report form submitted with values:", values);
     setIsReportModalVisible(false);
     onReportSubmit(values, Place);
@@ -102,10 +111,10 @@ function AdItem({ Ad, Place, onReportSubmit }: AdsItemProps) {
     setIsModalOpen(true);
   };
 
-  const handleReportModalSubmit = (values: AdsGeoJson.ReportFormValues) => {
+  const handleReportModalSubmit = (values: ReportApi.ReportFormValues) => {
     console.log("Report form submitted with values:", values);
     setIsReportModalVisible(false);
-    onReportSubmit(values, Place);
+    onReportSubmit(values, Place, Ad);
   };
 
   const handleRegisterClick = () => {
@@ -182,17 +191,30 @@ function AdItem({ Ad, Place, onReportSubmit }: AdsItemProps) {
 
 function AdsInfos() {
   const selected = useAppSelector((state) => state.SelectedAds);
+  const [uploadReport, data] = uploadReportData();
   const dispatch = useAppDispatch();
 
-  const onReportSubmit: AdsItemProps["onReportSubmit"] = (report, place) => {
+  const onReportSubmit: AdsItemProps["onReportSubmit"] = async (
+    report,
+    place,
+    ad,
+  ) => {
     try {
+      console.log(report, place, ad);
       const oldReport = z
         .array(AdsGeoJson.ReportGeoJsonPropertySchema)
         .safeParse(JSON.parse(localStorage.getItem(REPORT_KEY) || "[]"));
       if (oldReport.success == false) return console.log(oldReport.error);
-      oldReport.data.push({ ...report, ...place });
+
+      const BaoCaoGeoJson = await uploadReport({
+        ...report,
+        ...place,
+        id_quang_cao: ad?.id_quang_cao,
+      }).unwrap();
+      if (!data) return;
+      oldReport.data.push(BaoCaoGeoJson);
       localStorage.setItem(REPORT_KEY, JSON.stringify(oldReport.data));
-      dispatch(addReportData([{ ...report, ...place }]));
+      dispatch(addReportData([BaoCaoGeoJson]));
     } catch (e) {
       console.warn(e);
     }
@@ -200,7 +222,7 @@ function AdsInfos() {
 
   return (
     <>
-      {!selected ? null : selected.ads.length === 0 ? (
+      {!selected ? null : selected.ads.length == 0 ? (
         <EmptyAdItem onReportSubmit={onReportSubmit} Place={selected.place} />
       ) : (
         selected.ads.map((v, i) => (

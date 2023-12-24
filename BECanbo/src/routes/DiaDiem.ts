@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { pg_client } from "../db/db";
+import { pg_client } from "../db/db.js";
 import { sql } from "drizzle-orm";
 
 const DiaDiemRouter = Router();

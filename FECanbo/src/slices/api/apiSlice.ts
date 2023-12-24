@@ -1,27 +1,26 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
-  GetAllAdsReqResponse,
-  GetAllAdsResponse,
-  GetAllReportsResponse,
-} from "../../types/response";
-import {
   GetAllAdsRequest,
   GetAllAdsReqRequest,
   GetAllReportsRequest,
 } from "../../types/request";
+import { AdsGeoJson, AdsReqApi, ReportApi } from "@admanager/shared";
 
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:4030/api" }),
   endpoints: (builder) => ({
-    getAllAdsInfo: builder.query<GetAllAdsResponse, GetAllAdsRequest | void>({
+    getAllAdsInfo: builder.query<
+      AdsGeoJson.AdsGeoJsonProperty[],
+      GetAllAdsRequest | void
+    >({
       query: () => "/quang-cao",
     }),
     getAnAdsInfo: builder.query({
       query: (id) => `/quang-cao/${id}`,
     }),
     getAllAdsReq: builder.query<
-      GetAllAdsReqResponse,
+      AdsReqApi.ManyAdsRequestResponse[],
       GetAllAdsReqRequest | void
     >({
       query: () => "/yeu-cau-cap-phep",
@@ -30,13 +29,20 @@ export const apiSlice = createApi({
       query: (id) => `/yeu-cau-cap-phep/${id}`,
     }),
     getAllReportInfo: builder.query<
-      GetAllReportsResponse,
+      ReportApi.ReportResponse[],
       GetAllReportsRequest | void
     >({
       query: () => "/bao-cao",
     }),
-    getAReportInfo: builder.query({
-      query: (id) => `/bao-cao/${id}`,
+    submitAdRequest: builder.mutation<any, FormData>({
+      query: (formData) => ({
+        url: "/yeu-cau-bao-cao",
+        method: "POST",
+        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
     }),
   }),
 });
@@ -44,5 +50,6 @@ export const apiSlice = createApi({
 export const {
   useGetAllAdsInfoQuery,
   useGetAllReportInfoQuery,
-  useGetAllAdsRequestQuery,
+  useSubmitAdRequestMutation,
+  useGetAllAdsReqQuery,
 } = apiSlice;

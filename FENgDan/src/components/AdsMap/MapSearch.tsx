@@ -183,7 +183,6 @@ function MapSearchBar(props: MapSearchProps) {
           lat,
           dia_chi: formatted_address,
           ten_dia_diem: formatted_address,
-          id_dia_diem: -1,
         },
       }),
     );
@@ -199,9 +198,9 @@ function MapSearchBar(props: MapSearchProps) {
       placeholder={"Search for location"}
       options={placeOpts}
       onSearch={on_search_location}
-      className=" w-1/2"
       onSelect={on_suggest_select}
       allowClear
+      className=" w-1/2"
     />
   );
 }

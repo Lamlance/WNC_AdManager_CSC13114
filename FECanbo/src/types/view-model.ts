@@ -17,7 +17,7 @@ export interface AdsInfoRecord {
   adsType: string;
   address: string;
   sizeInfo: string;
-  num: number;
+  number: number;
   contentType: string;
   placeType: string;
   effDate: string;

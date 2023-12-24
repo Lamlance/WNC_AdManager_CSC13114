@@ -1,98 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import "./App.css";
-import AdsMap from "./components/AdsMap";
 import Sidebar from "./components/Sidebar";
-import ReduxStore, { useAppDispatch, useAppSelector } from "./Redux/ReduxStore";
+import ReduxStore from "./Redux/ReduxStore";
 import { Provider } from "react-redux";
-import { useGetAdsGeoJson } from "./Redux/GeoJsonSlice";
-import { AdsGeoJson } from "@admanager/shared";
-import { ClusterCreateData } from "./utils/AddClusterPoint";
-import { REPORT_KEY } from "./models/report_form_values";
-import { z } from "zod";
-import { addReportData } from "./Redux/ReportsDataSlice";
 
-const DefaultMapProps = {
-  InitialPosition: {
-    lng: 106.69379445290143,
-    lat: 10.788266281491206,
-    zoom: 14,
-  },
-  AdsClusterInfo: {
-    DataSource: { id: "ads_data" },
-    Cluster: { id: "ads_cluster", color: "#51bbd6" },
-    ClusterCount: { id: "ads_cluster_count" },
-    Uncluster: { id: "ads_unclustered_point", color: "#11b4da" },
-  },
-};
+import AdsMapPage from "./Pages/AdsMapPage";
 
 function App() {
-  const { data, error } = useGetAdsGeoJson();
-  const reportGeoProperty = useAppSelector((state) => state.ReportsData.data);
-  const dispatch = useAppDispatch();
-
-  const AdsDataSoruce = !data
-    ? undefined
-    : { ...DefaultMapProps.AdsClusterInfo.DataSource, data };
-  const AdsClusterInfo = !AdsDataSoruce
-    ? undefined
-    : { ...DefaultMapProps.AdsClusterInfo, DataSource: { ...AdsDataSoruce } };
-
-  function get_local_report_data() {
-    const oldReport = localStorage.getItem(REPORT_KEY);
-    if (!oldReport) return;
-
-    const reportData = z
-      .array(AdsGeoJson.ReportGeoJsonPropertySchema)
-      .safeParse(JSON.parse(oldReport));
-    if (reportData.success == false) return console.warn(reportData.error);
-    dispatch(addReportData(reportData.data));
-  }
-
-  function get_report_cluster_createData() {
-    if (reportGeoProperty.length === 0) return undefined;
-    const reportFeature: AdsGeoJson.ReportGeoJson["features"] =
-      reportGeoProperty.map(
-        (v) =>
-          ({
-            type: "Feature",
-            properties: v,
-            geometry: { type: "Point", coordinates: [v.lng, v.lat, 0] },
-          }) as const,
-      );
-    const ReportGeoJson: AdsGeoJson.ReportGeoJson = {
-      type: "FeatureCollection",
-      crs: {
-        type: "name",
-        properties: {
-          name: "urn:ogc:def:crs:OGC:1.3:CRS84",
-        },
-      },
-      features: reportFeature,
-    };
-    const ReportClusterCreate: ClusterCreateData = {
-      DataSource: { id: "report_data", data: ReportGeoJson },
-      Cluster: { id: "report_cluster", color: "#FF6961" },
-      ClusterCount: { id: "report_cluster_count" },
-      Uncluster: { id: "report_unclustered_point", color: "#ff948f" },
-    };
-    return ReportClusterCreate;
-  }
-
-  useEffect(() => {
-    try {
-      get_local_report_data();
-    } catch (e) {
-      console.warn(e);
-    }
-  }, []);
-
   return (
     <div className="h-screen w-screen">
-      <AdsMap
-        InitialPosition={DefaultMapProps.InitialPosition}
-        AdsClusterInfo={AdsClusterInfo}
-        ReportClusterInfo={get_report_cluster_createData()}
-      />
+      <AdsMapPage />
       {/* {sidebarVisible && <Sidebar openSidebar={closeSidebar} />} */}
       <Sidebar />
     </div>

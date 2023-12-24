@@ -1,13 +1,13 @@
 import { Modal } from "antd";
 import { useAppSelector } from "../Redux/ReduxStore";
-import { AdsGeoJson } from "@admanager/shared";
+import { AdsGeoJson, ReportApi } from "@admanager/shared";
 
 interface AdsDetailProps {
   isModalOpen: boolean;
   handleOk: () => void;
   handleCancel: () => void;
   Ad: AdsGeoJson.AdsProperty;
-  Place: AdsGeoJson.PlaceProperty | AdsGeoJson.ReportPlace;
+  Place: AdsGeoJson.PlaceProperty | ReportApi.ReportPlace;
 }
 
 function AdsDetail({

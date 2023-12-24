@@ -2,23 +2,24 @@
 import React from "react";
 import { Table } from "antd";
 import { AdRequest } from "../../types/view-model";
+import { AdsReqApi } from "@admanager/shared";
 
 const columns = [
-  {
-    title: "Pano ID",
-    dataIndex: "requestId",
-    key: "requestId",
-  },
+  // {
+  //   title: "Pano ID",
+  //   dataIndex: "requestId",
+  //   key: "requestId",
+  // },
   {
     title: "NỘI DUNG PANO",
-    dataIndex: "panoContent",
-    key: "panoContent",
+    dataIndex: "adsContent",
+    key: "adsContent",
   },
-  {
-    title: "VỊ TRÍ ĐẶT",
-    dataIndex: "position",
-    key: "position",
-  },
+  // {
+  //   title: "VỊ TRÍ ĐẶT",
+  //   dataIndex: "position",
+  //   key: "position",
+  // },
   {
     title: "CÔNG TY ĐẶT QUẢNG CÁO",
     dataIndex: "companyName",
@@ -28,25 +29,26 @@ const columns = [
     title: "THỜI GIAN ĐẶT",
     dataIndex: "effectedDate",
     key: "effectedDate",
-    render: (text: string, record: AdRequest) =>
-      `${record.ngay_hieu_luc} - ${record.ngay_het_han}`,
+    render: (text: string, record: AdsReqApi.ManyAdsRequestResponse) =>
+      `${record.effDate} - ${record.expDate}`,
   },
-  {
-    title: "TRẠNG THÁI",
-    dataIndex: "status",
-    key: "status",
-  },
+  // {
+  //   title: "TRẠNG THÁI",
+  //   dataIndex: "status",
+  //   key: "status",
+  // },
 ];
 
 interface AdsRequestTableProps {
-  data: AdRequest[];
-  onRowClick: (record: AdRequest) => void;
+  data: AdsReqApi.ManyAdsRequestResponse[];
+  onRowClick: (record: AdsReqApi.ManyAdsRequestResponse) => void;
 }
 
 const AdsRequestTable: React.FC<AdsRequestTableProps> = ({
   data,
   onRowClick,
 }) => {
+  console.log(data);
   return (
     <Table
       columns={columns}

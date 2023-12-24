@@ -1,7 +1,7 @@
 import {
   ReportFormValues,
   ReportFormValuesSchema,
-} from "@admanager/shared/types/AdsGeoJson";
+} from "@admanager/shared/types/ReportApi";
 import { Modal, Form, Input, Select, Button } from "antd";
 
 const { Option } = Select;
@@ -24,6 +24,7 @@ function ReportModal({
   const handleFinish = (values: ReportFormValues) => {
     const data = ReportFormValuesSchema.safeParse(values);
     if (data.success) onSubmit(values);
+    else console.warn(data.error);
     form.resetFields();
     console.log("Submit report clicked", values);
   };
@@ -45,20 +46,20 @@ function ReportModal({
         wrapperCol={{ span: 18 }}
       >
         <Form.Item<ReportFormValues>
-          name="reportType"
+          name="id_loai_bc"
           label="Hình thức báo cáo"
           rules={[
             { required: true, message: "Please select the type of report" },
           ]}
         >
           <Select placeholder="Select type">
-            <Option value="issue">Lỗi</Option>
-            <Option value="bad-content">Nội dung không phù hợp</Option>
+            <Option value={1}>Lỗi</Option>
+            <Option value={2}>Nội dung không phù hợp</Option>
           </Select>
         </Form.Item>
 
         <Form.Item<ReportFormValues>
-          name="fullName"
+          name="ten_nguoi_gui"
           label="Họ và tên người báo cáo"
           rules={[{ required: true, message: "Please enter your full name" }]}
         >
@@ -74,7 +75,7 @@ function ReportModal({
         </Form.Item>
 
         <Form.Item<ReportFormValues>
-          name="phoneNumber"
+          name="dien_thoai"
           label="Điện thoại liên lạc"
           rules={[
             { required: true, message: "Please enter your phone number" },
@@ -83,8 +84,8 @@ function ReportModal({
           <Input />
         </Form.Item>
 
-        <Form.Item
-          name="description"
+        <Form.Item<ReportFormValues>
+          name="noi_dung"
           label="Nội dung báo cáo"
           rules={[{ required: true, message: "Please enter a description" }]}
           wrapperCol={{ span: 18 }}
