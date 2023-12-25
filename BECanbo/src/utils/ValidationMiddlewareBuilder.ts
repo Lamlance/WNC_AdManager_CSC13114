@@ -36,7 +36,6 @@ function ValidatorMwBuilder<
   return function (req, res, next) {
     let q: any;
     let b: any;
-
     if (query) {
       const data = query.safeParse(req.query);
       if (data.success == false)

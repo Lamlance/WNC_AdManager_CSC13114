@@ -5,6 +5,9 @@ import EditAdForm from "./EditAdForm";
 import { AdsInfoRecord } from "../../types";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useGetAllAdsInfoQuery } from "../../slices/api/apiSlice";
+import { AdsGeoJson } from "@admanager/shared";
+
+type AdsInfoRecord2 = AdsGeoJson.PlaceProperty & AdsGeoJson.AdsProperty;
 
 function convertAdsData(data: any[]): AdsInfoRecord[] {
   return data.map((item) => {
@@ -48,50 +51,47 @@ function convertAdsData(data: any[]): AdsInfoRecord[] {
     };
   });
 }
+
+function convertAdsData2(
+  data: AdsGeoJson.AdsGeoJsonProperty[],
+): AdsInfoRecord2[] {
+  const newData: AdsInfoRecord2[] = [];
+  data.forEach((d) => d.ads.forEach((a) => newData.push({ ...a, ...d.place })));
+  return newData;
+}
+
 const AdManagement = () => {
-  const columns: ColumnsType<AdsInfoRecord> = [
-    {
-      title: "ID quảng cáo",
-      width: 200,
-      dataIndex: "id",
-      key: "id",
-      fixed: "left",
-      align: "center",
-    },
+  const columns: ColumnsType<AdsInfoRecord2> = [
     {
       title: "Loại bảng quảng cáo",
-      width: 200,
-      dataIndex: "adsType",
-      key: "id_loai_bang_qc",
+      dataIndex: "bang_qc",
+      key: "bang_qc",
     },
     {
       title: "Vị trí",
-      width: 200,
-      dataIndex: "address",
-      key: "id_dia_diem",
+      dataIndex: "ten_dia_diem",
+      key: "ten_dia_diem",
     },
     {
       title: "Kích thước (mxm)",
-      dataIndex: ["generalInfo", "size"],
-      width: 100,
-      key: "size",
       align: "center",
-      render: (size) => `${size.width} x ${size.height}`,
+      render: (data: AdsInfoRecord2) =>
+        data?.chieu_dai_m && data?.chieu_rong_m
+          ? `${data?.chieu_dai_m}m x ${data?.chieu_rong_m}m`
+          : "Không có thông tin",
     },
     {
       title: "Số lượng",
-      width: 100,
-      dataIndex: ["generalInfo", "number"],
-      key: "number",
+      dataIndex: "so_luong",
+      key: "so_luong",
       align: "center",
     },
-    { title: "Hình thức", dataIndex: "contentType", key: "id_hinh_thuc" },
-    { title: "Phân loại", dataIndex: "placeType", key: "id_loai_vitri" },
+    { title: "Hình thức", dataIndex: "hinh_thuc", key: "hinh_thuc" },
+    { title: "Phân loại", dataIndex: "loai_vitri", key: "loai_vitri" },
 
     {
       title: "Ngày hết hạn",
-      width: 120,
-      dataIndex: "expireDate",
+      dataIndex: "ngay_het_han",
       key: "ngay_het_han",
     },
 
@@ -121,7 +121,7 @@ const AdManagement = () => {
   ];
   const { data, error, isLoading } = useGetAllAdsInfoQuery();
 
-  const [selectedAds, setSelectedAds] = useState<AdsInfoRecord | null>(null);
+  const [selectedAds, setSelectedAds] = useState<AdsInfoRecord2 | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
@@ -134,43 +134,32 @@ const AdManagement = () => {
     setSelectedAds(null);
     setIsModalOpen(true);
   };
-  const convertedData = data ? convertAdsData(data) : [];
 
   const handleDeleteAd = () => {};
   return (
     <>
-      {error && (
-        <div>
-          <p> There was an error </p>
-        </div>
-      )}
-      {isLoading && (
-        <div>
-          <p> Loading page </p>
-        </div>
-      )}
-      {data && (
-        <>
-          <Button onClick={handleAddAd} type="primary" className="mb-3">
-            Thêm quảng cáo{" "}
-          </Button>
-          <Table
-            columns={columns}
-            dataSource={convertedData}
-            scroll={{ x: 1300 }}
-            onRow={(record) => ({
-              onClick: () => {
-                setSelectedAds(record);
-              },
-            })}
-          />
-          <EditAdForm
-            isModalOpen={isModalOpen}
-            onClose={closeModal}
-            ad={selectedAds}
-          />
-        </>
-      )}
+      {error && <div>There was an error</div>}
+      {isLoading && <div>Loading page</div>}
+      <Button onClick={handleAddAd} type="primary" className="mb-3">
+        Thêm quảng cáo{" "}
+      </Button>
+      <Table
+        pagination={{ pageSize: 4 }}
+        columns={columns}
+        dataSource={data ? convertAdsData2(data) : []}
+        scroll={{ x: 1300 }}
+        onRow={(record) => ({
+          onClick: () => {
+            setSelectedAds(record);
+          },
+        })}
+      />
+      <EditAdForm
+        type="AdInfo"
+        isModalOpen={isModalOpen}
+        onClose={closeModal}
+        ad={selectedAds}
+      />
     </>
   );
 };

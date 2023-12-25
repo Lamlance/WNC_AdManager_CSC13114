@@ -1,15 +1,18 @@
-import { AdsGeoJson } from "@admanager/shared";
+import { AdChangeApi, AdsGeoJson } from "@admanager/shared";
 import { AdsInfoRecord } from "../../types/view-model";
 import { Button, Carousel } from "antd";
 import { useRef } from "react";
 import { CarouselRef } from "antd/es/carousel";
 
-type AdsInfoDetailProps = {
+export type AdsInfoDetailProps = {
   ad: AdsGeoJson.AdsProperty;
   place: AdsGeoJson.PlaceProperty;
+  onRequestChange: (
+    data: AdsGeoJson.AdsProperty & AdsGeoJson.PlaceProperty,
+  ) => void;
 };
 
-const AdInfoDetail = ({ ad, place }: AdsInfoDetailProps) => {
+const AdInfoDetail = ({ ad, place, onRequestChange }: AdsInfoDetailProps) => {
   const containerStyle = {
     padding: "10px",
     backgroundColor: "#DBF1EA",
@@ -25,7 +28,7 @@ const AdInfoDetail = ({ ad, place }: AdsInfoDetailProps) => {
   };
 
   return (
-    <div style={containerStyle}>
+    <div style={containerStyle} className="flex flex-col">
       <h2 className="font-bold"> CHI TIẾT THÔNG TIN ĐIỂM QUẢNG CÁO </h2>
       <p>
         <span className="font-semibold"> Loại quảng cáo: </span>
@@ -59,18 +62,33 @@ const AdInfoDetail = ({ ad, place }: AdsInfoDetailProps) => {
         <span className="font-semibold"> Ngày hết hạn: </span>
         <span className="italic"> {ad.ngay_het_han} </span>
       </p>
+      <Button
+        onClick={() => onRequestChange({ ...ad, ...place })}
+        className=" self-center"
+      >
+        {" "}
+        Yêu cầu chỉnh sửa{" "}
+      </Button>
     </div>
   );
 };
 
-function AdsInfoSlider(props: AdsGeoJson.AdsGeoJsonProperty) {
+interface AdsInfoSliderProps {
+  data: AdsGeoJson.AdsGeoJsonProperty;
+  onRequestChange: AdsInfoDetailProps["onRequestChange"];
+}
+function AdsInfoSlider(props: AdsInfoSliderProps) {
   const sliderRef = useRef<CarouselRef | null>(null);
 
   return (
     <div className=" flex h-full flex-col gap-4">
       <Carousel ref={sliderRef} dotPosition="top" className=" p-2">
-        {props.ads.map((v) => (
-          <AdInfoDetail ad={v} place={props.place} />
+        {props.data.ads.map((v) => (
+          <AdInfoDetail
+            onRequestChange={props.onRequestChange}
+            ad={v}
+            place={props.data.place}
+          />
         ))}
       </Carousel>
       <div className=" flex justify-between">

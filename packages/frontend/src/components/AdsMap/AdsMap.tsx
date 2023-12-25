@@ -4,7 +4,6 @@ import { useEffect, useReducer, useRef, useState } from "react";
 import "./AdsMap.css";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Switch } from "antd";
-import "../../css/tailwind.css";
 
 type MapSearchProps = {
   MapRef?: Map | null;
@@ -13,7 +12,7 @@ type MapSearchProps = {
 
 import AdsClusterMarker from "./AdsClusterMarker";
 
-interface AdsMapProps {
+interface AdsMapProps<S extends MapSearchProps = MapSearchProps> {
   InitialPosition: {
     lng: number;
     lat: number;
@@ -22,17 +21,20 @@ interface AdsMapProps {
 
   AdsClusterInfo?: ReturnType<typeof AdsClusterMarker>;
   ReportClusterInfo?: ReturnType<typeof AdsClusterMarker>;
-  SearchBar?: (props: MapSearchProps) => JSX.Element;
+  SearchBar?: {
+    func: (props: S) => JSX.Element;
+    args: Parameters<(props: S) => JSX.Element>;
+  };
   onMapDblClick: (lngLat: { lng: number; lat: number }) => void;
 }
 
-function AdsMap({
+function AdsMap<S extends MapSearchProps = MapSearchProps>({
   SearchBar,
   InitialPosition,
   AdsClusterInfo,
   ReportClusterInfo,
   onMapDblClick,
-}: AdsMapProps) {
+}: AdsMapProps<S>) {
   const mapEleRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
 
@@ -43,11 +45,8 @@ function AdsMap({
   const [refresh, forceRefresh] = useReducer((x) => x + 1, 0);
 
   function initialize_map(container: HTMLElement) {
-    if (mapRef.current)
-      return console.log(
-        "Map already initalize",
-        mapRef.current.getSource("ads_data")
-      );
+    if (mapRef.current) return;
+
     const token = (import.meta as any).env.VITE_LOCATION_IQ_KEY;
     if (!token) return;
 
@@ -61,7 +60,7 @@ function AdsMap({
       doubleClickZoom: false,
     });
 
-    map.once("load", function () {
+    map.once("render", function () {
       mapRef.current = map;
       //initialize_ads_markers();
       mapRef.current.addControl(
@@ -115,7 +114,11 @@ function AdsMap({
         }}
       >
         {SearchBar ? (
-          <SearchBar refresh={refresh} MapRef={mapRef.current} />
+          <SearchBar.func
+            {...SearchBar.args[0]}
+            refresh={refresh}
+            MapRef={mapRef.current}
+          />
         ) : null}
         {!AdsClusterInfo || !mapRef.current || refresh <= 0
           ? null

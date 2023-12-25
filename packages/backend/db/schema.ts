@@ -122,8 +122,8 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
   email_cty: varchar("email_cty", { length: 127 }).notNull(),
   dia_chi_cty: varchar("dia_chi_cty", { length: 255 }).notNull(),
 
-  ngay_hieu_luc: date("ngay_hieu_luc").notNull(),
-  ngay_het_han: date("ngay_het_han").notNull(),
+  ngay_hieu_luc: timestamp("ngay_hieu_luc").defaultNow().notNull(),
+  ngay_het_han: timestamp("ngay_het_han").defaultNow().notNull(),
   trang_thai: varchar("trang_thai").notNull().default("Waiting"),
   hinh_anh: varchar("hinh_1", { length: 255 }),
 });
@@ -131,27 +131,23 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
 const YeuCauChinhSua = pgTable("YeuCauChinhSua", {
   id_yeu_cau: serial("id_yeu_cau").primaryKey(),
   ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
-  thoi_diem_chinh_sua: date("thoi_diem_chinh_sua").notNull(),
+  thoi_diem_chinh_sua: timestamp("thoi_diem_chinh_sua").defaultNow().notNull(),
   trang_thai: varchar("trang_thai", { length: 255 }).notNull(),
+  id_quang_cao: uuid("id_quang_cao")
+    .notNull()
+    .references(() => QuangCao.id_quang_cao),
 
-  quy_hoach: boolean("quy_hoach").default(false),
-  ngay_hieu_luc: date("ngay_hieu_luc"),
-  ngay_het_han: date("ngay_het_han"),
-  hinh_1: varchar("hinh_1", { length: 255 }),
-  hinh_2: varchar("hinh_2", { length: 255 }),
-  so_luong: integer("so_luong").default(1),
-  chieu_dai_m: real("chieu_dai_m"),
-  chieu_rong_m: real("chieu_rong_m"),
-  id_loai_bang_qc: integer("id_loai_bang_qc").references(
-    () => LoaiBangQC.id_loai_bang_qc
-  ),
-  id_dia_diem: integer("id_dia_diem").references(() => DiaDiem.id_dia_diem),
-  id_hinh_thuc: integer("id_hinh_thuc").references(() => HinhThucQC.id_htqc),
-  id_loai_vitri: integer("id_loai_vitri").references(
-    () => LoaiViTri.id_loai_vt
-  ),
+  thong_tin_sua: jsonb("thong_tin_sua").notNull(),
 });
-
+const YeuCauChinhSuaDiaDiem = pgTable("YeuCauChinhSuaDiaDiem", {
+  id_yeu_cau: serial("id_yeu_cau").primaryKey(),
+  id_dia_diem: integer("id_dia_diem").references(() => DiaDiem.id_dia_diem),
+  lng: doublePrecision("kinh_do"),
+  lat: doublePrecision("vi_do"),
+  ten_dia_diem: varchar("ten_dia_diem", { length: 255 }),
+  dia_chi: varchar("dia_chi", { length: 255 }),
+  ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
+});
 export {
   LoaiViTri,
   HinhThucQC,
@@ -164,4 +160,5 @@ export {
   BaoCao,
   YeuCauCapPhep,
   YeuCauChinhSua,
+  YeuCauChinhSuaDiaDiem,
 };

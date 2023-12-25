@@ -4,7 +4,14 @@ import {
   GetAllAdsReqRequest,
   GetAllReportsRequest,
 } from "../../types/request";
-import { AdsGeoJson, AdsReqApi, ReportApi } from "@admanager/shared";
+import {
+  AdChangeApi,
+  AdsGeoJson,
+  AdsReqApi,
+  PlaceChangeApi,
+  ReportApi,
+} from "@admanager/shared";
+import { query } from "express";
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -16,17 +23,11 @@ export const apiSlice = createApi({
     >({
       query: () => "/quang-cao",
     }),
-    getAnAdsInfo: builder.query({
-      query: (id) => `/quang-cao/${id}`,
-    }),
     getAllAdsReq: builder.query<
       AdsReqApi.ManyAdsRequestResponse[],
       GetAllAdsReqRequest | void
     >({
-      query: () => "/yeu-cau-cap-phep",
-    }),
-    getAnAdsRequest: builder.query({
-      query: (id) => `/yeu-cau-cap-phep/${id}`,
+      query: () => "/cap-phep-quang-cao",
     }),
     getAllReportInfo: builder.query<
       ReportApi.ReportResponse[],
@@ -34,11 +35,53 @@ export const apiSlice = createApi({
     >({
       query: () => "/bao-cao",
     }),
-    submitAdRequest: builder.mutation<any, FormData>({
+    getAllAdChangeRequest: builder.query<
+      AdChangeApi.AdChangeRequestResponse[],
+      void
+    >({
+      query: () => "/yeu-cau-quang-cao/chinh-sua",
+    }),
+    submitAdChangeRequest: builder.mutation<
+      void,
+      AdChangeApi.AdChangeRequestCreate
+    >({
+      query: (body) => ({
+        url: "/yeu-cau-quang-cao/chinh-sua",
+        method: "POST",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    submitAdRequest: builder.mutation<any, AdsReqApi.AdRequestCreate>({
       query: (formData) => ({
-        url: "/yeu-cau-bao-cao",
+        url: "/cap-phep-quang-cao/",
         method: "POST",
         body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
+    getAllPlaceChangeRequest: builder.query<
+      PlaceChangeApi.PlaceChangeRequestResponse[],
+      void
+    >({
+      query: () => ({
+        url: "dia-diem/chinh-sua",
+      }),
+    }),
+
+    submitPlaceChangeRequest: builder.mutation<
+      any,
+      PlaceChangeApi.PlaceChangeRequestCreate
+    >({
+      query: (body) => ({
+        url: "dia-diem/chinh-sua",
+        method: "POST",
+        body,
         headers: {
           "Content-Type": "application/json",
         },
@@ -52,4 +95,8 @@ export const {
   useGetAllReportInfoQuery,
   useSubmitAdRequestMutation,
   useGetAllAdsReqQuery,
+  useGetAllAdChangeRequestQuery,
+  useSubmitAdChangeRequestMutation,
+  useGetAllPlaceChangeRequestQuery,
+  useSubmitPlaceChangeRequestMutation,
 } = apiSlice;

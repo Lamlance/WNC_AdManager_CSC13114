@@ -5,7 +5,6 @@ import {
 } from "../../utils/AddClusterPoint";
 import { useEffect, useRef } from "react";
 import { ZodType, infer as ZodInfer } from "zod";
-import "../../css/tailwind.css";
 interface AdsClusterMarkerProps<S extends ZodType> {
   markerData: ClusterCreateData;
   readonly mapRef?: Map | null;

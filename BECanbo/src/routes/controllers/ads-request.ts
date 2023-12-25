@@ -1,9 +1,14 @@
 import { Router } from "express";
 import { CallAndCatchAsync } from "../../utils/CallCatch.js";
 import {
+  createAdChangeRequest,
+  createAdRequest,
+  getAllAdsChangeRequest,
   getAllAdsRequests,
   // saveAdsRequest,
 } from "../../db/service/ads-request.js";
+import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder.js";
+import { AdChangeApi, AdsReqApi } from "@admanager/shared";
 
 const router = Router();
 
@@ -17,19 +22,45 @@ router.get("/", async (req, res, next) => {
   return res.status(200).json(result.data);
 });
 
-// router.post("/", async (req, res, next) => {
-//   console.log(req.body);
-//   try {
-//     const result = await CallAndCatchAsync(saveAdsRequest, req.body);
+router.post(
+  "/",
+  ValidatorMwBuilder(
+    undefined,
+    AdsReqApi.AdRequestCreateSchema,
+    async function (req, res) {
+      const result = await CallAndCatchAsync(createAdRequest, res.locals.body);
+      if (!result.success) {
+        return res.status(500).json({ error: result.error.message });
+      }
+      return res.status(200).json(result.data);
+    }
+  )
+);
 
-//     if (!result.success) {
-//       return res.status(500).json({ msg: result.error.message });
-//     }
+router.get("/chinh-sua", async function (req, res) {
+  const result = await CallAndCatchAsync(getAllAdsChangeRequest, undefined);
+  if (!result.success) {
+    return res.status(500).json({ error: result.error.message });
+  }
+  return res.status(200).json(result.data);
+});
 
-//     return res.status(201).json(result.data);
-//   } catch (error) {
-//     console.error("Error handling ads request:", error);
-//     return res.status(500).json({ msg: "Internal server error" });
-//   }
-// });
+router.post(
+  "/chinh-sua",
+  ValidatorMwBuilder(
+    undefined,
+    AdChangeApi.AdChangeRequestCreateSchema,
+    async function (req, res) {
+      const result = await CallAndCatchAsync(
+        createAdChangeRequest,
+        res.locals.body
+      );
+      if (!result.success) {
+        return res.status(500).json({ error: result.error.message });
+      }
+      return res.status(200).json(result.data);
+    }
+  )
+);
+
 export default router;

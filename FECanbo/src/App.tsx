@@ -12,15 +12,13 @@ import {
 
 import AdsInfo from "./components/ads-info/AdsInfo";
 import ReportInfo from "./components/report-info/ReportInfo";
-import EditSetpoint from "./components/vhtt/EditSetpoint";
 import CreateAccount from "./components/vhtt/CreateAccount";
-import AdsMap from "./components/vhtt/AdsMap";
 import AdsRequestPage from "./routes/AdsRequestPage";
 import AdManagement from "./components/vhtt/AdManagement";
 import AdsRequestVHTTPage from "./components/vhtt/ads-request/AdsRequestVHTTPage";
+import EditRequest from "./components/vhtt/requestedit-ads/EditRequest";
 import EditRequestComponent from "./components/vhtt/EditRequestComponent";
-import AdsRequestTable from "./components/vhtt/ads-request/AdsRequestTable";
-import AdsRequest from "./components/vhtt/ads-request/AdsRequest";
+
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
   {
@@ -52,14 +50,20 @@ const itemVHTTs: Item[] = [
   {
     key: "4",
     icon: <UploadOutlined />,
-    label: "YÊU CẦU CẤP PHÉP",
+    label: "Yêu cầu cấp phép QC",
     title: "/vhtt/requestad",
   },
   {
     key: "5",
     icon: <UploadOutlined />,
-    label: "YÊU CẦU CHỈNH SỬA ",
-    title: "/vhtt/editrequest",
+    label: "Yêu cầu chỉnh sủa QC",
+    title: "/vhtt/edit-ad-request",
+  },
+  {
+    key: "6",
+    icon: <UploadOutlined />,
+    label: "Yêu cầu chỉnh sủa địa điểm",
+    title: "/vhtt/edit-place-request",
   },
 ];
 const App = () => {
@@ -75,7 +79,8 @@ const App = () => {
           <Route index element={<AdManagement />} />
           <Route path="requestad" element={<AdsRequestVHTTPage />} />
           <Route path="createaccount" element={<CreateAccount />} />
-          <Route path="editrequest" element={<EditRequestComponent />} />
+          <Route path="edit-ad-request" element={<EditRequest />} />
+          <Route path="edit-place-request" element={<EditRequestComponent />} />
         </Route>
       </Routes>
     </div>

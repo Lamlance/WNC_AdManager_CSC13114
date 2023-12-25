@@ -1,42 +1,27 @@
 // AdTable.tsx
 import React from "react";
 import { Table } from "antd";
-import { AdRequest } from "../../types/view-model";
 import { AdsReqApi } from "@admanager/shared";
 
 const columns = [
-  // {
-  //   title: "Pano ID",
-  //   dataIndex: "requestId",
-  //   key: "requestId",
-  // },
   {
     title: "NỘI DUNG PANO",
-    dataIndex: "adsContent",
-    key: "adsContent",
+    dataIndex: ["yeu_cau", "noi_dung_qc"],
+    key: "noi_dung_qc",
   },
-  // {
-  //   title: "VỊ TRÍ ĐẶT",
-  //   dataIndex: "position",
-  //   key: "position",
-  // },
   {
     title: "CÔNG TY ĐẶT QUẢNG CÁO",
-    dataIndex: "companyName",
-    key: "companyName",
+    dataIndex: ["yeu_cau", "ten_cty"],
+    key: "ten_cty",
   },
   {
     title: "THỜI GIAN ĐẶT",
-    dataIndex: "effectedDate",
     key: "effectedDate",
-    render: (text: string, record: AdsReqApi.ManyAdsRequestResponse) =>
-      `${record.effDate} - ${record.expDate}`,
+    render: (v: AdsReqApi.ManyAdsRequestResponse) =>
+      `${(v.yeu_cau.ngay_hieu_luc as unknown as string).split("T")[0]} - ${
+        (v.yeu_cau.ngay_het_han as unknown as string).split("T")[0]
+      }`,
   },
-  // {
-  //   title: "TRẠNG THÁI",
-  //   dataIndex: "status",
-  //   key: "status",
-  // },
 ];
 
 interface AdsRequestTableProps {

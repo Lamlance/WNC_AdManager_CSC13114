@@ -157,7 +157,10 @@ export default function AdsMapPage() {
 
   return (
     <AdsMap
-      SearchBar={MapSearchBar}
+      SearchBar={{
+        func: MapSearchBar,
+        args: [{ refresh: 0 }],
+      }}
       onMapDblClick={(data) => dispatch(setDblClick(data))}
       InitialPosition={DefaultMapProps.InitialPosition}
       AdsClusterInfo={AdsCluster}

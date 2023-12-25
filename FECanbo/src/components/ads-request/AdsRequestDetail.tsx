@@ -33,28 +33,31 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
               style={imageStyle.img}
             />
           </div>
-          <p className="ad-title line-clamp-1">{ad.adsContent}</p>
-          <p className="font-sans font-semibold">PANO ID: {"No diem pano"}</p>
-          <p className="font-sans font-light italic">{"No diem dat"}</p>
           <p>
             <span className="font-semibold">Công ty đặt quảng cáo: </span>
-            <span>{ad.companyName}</span>
+            <span>{ad.yeu_cau.ten_cty}</span>
           </p>
           <p>
             <span className="font-semibold">Email: </span>
-            <span>{ad.companyEmail}</span>
+            <span>{ad.yeu_cau.email_cty}</span>
           </p>
           <p>
             <span className="font-semibold">SĐT: </span>
-            <span>{ad.companyPhone}</span>
+            <span>{ad.yeu_cau.dien_thoai_cty}</span>
           </p>
           <p>
             <span className="font-semibold">Địa chỉ: </span>
-            <span>{"No cty address"}</span>
+            <span>{ad.yeu_cau.dia_chi_cty}</span>
           </p>
           <p>
             <span className="font-semibold">Thời gian đặt: </span>
-            <span>{ad.effDate}</span> - <span>{ad.expDate}</span>
+            <span>
+              {(ad.yeu_cau.ngay_hieu_luc as unknown as string).split("T")[1]}
+            </span>{" "}
+            -{" "}
+            <span>
+              {(ad.yeu_cau.ngay_het_han as unknown as string).split("T")[1]}
+            </span>
           </p>
           <p>
             <span className="font-semibold">Trạng thái: </span>
@@ -62,7 +65,7 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
           </p>
           <p>
             <span className="font-semibold">Nội dung: </span>
-            <span>{ad.adsContent}</span>
+            <span>{ad.yeu_cau.noi_dung_qc}</span>
           </p>
         </div>
       ) : (

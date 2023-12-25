@@ -1,6 +1,6 @@
 import { pg_client } from "../db.js";
 import { AdsSchema } from "@admanager/backend";
-import { AdsReqApi } from "@admanager/shared";
+import { AdChangeApi, AdsReqApi } from "@admanager/shared";
 import { eq } from "drizzle-orm";
 
 export const getAllAdsRequests = async (): Promise<
@@ -8,89 +8,69 @@ export const getAllAdsRequests = async (): Promise<
 > => {
   const data = await pg_client
     .select({
-      place: AdsSchema.DiaDiem,
-      idYeucau: AdsSchema.YeuCauCapPhep.id_yeu_cau,
-      adsContent: AdsSchema.YeuCauCapPhep.noi_dung_qc,
-      companyEmail: AdsSchema.YeuCauCapPhep.email_cty,
-      companyName: AdsSchema.YeuCauCapPhep.ten_cty,
-      companyPhone: AdsSchema.YeuCauCapPhep.dien_thoai_cty,
-      effDate: AdsSchema.YeuCauCapPhep.ngay_hieu_luc,
-      expDate: AdsSchema.YeuCauCapPhep.ngay_het_han,
+      yeu_cau: AdsSchema.YeuCauCapPhep,
+      dia_diem: AdsSchema.DiaDiem,
     })
     .from(AdsSchema.YeuCauCapPhep)
-    .innerJoin(
+    .leftJoin(
       AdsSchema.DiaDiem,
       eq(AdsSchema.DiaDiem.id_dia_diem, AdsSchema.YeuCauCapPhep.id_diem_dat)
     );
-
-  return data;
   return data;
 };
 
-interface SaveAdsRequestData {
-  panoContent: string;
-  position: string;
-  companyName: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
-  startDate: Date;
-  endDate: Date;
-  additionalInfo: string;
-  status: string;
-  image: string;
+export async function createAdRequest(data: AdsReqApi.AdRequestCreate) {
+  const res = await pg_client
+    .insert(AdsSchema.YeuCauCapPhep)
+    .values({ ...data, trang_thai: data.trang_thai || undefined })
+    .returning({ insertedId: AdsSchema.YeuCauCapPhep.id_yeu_cau });
+  return res[0].insertedId;
 }
 
-// export const saveAdsRequest = async (
-//   requestData: SaveAdsRequestData
-// ): Promise<AdRequest | null> => {
-//   try {
-//     const {
-//       panoContent,
-//       position,
-//       companyName,
-//       phoneNumber,
-//       address,
-//       startDate,
-//       endDate,
-//       email,
-//       status,
-//       image,
-//     } = requestData;
+export async function getAllAdsChangeRequest(): Promise<
+  AdChangeApi.AdChangeRequestResponse[]
+> {
+  const data = await pg_client
+    .select({
+      chinh_sua: AdsSchema.YeuCauChinhSua,
+      thong_tin_qc: {
+        ...AdsSchema.QuangCao,
+        quang_cao: AdsSchema.QuangCao,
+        loai_vitri: AdsSchema.LoaiViTri.loai_vitri,
+        hinh_thuc: AdsSchema.HinhThucQC.hinh_thuc_qc,
+        bang_qc: AdsSchema.LoaiBangQC.loai_bang_qc,
+      },
+    })
+    .from(AdsSchema.YeuCauChinhSua)
+    .innerJoin(
+      AdsSchema.QuangCao,
+      eq(AdsSchema.QuangCao.id_quang_cao, AdsSchema.YeuCauChinhSua.id_quang_cao)
+    )
+    .innerJoin(
+      AdsSchema.LoaiViTri,
+      eq(AdsSchema.LoaiViTri.id_loai_vt, AdsSchema.QuangCao.id_loai_vitri)
+    )
+    .innerJoin(
+      AdsSchema.HinhThucQC,
+      eq(AdsSchema.HinhThucQC.id_htqc, AdsSchema.QuangCao.id_hinh_thuc)
+    )
+    .innerJoin(
+      AdsSchema.LoaiBangQC,
+      eq(
+        AdsSchema.LoaiBangQC.id_loai_bang_qc,
+        AdsSchema.QuangCao.id_loai_bang_qc
+      )
+    );
 
-//     const [insertedId] = await pg_client
-//       .insert(AdsSchema.YeuCauCapPhep)
-//       .values({
-//         ten_cty: companyName,
-//         dien_thoai_cty: phoneNumber,
-//         email_cty: email,
-//         dia_chi_cty: address,
-//         ngay_hieu_luc: startDate,
-//         ngay_het_han: endDate,
-//         trang_thai: "macdin",
-//         hinh_anh: image,
-//       })
-//       .returning({ insertedId: AdsSchema.YeuCauCapPhep.id_yeu_cau })
-//       .execute();
+  return data;
+}
 
-//     if (!insertedId) {
-//       throw new Error("Failed to retrieve inserted ID");
-//     }
-
-//     const [insertedData] = await pg_client
-//       .select()
-//       .from(AdsSchema.YeuCauCapPhep)
-//       .innerJoin(
-//         AdsSchema.DiaDiem,
-//         eq(AdsSchema.DiaDiem.id_dia_diem, AdsSchema.YeuCauCapPhep.id_diem_dat)
-//       )
-//       .where({ id_yeu_cau: insertedId })
-//       .execute();
-
-//     return insertedData || null;
-//   } catch (error) {
-//     console.error("Error saving ads request:", error);
-//     throw error;
-//   }
-// };
-//a
+export async function createAdChangeRequest(
+  data: AdChangeApi.AdChangeRequestCreate
+) {
+  const res = await pg_client
+    .insert(AdsSchema.YeuCauChinhSua)
+    .values({ ...data, trang_thai: "Chờ" })
+    .returning({ insertId: AdsSchema.YeuCauChinhSua.id_yeu_cau });
+  return res[0].insertId;
+}

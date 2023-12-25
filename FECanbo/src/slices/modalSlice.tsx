@@ -1,11 +1,17 @@
+import { PlaceChangeApi } from "@admanager/shared";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface modalState {
   isModalOpen: boolean;
+  selectedPlace:
+    | PlaceChangeApi.PlaceChangeRequestResponse
+    | PlaceChangeApi.PlaceChangeRequestCreate
+    | null;
 }
 
 const initialState: modalState = {
   isModalOpen: true,
+  selectedPlace: null,
 };
 
 const pointSlice = createSlice({
@@ -18,9 +24,16 @@ const pointSlice = createSlice({
     showModalOpen: (state) => {
       state.isModalOpen = true;
     },
+    setSelectedPlace: (
+      state,
+      action: PayloadAction<modalState["selectedPlace"]>,
+    ) => {
+      state.selectedPlace = action.payload;
+    },
   },
 });
 
-export const { showModalOpen, showModalClose } = pointSlice.actions;
+export const { showModalOpen, showModalClose, setSelectedPlace } =
+  pointSlice.actions;
 
 export default pointSlice.reducer;

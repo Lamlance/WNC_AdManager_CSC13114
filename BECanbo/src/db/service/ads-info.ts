@@ -71,7 +71,7 @@ export async function GetQuangManyCaoData() {
   const grp_by_location: {
     [key: number]: {
       ads: AdsGeoJson.AdsProperty[];
-      dd: typeof AdsSchema.DiaDiem.$inferSelect;
+      dd: AdsGeoJson.PlaceProperty;
     };
   } = {};
 
