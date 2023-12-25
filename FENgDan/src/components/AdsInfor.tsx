@@ -1,13 +1,102 @@
 import { Button } from "antd";
 import ReportModal from "./ReportModal";
 import { useState } from "react";
-import { ReportFormValues } from "../models/report_form_values";
+import { REPORT_KEY } from "../models/report_form_values";
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { useAppSelector } from "../Redux/ReduxStore";
+import { useAppDispatch, useAppSelector } from "../Redux/ReduxStore";
 import AdsDetail from "./AdsDetail";
-import { AdsGeoJson } from "@admanager/shared";
+import { AdsGeoJson, ReportApi } from "@admanager/shared";
+import { z } from "zod";
+import { addReportData } from "../Redux/ReportsDataSlice";
+import { uploadReportData } from "../Redux/AdsServerApi";
 
-function AdItem(props: AdsGeoJson.AdsProperty) {
+interface EmptyAdItemProps {
+  Place: ReportApi.ReportPlace;
+  onReportSubmit: (
+    report: ReportApi.ReportFormValues,
+    place: AdsGeoJson.PlaceProperty | ReportApi.ReportPlace,
+    ad?: AdsGeoJson.AdsProperty,
+  ) => void;
+}
+
+interface AdsItemProps {
+  Ad: AdsGeoJson.AdsProperty;
+  Place: AdsGeoJson.PlaceProperty | ReportApi.ReportPlace;
+
+  onReportSubmit: (
+    report: ReportApi.ReportFormValues,
+    place: AdsGeoJson.PlaceProperty | ReportApi.ReportPlace,
+    ad?: AdsGeoJson.AdsProperty,
+  ) => void;
+}
+
+function EmptyAdItem({ Place, onReportSubmit }: EmptyAdItemProps) {
+  const [isReportModalVisible, setIsReportModalVisible] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleReportClick = () => {
+    setIsReportModalVisible(true);
+  };
+
+  const handleReportModalCancel = () => {
+    setIsReportModalVisible(false);
+  };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleReportModalSubmit = (values: ReportApi.ReportFormValues) => {
+    console.log("Report form submitted with values:", values);
+    setIsReportModalVisible(false);
+    onReportSubmit(values, Place);
+  };
+
+  const handleRegisterClick = () => {
+    console.log("Register button clicked");
+  };
+
+  return (
+    <div className="ads-info-container relative ">
+      <div className="ads-info-popup absolute w-full rounded-xl border-opacity-90 p-4 shadow-lg">
+        <div className="ads-info-content">
+          <p className="ads_info_location text-base">{Place.dia_chi}</p>
+          <p className="text-base">
+            <span className="font-semibold">{`Hiện chưa có dữ liệu quảng cáo`}</span>
+          </p>
+
+          <ReportModal
+            visible={isReportModalVisible}
+            onCancel={handleReportModalCancel}
+            onSubmit={handleReportModalSubmit}
+          />
+
+          <div className="mt-4 flex justify-end">
+            <InfoCircleOutlined
+              onClick={showModal}
+              className=" mt-2 cursor-pointer"
+              style={{ fontSize: "18px", color: "#1677ff" }}
+            />
+            <Button
+              type="primary"
+              danger
+              onClick={handleReportClick}
+              className=" ml-auto mr-2"
+            >
+              Báo cáo vi phạm
+            </Button>
+
+            <Button type="primary" onClick={handleRegisterClick}>
+              Đăng ký
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AdItem({ Ad, Place, onReportSubmit }: AdsItemProps) {
   const [isReportModalVisible, setIsReportModalVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleReportClick = () => {
@@ -18,17 +107,18 @@ function AdItem(props: AdsGeoJson.AdsProperty) {
     setIsReportModalVisible(false);
   };
 
-  const handleReportModalSubmit = (values: ReportFormValues) => {
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleReportModalSubmit = (values: ReportApi.ReportFormValues) => {
     console.log("Report form submitted with values:", values);
     setIsReportModalVisible(false);
+    onReportSubmit(values, Place, Ad);
   };
 
   const handleRegisterClick = () => {
     console.log("Register button clicked");
-  };
-
-  const showModal = () => {
-    setIsModalOpen(true);
   };
 
   const handleOk = () => {
@@ -42,26 +132,27 @@ function AdItem(props: AdsGeoJson.AdsProperty) {
     <div className="ads-info-container relative ">
       <div className="ads-info-popup absolute w-full rounded-xl border-opacity-90 p-4 shadow-lg">
         <div className="ads-info-content">
-          <p className=" text-lg font-bold">{props.bang_qc}</p>
-          <p className="ads_info_location text-base">{props.dia_chi}</p>
+          <p className=" text-lg font-bold">{Ad.bang_qc}</p>
+          <p className="ads_info_location text-base">{Place.dia_chi}</p>
           <p className="text-base">
             <span className="font-semibold">Kích thước: </span>{" "}
-            {`${props.chieu_dai_m}m x ${props.chieu_rong_m}m`}
+            {`${Ad.chieu_dai_m}m x ${Ad.chieu_rong_m}m`}
           </p>
           <p className="text-base">
-            <span className="font-semibold">Hình thức: </span> {props.hinh_thuc}
+            <span className="font-semibold">Hình thức: </span> {Ad.hinh_thuc}
           </p>
           <p className="text-base">
-            <span className="font-semibold">Phân loại: </span>{" "}
-            {props.loai_vitri}
+            <span className="font-semibold">Phân loại: </span> {Ad.loai_vitri}
           </p>
           <p className="text-base">
             <span className="font-semibold">Số lượng: </span>{" "}
-            {`${props.so_luong} trụ/bảng`}
+            {`${Ad.so_luong} trụ/bảng`}
           </p>
           <p className="mt-1 text-base font-bold italic">Đã quy hoạch</p>
 
           <AdsDetail
+            Place={Place}
+            Ad={Ad}
             isModalOpen={isModalOpen}
             handleOk={handleOk}
             handleCancel={handleCancel}
@@ -71,7 +162,6 @@ function AdItem(props: AdsGeoJson.AdsProperty) {
             visible={isReportModalVisible}
             onCancel={handleReportModalCancel}
             onSubmit={handleReportModalSubmit}
-            reportFormValues={{} as ReportFormValues}
           />
 
           <div className="mt-4 flex justify-end">
@@ -101,13 +191,48 @@ function AdItem(props: AdsGeoJson.AdsProperty) {
 
 function AdsInfos() {
   const selected = useAppSelector((state) => state.SelectedAds);
+  const [uploadReport, data] = uploadReportData();
+  const dispatch = useAppDispatch();
+
+  const onReportSubmit: AdsItemProps["onReportSubmit"] = async (
+    report,
+    place,
+    ad,
+  ) => {
+    try {
+      console.log(report, place, ad);
+      const oldReport = z
+        .array(AdsGeoJson.ReportGeoJsonPropertySchema)
+        .safeParse(JSON.parse(localStorage.getItem(REPORT_KEY) || "[]"));
+      if (oldReport.success == false) return console.log(oldReport.error);
+
+      const BaoCaoGeoJson = await uploadReport({
+        ...report,
+        ...place,
+        id_quang_cao: ad?.id_quang_cao,
+      }).unwrap();
+      if (!data) return;
+      oldReport.data.push(BaoCaoGeoJson);
+      localStorage.setItem(REPORT_KEY, JSON.stringify(oldReport.data));
+      dispatch(addReportData([BaoCaoGeoJson]));
+    } catch (e) {
+      console.warn(e);
+    }
+  };
 
   return (
     <>
-      {!selected ? (
-        <div>No ads data available</div>
+      {!selected ? null : selected.ads.length == 0 ? (
+        <EmptyAdItem onReportSubmit={onReportSubmit} Place={selected.place} />
       ) : (
-        selected.ads.map((v) => <AdItem {...v} key={v.dia_chi} />)
+        selected.ads.map((v, i) => (
+          <AdItem
+            onReportSubmit={onReportSubmit}
+            Ad={v}
+            Place={selected.place}
+            key={`${selected.place.dia_chi}_${i}`}
+          />
+        ))
       )}
     </>
   );

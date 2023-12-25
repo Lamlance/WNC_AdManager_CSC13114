@@ -3,13 +3,23 @@ import SelectedAdsSlice from "./SelectedAdsSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import GoongApi from "./GoongApi";
 import MapClickSlice from "./MapClickSlice";
+import GeoJsonApi from "./GeoJsonSlice";
+import ReportsDataSlice from "./ReportsDataSlice";
+import AdsServerApi from "./AdsServerApi";
 const ReduxStore = configureStore({
   reducer: {
     SelectedAds: SelectedAdsSlice.reducer,
     MapClick: MapClickSlice.reducer,
+    ReportsData: ReportsDataSlice.reducer,
+    [AdsServerApi.reducerPath]: AdsServerApi.reducer,
     [GoongApi.reducerPath]: GoongApi.reducer,
+    [GeoJsonApi.reducerPath]: GeoJsonApi.reducer,
   },
-  middleware: (getDefaultMw) => getDefaultMw().concat(GoongApi.middleware),
+  middleware: (getDefaultMw) =>
+    getDefaultMw()
+      .concat(AdsServerApi.middleware)
+      .concat(GoongApi.middleware)
+      .concat(GeoJsonApi.middleware),
 });
 type RootState = ReturnType<typeof ReduxStore.getState>;
 type AppDispatch = typeof ReduxStore.dispatch;

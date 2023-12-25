@@ -2,12 +2,12 @@ import React from "react";
 import { Row, Col } from "antd";
 import AdsRequestTable from "./AdsRequestTable";
 import AdsRequestDetail from "./AdsRequestDetail";
-import { AdRequest } from "../../types";
+import { AdsReqApi } from "@admanager/shared";
 
 interface MainContentSectionProps {
-  data: AdRequest[];
-  onRowClick: (record: AdRequest) => void;
-  selectedAd: AdRequest | null;
+  data: AdsReqApi.ManyAdsRequestResponse[];
+  onRowClick: (record: AdsReqApi.ManyAdsRequestResponse) => void;
+  selectedAd: AdsReqApi.ManyAdsRequestResponse | null;
 }
 
 const AdsRequest: React.FC<MainContentSectionProps> = ({
@@ -15,10 +15,14 @@ const AdsRequest: React.FC<MainContentSectionProps> = ({
   onRowClick,
   selectedAd,
 }) => {
+  console.log("selctedad", selectedAd);
   return (
-    <Row gutter={20} style={{
-      minHeight: "100vh"
-    }}>
+    <Row
+      gutter={20}
+      style={{
+        minHeight: "100vh",
+      }}
+    >
       <Col span={17}>
         <AdsRequestTable data={data} onRowClick={onRowClick} />
       </Col>

@@ -1,56 +1,50 @@
+import { ReportApi } from "@admanager/shared";
 import { Table } from "antd";
-import { ReportInfoRecord } from "../../types";
+
+interface ReportInfoTableProps {
+  data: ReportApi.ReportResponse[];
+  onRowSelect: (data: ReportApi.ReportResponse) => void;
+}
 
 const columns = [
   {
     title: "Người báo cáo",
-    dataIndex: "reporterInfo",
-    key: "reporterInfo",
+    dataIndex: ["bao_cao", "ten_nguoi_gui"],
+    key: "ten_nguoi_gui",
   },
   {
     title: "Địa chỉ quảng cáo",
-    dataIndex: "adsAddress",
-    key: "adsAddress",
-  },
-  {
-    title: "Loại hình quảng cáo",
-    dataIndex: "adsType",
-    key: "adsType",
+    dataIndex: ["bao_cao", "dia_chi"],
+    key: "dia_chi",
   },
   {
     title: "Loại hình báo cáo",
-    dataIndex: "reportType",
-    key: "reportType",
+    dataIndex: ["loai_bc"],
+    key: "loai_bc",
   },
   {
     title: "Thời gian báo cáo",
-    dataIndex: "reportTime",
-    key: "reportTime",
+    dataIndex: ["bao_cao", "thoi_diem_bc"],
+    key: "thoi_diem_bc",
   },
   {
     title: "Trạng thái",
-    dataIndex: "status",
-    key: "status",
+    dataIndex: ["bao_cao", "trang_thai"],
+    key: "trang_thai",
   },
 ];
 
-interface ReportInfoTableProps {
-  data: ReportInfoRecord[];
-  onRowClick: (record: ReportInfoRecord) => void;
-}
-
-const ReportInfoTable = ({
-  data,
-  onRowClick
-} : ReportInfoTableProps) => {
+const ReportInfoTable = ({ data, onRowSelect }: ReportInfoTableProps) => {
+  console.log("Report table data", data);
   return (
     <Table
       columns={columns}
       dataSource={data}
       onRow={(record) => ({
-        onClick: () => onRowClick(record),
+        onClick: () => onRowSelect(record),
       })}
       pagination={{ pageSize: 5 }}
+      rowKey="id"
     />
   );
 };

@@ -2,13 +2,21 @@ import { Drawer } from "antd";
 import Tab from "./Tabs";
 import { useAppDispatch, useAppSelector } from "../Redux/ReduxStore";
 import { setSelectedAdsLocation } from "../Redux/SelectedAdsSlice";
+import { setSelectedReport } from "../Redux/ReportsDataSlice";
+import AdsInfor from "./AdsInfor";
+import ReportInfor from "./ReportInfor";
 
 function Sidebar() {
-  const selected = useAppSelector((state) => state.SelectedAds);
+  const selectedAds = useAppSelector((state) => state.SelectedAds);
+  const selectedReport = useAppSelector(
+    (state) => state.ReportsData.selectedReport,
+  );
+
   const dispatch = useAppDispatch();
 
   function on_drawer_close() {
     dispatch(setSelectedAdsLocation(null));
+    dispatch(setSelectedReport(null));
   }
 
   return (
@@ -18,15 +26,12 @@ function Sidebar() {
         placement="left"
         closable={false}
         onClose={on_drawer_close}
-        open={selected ? true : false}
+        open={selectedAds || selectedReport ? true : false}
         key="left"
         width="30%"
       >
-        <Tab />
-
-        {/* <div className="absolute bottom-0 left-0 right-0 top-0 z-10">
-          <AdsMap onAdMarkerClick={onAdMarkerClick} />
-        </div> */}
+        {!selectedAds ? null : <AdsInfor />}
+        {!selectedReport ? null : <ReportInfor />}
       </Drawer>
     </div>
   );
