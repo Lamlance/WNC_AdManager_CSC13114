@@ -1,9 +1,10 @@
 import React from "react";
 import { AdRequest } from "../../../types";
 import { Button } from "antd";
+import { AdsReqApi } from "@admanager/shared";
 
 interface AdDetailsSectionProps {
-  ad: AdRequest | null;
+  ad: AdsReqApi.ManyAdsRequestResponse | null;
 }
 
 const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
@@ -33,46 +34,49 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
               style={imageStyle.img}
             />
           </div>
-          <p className="ad-title">{ad.panoContent}</p>
-          <p className="font-sans font-semibold">PANO ID: {ad.requestId}</p>
-          <p className="font-sans font-light italic">{ad.position}</p>
           <p>
             <span className="font-semibold">Công ty đặt quảng cáo: </span>
-            <span>{ad.companyName}</span>
+            <span>{ad.yeu_cau.ten_cty}</span>
           </p>
           <p>
             <span className="font-semibold">Email: </span>
-            <span>{ad.email}</span>
+            <span>{ad.yeu_cau.email_cty}</span>
           </p>
           <p>
             <span className="font-semibold">SĐT: </span>
-            <span>{ad.phoneNumber}</span>
+            <span>{ad.yeu_cau.dien_thoai_cty}</span>
           </p>
           <p>
             <span className="font-semibold">Địa chỉ: </span>
-            <span>{ad.address}</span>
+            <span>{ad.yeu_cau.dia_chi_cty}</span>
           </p>
           <p>
             <span className="font-semibold">Thời gian đặt: </span>
-            <span>{ad.effectedDate}</span> - <span>{ad.expiredDate}</span>
+            <span>
+              {(ad.yeu_cau.ngay_hieu_luc as unknown as string).split("T")[1]}
+            </span>{" "}
+            -{" "}
+            <span>
+              {(ad.yeu_cau.ngay_het_han as unknown as string).split("T")[1]}
+            </span>
           </p>
           <p>
             <span className="font-semibold">Trạng thái: </span>
-            <span>{ad.status}</span>
+            <span>{"No status"}</span>
           </p>
           <p>
             <span className="font-semibold">Nội dung: </span>
-            <span>{ad.panoContent}</span>
+            <span>{ad.yeu_cau.noi_dung_qc}</span>
           </p>
           <div className="my-3 flex justify-between">
-            {ad.status == "Đã phê duyệt" ? (
+            {ad.yeu_cau.trang_thai == "Đã phê duyệt" ? (
               <Button className="bg-neutral-300" disabled type="primary">
                 Phê duyệt
               </Button>
             ) : (
               <Button type="primary">Phê duyệt</Button>
             )}
-            {ad.status == "Đã từ chối" ? (
+            {ad.yeu_cau.trang_thai == "Đã từ chối" ? (
               <Button disabled type="primary" className="bg-red-500">
                 Từ chối
               </Button>
