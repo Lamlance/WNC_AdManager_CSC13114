@@ -1,14 +1,15 @@
-/* eslint-disable react-refresh/only-export-components */
 import { useEffect } from "react";
 import "./App.css";
-import AdsMap from "./components/AdsMap";
 import Sidebar from "./components/Sidebar";
 import ReduxStore from "./Redux/ReduxStore";
 import { Provider } from "react-redux";
+
+import AdsMapPage from "./Pages/AdsMapPage";
+
 function App() {
   return (
     <div className="h-screen w-screen">
-      <AdsMap />
+      <AdsMapPage />
       {/* {sidebarVisible && <Sidebar openSidebar={closeSidebar} />} */}
       <Sidebar />
     </div>

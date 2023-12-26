@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  GoongPredictRespond,
+  GoongRevGeocodeRespond,
   useLazyGetPlaceDetail,
   useLazyGetPredicts,
   useLazyRevGeocode,
@@ -9,30 +11,40 @@ import { Select } from "antd";
 import { useAppDispatch, useAppSelector } from "../../Redux/ReduxStore";
 import MapLibreGL, { Map, Marker, Popup } from "maplibre-gl";
 import { setDblClick } from "../../Redux/MapClickSlice";
+import { AdsGeoJson } from "@admanager/shared";
+import { setSelectedAdsLocation } from "../../Redux/SelectedAdsSlice";
 
 type PlaceOption = {
   value: string;
   key: string;
   disabled?: boolean;
 };
+
 type PlaceOptionMapArgs =
   | {
       type: "Predict";
-      respond: Awaited<ReturnType<ReturnType<typeof useLazyGetPredicts>[0]>>;
+      respond: GoongPredictRespond | undefined;
     }
   | {
       type: "RevGeo";
-      respond: Awaited<ReturnType<ReturnType<typeof useLazyRevGeocode>[0]>>;
+      respond: GoongRevGeocodeRespond | undefined;
     };
+
+type PlacePropertyCreate = {
+  lng: number;
+  lat: number;
+  formatted_address: string;
+};
+
 const GoongKey = "4xsMpUsUm57ogvFDPCjlQlvmUWq6JqzeYOYJfjJe";
 const IdCoordDelimiter = "|^|";
 
-type MapSearchRef = {
+type MapSearchProps = {
   MapRef?: Map | null;
-  refresh: boolean;
+  refresh: number;
 };
 
-function MapSearchBar(props: MapSearchRef) {
+function MapSearchBar(props: MapSearchProps) {
   const [placeOpts, setPlaceOpts] = useState<PlaceOption[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [openSelect, setOpenSelect] = useState<boolean | undefined>(undefined);
@@ -42,13 +54,13 @@ function MapSearchBar(props: MapSearchRef) {
 
   const [getPlaceDetail, predictions] = useLazyGetPlaceDetail();
   const [getPredicts] = useLazyGetPredicts();
-  const [getRevGeocode] = useLazyRevGeocode();
+  const [getRevGeocode, revGeoLocations] = useLazyRevGeocode();
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const markerPopup = useRef<Popup | null>(null);
   const MarkerRef = useRef<Marker | null>(null);
 
-  console.log(predictions.data);
+  //console.log(predictions.data);
 
   function initialize_marker() {
     if (MarkerRef.current || !props.MapRef) return;
@@ -85,10 +97,9 @@ function MapSearchBar(props: MapSearchRef) {
     if (!mapClick) return;
     const { lng, lat } = mapClick.dblClick;
     MarkerRef.current?.setLngLat([lng, lat]);
-    console.log(props.MapRef?.querySourceFeatures("ads_data"));
 
     getRevGeocode({ key: GoongKey, lng, lat }).then((respond) => {
-      get_suggest_option({ type: "RevGeo", respond });
+      get_suggest_option({ type: "RevGeo", respond: respond.data });
     });
     console.log(mapClick?.dblClick);
   }
@@ -106,18 +117,18 @@ function MapSearchBar(props: MapSearchRef) {
     timeoutRef.current = setTimeout(function () {
       console.log("Now searching: ", srch);
       getPredicts({ key: GoongKey, input: srch }).then((p) =>
-        get_suggest_option({ type: "Predict", respond: p }),
+        get_suggest_option({ type: "Predict", respond: p.data }),
       );
     }, 2000);
   }
 
   function get_suggest_option({ type, respond }: PlaceOptionMapArgs) {
     setLoading(false);
-    if (!respond.data) return setPlaceOpts([]);
+    if (!respond) return setPlaceOpts([]);
 
     if (type === "Predict") {
       return setPlaceOpts(
-        respond.data.predictions.map((p) => ({
+        respond.predictions.map((p) => ({
           value: p.description,
           key: p.place_id,
         })),
@@ -126,11 +137,9 @@ function MapSearchBar(props: MapSearchRef) {
 
     setOpenSelect(true);
     setPlaceOpts(
-      respond.data.results.map((r) => ({
+      respond.results.map((r) => ({
         value: r.formatted_address,
-        key: `${r.place_id}${IdCoordDelimiter}${JSON.stringify(
-          r.geometry.location,
-        )}`,
+        key: `${r.place_id}${IdCoordDelimiter}`,
       })),
     );
   }
@@ -145,36 +154,53 @@ function MapSearchBar(props: MapSearchRef) {
       const { lng, lat } = result.data.result.geometry.location;
       console.log(lng, lat);
       MarkerRef.current?.setLngLat([lng, lat]);
+
+      set_select_place({ ...result.data.result, lng, lat });
       return;
     }
 
-    try {
-      const { lng, lat } = z
-        .object({ lng: z.number(), lat: z.number() })
-        .parse(JSON.parse(z.string().parse(key.split(IdCoordDelimiter)[1])));
-      console.log(lng, lat);
-      MarkerRef.current?.setLngLat([lng, lat]);
-    } catch (e) {
-      console.warn(e);
-    }
+    if (!revGeoLocations.data) return;
+    const place_id = key.replace(IdCoordDelimiter, "");
+    const place = revGeoLocations.data.results.find(
+      (v) => v.place_id === place_id,
+    );
+    if (!place) return;
+    MarkerRef.current?.setLngLat(place.geometry.location);
+    set_select_place({ ...place, ...place.geometry.location });
   }
 
-  function on_select_focus() {
-    if (typeof openSelect === "boolean") return setOpenSelect(undefined);
+  function set_select_place({
+    lng,
+    lat,
+    formatted_address,
+  }: PlacePropertyCreate) {
+    console.log("Set palce", formatted_address);
+    dispatch(
+      setSelectedAdsLocation({
+        ads: [],
+        place: {
+          lng,
+          lat,
+          dia_chi: formatted_address,
+          ten_dia_diem: formatted_address,
+        },
+      }),
+    );
   }
 
   return (
     <Select
-      onFocus={on_select_focus}
+      onFocus={() => setOpenSelect(true)}
+      onBlur={() => setOpenSelect(undefined)}
       open={openSelect}
       loading={loading}
       showSearch
       placeholder={"Search for location"}
       options={placeOpts}
       onSearch={on_search_location}
-      className=" w-1/2"
       onSelect={on_suggest_select}
       allowClear
+      className=" w-1/2"
     />
   );
 }

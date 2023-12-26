@@ -1,49 +1,109 @@
-import { Row, Col } from "antd";
+import { Row, Col, Button } from "antd";
 import AdsInfoTable from "./AdsInfoTable";
-import { AdsInfoRecord } from "../../types";
+import {
+  useGetAllAdsInfoQuery,
+  useSubmitAdChangeRequestMutation,
+  useSubmitAdRequestMutation,
+  useSubmitPlaceChangeRequestMutation,
+} from "../../slices/api/apiSlice";
+import AdsInfoSlider, { AdsInfoDetailProps } from "./AdsInfoDetail";
 import { useState } from "react";
-import AdsInfoDetail from "./AdsInfoDetail";
-import { useGetAllAdsInfoQuery } from "../../slices/api/apiSlice";
-
-const data: AdsInfoRecord[] = [];
+import { AdsGeoJson, PlaceChangeApi } from "@admanager/shared";
+import EditAdForm, { AdChangeFormValue } from "../vhtt/EditAdForm";
+import { useAppDispatch } from "../../store";
+import {
+  setSelectedPlace,
+  showModalClose,
+  showModalOpen,
+} from "../../slices/modalSlice";
+import EditSetpoint from "../vhtt/EditSetpoint";
 
 const AdsInfo = () => {
   const { data, error, isLoading } = useGetAllAdsInfoQuery();
-  console.log("data", data);
-  const [selectedAdsInfo, setSelectedAdsInfo] = useState<AdsInfoRecord | null>(
-    null,
-  );
+  const [selectedRow, setSelectedRow] =
+    useState<AdsGeoJson.AdsGeoJsonProperty | null>(null);
+  const [submitAdChangeReq] = useSubmitAdChangeRequestMutation();
+  const [submitPlaceChangeReq] = useSubmitPlaceChangeRequestMutation();
+  const [openAd, setOpenAd] = useState<boolean>(false);
+  const [selectedAd, setSelectedAd] = useState<
+    (AdsGeoJson.AdsProperty & AdsGeoJson.PlaceProperty) | null
+  >(null);
+
+  const dispatch = useAppDispatch();
+
+  function onAdsDataChangeRequest(
+    data: AdsGeoJson.AdsProperty & AdsGeoJson.PlaceProperty,
+  ) {
+    console.log(data);
+    setSelectedAd(data);
+    setOpenAd(true);
+  }
+
+  function onRequestChangePlace(data: AdsGeoJson.AdsGeoJsonProperty) {
+    console.log(data);
+    dispatch(showModalOpen());
+    dispatch(setSelectedPlace({ ...data.place, ly_do_chinh_sua: "" }));
+  }
+
+  async function onAdChangeSubmit(data: AdChangeFormValue) {
+    if (!selectedAd) return;
+
+    submitAdChangeReq({
+      id_quang_cao: selectedAd.id_quang_cao,
+      ly_do_chinh_sua: "Ly do gi đó",
+      thong_tin_sua: data,
+    }).then((v) => console.log(v));
+  }
+
+  async function onPlaceChangeSubmit(
+    data:
+      | PlaceChangeApi.PlaceChangeRequestCreate
+      | PlaceChangeApi.PlaceChangeRequestResponse,
+  ) {
+    console.log(data);
+    submitPlaceChangeReq({ ...data, ly_do_chinh_sua: "Ly do nao do #2" }).then(
+      (v) => {
+        console.log(v);
+        dispatch(showModalClose());
+      },
+    );
+  }
 
   return (
     <>
-      {error && (
-        <div>
-          <p> There was an error </p>
-        </div>
+      <EditSetpoint onFormSubmit={onPlaceChangeSubmit} />
+      {selectedAd && (
+        <EditAdForm
+          onFormSubmit={onAdChangeSubmit}
+          ad={selectedAd}
+          type="AdInfo"
+          isModalOpen={openAd}
+          onClose={() => setOpenAd(false)}
+        />
       )}
-      {isLoading && (
-        <div>
-          <p> Loading page </p>
-        </div>
-      )}
-      {data && (
-        <Row
-          gutter={20}
-          style={{
-            minHeight: "100vh",
-          }}
-        >
-          <Col span={17}>
-            <AdsInfoTable
-              data={data}
-              onRowClick={(record) => setSelectedAdsInfo(record)}
+
+      {error && <div>There was an error</div>}
+      {isLoading && <div>Loading data </div>}
+      <Row gutter={20} style={{ minHeight: "100vh" }}>
+        <Col span={17}>
+          <AdsInfoTable
+            data={(data || []).map((v) => ({
+              ...v,
+              loai_vi_tri: v.ads[0].loai_vitri,
+            }))}
+            onRowSelect={setSelectedRow}
+            onRequestChangePlace={onRequestChangePlace}
+          />
+        </Col>
+        <Col span={7}>
+          {selectedRow && (
+            <AdsInfoSlider
+              data={selectedRow}
+              onRequestChange={onAdsDataChangeRequest}
             />
-          </Col>
-          <Col span={6}>
-            {selectedAdsInfo && <AdsInfoDetail {...selectedAdsInfo} />}
-          </Col>
-        </Row>
-      )}
+          )}
+        </Col>
+      </Row>
     </>
   );
 };

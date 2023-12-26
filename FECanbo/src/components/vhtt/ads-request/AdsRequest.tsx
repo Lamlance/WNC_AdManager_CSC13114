@@ -3,19 +3,19 @@ import { Row, Col } from "antd";
 import AdsRequestTable from "./AdsRequestTable";
 import AdsRequestDetail from "./AdsRequestDetail";
 import { AdRequest } from "../../../types";
+import { useGetAllAdsReqQuery } from "../../../slices/api/apiSlice";
+import { AdsReqApi } from "@admanager/shared";
 
 interface MainContentSectionProps {
-  data: AdRequest[];
-  onRowClick: (record: AdRequest) => void;
-  selectedAd: AdRequest | null;
+  onRowClick: (record: AdsReqApi.ManyAdsRequestResponse) => void;
+  selectedAd: AdsReqApi.ManyAdsRequestResponse | null;
 }
 
 const AdsRequest: React.FC<MainContentSectionProps> = ({
-  data,
   onRowClick,
   selectedAd,
 }) => {
-  console.log("selctedad", selectedAd);
+  const { data, error, isLoading } = useGetAllAdsReqQuery();
   return (
     <Row
       gutter={20}
@@ -24,7 +24,7 @@ const AdsRequest: React.FC<MainContentSectionProps> = ({
       }}
     >
       <Col span={17}>
-        <AdsRequestTable data={data} onRowClick={onRowClick} />
+        <AdsRequestTable data={data || []} onRowClick={onRowClick} />
       </Col>
       <Col span={7}>
         <AdsRequestDetail ad={selectedAd} />

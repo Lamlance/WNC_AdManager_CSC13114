@@ -1,54 +1,88 @@
-import React, { useState, useContext } from "react";
 import { Modal, Input, Button, Form } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { Link, Routes, Route, useLocation } from 'react-router-dom'
-import usecontext from "../UseReducer/usecontext.js"
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../../store.ts";
+// import { onChangeLocation, onChangeAddress } from '../../slices/pointSlice.tsx';
+import { setSelectedPlace, showModalClose } from "../../slices/modalSlice.tsx";
+import AdsMapModal from "../AdsMap/AdsMapModal.tsx";
+import { useState } from "react";
+import { PlaceChangeApi } from "@admanager/shared";
 
-function EditSetpoint() {
+type EditPlaceFormValue =
+  | PlaceChangeApi.PlaceChangeRequestCreate
+  | PlaceChangeApi.PlaceChangeRequestResponse;
 
-  const { state, dispath } = useContext(usecontext)
-  const { name, address, lng, lat, isModalOpen } = state;
+interface EditSetpointProps {
+  onFormSubmit: (data: EditPlaceFormValue) => void;
+}
 
-  const showModal = () => {
-    dispath({ type: "SHOW_MODAL_OPEN"})
-  };
+function EditSetpoint(props: EditSetpointProps) {
+  const [adMapOpen, setAdMapOpen] = useState<boolean>(false);
+  const [selectedLngLat, setSelectedLngLat] = useState<{
+    lng: number;
+    lat: number;
+  } | null>(null);
+  const dispatch = useDispatch();
+  const modal = useSelector((state: RootState) => state.PlaceEditModal);
+  const { isModalOpen, selectedPlace } = modal;
 
-  const handleOk = () => {
-    dispath({ type: "SHOW_MODAL_CLOSE"})
-  };
-
-  const handleCancel = () => {
-    dispath({ type: "SHOW_MODAL_CLOSE"})
-  };
-
-  const handleName = (e: any) => {
-    // setName(e.target.value);
-    console.log('handle name')
-    dispath({ type: "ON_CHANGE_NAME", payload: e.target.value})
-  }
-
-  const handleAddress = (e: any) => {
-    // setAddress(e.target.value);
-    dispath({ type: "ON_CHANGE_ADDRESS", payload: e.target.value})
+  function onFormSubmit(data: EditPlaceFormValue) {
+    props.onFormSubmit({ ...data, id_dia_diem: selectedPlace?.id_dia_diem });
   }
 
   return (
     <>
-
-      <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button>
-      <Modal title="" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
-        <Form name="wrap" labelCol={{ flex: '110px' }} labelAlign="left" labelWrap wrapperCol={{ flex: 1 }} colon={false} className="max-w-2xl mt-8">
-          <Form.Item label="Tên địa điểm">
-            <Input onChange={handleName} value={name}/>
+      <AdsMapModal
+        open={adMapOpen}
+        onClose={() => setAdMapOpen(false)}
+        initPos={{
+          lng: selectedPlace?.lng || 106.69377070251456,
+          lat: selectedPlace?.lat || 10.788256560601225,
+        }}
+        onPlaceSelect={(data) => setSelectedLngLat(data)}
+      />
+      <Modal
+        title=""
+        open={isModalOpen} // onOk={() => dispatch(showModalClose())}
+        onCancel={() => {
+          dispatch(showModalClose());
+          dispatch(setSelectedPlace(null));
+        }}
+        footer={null}
+      >
+        <Form
+          onFinish={onFormSubmit}
+          name="wrap"
+          labelCol={{ flex: "110px" }}
+          labelAlign="left"
+          labelWrap
+          wrapperCol={{ flex: 1 }}
+          colon={false}
+          className="mt-8 max-w-2xl"
+        >
+          <Form.Item<EditPlaceFormValue>
+            name={"ten_dia_diem"}
+            label="Tên địa điểm"
+          >
+            <Input placeholder={selectedPlace?.ten_dia_diem || ""} />
           </Form.Item>
-          <Form.Item label="Địa chỉ">
-            <Input onChange={handleAddress} value={address}/>
+          <Form.Item<EditPlaceFormValue> name={"dia_chi"} label="Địa chỉ">
+            <Input placeholder={selectedPlace?.dia_chi || ""} />
           </Form.Item>
           <Form.Item label="Vị trí">
-            <Input className="w-5/6" value={state && state.lng && state.lat ? `${state.lng} x ${state.lat}` : ''} /> <Button><Link to="/vhtt/adsmap" ><SearchOutlined ></SearchOutlined></Link></Button>
-
+            <Input
+              disabled
+              className="w-5/6"
+              value={
+                selectedLngLat
+                  ? `${selectedLngLat.lng} x ${selectedLngLat.lat}`
+                  : selectedPlace?.lng && selectedPlace?.lat
+                    ? `${selectedPlace.lng} x ${selectedPlace.lat}`
+                    : "Không chỉnh sửa"
+              }
+            />{" "}
+            <Button onClick={() => setAdMapOpen(true)}>🗺️</Button>
           </Form.Item>
 
           <Form.Item className="flex justify-center">
@@ -57,12 +91,8 @@ function EditSetpoint() {
             </Button>
           </Form.Item>
         </Form>
-
       </Modal>
-
-
     </>
-
   );
 }
 

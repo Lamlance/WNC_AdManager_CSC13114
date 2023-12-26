@@ -3,7 +3,10 @@ import { useEffect, useRef, useContext } from "react";
 import { Link, useNavigate } from 'react-router-dom'
 import "../../../../FENgDan/src/components/AdsMap.css";
 import "maplibre-gl/dist/maplibre-gl.css";
-import usecontext from "../UseReducer/usecontext.js"
+
+import { useDispatch, useSelector } from 'react-redux';
+import { setLng, setLat} from '../../slices/pointSlice.tsx';
+import type { RootState } from '../../store.ts'
 
 
 function AdsMap() {
@@ -12,9 +15,11 @@ function AdsMap() {
   // const dispatch = useAppDispatch();
   const  navigate  = useNavigate()
 
-  const { state, dispath } = useContext(usecontext)
-  const { lng, lat } = state;
+  const dispatch = useDispatch();
+  const point = useSelector((state: RootState) => state.point);
 
+
+  const { lng, lat } = point;
 
   function initialize_map(container: HTMLElement) {
     if (mapRef.current) {
@@ -39,9 +44,9 @@ function AdsMap() {
           .addTo(map);
         const { lng, lat } = e.lngLat;
 
-        dispath({ type: "SET_LNG", payload: lng })
-        dispath({ type: "SET_LAT", payload: lng })
-        setTimeout(() => { navigate('/vhtt/editpoint')}, 200);
+        dispatch(setLng(lng));
+        dispatch(setLat(lat));
+        setTimeout(() => { navigate('/vhtt/editrequest')}, 200);
       });
     });
 

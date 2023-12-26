@@ -1,7 +1,13 @@
+import { AdsGeoJson, ReportApi } from "@admanager/shared";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import z from "zod";
-import { AdsMarkerInfoSchema } from "../models/mock_markers";
-type MarkerInfo = z.infer<typeof AdsMarkerInfoSchema> | null;
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+type MarkerInfo =
+  | AdsGeoJson.AdsGeoJsonProperty
+  | {
+      ads: [];
+      place: ReportApi.ReportPlace;
+    }
+  | null;
 const initialState: MarkerInfo = null as MarkerInfo;
 
 const SelectedAdsSlice = createSlice({

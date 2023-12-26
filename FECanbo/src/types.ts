@@ -45,11 +45,3 @@ export interface ReportInfoRecord {
   reportTime: Date;
   status: string;
 }
-
-export interface EditAdRequest {
-  id: string;
-  timeRequest: string;
-  reason: string;
-  newinfo: AdsInfoRecord;
-  status: string;
-}

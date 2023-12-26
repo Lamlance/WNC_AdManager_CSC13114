@@ -1,2 +1,4 @@
 import * as AdsSchema from "./db/schema.js";
-export { AdsSchema };
+import * as AdsZodSchema from "./ZodSchema.js";
+
+export { AdsSchema, AdsZodSchema };
