@@ -9,10 +9,22 @@ import {
   GetAllAdsReqRequest,
   GetAllReportsRequest,
 } from "../../types/request";
+import { RootState } from "../../store";
 
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:4030/api" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:4030/api",
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).auth.token;
+
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     getAllAdsInfo: builder.query<GetAllAdsResponse, GetAllAdsRequest | void>({
       query: () => "/quang-cao",

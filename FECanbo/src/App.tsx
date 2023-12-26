@@ -17,14 +17,14 @@ import AdsMap from "./components/vhtt/AdsMap";
 import AdsRequestPage from "./routes/AdsRequestPage";
 const { Header, Sider, Content } = Layout;
 import usecontext from "./components/UseReducer/usecontext.js";
-import usereducer from "./components/UseReducer/usereducer.js"
-
+import usereducer from "./components/UseReducer/usereducer.js";
+import LoginPage from "./routes/LoginPage.js";
+import RegisterPage from "./routes/RegisterPage.js";
 
 const App = () => {
   const [state, dispath] = usereducer();
 
   return (
-
     <usecontext.Provider value={{ state, dispath }}>
       <div className="h-screen w-screen">
         <Routes>
@@ -32,6 +32,7 @@ const App = () => {
             <Route index element={<AdsRequestPage />} />
             <Route path="advertisements" element={<AdsInfo />} />
             <Route path="reports" element={<ReportInfo />} />
+            <Route />
           </Route>
           <Route path="vhtt">
             <Route path="editad" element={<EditAdForm />} />
@@ -39,9 +40,13 @@ const App = () => {
             <Route path="adsmap" element={<AdsMap />} />
             <Route path="createaccount" element={<CreateAccount />} />
           </Route>
+          <Route path="/auth">
+            <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
+          </Route>
         </Routes>
       </div>
-    </usecontext.Provider >
+    </usecontext.Provider>
   );
 };
 
