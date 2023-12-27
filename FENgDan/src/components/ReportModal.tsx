@@ -54,7 +54,7 @@ function ReportModal({
       open={visible}
       onCancel={onCancel}
       footer={null}
-      width={800}
+      width={750}
     >
       <Form
         form={form}
