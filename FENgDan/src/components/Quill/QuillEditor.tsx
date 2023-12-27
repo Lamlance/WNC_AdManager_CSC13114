@@ -63,7 +63,7 @@ function QuillEditor() {
           <button className="ql-video"></button>
         </span>
       </div>
-      <div ref={editorEleRef}></div>
+      <div ref={editorEleRef} style={{ height: "250px" }}></div>
 
       <Button onClick={save_quill}>Save</Button>
     </>
