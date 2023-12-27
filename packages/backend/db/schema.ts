@@ -126,6 +126,7 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
   ngay_het_han: timestamp("ngay_het_han").defaultNow().notNull(),
   trang_thai: varchar("trang_thai").notNull().default("Waiting"),
   hinh_anh: varchar("hinh_1", { length: 255 }),
+  hinh_anh_2: varchar("hinh_2", { length: 255 }),
 });
 
 const YeuCauChinhSua = pgTable("YeuCauChinhSua", {

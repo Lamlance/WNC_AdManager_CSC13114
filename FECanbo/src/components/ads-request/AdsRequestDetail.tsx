@@ -1,37 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AdRequest } from "../../types/view-model";
 import { AdsReqApi } from "@admanager/shared";
+import { useLazyGetImageUrlQuery } from "../../slices/api/apiSlice";
+import { Carousel } from "antd";
 
 interface AdDetailsSectionProps {
   ad: AdsReqApi.ManyAdsRequestResponse | null;
 }
 
 const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
-  const containerStyle = {
-    padding: "10px",
-    backgroundColor: "#DBF1EA",
-    borderRadius: "8px",
-  };
+  const [getImgUrl] = useLazyGetImageUrlQuery();
+  const [imgUrl, setImgUrl] = useState<string[]>([]);
 
-  const imageStyle = {
-    marginBottom: "10px",
-    img: {
-      width: "100%",
-      borderRadius: "4px",
-    },
-  };
+  useEffect(() => {
+    setImgUrl([]);
+    if (!ad?.yeu_cau) return;
+    const imgs: Promise<{ data?: { url: string } }>[] = [];
+    if (ad.yeu_cau.hinh_anh) imgs.push(getImgUrl(ad.yeu_cau.hinh_anh));
+    if (ad.yeu_cau.hinh_anh_2) imgs.push(getImgUrl(ad.yeu_cau.hinh_anh_2));
+
+    Promise.allSettled(imgs).then((data) => {
+      const urls: string[] = [];
+      data.forEach((d) => {
+        if (d.status === "fulfilled" && d.value.data) {
+          urls.push(d.value.data.url);
+        }
+      });
+      setImgUrl(urls);
+    });
+  }, [ad]);
 
   return (
-    <div style={containerStyle}>
+    <div className=" bg-green-300 p-4">
       {ad ? (
         <div>
           <h2 className="font-bold">CHI TIẾT YÊU CẦU</h2>
-          <div style={imageStyle}>
-            <img
-              src="https://example.com/path/to/your/image.jpg"
-              alt="Ads Img"
-              style={imageStyle.img}
-            />
+          <div className=" mb-4">
+            <Carousel>
+              {imgUrl.map((i) => (
+                <img key={i} src={i} alt="Ads Img" className=" w-full" />
+              ))}
+            </Carousel>
           </div>
           <p>
             <span className="font-semibold">Công ty đặt quảng cáo: </span>

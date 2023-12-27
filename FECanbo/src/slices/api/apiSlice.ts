@@ -11,7 +11,6 @@ import {
   PlaceChangeApi,
   ReportApi,
 } from "@admanager/shared";
-import { query } from "express";
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -54,14 +53,11 @@ export const apiSlice = createApi({
         },
       }),
     }),
-    submitAdRequest: builder.mutation<any, AdsReqApi.AdRequestCreate>({
+    submitAdRequest: builder.mutation<any, FormData>({
       query: (formData) => ({
         url: "/cap-phep-quang-cao/",
         method: "POST",
         body: formData,
-        headers: {
-          "Content-Type": "application/json",
-        },
       }),
     }),
 
@@ -87,6 +83,10 @@ export const apiSlice = createApi({
         },
       }),
     }),
+
+    getImageUrl: builder.query<{ url: string }, string>({
+      query: (img_name) => `/image/${img_name}`,
+    }),
   }),
 });
 
@@ -99,4 +99,7 @@ export const {
   useSubmitAdChangeRequestMutation,
   useGetAllPlaceChangeRequestQuery,
   useSubmitPlaceChangeRequestMutation,
+
+  useGetImageUrlQuery,
+  useLazyGetImageUrlQuery,
 } = apiSlice;
