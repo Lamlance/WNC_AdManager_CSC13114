@@ -4,6 +4,9 @@ import {
 } from "@admanager/shared/types/ReportApi";
 import { Modal, Form, Input, Select, Button } from "antd";
 import QuillEditor from "./Quill/QuillEditor";
+import Quill from "quill";
+import React, { useRef } from "react";
+
 const { Option } = Select;
 
 interface ReportModalProps {
@@ -21,12 +24,19 @@ function ReportModal({
 }: ReportModalProps) {
   const [form] = Form.useForm();
 
+  const quillRef = useRef<Quill | null>(null);
+
   const handleFinish = (values: ReportFormValues) => {
     const data = ReportFormValuesSchema.safeParse(values);
     // if (data.success) onSubmit(values);
     // else console.warn(data.error);
 
     form.resetFields();
+
+    if (quillRef.current) {
+      console.log(quillRef.current.root.innerHTML.trim());
+    }
+
     console.log("Submit report clicked", values);
   };
 
@@ -45,7 +55,7 @@ function ReportModal({
         initialValues={reportFormValues}
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 18 }}
-        className=" overflow-scroll"
+        className="overflow-scroll"
       >
         <Form.Item<ReportFormValues>
           name="id_loai_bc"
@@ -88,7 +98,7 @@ function ReportModal({
 
         <div className="flex min-h-96 flex-col">
           <p>Nội dung báo cáo</p>
-          <QuillEditor />
+          <QuillEditor forwardedRef={quillRef} />
         </div>
 
         <Form.Item className="flex justify-center text-center">

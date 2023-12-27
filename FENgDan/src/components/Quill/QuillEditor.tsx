@@ -1,48 +1,40 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import "quill/dist/quill.snow.css";
 import Quill from "quill";
-import { Button } from "antd";
 
-function QuillEditor() {
+interface QuillEditorProps {
+  forwardedRef: React.RefObject<Quill>;
+}
+
+function QuillEditor({ forwardedRef }: QuillEditorProps) {
   const editorEleRef = useRef<HTMLDivElement | null>(null);
   const toolbarEleRef = useRef<HTMLDivElement | null>(null);
-  const editorRef = useRef<Quill | null>(null);
 
-  function initalizeEditor() {
-    if (editorRef.current) return;
-    if (!editorEleRef.current || !toolbarEleRef.current) return;
+  useEffect(() => {
+    const initializeEditor = () => {
+      if (
+        forwardedRef.current ||
+        !editorEleRef.current ||
+        !toolbarEleRef.current
+      )
+        return;
 
-    const quill = new Quill(editorEleRef.current, {
-      modules: {
-        toolbar: {
-          container: toolbarEleRef.current,
-          handlers: {
-            image: customImgHanlder,
+      const quill = new Quill(editorEleRef.current, {
+        modules: {
+          toolbar: {
+            container: toolbarEleRef.current,
+            handlers: {},
           },
         },
-      },
-      theme: "snow",
-    });
+        theme: "snow",
+      });
 
-    editorRef.current = quill;
-  }
+      const mutableRef = forwardedRef as React.MutableRefObject<Quill | null>;
+      mutableRef.current = quill;
+    };
 
-  function customImgHanlder() {
-    if (!editorRef.current) return;
-
-    const input = document.createElement("input");
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
-    input.click();
-    input.onchange = async function () {};
-  }
-
-  function save_quill() {
-    if (!editorRef.current) return;
-    console.log(editorRef.current.root.innerHTML.trim());
-  }
-
-  useEffect(initalizeEditor, []);
+    initializeEditor();
+  }, [forwardedRef]);
 
   return (
     <>
@@ -64,8 +56,6 @@ function QuillEditor() {
         </span>
       </div>
       <div ref={editorEleRef} style={{ height: "250px" }}></div>
-
-      <Button onClick={save_quill}>Save</Button>
     </>
   );
 }
