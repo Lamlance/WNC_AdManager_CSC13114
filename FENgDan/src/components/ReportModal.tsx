@@ -3,6 +3,7 @@ import {
   ReportFormValuesSchema,
 } from "@admanager/shared/types/ReportApi";
 import { Modal, Form, Input, Select, Button } from "antd";
+import QuillEditor from "./Quill/QuillEditor";
 
 const { Option } = Select;
 
@@ -90,7 +91,8 @@ function ReportModal({
           rules={[{ required: true, message: "Please enter a description" }]}
           wrapperCol={{ span: 18 }}
         >
-          <Input.TextArea rows={4} />
+          {/* <Input.TextArea rows={4} /> */}
+          <QuillEditor />
         </Form.Item>
 
         <Form.Item className="flex justify-center text-center">
