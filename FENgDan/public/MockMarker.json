@@ -10,6 +10,21 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "2ade58a5-2b40-46d7-9d9e-fdd4e7389eff",
+            "quy_hoach": true,
+            "ngay_hieu_luc": "2023-01-01",
+            "ngay_het_han": "2023-12-31",
+            "hinh_1": "hinh_1_path.jpg",
+            "hinh_2": "hinh_2_path.jpg",
+            "so_luong": 1,
+            "chieu_dai_m": 2,
+            "chieu_rong_m": 3,
+            "loai_vitri": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "hinh_thuc": "Quảng cáo thương mại",
+            "bang_qc": "Trụ bảng hiflex"
+          },
+          {
+            "id_quang_cao": "6f1ae1ac-cd0f-47e9-bf11-e2d77819c61b",
             "quy_hoach": true,
             "ngay_hieu_luc": "2023-01-01",
             "ngay_het_han": "2023-12-31",
@@ -43,6 +58,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "d34fcbab-ab29-471b-92e4-00a69468edba",
             "quy_hoach": false,
             "ngay_hieu_luc": "2023-02-01",
             "ngay_het_han": "2023-11-30",
@@ -76,6 +92,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "ddfd0907-36e7-406e-b5f2-6d2299b5c5d6",
             "quy_hoach": true,
             "ngay_hieu_luc": "2023-03-01",
             "ngay_het_han": "2023-10-31",
@@ -109,6 +126,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "e91ce15d-0558-4cae-b908-3b41e76e5c11",
             "quy_hoach": true,
             "ngay_hieu_luc": "2023-04-01",
             "ngay_het_han": "2023-09-30",
@@ -142,6 +160,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "c6747331-4b35-453c-8949-1031e2f90efd",
             "quy_hoach": false,
             "ngay_hieu_luc": "2023-05-01",
             "ngay_het_han": "2023-08-31",
@@ -175,6 +194,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "1b50cfc9-8de7-4b85-8100-7b52778bb013",
             "quy_hoach": true,
             "ngay_hieu_luc": "2023-06-01",
             "ngay_het_han": "2023-12-31",
@@ -208,6 +228,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "6ae3a8c2-4bd4-4c90-8c82-9a47758624e5",
             "quy_hoach": false,
             "ngay_hieu_luc": "2023-07-01",
             "ngay_het_han": "2023-11-30",
@@ -241,6 +262,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "f05e2455-1585-4af4-862e-4dd636b51f76",
             "quy_hoach": true,
             "ngay_hieu_luc": "2023-08-01",
             "ngay_het_han": "2023-10-31",
@@ -274,6 +296,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "b942cd9c-bff9-4a4b-bf2a-8a87b493a067",
             "quy_hoach": true,
             "ngay_hieu_luc": "2023-09-01",
             "ngay_het_han": "2023-09-30",
@@ -307,6 +330,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "25579ed7-48f5-4159-84d1-78a25a11c4c1",
             "quy_hoach": false,
             "ngay_hieu_luc": "2023-10-01",
             "ngay_het_han": "2023-08-31",
@@ -340,6 +364,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "4e50e8cf-7723-40fe-bf7d-7e104c979144",
             "quy_hoach": true,
             "ngay_hieu_luc": "2023-11-01",
             "ngay_het_han": "2023-12-31",
@@ -373,6 +398,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "f451a5cd-f8f5-45eb-b4ab-4a4057a7d68a",
             "quy_hoach": false,
             "ngay_hieu_luc": "2023-12-01",
             "ngay_het_han": "2023-12-31",
@@ -406,6 +432,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "31c12a01-15c7-4db9-bba2-17ce547d5471",
             "quy_hoach": true,
             "ngay_hieu_luc": "2024-01-01",
             "ngay_het_han": "2024-12-31",
@@ -439,6 +466,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "cb139993-1c07-4969-bf76-9db8a16ee2a8",
             "quy_hoach": false,
             "ngay_hieu_luc": "2024-02-01",
             "ngay_het_han": "2024-11-30",
@@ -472,6 +500,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "93d91d16-43b9-4baa-9063-0133d06d83b9",
             "quy_hoach": true,
             "ngay_hieu_luc": "2024-03-01",
             "ngay_het_han": "2024-10-31",
@@ -505,6 +534,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "736b9e8c-ec82-4bf7-950a-87a824a935ef",
             "quy_hoach": true,
             "ngay_hieu_luc": "2024-04-01",
             "ngay_het_han": "2024-09-30",
@@ -538,6 +568,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "c23b7775-9a48-495a-88b7-5826d4c198d8",
             "quy_hoach": false,
             "ngay_hieu_luc": "2024-05-01",
             "ngay_het_han": "2024-08-31",
@@ -571,6 +602,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "dd6a14a8-39a1-4d3f-9f78-7d1c826a8d68",
             "quy_hoach": true,
             "ngay_hieu_luc": "2024-06-01",
             "ngay_het_han": "2024-07-31",
@@ -604,6 +636,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "08c2f3a6-5d8b-45ed-8d5a-78f4e1bfca62",
             "quy_hoach": true,
             "ngay_hieu_luc": "2024-07-01",
             "ngay_het_han": "2024-06-30",
@@ -637,6 +670,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "fe2f5049-ec78-47b3-84f2-d5e51b02baff",
             "quy_hoach": false,
             "ngay_hieu_luc": "2024-08-01",
             "ngay_het_han": "2024-05-31",
@@ -670,6 +704,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "69d91a3e-4a9f-4d89-8d92-6a6d20b36a7a",
             "quy_hoach": true,
             "ngay_hieu_luc": "2024-09-01",
             "ngay_het_han": "2024-04-30",
@@ -703,6 +738,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "b0ad4f94-2a1c-496a-b056-63eac6141b94",
             "quy_hoach": false,
             "ngay_hieu_luc": "2024-10-01",
             "ngay_het_han": "2024-04-30",
@@ -736,6 +772,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "5820b92a-2f6f-4c5f-b5f5-d9090e63f442",
             "quy_hoach": true,
             "ngay_hieu_luc": "2024-11-01",
             "ngay_het_han": "2024-03-31",
@@ -769,6 +806,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "b014ab8d-21ab-49b2-9515-45b978a5472f",
             "quy_hoach": false,
             "ngay_hieu_luc": "2024-12-01",
             "ngay_het_han": "2024-03-31",
@@ -802,6 +840,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "bb9b07ec-312b-42ef-8c80-ec508a8a686c",
             "quy_hoach": false,
             "ngay_hieu_luc": "2025-03-01",
             "ngay_het_han": "2025-05-31",
@@ -835,6 +874,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "90e8a299-30cc-4b68-8612-489913541768",
             "quy_hoach": true,
             "ngay_hieu_luc": "2025-06-01",
             "ngay_het_han": "2025-08-31",
@@ -868,6 +908,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "ac0382d1-8a9e-4d9b-93b5-0de3b8f3f285",
             "quy_hoach": false,
             "ngay_hieu_luc": "2025-09-01",
             "ngay_het_han": "2025-12-31",
@@ -901,6 +942,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "c916a234-1a33-4f8c-825d-b883fd6cb6e1",
             "quy_hoach": true,
             "ngay_hieu_luc": "2026-01-01",
             "ngay_het_han": "2026-03-31",
@@ -934,6 +976,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "23b9ecf0-74e3-4bfb-bd16-59bc3dd87126",
             "quy_hoach": false,
             "ngay_hieu_luc": "2026-04-01",
             "ngay_het_han": "2026-06-30",
@@ -967,6 +1010,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "e67439d8-bc3b-4d32-a933-babf581b0d7c",
             "quy_hoach": true,
             "ngay_hieu_luc": "2026-07-01",
             "ngay_het_han": "2026-09-30",
@@ -1000,6 +1044,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "a87dbb1c-9c7b-4f19-9e5d-4d370c440b31",
             "quy_hoach": true,
             "ngay_hieu_luc": "2026-10-01",
             "ngay_het_han": "2027-02-28",
@@ -1033,6 +1078,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "b2bc8d8a-17cd-487c-907b-d58123c54e5e",
             "quy_hoach": false,
             "ngay_hieu_luc": "2027-03-01",
             "ngay_het_han": "2027-05-31",
@@ -1066,6 +1112,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "6c5c201b-4764-429c-8e69-3c4c496ad5c8",
             "quy_hoach": true,
             "ngay_hieu_luc": "2027-06-01",
             "ngay_het_han": "2027-08-31",
@@ -1099,6 +1146,7 @@
       "properties": {
         "ads": [
           {
+            "id_quang_cao": "7f8f03c5-22b7-4f14-82ec-cf59d9fbb7a4",
             "quy_hoach": false,
             "ngay_hieu_luc": "2027-09-01",
             "ngay_het_han": "2027-12-31",

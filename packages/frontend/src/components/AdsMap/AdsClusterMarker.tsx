@@ -58,7 +58,8 @@ function AdsClusterMarker<S extends ZodType>({
       const marker_data = geoJsonPropertySchema.safeParse(
         e.features?.[0].properties
       );
-      if (marker_data.success === false) return;
+
+      if (marker_data.success === false) return console.log(marker_data.error);
       popUpRef.current = popUpBuilder(marker_data.data, [lng, lat]);
       popUpRef.current.addTo(mapRef);
     });

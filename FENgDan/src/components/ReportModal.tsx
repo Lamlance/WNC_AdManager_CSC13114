@@ -23,8 +23,8 @@ function ReportModal({
 
   const handleFinish = (values: ReportFormValues) => {
     const data = ReportFormValuesSchema.safeParse(values);
-    if (data.success) onSubmit(values);
-    else console.warn(data.error);
+    // if (data.success) onSubmit(values);
+    // else console.warn(data.error);
 
     form.resetFields();
     console.log("Submit report clicked", values);
@@ -45,6 +45,7 @@ function ReportModal({
         initialValues={reportFormValues}
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 18 }}
+        className=" overflow-scroll"
       >
         <Form.Item<ReportFormValues>
           name="id_loai_bc"
@@ -85,14 +86,10 @@ function ReportModal({
           <Input />
         </Form.Item>
 
-        <Form.Item<ReportFormValues>
-          name="noi_dung"
-          label="Nội dung báo cáo"
-          // rules={[{ required: true, message: "Please enter a description" }]}
-          wrapperCol={{ span: 18 }}
-        >
+        <div className="flex min-h-96 flex-col">
+          <p>Nội dung báo cáo</p>
           <QuillEditor />
-        </Form.Item>
+        </div>
 
         <Form.Item className="flex justify-center text-center">
           <Button type="primary" htmlType="submit">

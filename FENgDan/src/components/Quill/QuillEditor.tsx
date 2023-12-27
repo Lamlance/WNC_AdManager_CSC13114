@@ -6,12 +6,10 @@ import { Button } from "antd";
 function QuillEditor() {
   const editorEleRef = useRef<HTMLDivElement | null>(null);
   const toolbarEleRef = useRef<HTMLDivElement | null>(null);
-  const [editor, setEditor] = useState<Quill | null>(null);
-
   const editorRef = useRef<Quill | null>(null);
 
   function initalizeEditor() {
-    if (editor) return;
+    if (editorRef.current) return;
     if (!editorEleRef.current || !toolbarEleRef.current) return;
 
     const quill = new Quill(editorEleRef.current, {
@@ -27,7 +25,6 @@ function QuillEditor() {
     });
 
     editorRef.current = quill;
-    setEditor(quill);
   }
 
   function customImgHanlder() {
@@ -41,8 +38,8 @@ function QuillEditor() {
   }
 
   function save_quill() {
-    if (!editor) return;
-    console.log(editor.root.innerHTML.trim());
+    if (!editorRef.current) return;
+    console.log(editorRef.current.root.innerHTML.trim());
   }
 
   useEffect(initalizeEditor, []);
