@@ -3,6 +3,9 @@ import {
   ReportFormValuesSchema,
 } from "@admanager/shared/types/ReportApi";
 import { Modal, Form, Input, Select, Button } from "antd";
+import QuillEditor from "./Quill/QuillEditor";
+import Quill from "quill";
+import React, { useRef } from "react";
 
 const { Option } = Select;
 
@@ -21,12 +24,28 @@ function ReportModal({
 }: ReportModalProps) {
   const [form] = Form.useForm();
 
+  const quillRef = useRef<Quill | null>(null);
+
   const handleFinish = (values: ReportFormValues) => {
-    const data = ReportFormValuesSchema.safeParse(values);
-    if (data.success) onSubmit(values);
-    else console.warn(data.error);
+    let quillContent = "";
+    if (quillRef.current) {
+      quillContent = quillRef.current.root.innerHTML.trim();
+    }
+    const updatedValues = {
+      ...values,
+      noi_dung: quillContent,
+    };
+    const data = ReportFormValuesSchema.safeParse(updatedValues);
+    // if (data.success) onSubmit(updatedValues);
+    // else console.warn(data.error);
+
     form.resetFields();
-    console.log("Submit report clicked", values);
+
+    if (quillRef.current) {
+      console.log(quillRef.current.root.innerHTML.trim());
+    }
+
+    console.log("Submit report clicked", updatedValues);
   };
 
   return (
@@ -44,6 +63,7 @@ function ReportModal({
         initialValues={reportFormValues}
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 18 }}
+        className="overflow-scroll"
       >
         <Form.Item<ReportFormValues>
           name="id_loai_bc"
@@ -84,14 +104,10 @@ function ReportModal({
           <Input />
         </Form.Item>
 
-        <Form.Item<ReportFormValues>
-          name="noi_dung"
-          label="Nội dung báo cáo"
-          rules={[{ required: true, message: "Please enter a description" }]}
-          wrapperCol={{ span: 18 }}
-        >
-          <Input.TextArea rows={4} />
-        </Form.Item>
+        <div className="flex min-h-96 flex-col">
+          <p>Nội dung báo cáo</p>
+          <QuillEditor forwardedRef={quillRef} />
+        </div>
 
         <Form.Item className="flex justify-center text-center">
           <Button type="primary" htmlType="submit">
