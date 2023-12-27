@@ -150,6 +150,7 @@ const AdManagement = () => {
         scroll={{ x: 1300 }}
         onRow={(record) => ({
           onClick: () => {
+            console.log("newres", record);
             setSelectedAds(record);
           },
         })}

@@ -1,17 +1,11 @@
-import { FC, useEffect, useRef, useState } from "react";
-import {
-  Select,
-  DatePicker,
-  InputNumber,
-  Form,
-  Input,
-  Button,
-  InputRef,
-} from "antd";
+import { FC, useEffect, useState } from "react";
+import { Select, DatePicker, InputNumber, Form, Input, Button } from "antd";
+
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
+
 const { Option } = Select;
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -39,6 +33,11 @@ const LocateType = [
   "Nhà chờ xe buýt",
 ];
 const AdType = ["Cổ động chính trị", "Quảng cáo thương mại", "Xã hội hoá"];
+// interface MyComponentProps {
+//   ad: AdsInfoRecord | null;
+//   isModalOpen: boolean;
+//   onClose: () => void;
+// }
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -79,61 +78,43 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList2, setFileList2] = useState<UploadFile[]>([]);
   const [mapModalOpen, setOpenMapModal] = useState<boolean>(false);
   const [address, setAddress] = useState<string>("");
 
   const handleCancel = () => setPreviewOpen(false);
 
   useEffect(() => {
+    console.log("newtt", ad?.bang_qc);
     const files: UploadFile[] = [];
     if (ad?.hinh_1) {
       files.push({ uid: "1", name: "Image 1", status: "done", url: ad.hinh_1 });
+      setFileList(
+        files.filter((file) => {
+          return file.uid === "1";
+        }),
+      );
     }
     if (ad?.hinh_2) {
       files.push({ uid: "2", name: "Image 2", status: "done", url: ad.hinh_2 });
+      setFileList2(
+        files.filter((file) => {
+          return file.uid === "2";
+        }),
+      );
     }
-    setFileList(files);
-    if (ad && type === "AdInfo") setAddress(ad.dia_chi);
-  }, [ad]);
 
-  useEffect(() => {
-    const files: UploadFile[] = [];
-    if (ad?.hinh_1) {
-      files.push({ uid: "1", name: "Image 1", status: "done", url: ad.hinh_1 });
+    if (ad && type === "AdInfo") {
+      setAddress(ad.dia_chi);
     }
-    if (ad?.hinh_2) {
-      files.push({ uid: "2", name: "Image 2", status: "done", url: ad.hinh_2 });
-    }
-    setFileList(files);
-    if (ad && type === "AdInfo") setAddress(ad.dia_chi);
-  }, [ad]);
+    form.setFieldsValue({
+      so_luong: ad?.so_luong,
+      chieu_dai_m: ad?.chieu_dai_m,
+      chieu_rong_m: ad?.chieu_rong_m,
+      bang_qc: ad?.bang_qc,
+    });
+  }, [ad, form]);
 
-  useEffect(() => {
-    if (ad?.img) {
-      setFileList([
-        {
-          uid: "1",
-          name: "Image 1",
-          status: "done",
-          url: ad.img,
-        },
-      ]);
-    } else {
-      setFileList([]);
-    }
-    if (ad?.img2) {
-      setFileList2([
-        {
-          uid: "2",
-          name: "Image 2",
-          status: "done",
-          url: ad?.img2,
-        },
-      ]);
-    } else {
-      setFileList2([]);
-    }
-  }, [ad]);
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as RcFile);
@@ -155,6 +136,17 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
       setFileList([{ ...file, status: "done", url: preview }]);
     } else {
       setFileList(newFileList);
+    }
+  };
+  const handleChange2: UploadProps["onChange"] = async ({
+    fileList: newFileList,
+    file,
+  }) => {
+    if (file && file.type && file.type.startsWith("image/")) {
+      const preview = await getBase64(file.originFileObj as RcFile);
+      setFileList2([{ ...file, status: "done", url: preview }]);
+    } else {
+      setFileList2(newFileList);
     }
   };
 
@@ -223,7 +215,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
           <div className="grid grid-cols-2 gap-5  ">
             <Form.Item<AdChangeFormValue>
               label=" Loại quảng cáo"
-              name={"id_loai_bang_qc"}
+              name={"bang_qc"}
             >
               <Select value={ad?.bang_qc}>
                 {AdTableType.map((value) => (
@@ -237,7 +229,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
               name={"id_hinh_thuc"}
               label=" Hình thức"
             >
-              <Select value={ad?.hinh_thuc}>
+              <Select defaultValue={ad?.hinh_thuc}>
                 {AdType.map((value) => (
                   <Option key={value} value={value}>
                     {value}
@@ -249,7 +241,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
               name={"id_loai_vitri"}
               label="Loại vị trí"
             >
-              <Select value={ad?.loai_vitri}>
+              <Select defaultValue={ad?.loai_vitri}>
                 {LocateType.map((value) => (
                   <Option key={value} value={value}>
                     {value}
@@ -257,22 +249,24 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
                 ))}
               </Select>
             </Form.Item>
-            <div className=" flex flex-row">
-              <Form.Item<AdChangeFormValue>
-                name={"chieu_dai_m"}
-                initialValue={ad?.chieu_dai_m || 0}
-              >
-                <InputNumber className="h-8 w-12 " min={1} max={10} />
-              </Form.Item>
-              <span className="mx-2">x</span>
-              <Form.Item<AdChangeFormValue>
-                name={"chieu_rong_m"}
-                initialValue={ad?.chieu_rong_m || 0}
-              >
-                <InputNumber className="h-8 w-12" min={1} max={10} />
-              </Form.Item>
-              <span className="mx-2">(mxm)</span>
-            </div>
+            <Form.Item<AdChangeFormValue> label="Kích thước">
+              <div className=" flex flex-row">
+                <Form.Item<AdChangeFormValue>
+                  name={"chieu_dai_m"}
+                  initialValue={ad?.chieu_dai_m || 0}
+                >
+                  <InputNumber className="h-8 w-12 " min={1} max={10} />
+                </Form.Item>
+                <span className="mx-2">x</span>
+                <Form.Item<AdChangeFormValue>
+                  name={"chieu_rong_m"}
+                  initialValue={ad?.chieu_rong_m || 0}
+                >
+                  <InputNumber className="h-8 w-12" min={1} max={10} />
+                </Form.Item>
+                <span className="mx-2">(mxm)</span>
+              </div>
+            </Form.Item>
 
             <Form.Item<AdChangeFormValue>
               name={"ngay_het_han"}
@@ -288,41 +282,66 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
             >
               <InputNumber className="h-8 w-12 " min={1} />
             </Form.Item>
-            <Form.Item label="Số lượng">
-              <InputNumber className="h-8 w-12 " min={1} max={10} />
-              <span className="mx-2">trụ/bảng</span>
+
+            <Form.Item label="Hình ảnh 1">
+              <Upload
+                action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={handlePreview}
+                onChange={handleChange}
+              >
+                {fileList.length >= 2 ? null : uploadButton}
+              </Upload>
+              <Modal
+                open={previewOpen}
+                title={previewTitle}
+                footer={null}
+                onCancel={handleCancel}
+              >
+                <img
+                  alt="example"
+                  style={{ width: "100%" }}
+                  src={previewImage}
+                />
+              </Modal>
+            </Form.Item>
+            <Form.Item label="Hình ảnh 2">
+              <Upload
+                action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                listType="picture-card"
+                fileList={fileList2}
+                onPreview={handlePreview}
+                onChange={handleChange2}
+              >
+                {fileList2.length >= 2 ? null : uploadButton}
+              </Upload>
+              <Modal
+                open={previewOpen}
+                title={previewTitle}
+                footer={null}
+                onCancel={handleCancel}
+              >
+                <img
+                  alt="example"
+                  style={{ width: "100%" }}
+                  src={previewImage}
+                />
+              </Modal>
             </Form.Item>
           </div>
-          <Form.Item
-            label="Địa chỉ"
-            labelCol={{ span: 3 }}
-            wrapperCol={{ span: 20 }}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Hình ảnh"
-            labelCol={{ span: 3 }}
-            wrapperCol={{ span: 20 }}
-          >
-            <Upload
-              action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-              listType="picture-card"
-              fileList={fileList}
-              onPreview={handlePreview}
-              onChange={handleChange}
+          <div className=" flex flex-row">
+            <Form.Item<AdChangeFormValue>
+              label="Địa chỉ"
+              className=" flex-1"
+              labelCol={{ span: 3 }}
+              wrapperCol={{ span: 20 }}
             >
-              {fileList.length >= 8 ? null : uploadButton}
-            </Upload>
-            <Modal
-              open={previewOpen}
-              title={previewTitle}
-              footer={null}
-              onCancel={handleCancel}
-            >
-              <img alt="example" style={{ width: "100%" }} src={previewImage} />
-            </Modal>
-          </Form.Item>
+              <Input value={address} />
+            </Form.Item>
+            <Button onClick={() => setOpenMapModal(true)}>🗺️</Button>
+          </div>
+
           <Form.Item className="mt-5 flex items-center justify-center">
             <Button type="primary" htmlType="submit">
               Cập nhật

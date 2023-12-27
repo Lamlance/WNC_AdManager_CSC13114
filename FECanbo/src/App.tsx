@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { Button, Layout, Menu } from "antd";
 import { ReactElement } from "react";
-import { ReactElement } from "react";
+
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
