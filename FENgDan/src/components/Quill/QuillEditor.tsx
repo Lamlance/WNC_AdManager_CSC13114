@@ -55,7 +55,7 @@ function QuillEditor({ forwardedRef }: QuillEditorProps) {
           <button className="ql-video"></button>
         </span>
       </div>
-      <div ref={editorEleRef} style={{ height: "250px" }}></div>
+      <div ref={editorEleRef} style={{ height: "200px" }}></div>
     </>
   );
 }

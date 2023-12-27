@@ -63,7 +63,6 @@ function ReportModal({
         initialValues={reportFormValues}
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 18 }}
-        className="overflow-scroll"
       >
         <Form.Item<ReportFormValues>
           name="id_loai_bc"
@@ -104,8 +103,10 @@ function ReportModal({
           <Input />
         </Form.Item>
 
-        <div className="flex min-h-96 flex-col">
-          <p>Nội dung báo cáo</p>
+        <div className="flex min-h-72 flex-col">
+          <p className="font mb-2 text-center text-base font-bold">
+            Nội dung báo cáo
+          </p>
           <QuillEditor forwardedRef={quillRef} />
         </div>
 
