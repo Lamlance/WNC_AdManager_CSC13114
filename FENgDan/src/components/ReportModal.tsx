@@ -63,6 +63,7 @@ function ReportModal({
         initialValues={reportFormValues}
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 18 }}
+        labelAlign="left"
       >
         <Form.Item<ReportFormValues>
           name="id_loai_bc"
