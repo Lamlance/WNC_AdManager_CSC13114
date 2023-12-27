@@ -33,11 +33,6 @@ const LocateType = [
   "Nhà chờ xe buýt",
 ];
 const AdType = ["Cổ động chính trị", "Quảng cáo thương mại", "Xã hội hoá"];
-// interface MyComponentProps {
-//   ad: AdsInfoRecord | null;
-//   isModalOpen: boolean;
-//   onClose: () => void;
-// }
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -83,9 +78,8 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
   const [address, setAddress] = useState<string>("");
 
   const handleCancel = () => setPreviewOpen(false);
-
+  console.log("newtt", ad);
   useEffect(() => {
-    console.log("newtt", ad?.bang_qc);
     const files: UploadFile[] = [];
     if (ad?.hinh_1) {
       files.push({ uid: "1", name: "Image 1", status: "done", url: ad.hinh_1 });
@@ -107,13 +101,17 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
     if (ad && type === "AdInfo") {
       setAddress(ad.dia_chi);
     }
+
     form.setFieldsValue({
       so_luong: ad?.so_luong,
       chieu_dai_m: ad?.chieu_dai_m,
       chieu_rong_m: ad?.chieu_rong_m,
       bang_qc: ad?.bang_qc,
+      loai_vitri: ad?.loai_vitri,
+      hinh_thuc: ad?.hinh_thuc,
+      ten_dia_diem: ad?.ten_dia_diem,
     });
-  }, [ad, form]);
+  }, [ad]);
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -163,6 +161,9 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
 
   const handleCancelModal = () => {
     onClose();
+    setAddress("");
+    setFileList([]);
+    setFileList2([]);
   };
   const [isOpen, setIsopen] = useState(false);
   useEffect(() => {
@@ -225,10 +226,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item<AdChangeFormValue>
-              name={"id_hinh_thuc"}
-              label=" Hình thức"
-            >
+            <Form.Item<AdChangeFormValue> name={"hinh_thuc"} label=" Hình thức">
               <Select defaultValue={ad?.hinh_thuc}>
                 {AdType.map((value) => (
                   <Option key={value} value={value}>
@@ -238,7 +236,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
               </Select>
             </Form.Item>
             <Form.Item<AdChangeFormValue>
-              name={"id_loai_vitri"}
+              name={"loai_vitri"}
               label="Loại vị trí"
             >
               <Select defaultValue={ad?.loai_vitri}>
@@ -249,6 +247,14 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
                 ))}
               </Select>
             </Form.Item>
+            <Form.Item<AdChangeFormValue>
+              label="Vị trí"
+              name={"ten_dia_diem"}
+              initialValue={ad?.ten_dia_diem}
+            >
+              <Input />
+            </Form.Item>
+
             <Form.Item<AdChangeFormValue> label="Kích thước">
               <div className=" flex flex-row">
                 <Form.Item<AdChangeFormValue>
@@ -267,6 +273,21 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
                 <span className="mx-2">(mxm)</span>
               </div>
             </Form.Item>
+            <Form.Item<AdChangeFormValue>
+              name={"so_luong"}
+              label="Số lượng"
+              initialValue={ad?.so_luong || 0}
+            >
+              <InputNumber className="h-8 w-12 " min={1} />
+            </Form.Item>
+
+            <Form.Item<AdChangeFormValue>
+              name={"ngay_hieu_luc"}
+              label="Ngày hiệu lực"
+              initialValue={dayjs(`${ad?.ngay_hieu_luc || today}`, dateFormat)}
+            >
+              <DatePicker format={dateFormat} />
+            </Form.Item>
 
             <Form.Item<AdChangeFormValue>
               name={"ngay_het_han"}
@@ -274,13 +295,6 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
               initialValue={dayjs(`${ad?.ngay_het_han || today}`, dateFormat)}
             >
               <DatePicker format={dateFormat} />
-            </Form.Item>
-            <Form.Item<AdChangeFormValue>
-              name={"so_luong"}
-              label="Số lượng"
-              initialValue={ad?.so_luong || 0}
-            >
-              <InputNumber className="h-8 w-12 " min={1} />
             </Form.Item>
 
             <Form.Item label="Hình ảnh 1">

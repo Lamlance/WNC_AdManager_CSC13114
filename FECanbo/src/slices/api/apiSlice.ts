@@ -3,6 +3,7 @@ import {
   GetAllAdsRequest,
   GetAllAdsReqRequest,
   GetAllReportsRequest,
+  GetAllAdsMethod,
 } from "../../types/request";
 import {
   AdChangeApi,
@@ -23,6 +24,13 @@ export const apiSlice = createApi({
     >({
       query: () => "/quang-cao",
     }),
+    getAllAdsMethod: builder.query<
+      AdsGeoJson.AdMethodProperty[],
+      GetAllAdsMethod | void
+    >({
+      query: () => "/hinh-thuc-quang-cao",
+    }),
+
     getAllAdsReq: builder.query<
       AdsReqApi.ManyAdsRequestResponse[],
       GetAllAdsReqRequest | void
@@ -93,6 +101,7 @@ export const apiSlice = createApi({
 export const {
   useGetAllAdsInfoQuery,
   useGetAllReportInfoQuery,
+  useGetAllAdsMethodQuery,
   useSubmitAdRequestMutation,
   useGetAllAdsReqQuery,
   useGetAllAdChangeRequestQuery,

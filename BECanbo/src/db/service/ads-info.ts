@@ -82,6 +82,7 @@ export async function GetQuangManyCaoData() {
       loai_vitri: qc.loai_vitri,
       hinh_thuc: qc.hinh_thuc,
       bang_qc: qc.bang_qc,
+      ten_dia_diem: qc.dia_diem.ten_dia_diem,
     };
     const trimProp = AdsGeoJson.AdsPropertySchema.safeParse(prop);
     if (trimProp.success == false) continue;

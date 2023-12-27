@@ -2,55 +2,12 @@ import React, { useState } from "react";
 import { Button, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import EditAdForm from "./EditAdForm";
-import { AdsInfoRecord } from "../../types";
+
 import { DeleteOutlined } from "@ant-design/icons";
 import { useGetAllAdsInfoQuery } from "../../slices/api/apiSlice";
 import { AdsGeoJson } from "@admanager/shared";
 
 type AdsInfoRecord2 = AdsGeoJson.PlaceProperty & AdsGeoJson.AdsProperty;
-
-function convertAdsData(data: any[]): AdsInfoRecord[] {
-  return data.map((item) => {
-    const {
-      ads: {
-        id_quang_cao,
-        id_dia_diem,
-        so_luong,
-        chieu_dai_m,
-        chieu_rong_m,
-        ngay_hieu_luc,
-        ngay_het_han,
-        hinh_1,
-        hinh_2,
-        quy_hoach,
-      },
-      place: { dia_chi },
-      placeType: { loai_vitri },
-      contentType: { hinh_thuc_qc },
-      adsType: { loai_bang_qc },
-    } = item;
-
-    return {
-      id: id_quang_cao,
-      adsType: loai_bang_qc,
-      address: dia_chi,
-      generalInfo: {
-        size: {
-          width: chieu_rong_m,
-          height: chieu_dai_m,
-        },
-        number: so_luong,
-      },
-      contentType: hinh_thuc_qc,
-      placeType: loai_vitri,
-      status: quy_hoach ? "Planned" : "Unplanned",
-      effectDate: ngay_hieu_luc,
-      expireDate: ngay_het_han,
-      img: hinh_1,
-      img2: hinh_2,
-    };
-  });
-}
 
 function convertAdsData2(
   data: AdsGeoJson.AdsGeoJsonProperty[],
@@ -132,10 +89,12 @@ const AdManagement = () => {
   };
   const handleAddAd = () => {
     setSelectedAds(null);
+
     setIsModalOpen(true);
   };
 
   const handleDeleteAd = () => {};
+  console.log("data", data);
   return (
     <>
       {error && <div>There was an error</div>}
