@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { Button, Layout, Menu } from "antd";
+import { ReactElement } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -11,63 +12,97 @@ import {
 
 import AdsInfo from "./components/ads-info/AdsInfo";
 import ReportInfo from "./components/report-info/ReportInfo";
-import EditAdForm from "./components/vhtt/EditAdForm";
-import EditSetpoint from "./components/vhtt/EditSetpoint";
 import CreateAccount from "./components/vhtt/CreateAccount";
-import AdsMap from "./components/vhtt/AdsMap";
 import AdsRequestPage from "./routes/AdsRequestPage";
+import AdManagement from "./components/vhtt/AdManagement";
+import AdsRequestVHTTPage from "./components/vhtt/ads-request/AdsRequestVHTTPage";
+import EditRequest from "./components/vhtt/requestedit-ads/EditRequest";
 import EditRequestComponent from "./components/vhtt/EditRequestComponent";
+
 const { Header, Sider, Content } = Layout;
-
-
+const items: Item[] = [
+  {
+    key: "1",
+    icon: <UserOutlined />,
+    label: "Yêu cầu cấp phép",
+    title: "/",
+  },
+  {
+    key: "2",
+    icon: <VideoCameraOutlined />,
+    label: "Thông tin điểm quảng cáo",
+    title: "/advertisements",
+  },
+  {
+    key: "3",
+    icon: <UploadOutlined />,
+    label: "Báo cáo từ người dân",
+    title: "/reports",
+  },
+];
+const itemVHTTs: Item[] = [
+  {
+    key: "1",
+    icon: <VideoCameraOutlined />,
+    label: "Quản lý bảng quảng cáo",
+    title: "/vhtt",
+  },
+  {
+    key: "4",
+    icon: <UploadOutlined />,
+    label: "Yêu cầu cấp phép QC",
+    title: "/vhtt/requestad",
+  },
+  {
+    key: "5",
+    icon: <UploadOutlined />,
+    label: "Yêu cầu chỉnh sủa QC",
+    title: "/vhtt/edit-ad-request",
+  },
+  {
+    key: "6",
+    icon: <UploadOutlined />,
+    label: "Yêu cầu chỉnh sủa địa điểm",
+    title: "/vhtt/edit-place-request",
+  },
+];
 const App = () => {
   return (
     <div className="h-screen w-screen">
       <Routes>
-        <Route path="/" element={<PageLayout />}>
+        <Route path="/" element={<PageLayout items={items} />}>
           <Route index element={<AdsRequestPage />} />
           <Route path="advertisements" element={<AdsInfo />} />
           <Route path="reports" element={<ReportInfo />} />
         </Route>
-        <Route path="vhtt" element={<PageLayoutVHTT />}>
-          <Route path="editad" element={<EditAdForm />} />
-          {/* <Route path="editpoint" element={<EditSetpoint />} /> */}
-          <Route path="adsmap" element={<AdsMap />} />
+        <Route path="vhtt" element={<PageLayout items={itemVHTTs} />}>
+          <Route index element={<AdManagement />} />
+          <Route path="requestad" element={<AdsRequestVHTTPage />} />
           <Route path="createaccount" element={<CreateAccount />} />
-          <Route path="editrequest" element={<EditRequestComponent />} />
+          <Route path="edit-ad-request" element={<EditRequest />} />
+          <Route path="edit-place-request" element={<EditRequestComponent />} />
         </Route>
       </Routes>
     </div>
   );
 };
 
-const PageLayout = () => {
+interface Item {
+  key: string;
+  icon: ReactElement;
+  label: string;
+  title: string;
+}
+interface PageLayoutProps {
+  items: Item[];
+}
+
+const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
 
-  const items = [
-    {
-      key: "1",
-      icon: <UserOutlined />,
-      label: "Yêu cầu cấp phép",
-      title: "/",
-    },
-    {
-      key: "2",
-      icon: <VideoCameraOutlined />,
-      label: "Thông tin điểm quảng cáo",
-      title: "/advertisements",
-    },
-    {
-      key: "3",
-      icon: <UploadOutlined />,
-      label: "Báo cáo từ người dân",
-      title: "/reports",
-    },
-  ];
-
   return (
-    <Layout>
+    <Layout className="min-h-full">
       <Sider
         trigger={null}
         collapsedWidth={0}
@@ -166,11 +201,21 @@ const PageLayoutVHTT = () => {
 
   return (
     <Layout>
-      <Sider trigger={null} collapsedWidth={0} width={280} collapsible collapsed={collapsed}>
+      <Sider
+        trigger={null}
+        collapsedWidth={0}
+        width={280}
+        collapsible
+        collapsed={collapsed}
+      >
         <div className="my-4 flex flex-row justify-center">
           <span className="text-base font-bold text-white"> VHTT</span>
         </div>
-        <Menu theme="dark" mode="inline" style={{fontSize: "16px"}} defaultSelectedKeys={["1"]}
+        <Menu
+          theme="dark"
+          mode="inline"
+          style={{ fontSize: "16px" }}
+          defaultSelectedKeys={["1"]}
           items={items}
           onSelect={({ key }) => {
             const redirectURL = items?.find((item) => item?.key == key)?.title;
@@ -180,7 +225,7 @@ const PageLayoutVHTT = () => {
           }}
         />
       </Sider>
-      <Layout style={{ background: "#ffffff", }}>
+      <Layout style={{ background: "#ffffff" }}>
         <Header style={{ padding: 0, background: "#ffffff" }}>
           <Button
             type="text"

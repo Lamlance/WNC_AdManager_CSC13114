@@ -4,63 +4,47 @@ import { CallAndCatchAsync } from "../utils/CallCatch.js";
 import { eq } from "drizzle-orm";
 import { AdsGeoJson } from "@admanager/shared";
 import { pg_client } from "../db/db.js";
+import z from "zod";
+import { GetQuangManyCaoData } from "../db/service/ads-info.js";
 
-async function GetQuangCaoData() {
+async function GetReportData() {
   const data = await pg_client
     .select({
+      bao_cao: AdsSchema.BaoCao,
+      loai_bao_cao: AdsSchema.LoaiBaoCao.loai_bao_cao,
       dia_diem: AdsSchema.DiaDiem,
       quang_cao: AdsSchema.QuangCao,
-      loai_vitri: AdsSchema.LoaiViTri.loai_vitri,
-      hinh_thuc: AdsSchema.HinhThucQC.hinh_thuc_qc,
-      bang_qc: AdsSchema.LoaiBangQC.loai_bang_qc,
     })
-    .from(AdsSchema.QuangCao)
+    .from(AdsSchema.BaoCao)
     .innerJoin(
+      AdsSchema.LoaiBaoCao,
+      eq(AdsSchema.BaoCao.id_bao_cao, AdsSchema.LoaiBaoCao.id_loai_bc)
+    )
+    .leftJoin(
+      AdsSchema.QuangCao,
+      eq(AdsSchema.BaoCao.id_quang_cao, AdsSchema.QuangCao.id_quang_cao)
+    )
+    .leftJoin(
       AdsSchema.DiaDiem,
-      eq(AdsSchema.QuangCao.id_dia_diem, AdsSchema.DiaDiem.id_dia_diem)
-    )
-    .innerJoin(
-      AdsSchema.LoaiViTri,
-      eq(AdsSchema.LoaiViTri.id_loai_vt, AdsSchema.QuangCao.id_loai_vitri)
-    )
-    .innerJoin(
-      AdsSchema.HinhThucQC,
-      eq(AdsSchema.HinhThucQC.id_htqc, AdsSchema.QuangCao.id_hinh_thuc)
-    )
-    .innerJoin(
-      AdsSchema.LoaiBangQC,
-      eq(
-        AdsSchema.LoaiBangQC.id_loai_bang_qc,
-        AdsSchema.QuangCao.id_loai_bang_qc
-      )
+      eq(AdsSchema.DiaDiem.id_dia_diem, AdsSchema.QuangCao.id_dia_diem)
     );
 
   const grp_by_location: {
-    [key: number]: {
-      ads: AdsGeoJson.AdsProperty[];
-      dd: typeof AdsSchema.DiaDiem.$inferSelect;
-    };
+    [key: string]: AdsGeoJson.ReportGeoJsonProperty[];
   } = {};
 
   for (let i = 0; i < data.length; i++) {
-    const qc = data[i];
-    const prop: AdsGeoJson.AdsProperty = {
-      ...qc.quang_cao,
-      ...qc.dia_diem,
-      loai_vitri: qc.loai_vitri,
-      hinh_thuc: qc.hinh_thuc,
-      bang_qc: qc.bang_qc,
-    };
-    const trimProp = AdsGeoJson.AdsPropertySchema.safeParse(prop);
-    if (trimProp.success == false) continue;
+    const rp: AdsGeoJson.ReportGeoJsonProperty = data[i];
+    const trim_rp = AdsGeoJson.ReportGeoJsonPropertySchema.safeParse(rp);
+    if (trim_rp.success == false) continue;
+    const key = `${trim_rp.data.bao_cao.lng.toFixed(
+      4
+    )}|${trim_rp.data.bao_cao.lat.toFixed(4)}`;
 
-    if (grp_by_location[qc.dia_diem.id_dia_diem]) {
-      grp_by_location[qc.dia_diem.id_dia_diem].ads.push(trimProp.data);
+    if (grp_by_location[key]) {
+      grp_by_location[key].push(trim_rp.data);
     } else {
-      grp_by_location[qc.dia_diem.id_dia_diem] = {
-        ads: [trimProp.data],
-        dd: qc.dia_diem,
-      };
+      grp_by_location[key] = [trim_rp.data];
     }
   }
 
@@ -70,7 +54,7 @@ async function GetQuangCaoData() {
 const GeoJsonRouter = Router();
 
 GeoJsonRouter.get("/", async function (req, res) {
-  const qc_data = await CallAndCatchAsync(GetQuangCaoData, undefined);
+  const qc_data = await CallAndCatchAsync(GetQuangManyCaoData, undefined);
   if (qc_data.success == false)
     return res.status(500).json({ error: qc_data.error });
 
@@ -87,14 +71,53 @@ GeoJsonRouter.get("/", async function (req, res) {
 
   for (let i = 0; i < geo_data.length; i++) {
     const qc = geo_data[i];
+    const prop: AdsGeoJson.AdsGeoJsonProperty = {
+      ads: qc[1].ads,
+      place: qc[1].dd,
+    };
     geo_json.features.push({
       type: "Feature",
-      properties: {
-        ads: qc[1].ads,
-      },
+      properties: prop,
       geometry: {
         type: "Point",
         coordinates: [qc[1].dd.lng, qc[1].dd.lat, 0],
+      },
+    });
+  }
+
+  return res.status(200).json(geo_json);
+});
+
+GeoJsonRouter.get("/report", async function (req, res) {
+  const rp_data = await CallAndCatchAsync(GetReportData, undefined);
+  if (rp_data.success == false)
+    return res.status(500).json({ error: rp_data.error });
+  const geo_json: AdsGeoJson.ReportGeoJson = {
+    type: "FeatureCollection",
+    crs: {
+      properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+      type: "name",
+    },
+    features: [],
+  };
+
+  const geo_data = Object.entries(rp_data.data);
+  for (let i = 0; i < geo_data.length; i++) {
+    const rp = geo_data[i][1];
+    const loc = geo_data[i][0];
+    const [lngStr, latStr] = loc.split("|");
+    const coord = z.array(z.coerce.number()).safeParse([lngStr, latStr]);
+    if (coord.success == false) {
+      console.log(coord.error);
+      continue;
+    }
+
+    geo_json.features.push({
+      type: "Feature",
+      properties: rp,
+      geometry: {
+        type: "Point",
+        coordinates: [coord.data[0], coord.data[1], 0],
       },
     });
   }

@@ -29,6 +29,8 @@ export interface AdsInfoRecord {
   status: string;
   effectDate: string;
   expireDate: string;
+  img: string;
+  img2: string;
 }
 
 export interface ReportInfoRecord {
@@ -44,8 +46,29 @@ export interface ReportInfoRecord {
   status: string;
 }
 
+<<<<<<< HEAD
 
 export interface EditRequest {   //yeu cau chinh sua
+=======
+export interface EditAdRequest {
+  id: string;
+  timeRequest: string;
+  reason: string;
+  newinfo: AdsInfoRecord;
+  status: string;
+}
+
+export interface EditAdRequest {
+  id: string;
+  timeRequest: string;
+  reason: string;
+  newinfo: AdsInfoRecord;
+  status: string;
+}
+
+export interface EditRequest {
+  //yeu cau chinh sua
+>>>>>>> 920c6bb3c62c34021bba84d4adc2c7eb41b3023a
   id: string;
   location: string;
   sender: string;
@@ -54,4 +77,8 @@ export interface EditRequest {   //yeu cau chinh sua
   lng: number;
   lat: number;
   status: string;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 920c6bb3c62c34021bba84d4adc2c7eb41b3023a

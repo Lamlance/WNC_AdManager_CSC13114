@@ -1,5 +1,8 @@
+import {
+  ReportFormValues,
+  ReportFormValuesSchema,
+} from "@admanager/shared/types/ReportApi";
 import { Modal, Form, Input, Select, Button } from "antd";
-import { ReportFormValues } from "../models/report_form_values";
 
 const { Option } = Select;
 
@@ -7,7 +10,7 @@ interface ReportModalProps {
   visible: boolean;
   onCancel: () => void;
   onSubmit: (values: ReportFormValues) => void;
-  reportFormValues: ReportFormValues;
+  reportFormValues?: ReportFormValues;
 }
 
 function ReportModal({
@@ -19,7 +22,9 @@ function ReportModal({
   const [form] = Form.useForm();
 
   const handleFinish = (values: ReportFormValues) => {
-    onSubmit(values);
+    const data = ReportFormValuesSchema.safeParse(values);
+    if (data.success) onSubmit(values);
+    else console.warn(data.error);
     form.resetFields();
     console.log("Submit report clicked", values);
   };
@@ -40,28 +45,28 @@ function ReportModal({
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 18 }}
       >
-        <Form.Item
-          name="reportType"
+        <Form.Item<ReportFormValues>
+          name="id_loai_bc"
           label="Hình thức báo cáo"
           rules={[
             { required: true, message: "Please select the type of report" },
           ]}
         >
           <Select placeholder="Select type">
-            <Option value="issue">Lỗi</Option>
-            <Option value="bad-content">Nội dung không phù hợp</Option>
+            <Option value={1}>Lỗi</Option>
+            <Option value={2}>Nội dung không phù hợp</Option>
           </Select>
         </Form.Item>
 
-        <Form.Item
-          name="fullName"
+        <Form.Item<ReportFormValues>
+          name="ten_nguoi_gui"
           label="Họ và tên người báo cáo"
           rules={[{ required: true, message: "Please enter your full name" }]}
         >
           <Input />
         </Form.Item>
 
-        <Form.Item
+        <Form.Item<ReportFormValues>
           name="email"
           label="Email liên lạc"
           rules={[{ required: true, message: "Please enter your email" }]}
@@ -69,8 +74,8 @@ function ReportModal({
           <Input type="email" />
         </Form.Item>
 
-        <Form.Item
-          name="phoneNumber"
+        <Form.Item<ReportFormValues>
+          name="dien_thoai"
           label="Điện thoại liên lạc"
           rules={[
             { required: true, message: "Please enter your phone number" },
@@ -79,8 +84,8 @@ function ReportModal({
           <Input />
         </Form.Item>
 
-        <Form.Item
-          name="description"
+        <Form.Item<ReportFormValues>
+          name="noi_dung"
           label="Nội dung báo cáo"
           rules={[{ required: true, message: "Please enter a description" }]}
           wrapperCol={{ span: 18 }}
@@ -88,8 +93,8 @@ function ReportModal({
           <Input.TextArea rows={4} />
         </Form.Item>
 
-        <Form.Item className="text-center">
-          <Button type="primary" htmlType="submit" className=" w-full">
+        <Form.Item className="flex justify-center text-center">
+          <Button type="primary" htmlType="submit">
             Nộp đơn
           </Button>
         </Form.Item>

@@ -1,0 +1,49 @@
+import z from "zod";
+import * as AdsGeoJson from "./AdsGeoJson.js";
+
+const AdChangeDataSchema = z
+  .object({
+    id_loai_bang_qc: z.number().nullish(),
+    id_dia_diem: z.number().nullish(),
+    id_hinh_thuc: z.number().nullish(),
+    id_loai_vitri: z.number().nullish(),
+  })
+  .merge(AdsGeoJson.AdsPropertySchema.partial());
+
+const AdChangeRequestCreateSchema = z.object({
+  ly_do_chinh_sua: z.string(),
+  id_quang_cao: z.string(),
+  thong_tin_sua: AdChangeDataSchema,
+});
+
+const AdChangeRequestSchema = z
+  .object({
+    id_yeu_cau: z.number(),
+    thoi_diem_chinh_sua: z.date(),
+    trang_thai: z.string(),
+    id_quang_cao: z.string(),
+  })
+  .merge(AdChangeRequestCreateSchema);
+
+const AdChangeRequestResponseSchema = z.object({
+  chinh_sua: AdChangeRequestSchema,
+  thong_tin_qc: AdsGeoJson.AdsPropertySchema,
+});
+
+type AdChangeRequest = z.infer<typeof AdChangeRequestSchema>;
+type AdChangeRequestCreate = z.infer<typeof AdChangeRequestCreateSchema>;
+type AdChangeRequestResponse = z.infer<typeof AdChangeRequestResponseSchema>;
+type AdChangeData = z.infer<typeof AdChangeDataSchema>;
+
+export {
+  AdChangeRequestSchema,
+  AdChangeDataSchema,
+  AdChangeRequestResponseSchema,
+  AdChangeRequestCreateSchema,
+};
+export type {
+  AdChangeRequest,
+  AdChangeData,
+  AdChangeRequestResponse,
+  AdChangeRequestCreate,
+};

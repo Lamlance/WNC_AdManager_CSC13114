@@ -11,6 +11,8 @@ import {
   primaryKey,
   real,
   date,
+  jsonb,
+  timestamp,
 } from "drizzle-orm/pg-core";
 const LoaiViTri = pgTable("LoaiViTri", {
   id_loai_vt: serial("id").primaryKey(),
@@ -88,11 +90,22 @@ const LoaiBaoCao = pgTable("LoaiBaoCao", {
 });
 
 const BaoCao = pgTable("BaoCao", {
-  id_bao_cao: uuid("id_bao_cao").defaultRandom().primaryKey(),
+  id_bao_cao: serial("id_bao_cao").primaryKey(),
   ten_nguoi_gui: varchar("ten_nguoi_gui", { length: 255 }).notNull(),
   email: varchar("email", { length: 127 }),
   dien_thoai: varchar("dien_thoai", { length: 127 }),
   noi_dung: varchar("noi_dung", { length: 511 }).notNull(),
+  trang_thai: varchar("trang_thai", { length: 255 })
+    .notNull()
+    .default("Chưa xử lý"),
+  thoi_diem_bc: timestamp("thoi_diem_bc").notNull().defaultNow(),
+
+  dia_chi: varchar("dia_chi", { length: 255 }).notNull(),
+  id_quang_cao: uuid("id_quang_cao").references(() => QuangCao.id_quang_cao),
+  id_dia_diem: integer("id_dia_diem").references(() => DiaDiem.id_dia_diem),
+
+  lng: doublePrecision("kinh_do").notNull(),
+  lat: doublePrecision("vi_do").notNull(),
 
   id_loai_bc: integer("id_loai_bc")
     .notNull()
@@ -101,22 +114,23 @@ const BaoCao = pgTable("BaoCao", {
 
 const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
   id_yeu_cau: serial("id_yeu_cau").primaryKey(),
-  id_diem_dat: serial("id_diem_dat")
-    .notNull()
-    .references(() => DiaDiem.id_dia_diem),
+  id_diem_dat: integer("id_diem_dat").references(() => DiaDiem.id_dia_diem),
   noi_dung_qc: varchar("noi_dung_qc", { length: 255 }).notNull(),
 
   ten_cty: varchar("ten_cty", { length: 255 }).notNull(),
   dien_thoai_cty: varchar("dien_thoai_cty", { length: 127 }).notNull(),
-  emial_cty: varchar("dien_thoai_cty", { length: 127 }).notNull(),
-  dia_chi_cty: varchar("dien_thoai_cty", { length: 255 }).notNull(),
+  email_cty: varchar("email_cty", { length: 127 }).notNull(),
+  dia_chi_cty: varchar("dia_chi_cty", { length: 255 }).notNull(),
 
-  ngay_hieu_luc: date("ngay_hieu_luc").notNull(),
-  ngay_het_han: date("ngay_het_han").notNull(),
+  ngay_hieu_luc: timestamp("ngay_hieu_luc").defaultNow().notNull(),
+  ngay_het_han: timestamp("ngay_het_han").defaultNow().notNull(),
+  trang_thai: varchar("trang_thai").notNull().default("Waiting"),
+  hinh_anh: varchar("hinh_1", { length: 255 }),
 });
 
 const YeuCauChinhSua = pgTable("YeuCauChinhSua", {
   id_yeu_cau: serial("id_yeu_cau").primaryKey(),
+<<<<<<< HEAD
   ten_dia_diem: varchar("ten_dia_diem", { length: 255 }).notNull(),
   dvi_yeu_cau: varchar("dvi_yeu_cau", { length: 255 }).notNull(),
   dia_chi: varchar("dia_chi", { length: 255 }).notNull(),
@@ -126,6 +140,26 @@ const YeuCauChinhSua = pgTable("YeuCauChinhSua", {
   trang_thai: varchar("trang_thai", { length: 255 }).notNull(),  
 })
 
+=======
+  ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
+  thoi_diem_chinh_sua: timestamp("thoi_diem_chinh_sua").defaultNow().notNull(),
+  trang_thai: varchar("trang_thai", { length: 255 }).notNull(),
+  id_quang_cao: uuid("id_quang_cao")
+    .notNull()
+    .references(() => QuangCao.id_quang_cao),
+
+  thong_tin_sua: jsonb("thong_tin_sua").notNull(),
+});
+const YeuCauChinhSuaDiaDiem = pgTable("YeuCauChinhSuaDiaDiem", {
+  id_yeu_cau: serial("id_yeu_cau").primaryKey(),
+  id_dia_diem: integer("id_dia_diem").references(() => DiaDiem.id_dia_diem),
+  lng: doublePrecision("kinh_do"),
+  lat: doublePrecision("vi_do"),
+  ten_dia_diem: varchar("ten_dia_diem", { length: 255 }),
+  dia_chi: varchar("dia_chi", { length: 255 }),
+  ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
+});
+>>>>>>> 920c6bb3c62c34021bba84d4adc2c7eb41b3023a
 export {
   LoaiViTri,
   HinhThucQC,
@@ -138,4 +172,8 @@ export {
   BaoCao,
   YeuCauCapPhep,
   YeuCauChinhSua,
+<<<<<<< HEAD
+=======
+  YeuCauChinhSuaDiaDiem,
+>>>>>>> 920c6bb3c62c34021bba84d4adc2c7eb41b3023a
 };
