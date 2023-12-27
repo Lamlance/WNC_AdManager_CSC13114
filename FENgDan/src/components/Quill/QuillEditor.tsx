@@ -1,9 +1,9 @@
-import { useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import "quill/dist/quill.snow.css";
 import Quill from "quill";
 
 interface QuillEditorProps {
-  forwardedRef: React.RefObject<Quill>;
+  forwardedRef: RefObject<Quill>;
 }
 
 function QuillEditor({ forwardedRef }: QuillEditorProps) {
