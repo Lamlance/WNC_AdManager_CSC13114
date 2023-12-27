@@ -4,7 +4,6 @@ import {
 } from "@admanager/shared/types/ReportApi";
 import { Modal, Form, Input, Select, Button } from "antd";
 import QuillEditor from "./Quill/QuillEditor";
-
 const { Option } = Select;
 
 interface ReportModalProps {
@@ -26,6 +25,7 @@ function ReportModal({
     const data = ReportFormValuesSchema.safeParse(values);
     if (data.success) onSubmit(values);
     else console.warn(data.error);
+
     form.resetFields();
     console.log("Submit report clicked", values);
   };
@@ -88,10 +88,9 @@ function ReportModal({
         <Form.Item<ReportFormValues>
           name="noi_dung"
           label="Nội dung báo cáo"
-          rules={[{ required: true, message: "Please enter a description" }]}
+          // rules={[{ required: true, message: "Please enter a description" }]}
           wrapperCol={{ span: 18 }}
         >
-          {/* <Input.TextArea rows={4} /> */}
           <QuillEditor />
         </Form.Item>
 

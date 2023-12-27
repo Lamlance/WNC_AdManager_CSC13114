@@ -1,52 +1,76 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "quill/dist/quill.snow.css";
-import { Button } from "antd";
 import Quill from "quill";
+import { Button } from "antd";
 
-const QuillEditor = () => {
-  const quillRef = useRef(null);
+function QuillEditor() {
+  const editorEleRef = useRef<HTMLDivElement | null>(null);
+  const toolbarEleRef = useRef<HTMLDivElement | null>(null);
+  const [editor, setEditor] = useState<Quill | null>(null);
 
-  useEffect(() => {
-    if (quillRef.current) {
-      // You can customize Quill options here
-      const options = {
-        theme: "snow",
-        // Add more options as needed
-      };
+  const editorRef = useRef<Quill | null>(null);
 
-      // Initialize Quill with options
-      const quillInstance = new Quill(quillRef.current, options);
+  function initalizeEditor() {
+    if (editor) return;
+    if (!editorEleRef.current || !toolbarEleRef.current) return;
 
-      // Add any event listeners or additional configurations as needed
-      // For example:
-      // quillInstance.on('text-change', (delta, oldDelta, source) => {
-      //   // Handle text change
-      // });
+    const quill = new Quill(editorEleRef.current, {
+      modules: {
+        toolbar: {
+          container: toolbarEleRef.current,
+          handlers: {
+            image: customImgHanlder,
+          },
+        },
+      },
+      theme: "snow",
+    });
 
-      // You can expose the Quill instance if needed
-      // quillRef.current.quill = quillInstance;
-    }
-  }, []);
+    editorRef.current = quill;
+    setEditor(quill);
+  }
 
-  const handleButtonClick = () => {
-    // Access the Quill instance if needed
-    if (quillRef.current) {
-      const quillInstance = quillRef.current;
-      // Get the HTML content
-      const htmlContent = quillInstance.root.innerHTML;
-      console.log(htmlContent);
-    }
-  };
+  function customImgHanlder() {
+    if (!editorRef.current) return;
+
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+    input.onchange = async function () {};
+  }
+
+  function save_quill() {
+    if (!editor) return;
+    console.log(editor.root.innerHTML.trim());
+  }
+
+  useEffect(initalizeEditor, []);
 
   return (
-    <div>
-      <div ref={quillRef} style={{ height: "400px" }} />
-      <Button type="primary" onClick={handleButtonClick}>
-        Get Content
-      </Button>
-    </div>
+    <>
+      <div ref={toolbarEleRef} className="ql-toolbar ql-snow flex flex-row">
+        <span className="ql-formats">
+          <select className="ql-font"></select>
+          <select className="ql-size"></select>
+        </span>
+        <span className="ql-formats">
+          <button className="ql-bold"></button>
+          <button className="ql-italic"></button>
+          <button className="ql-underline"></button>
+          <button className="ql-strike"></button>
+        </span>
+        <span className="ql-formats">
+          <button className="ql-link"></button>
+          <button className="ql-image"></button>
+          <button className="ql-video"></button>
+        </span>
+      </div>
+      <div ref={editorEleRef}></div>
+
+      <Button onClick={save_quill}>Save</Button>
+    </>
   );
-};
+}
 
 export default QuillEditor;
