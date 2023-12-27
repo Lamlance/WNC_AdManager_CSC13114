@@ -27,8 +27,16 @@ function ReportModal({
   const quillRef = useRef<Quill | null>(null);
 
   const handleFinish = (values: ReportFormValues) => {
-    const data = ReportFormValuesSchema.safeParse(values);
-    // if (data.success) onSubmit(values);
+    let quillContent = "";
+    if (quillRef.current) {
+      quillContent = quillRef.current.root.innerHTML.trim();
+    }
+    const updatedValues = {
+      ...values,
+      noi_dung: quillContent,
+    };
+    const data = ReportFormValuesSchema.safeParse(updatedValues);
+    // if (data.success) onSubmit(updatedValues);
     // else console.warn(data.error);
 
     form.resetFields();
@@ -37,7 +45,7 @@ function ReportModal({
       console.log(quillRef.current.root.innerHTML.trim());
     }
 
-    console.log("Submit report clicked", values);
+    console.log("Submit report clicked", updatedValues);
   };
 
   return (
