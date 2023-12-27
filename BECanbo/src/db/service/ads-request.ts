@@ -1,6 +1,6 @@
 import { AdsSchema } from "@admanager/backend";
 import { pg_client } from "../db";
-import { DiaDiem, YeuCauCapPhep } from "@admanager/backend/db/schema";
+import { QuangCao, YeuCauCapPhep, DiaDiem, LoaiBangQC, LoaiViTri, HinhThucQC, YeuCauChinhSua } from "@admanager/backend/db/schema";
 import { AdChangeApi, AdsReqApi } from "@admanager/shared";
 import { eq } from "drizzle-orm";
 
@@ -9,14 +9,8 @@ export const getAllAdsRequests = async (): Promise<
 > => {
   const data = await pg_client
     .select({
-      id: YeuCauCapPhep.id_yeu_cau,
-      place: DiaDiem.dia_chi,
-      adsContent: YeuCauCapPhep.noi_dung_qc,
-      companyEmail: YeuCauCapPhep.email_cty,
-      companyName: YeuCauCapPhep.ten_cty,
-      companyPhone: YeuCauCapPhep.dien_thoai_cty,
-      effDate: YeuCauCapPhep.ngay_hieu_luc,
-      expDate: YeuCauCapPhep.ngay_het_han
+      yeu_cau: AdsSchema.YeuCauCapPhep,
+      dia_diem: AdsSchema.DiaDiem,
     })
     .from(YeuCauCapPhep)
     .innerJoin(

@@ -55,7 +55,7 @@ const DiaDiem = pgTable("DiaDiem", {
 });
 
 const QuangCao = pgTable("QuangCao", {
-  id_quang_cao: serial("id").primaryKey(),
+  id_quang_cao: uuid("id").primaryKey().defaultRandom(),
   quy_hoach: boolean("quy_hoach").notNull().default(false),
 
   ngay_hieu_luc: date("ngay_hieu_luc"),
@@ -96,6 +96,18 @@ const BaoCao = pgTable("BaoCao", {
   email: varchar("email", { length: 127 }),
   dien_thoai: varchar("dien_thoai", { length: 127 }),
   noi_dung: varchar("noi_dung", { length: 511 }).notNull(),
+  trang_thai: varchar("trang_thai", { length: 255 })
+    .notNull()
+    .default("Chưa xử lý"),
+  thoi_diem_bc: timestamp("thoi_diem_bc").notNull().defaultNow(),
+
+  dia_chi: varchar("dia_chi", { length: 255 }).notNull(),
+  id_quang_cao: uuid("id_quang_cao").references(() => QuangCao.id_quang_cao),
+  id_dia_diem: integer("id_dia_diem").references(() => DiaDiem.id_dia_diem),
+
+  lng: doublePrecision("kinh_do").notNull(),
+  lat: doublePrecision("vi_do").notNull(),
+
   id_loai_bc: integer("id_loai_bc")
     .notNull()
     .references(() => LoaiBaoCao.id_loai_bc),
@@ -128,6 +140,23 @@ const YeuCauChinhSua = pgTable("YeuCauChinhSua", {
 
   thong_tin_sua: jsonb("thong_tin_sua").notNull(),
 });
+const YeuCauChinhSuaDiaDiem = pgTable("YeuCauChinhSuaDiaDiem", {
+  id_yeu_cau: serial("id_yeu_cau").primaryKey(),
+  id_dia_diem: integer("id_dia_diem").references(() => DiaDiem.id_dia_diem),
+  lng: doublePrecision("kinh_do"),
+  lat: doublePrecision("vi_do"),
+  ten_dia_diem: varchar("ten_dia_diem", { length: 255 }),
+  dia_chi: varchar("dia_chi", { length: 255 }),
+  ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
+});
+
+const TKNguoiDung = pgTable("TKNguoiDung", {
+  id_tk: uuid("id_tk").primaryKey().defaultRandom(),
+  ten_tk: varchar("ten_tk", { length: 255 }).notNull().unique(),
+  mat_khau: varchar("mat_khau", { length: 255 }).notNull(),
+  cap_tk: varchar("cap_tk", { length: 255 }).notNull(),
+  thoi_diem_tao: date("thoi_diem_tao").notNull().default(sql`CURRENT_TIMESTAMP`)
+})
 
 export {
   LoaiViTri,
@@ -140,5 +169,7 @@ export {
   LoaiBaoCao,
   BaoCao,
   YeuCauCapPhep,
-  YeuCauChinhSua
+  YeuCauChinhSua,
+  YeuCauChinhSuaDiaDiem,
+  TKNguoiDung
 };
