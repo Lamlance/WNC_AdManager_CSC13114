@@ -1,23 +1,29 @@
-import { Row, Col } from "antd";
+import { Row, Col, Button } from "antd";
 import AdsInfoTable from "./AdsInfoTable";
-import { useGetAllAdsInfoQuery } from "../../slices/api/apiSlice";
-import { fromAdsResponse2AdsRecord } from "../../types/mapper";
+import { AdsInfoRecord } from "../../types";
+import { useState } from "react";
 import AdsInfoDetail from "./AdsInfoDetail";
+import { useGetAllAdsInfoQuery } from "../../slices/api/apiSlice";
+
+const data: AdsInfoRecord[] = [];
 
 const AdsInfo = () => {
   const { data, error, isLoading } = useGetAllAdsInfoQuery();
+  const [selectedAdsInfo, setSelectedAdsInfo] = useState<AdsInfoRecord | null>(
+    null,
+  );
 
   return (
     <>
-      {error && (
-        <div>
-          <p> There was an error </p>
-        </div>
-      )}
-      {isLoading && (
-        <div>
-          <p> Loading page </p>
-        </div>
+      <EditSetpoint onFormSubmit={onPlaceChangeSubmit} />
+      {selectedAd && (
+        <EditAdForm
+          onFormSubmit={onAdChangeSubmit}
+          ad={selectedAd}
+          type="AdInfo"
+          isModalOpen={openAd}
+          onClose={() => setOpenAd(false)}
+        />
       )}
       {data && (
         <Row
@@ -28,11 +34,12 @@ const AdsInfo = () => {
         >
           <Col span={17}>
             <AdsInfoTable
-              data={data.map((adsInfo) => fromAdsResponse2AdsRecord(adsInfo))}
+              data={data}
+              onRowClick={(record) => setSelectedAdsInfo(record)}
             />
           </Col>
-          <Col span={7}>
-            {<AdsInfoDetail {...fromAdsResponse2AdsRecord(data[0])} />}
+          <Col span={6}>
+            {selectedAdsInfo && <AdsInfoDetail {...selectedAdsInfo} />}
           </Col>
         </Row>
       )}

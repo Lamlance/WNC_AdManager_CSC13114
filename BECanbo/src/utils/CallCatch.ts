@@ -1,6 +1,6 @@
 type CallCatchReturn<R extends any> =
   | { success: true; data: R }
-  | { success: false; error: Error };
+  | { success: false; error: any };
 
 async function CallAndCatchAsync<R extends any, P extends object | undefined>(
   func: (args: P) => Promise<R>,
@@ -11,7 +11,7 @@ async function CallAndCatchAsync<R extends any, P extends object | undefined>(
     return { success: true, data: data };
   } catch (e) {
     console.warn(e);
-    return { success: false, error: e as Error };
+    return { success: false, error: e };
   }
 }
 
