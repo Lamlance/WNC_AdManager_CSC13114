@@ -38,7 +38,7 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
           <div className=" mb-4">
             <Carousel>
               {imgUrl.map((i) => (
-                <img key={i} src={i} alt="Ads Img" className=" w-full" />
+                <img key={i} src={i} alt="Ads Img" className=" mb-4 w-full" />
               ))}
             </Carousel>
           </div>

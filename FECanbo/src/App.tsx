@@ -19,6 +19,7 @@ import AdsRequestVHTTPage from "./components/vhtt/ads-request/AdsRequestVHTTPage
 import EditRequest from "./components/vhtt/requestedit-ads/EditRequest";
 import EditRequestComponent from "./components/vhtt/EditRequestComponent";
 import EditUserInfo from "./components/user/EditUserInfo";
+import ResolveReport from "./components/report-info/ResolveReport";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
@@ -82,6 +83,7 @@ const App = () => {
           <Route path="advertisements" element={<AdsInfo />} />
           <Route path="reports" element={<ReportInfo />} />
           <Route path="user" element={<EditUserInfo />} />
+          <Route path="resolve" element={<ResolveReport />} />
         </Route>
         <Route path="vhtt" element={<PageLayout items={itemVHTTs} />}>
           <Route index element={<AdManagement />} />
