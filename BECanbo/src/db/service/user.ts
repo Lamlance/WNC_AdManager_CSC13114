@@ -1,16 +1,16 @@
 import { AdsSchema } from "@admanager/backend";
 import { pg_client } from "../db";
-import { and, eq } from "drizzle-orm";
-import { UserDto } from "../../types/dto/user";
+import { eq } from "drizzle-orm";
 import { TKNguoiDung } from "@admanager/backend/db/schema";
+import { AuthApi } from "@admanager/shared";
 
-export const createAnUser = async (body: UserDto) => {
+export const createAnUser = async (body: AuthApi.RegisterRequest) => {
   const data = await pg_client
     .insert(AdsSchema.TKNguoiDung)
     .values({
       ten_tk: body.username,
-      mat_khau: body.password,
-      cap_tk: body.role,
+      mat_khau: body.pwd,
+      cap_tk: body.role || "viewer",
     })
     .returning({
       id: TKNguoiDung.id_tk,
@@ -33,7 +33,12 @@ export const getUserById = async (id: string) => {
 
 export const getAnUserByUsername = async (username: string) => {
   const data = await pg_client
-    .select()
+    .select({
+      userId: TKNguoiDung.id_tk,
+      username: TKNguoiDung.ten_tk,
+      role: TKNguoiDung.cap_tk,
+      pwd: TKNguoiDung.mat_khau
+    })
     .from(AdsSchema.TKNguoiDung)
     .where(eq(AdsSchema.TKNguoiDung.ten_tk, username));
 

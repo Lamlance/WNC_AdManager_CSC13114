@@ -14,15 +14,19 @@ const opts: StrategyOptions = {
   secretOrKey: JWT_SECRET_KEY,
 };
 
-export const strategy = new Strategy(opts, async (payload, done) => {
-  const result = await CallAndCatchAsync(getUserById, payload.id);
+function isTokenExpired(payload: string) {
+  const { exp } = JSON.parse(payload);
+  const expired = Date.now() >= exp * 1000;
+  return expired;
+}
 
-  if (result.success) {
-    if (result.data) {
-      return done(null, result.data);
+export const strategy = new Strategy(opts, async (payload, done) => {
+  if (isTokenExpired(payload)) {
+    if (payload) {
+      return done(null, payload);
     }
     return done(null, false);
   } else {
-    return done(result.error);
+    return done(new Error("The token is expired!"));
   }
 });
