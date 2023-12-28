@@ -72,6 +72,26 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    submitAdMethod: builder.mutation<any, AdsGeoJson.AdMethodCreateProperty>({
+      query: (formData) => ({
+        url: "/hinh-thuc-quang-cao/",
+        method: "POST",
+        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    submitUpdateAdMethod: builder.mutation<any, AdsGeoJson.AdMethodProperty>({
+      query: (body) => ({
+        url: "/hinh-thuc-quang-cao/",
+        method: "PUT",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
 
     getAllPlaceChangeRequest: builder.query<
       PlaceChangeApi.PlaceChangeRequestResponse[],
@@ -108,4 +128,6 @@ export const {
   useSubmitAdChangeRequestMutation,
   useGetAllPlaceChangeRequestQuery,
   useSubmitPlaceChangeRequestMutation,
+  useSubmitAdMethodMutation,
+  useSubmitUpdateAdMethodMutation,
 } = apiSlice;

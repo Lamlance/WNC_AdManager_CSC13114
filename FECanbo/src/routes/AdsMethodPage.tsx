@@ -4,16 +4,23 @@ import { Button, Table, Form, Input } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { Modal } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-import { useGetAllAdsMethodQuery } from "../slices/api/apiSlice";
+import {
+  useGetAllAdsMethodQuery,
+  useSubmitAdMethodMutation,
+  useSubmitUpdateAdMethodMutation,
+} from "../slices/api/apiSlice";
 type AdsMethod = AdsGeoJson.AdMethodProperty;
+
 type SizeType = Parameters<typeof Form>[0]["size"];
-export type AdChangeFormValue = Omit<AdsMethod, "id_ht_qc">;
+type AdMethodFormValue = AdsGeoJson.AdMethodCreateProperty;
+type AdMethodUpdateValue = AdsGeoJson.AdMethodUpdateProperty;
+export type AdChangeFormValue = Omit<AdsMethod, "id_htqc">;
 function AdsMethodPage() {
   const columns: ColumnsType<AdsMethod> = [
     {
       title: "#",
-      dataIndex: "id_ht_qc",
-      key: "id_ht_qc",
+      dataIndex: "id_htqc",
+      key: "id_htqc",
     },
     {
       title: "Hình thức quảng cáo",
@@ -49,6 +56,9 @@ function AdsMethodPage() {
   const [form] = Form.useForm<AdChangeFormValue>();
   const [isOpen, setIsopen] = useState(false);
   const { data, error, isLoading } = useGetAllAdsMethodQuery();
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [submitAdMethod] = useSubmitAdMethodMutation();
+  const [submitUpdateAdMethod] = useSubmitUpdateAdMethodMutation();
 
   const handleAddAd = () => {
     setSelectedAds(null);
@@ -66,11 +76,13 @@ function AdsMethodPage() {
     setIsopen(false);
   };
   useEffect(() => {
-    console.log("gggg", selectedAds);
     form.setFieldsValue({
       hinh_thuc_qc: selectedAds?.hinh_thuc_qc,
     });
-  }, [selectedAds]);
+    if (form.getFieldValue("hinh_thuc_qc")) {
+      setIsUpdate(true);
+    }
+  }, [selectedAds, form]);
 
   const [componentSize, setComponentSize] = useState<SizeType | "default">(
     "default",
@@ -78,6 +90,26 @@ function AdsMethodPage() {
 
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
+  };
+  const onFinish = (values: AdMethodFormValue) => {
+    const data = AdsGeoJson.AdMethodCreateSchema.safeParse(values);
+    console.log(data);
+    if (data.success == false) return console.log(data.error);
+    submitAdMethod(data.data).then((v) => console.log(v));
+    handleOk();
+    window.location.reload();
+  };
+  const onFinish2 = (values: AdMethodUpdateValue) => {
+    const realData: AdsMethod = {
+      id_htqc: selectedAds!.id_htqc,
+      hinh_thuc_qc: values.hinh_thuc_qc,
+    };
+    const data = AdsGeoJson.AdMethodSchema.safeParse(realData);
+
+    if (data.success == false) return console.log(data.error);
+    submitUpdateAdMethod(data.data).then((v) => console.log(v));
+    handleOk();
+    window.location.reload();
   };
   return (
     <>
@@ -91,6 +123,7 @@ function AdsMethodPage() {
         dataSource={data}
         onRow={(record) => ({
           onClick: () => {
+            console.log("fff", record);
             setSelectedAds(record);
           },
         })}
@@ -110,7 +143,7 @@ function AdsMethodPage() {
         </h1>
         <Form
           form={form}
-          onFinish={(v) => console.log(v)}
+          onFinish={isUpdate ? onFinish2 : onFinish}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 16 }}
           layout="horizontal"

@@ -75,8 +75,15 @@ const ReportGeoJsonPropertySchema = z.preprocess(
 );
 
 const AdMethodSchema = z.object({
-  id_ht_qc: z.number(),
+  id_htqc: z.number(),
   hinh_thuc_qc: z.string(),
+});
+
+const AdMethodCreateSchema = AdMethodSchema.omit({
+  id_htqc: true,
+});
+const AdMethodUpdateSchema = AdMethodSchema.omit({
+  id_htqc: true,
 });
 
 type AdsProperty = z.infer<typeof AdsPropertySchema>;
@@ -84,6 +91,8 @@ type PlaceProperty = z.infer<typeof PlacePropertySchema>;
 type AdsGeoJsonProperty = z.infer<typeof AdsGeoJsonPropertySchema>;
 type ReportGeoJsonProperty = z.infer<typeof ReportGeoJsonPropertySchema>;
 type AdMethodProperty = z.infer<typeof AdMethodSchema>;
+type AdMethodCreateProperty = z.infer<typeof AdMethodCreateSchema>;
+type AdMethodUpdateProperty = z.infer<typeof AdMethodUpdateSchema>;
 
 type GeoJsonProperty<P extends object> = {
   type: "Feature";
@@ -114,6 +123,8 @@ export type {
   ReportGeoJsonProperty,
   ReportGeoJson,
   AdMethodProperty,
+  AdMethodCreateProperty,
+  AdMethodUpdateProperty,
 };
 
 export {
@@ -122,4 +133,6 @@ export {
   AdsGeoJsonPropertySchema,
   ReportGeoJsonPropertySchema,
   AdMethodSchema,
+  AdMethodCreateSchema,
+  AdMethodUpdateSchema,
 };
