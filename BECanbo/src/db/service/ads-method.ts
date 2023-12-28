@@ -25,7 +25,7 @@ export async function createAdMethod(data: AdsGeoJson.AdMethodCreateProperty) {
 
 export async function updateAdMethod(data: AdsGeoJson.AdMethodProperty) {
   const { id_htqc, hinh_thuc_qc } = data;
-  console.log("cccc", id_htqc);
+
   const res = await pg_client
     .update(AdsSchema.HinhThucQC)
     .set({ hinh_thuc_qc: hinh_thuc_qc })

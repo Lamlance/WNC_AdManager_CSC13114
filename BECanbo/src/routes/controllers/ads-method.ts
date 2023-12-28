@@ -36,12 +36,17 @@ router.post(
 );
 
 router.put(
-  "/",
+  "/:id",
   ValidatorMwBuilder(
     undefined,
-    AdsGeoJson.AdMethodSchema,
+    AdsGeoJson.AdMethodUpdateSchema,
     async function (req, res) {
-      const result = await CallAndCatchAsync(updateAdMethod, res.locals.body);
+      const { id } = req.params;
+      const data: AdsGeoJson.AdMethodProperty = {
+        id_htqc: Number(id),
+        hinh_thuc_qc: res.locals.body.hinh_thuc_qc,
+      };
+      const result = await CallAndCatchAsync(updateAdMethod, data);
       if (!result.success) {
         return res.status(500).json({ error: result.error.message });
       }

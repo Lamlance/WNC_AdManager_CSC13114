@@ -84,7 +84,7 @@ export const apiSlice = createApi({
     }),
     submitUpdateAdMethod: builder.mutation<any, AdsGeoJson.AdMethodProperty>({
       query: (body) => ({
-        url: "/hinh-thuc-quang-cao/",
+        url: `/hinh-thuc-quang-cao/${body.id_htqc}`,
         method: "PUT",
         body: body,
         headers: {
@@ -121,13 +121,13 @@ export const apiSlice = createApi({
 export const {
   useGetAllAdsInfoQuery,
   useGetAllReportInfoQuery,
-  useGetAllAdsMethodQuery,
   useSubmitAdRequestMutation,
   useGetAllAdsReqQuery,
   useGetAllAdChangeRequestQuery,
   useSubmitAdChangeRequestMutation,
   useGetAllPlaceChangeRequestQuery,
   useSubmitPlaceChangeRequestMutation,
+  useGetAllAdsMethodQuery,
   useSubmitAdMethodMutation,
   useSubmitUpdateAdMethodMutation,
 } = apiSlice;

@@ -123,7 +123,6 @@ function AdsMethodPage() {
         dataSource={data}
         onRow={(record) => ({
           onClick: () => {
-            console.log("fff", record);
             setSelectedAds(record);
           },
         })}
