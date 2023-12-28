@@ -107,6 +107,9 @@ const BaoCao = pgTable("BaoCao", {
   lng: doublePrecision("kinh_do").notNull(),
   lat: doublePrecision("vi_do").notNull(),
 
+  hinh_1: varchar("hinh_1", { length: 255 }),
+  hinh_2: varchar("hinh_2", { length: 255 }),
+
   id_loai_bc: integer("id_loai_bc")
     .notNull()
     .references(() => LoaiBaoCao.id_loai_bc),

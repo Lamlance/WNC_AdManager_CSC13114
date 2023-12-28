@@ -3,7 +3,7 @@ import "quill/dist/quill.snow.css";
 import Quill from "quill";
 
 interface QuillEditorProps {
-  forwardedRef: RefObject<Quill>;
+  forwardedRef: React.MutableRefObject<Quill | null>;
 }
 
 function QuillEditor({ forwardedRef }: QuillEditorProps) {
@@ -29,8 +29,7 @@ function QuillEditor({ forwardedRef }: QuillEditorProps) {
         theme: "snow",
       });
 
-      const mutableRef = forwardedRef as React.MutableRefObject<Quill | null>;
-      mutableRef.current = quill;
+      forwardedRef.current = quill;
     };
 
     initializeEditor();
@@ -51,7 +50,6 @@ function QuillEditor({ forwardedRef }: QuillEditorProps) {
         </span>
         <span className="ql-formats">
           <button className="ql-link"></button>
-          <button className="ql-image"></button>
           <button className="ql-video"></button>
         </span>
       </div>

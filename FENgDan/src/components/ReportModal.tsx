@@ -2,19 +2,27 @@ import {
   ReportFormValues,
   ReportFormValuesSchema,
 } from "@admanager/shared/types/ReportApi";
-import { Modal, Form, Input, Select, Button } from "antd";
+import { Modal, Form, Input, Select, Button, UploadFile } from "antd";
 import QuillEditor from "./Quill/QuillEditor";
 import Quill from "quill";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import PictureWallUpload from "./Quill/PictureWallUpload";
+import Upload, { RcFile, UploadProps } from "antd/es/upload";
+import { PlusOutlined } from "@ant-design/icons";
+import { checkValidFile } from "../utils/ImageUpload";
 
 const { Option } = Select;
 
 interface ReportModalProps {
   visible: boolean;
   onCancel: () => void;
-  onSubmit: (values: ReportFormValues) => void;
+  onSubmit: (values: ReportFormPropery) => void;
   reportFormValues?: ReportFormValues;
 }
+
+export type ReportFormPropery = ReportFormValues & {
+  images?: UploadFile[];
+};
 
 function ReportModal({
   visible,
@@ -23,30 +31,48 @@ function ReportModal({
   reportFormValues,
 }: ReportModalProps) {
   const [form] = Form.useForm();
-
   const quillRef = useRef<Quill | null>(null);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const handleFinish = (values: ReportFormValues) => {
+  const handleFinish = (values: ReportFormPropery) => {
     let quillContent = "";
     if (quillRef.current) {
       quillContent = quillRef.current.root.innerHTML.trim();
     }
+
     const updatedValues = {
       ...values,
       noi_dung: quillContent,
     };
     const data = ReportFormValuesSchema.safeParse(updatedValues);
+    form.resetFields();
+    if (data.success == false) return console.warn(data.error);
     // if (data.success) onSubmit(updatedValues);
     // else console.warn(data.error);
 
-    form.resetFields();
-
-    if (quillRef.current) {
-      console.log(quillRef.current.root.innerHTML.trim());
-    }
-
-    console.log("Submit report clicked", updatedValues);
+    onSubmit({
+      ...data.data,
+      images: fileList,
+    });
   };
+
+  const handleChangeUpload: UploadProps["onChange"] = ({
+    fileList: newFileList,
+  }) => setFileList(newFileList);
+
+  const onBeforeFileUpload: UploadProps["beforeUpload"] = (file) => {
+    const res = checkValidFile(file);
+    if (res.valid) return true;
+    console.warn(res.msg);
+    return false;
+  };
+
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
 
   return (
     <Modal
@@ -56,7 +82,7 @@ function ReportModal({
       footer={null}
       width={750}
     >
-      <Form
+      <Form<ReportFormPropery>
         form={form}
         onFinish={handleFinish}
         layout="horizontal"
@@ -65,7 +91,7 @@ function ReportModal({
         wrapperCol={{ span: 18 }}
         labelAlign="left"
       >
-        <Form.Item<ReportFormValues>
+        <Form.Item<ReportFormPropery>
           name="id_loai_bc"
           label="Hình thức báo cáo"
           rules={[
@@ -78,15 +104,14 @@ function ReportModal({
           </Select>
         </Form.Item>
 
-        <Form.Item<ReportFormValues>
+        <Form.Item<ReportFormPropery>
           name="ten_nguoi_gui"
-          label="Họ và tên người báo cáo"
+          label="Tên người báo cáo"
           rules={[{ required: true, message: "Please enter your full name" }]}
         >
           <Input />
         </Form.Item>
-
-        <Form.Item<ReportFormValues>
+        <Form.Item<ReportFormPropery>
           name="email"
           label="Email liên lạc"
           rules={[{ required: true, message: "Please enter your email" }]}
@@ -94,7 +119,7 @@ function ReportModal({
           <Input type="email" />
         </Form.Item>
 
-        <Form.Item<ReportFormValues>
+        <Form.Item<ReportFormPropery>
           name="dien_thoai"
           label="Điện thoại liên lạc"
           rules={[
@@ -102,6 +127,16 @@ function ReportModal({
           ]}
         >
           <Input />
+        </Form.Item>
+        <Form.Item<ReportFormPropery> name="images" label={"Hình ảnh minh họa"}>
+          <Upload
+            listType="picture-card"
+            fileList={fileList}
+            beforeUpload={() => false}
+            onChange={handleChangeUpload}
+          >
+            {fileList.length >= 2 ? null : uploadButton}
+          </Upload>
         </Form.Item>
 
         <div className="flex min-h-72 flex-col">

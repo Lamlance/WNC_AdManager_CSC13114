@@ -7,7 +7,7 @@ export const minio_client = new MinioClient({
   secretKey: "r391TfyYwtmvKnp6dttW9SN6BkiNtEgEsNZ0NCBy",
 });
 
-type BucketName = "adsrequest";
+type BucketName = "adsrequest" | "adsreports";
 
 type Minio_UploadImgArgs = {
   bkName: BucketName;
@@ -19,6 +19,11 @@ type Minio_GetImgLinkArgs = Omit<
   Minio_UploadImgArgs,
   "filePath" | "delAfterLoad"
 >;
+
+type Minio_UploadMulterImgArggs = {
+  files: Express.Multer.File[];
+  bkName: BucketName;
+};
 
 export function Minio_UploadImg({
   bkName,
@@ -43,6 +48,22 @@ export function Minio_UploadImg({
       }
     );
   });
+}
+
+export function Minio_UploadMulterImgs(args: Minio_UploadMulterImgArggs) {
+  const promises: Promise<UploadedObjectInfo>[] = [];
+  for (let i = 0; i < args.files.length; i++) {
+    const f = args.files[i];
+    promises.push(
+      Minio_UploadImg({
+        bkName: args.bkName,
+        filename: f.filename,
+        filePath: f.path,
+        delAfterLoad: false,
+      })
+    );
+  }
+  return promises;
 }
 
 export async function Minio_GetImgLink({
