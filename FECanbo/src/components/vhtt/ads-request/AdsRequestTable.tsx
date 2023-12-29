@@ -40,7 +40,7 @@ const AdsRequestTable: React.FC<AdsRequestTableProps> = ({
     {
       title: "TRẠNG THÁI",
       dataIndex: ["yeu_cau", "trang_thai"],
-      key: "status",
+      key: "trang_thai",
     },
   ];
 

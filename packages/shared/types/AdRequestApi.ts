@@ -24,9 +24,28 @@ const ManyAdsRequestResponseSchema = z.object({
 const AdRequestCreateSchema = AdsRequestSchema.omit({
   id_yeu_cau: true,
 });
+const AdRequestUpdateStatusSchema = z.object({
+  trang_thai: z.string(),
+});
+const AdRequestUpdateStatusSchema2 = z.object({
+  id_yeu_cau: z.number(),
+  trang_thai: z.string(),
+});
 
 type ManyAdsRequestResponse = z.infer<typeof ManyAdsRequestResponseSchema>;
 type AdRequestCreate = z.infer<typeof AdRequestCreateSchema>;
+type AdRequestUpdateStatus = z.infer<typeof AdRequestUpdateStatusSchema>;
+type AdRequestUpdateStatus2 = z.infer<typeof AdRequestUpdateStatusSchema2>;
 
-export { ManyAdsRequestResponseSchema, AdRequestCreateSchema };
-export type { ManyAdsRequestResponse, AdRequestCreate };
+export {
+  ManyAdsRequestResponseSchema,
+  AdRequestCreateSchema,
+  AdRequestUpdateStatusSchema,
+  AdRequestUpdateStatusSchema2,
+};
+export type {
+  ManyAdsRequestResponse,
+  AdRequestCreate,
+  AdRequestUpdateStatus,
+  AdRequestUpdateStatus2,
+};

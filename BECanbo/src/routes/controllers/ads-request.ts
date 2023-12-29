@@ -5,6 +5,7 @@ import {
   createAdRequest,
   getAllAdsChangeRequest,
   getAllAdsRequests,
+  updateAdStatusRequest,
   // saveAdsRequest,
 } from "../../db/service/ads-request.js";
 import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder.js";
@@ -56,6 +57,27 @@ router.post(
         createAdChangeRequest,
         res.locals.body
       );
+      if (!result.success) {
+        return res.status(500).json({ error: result.error.message });
+      }
+      return res.status(200).json(result.data);
+    }
+  )
+);
+
+router.put(
+  "/:id",
+  ValidatorMwBuilder(
+    undefined,
+    AdsReqApi.AdRequestUpdateStatusSchema,
+    async function (req, res) {
+      const { id } = req.params;
+
+      const result = await CallAndCatchAsync(updateAdStatusRequest, {
+        id_yeu_cau: Number(id),
+        trang_thai: res.locals.body.trang_thai,
+      });
+
       if (!result.success) {
         return res.status(500).json({ error: result.error.message });
       }
