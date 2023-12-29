@@ -46,10 +46,6 @@ export interface ReportInfoRecord {
   status: string;
 }
 
-<<<<<<< HEAD
-
-export interface EditRequest {   //yeu cau chinh sua
-=======
 export interface EditAdRequest {
   id: string;
   timeRequest: string;
@@ -68,7 +64,6 @@ export interface EditAdRequest {
 
 export interface EditRequest {
   //yeu cau chinh sua
->>>>>>> 920c6bb3c62c34021bba84d4adc2c7eb41b3023a
   id: string;
   location: string;
   sender: string;
@@ -77,8 +72,18 @@ export interface EditRequest {
   lng: number;
   lat: number;
   status: string;
-<<<<<<< HEAD
-}
-=======
-}
->>>>>>> 920c6bb3c62c34021bba84d4adc2c7eb41b3023a
+  
+// const AdChangeRequestSchema = z
+//   .object({
+//     id_yeu_cau: z.number(),
+//     thoi_diem_chinh_sua: z.date(),
+//     trang_thai: z.string(),
+//     id_quang_cao: z.string(),
+//   })
+//   .merge(AdChangeRequestCreateSchema);
+
+// const AdChangeRequestResponseSchema = z.object({
+//   chinh_sua: AdChangeRequestSchema,
+//   thong_tin_qc: AdsGeoJson.AdsPropertySchema,
+// });
+}  

@@ -130,17 +130,6 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
 
 const YeuCauChinhSua = pgTable("YeuCauChinhSua", {
   id_yeu_cau: serial("id_yeu_cau").primaryKey(),
-<<<<<<< HEAD
-  ten_dia_diem: varchar("ten_dia_diem", { length: 255 }).notNull(),
-  dvi_yeu_cau: varchar("dvi_yeu_cau", { length: 255 }).notNull(),
-  dia_chi: varchar("dia_chi", { length: 255 }).notNull(),
-  noi_dung: varchar("noi_dung", { length: 255 }).notNull(),  
-  lng: doublePrecision("kinh_do").notNull(),
-  lat: doublePrecision("vi_do").notNull(),
-  trang_thai: varchar("trang_thai", { length: 255 }).notNull(),  
-})
-
-=======
   ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
   thoi_diem_chinh_sua: timestamp("thoi_diem_chinh_sua").defaultNow().notNull(),
   trang_thai: varchar("trang_thai", { length: 255 }).notNull(),
@@ -159,7 +148,6 @@ const YeuCauChinhSuaDiaDiem = pgTable("YeuCauChinhSuaDiaDiem", {
   dia_chi: varchar("dia_chi", { length: 255 }),
   ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
 });
->>>>>>> 920c6bb3c62c34021bba84d4adc2c7eb41b3023a
 export {
   LoaiViTri,
   HinhThucQC,
@@ -171,9 +159,5 @@ export {
   LoaiBaoCao,
   BaoCao,
   YeuCauCapPhep,
-  YeuCauChinhSua,
-<<<<<<< HEAD
-=======
-  YeuCauChinhSuaDiaDiem,
->>>>>>> 920c6bb3c62c34021bba84d4adc2c7eb41b3023a
+  YeuCauChinhSua,YeuCauChinhSuaDiaDiem,
 };
