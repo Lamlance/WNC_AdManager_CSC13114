@@ -5,6 +5,7 @@ import {
   createAdRequest,
   getAllAdsChangeRequest,
   getAllAdsRequests,
+  updateAdChangeStatusRequest,
   updateAdStatusRequest,
   // saveAdsRequest,
 } from "../../db/service/ads-request.js";
@@ -66,10 +67,31 @@ router.post(
 );
 
 router.put(
+  "/chinh-sua/:id",
+  ValidatorMwBuilder(
+    undefined,
+    AdChangeApi.AdChangeStatusRequestUpdateSchema,
+    async function (req, res) {
+      const { id } = req.params;
+
+      const result = await CallAndCatchAsync(updateAdChangeStatusRequest, {
+        id_yeu_cau: Number(id),
+        trang_thai: res.locals.body.trang_thai,
+      });
+
+      if (!result.success) {
+        return res.status(500).json({ error: result.error.message });
+      }
+      return res.status(200).json(result.data);
+    }
+  )
+);
+
+router.put(
   "/:id",
   ValidatorMwBuilder(
     undefined,
-    AdsReqApi.AdRequestUpdateStatusSchema,
+    AdsReqApi.AdRequestUpdateStatusSchema2,
     async function (req, res) {
       const { id } = req.params;
 

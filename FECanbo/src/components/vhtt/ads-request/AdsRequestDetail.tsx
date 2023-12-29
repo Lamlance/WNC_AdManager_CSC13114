@@ -22,8 +22,8 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
     },
   };
   const [submitAdMethod] = useSubmitUpdateAdRequestStatusMutation();
-  const hanldeApprove = () => {
-    const data = {
+  const handleApprove = () => {
+    const data: AdsReqApi.AdRequestUpdateStatus2 = {
       id_yeu_cau: ad!.yeu_cau.id_yeu_cau,
       trang_thai: "Approve",
     };
@@ -32,7 +32,7 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
     window.location.reload();
   };
   const handleReject = () => {
-    const data = {
+    const data: AdsReqApi.AdRequestUpdateStatus2 = {
       id_yeu_cau: ad!.yeu_cau.id_yeu_cau,
       trang_thai: "Reject",
     };
@@ -99,7 +99,7 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
             </div>
           ) : (
             <div className="my-3 flex justify-between">
-              <Button type="primary" onClick={hanldeApprove}>
+              <Button type="primary" onClick={handleApprove}>
                 Phê duyệt
               </Button>
               <Button

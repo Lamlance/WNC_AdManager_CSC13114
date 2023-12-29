@@ -107,6 +107,20 @@ export const apiSlice = createApi({
       }),
     }),
 
+    submitUpdateAdChangeRequestStatus: builder.mutation<
+      any,
+      AdChangeApi.AdChangeStatusRequestUpdate
+    >({
+      query: (body) => ({
+        url: `/yeu-cau-quang-cao/chinh-sua/${body.id_yeu_cau}`,
+        method: "PUT",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
     getAllPlaceChangeRequest: builder.query<
       PlaceChangeApi.PlaceChangeRequestResponse[],
       void
@@ -145,4 +159,5 @@ export const {
   useSubmitAdMethodMutation,
   useSubmitUpdateAdMethodMutation,
   useSubmitUpdateAdRequestStatusMutation,
+  useSubmitUpdateAdChangeRequestStatusMutation,
 } = apiSlice;

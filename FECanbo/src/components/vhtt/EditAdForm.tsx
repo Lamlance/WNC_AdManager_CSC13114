@@ -78,7 +78,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
   const [address, setAddress] = useState<string>("");
 
   const handleCancel = () => setPreviewOpen(false);
-  console.log("newtt", ad);
+
   useEffect(() => {
     const files: UploadFile[] = [];
     if (ad?.hinh_1) {

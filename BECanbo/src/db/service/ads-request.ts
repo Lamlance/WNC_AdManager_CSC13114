@@ -74,6 +74,18 @@ export async function createAdChangeRequest(
     .returning({ insertId: AdsSchema.YeuCauChinhSua.id_yeu_cau });
   return res[0].insertId;
 }
+
+export async function updateAdChangeStatusRequest(
+  args: AdChangeApi.AdChangeStatusRequestUpdate
+) {
+  const res = await pg_client
+    .update(AdsSchema.YeuCauChinhSua)
+    .set({ trang_thai: args.trang_thai })
+    .where(eq(AdsSchema.YeuCauChinhSua.id_yeu_cau, args.id_yeu_cau));
+
+  return res;
+}
+
 type UpdateAdStatusRequestArgs = { id_yeu_cau: number; trang_thai: string };
 export async function updateAdStatusRequest(args: UpdateAdStatusRequestArgs) {
   const res = await pg_client
