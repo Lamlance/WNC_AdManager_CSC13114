@@ -6,13 +6,24 @@ import {
   LoaiBaoCao,
   QuangCao,
 } from "@admanager/backend/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, ilike, inArray, or } from "drizzle-orm";
 import { AdsGeoJson, ReportApi } from "@admanager/shared";
 
-export const getALLReportInfo = async function (): Promise<
-  ReportApi.ReportResponse[]
-> {
-  const data = await pg_client
+type GetALLReportInfoArgs = {
+  phuong_id?: number[];
+};
+
+export const getALLReportInfo = async function (
+  args: GetALLReportInfoArgs
+): Promise<ReportApi.ReportResponse[]> {
+  const ward_list =
+    args.phuong_id &&
+    (await pg_client
+      .select()
+      .from(AdsSchema.Phuong)
+      .where(inArray(AdsSchema.Phuong.id_phuong, args.phuong_id)));
+  console.log(ward_list);
+  const query = pg_client
     .select({
       bao_cao: AdsSchema.BaoCao,
       loai_bc: AdsSchema.LoaiBaoCao.loai_bao_cao,
@@ -31,7 +42,17 @@ export const getALLReportInfo = async function (): Promise<
       eq(AdsSchema.DiaDiem.id_dia_diem, AdsSchema.QuangCao.id_dia_diem)
     );
 
-  return data;
+  if (ward_list) {
+    query.where(
+      or(
+        ...ward_list.map((p) =>
+          ilike(AdsSchema.BaoCao.dia_chi, `%${p.ten_phuong}%`)
+        )
+      )
+    );
+  }
+
+  return await query;
 };
 
 export async function createReportInfo(

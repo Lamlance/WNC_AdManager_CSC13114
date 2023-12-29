@@ -9,17 +9,36 @@ import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder";
 import { AdsZodSchema } from "@admanager/backend";
 import MulterMw from "../../utils/Multer";
 import { Minio_UploadImg, Minio_UploadMulterImgs } from "../../db/minio";
+import z from "zod";
+
+const GetALLReportInfoQuery = z.object({
+  phuong_id: z
+    .preprocess(
+      (v) => (typeof v === "string" ? v.split(",") : v),
+      z.array(z.coerce.number())
+    )
+    .nullish(),
+});
 
 const router = Router();
 
 // Get all report info records
-router.get("/", async (req, res, next) => {
-  const result = await CallAndCatchAsync(getALLReportInfo, undefined);
-  if (!result.success) {
-    return res.status(500).json({ msg: result.error.message });
-  }
-  return res.status(200).json(result.data);
-});
+router.get(
+  "/",
+  ValidatorMwBuilder(
+    GetALLReportInfoQuery,
+    undefined,
+    async (req, res, next) => {
+      const result = await CallAndCatchAsync(getALLReportInfo, {
+        phuong_id: res.locals.query.phuong_id || undefined,
+      });
+      if (!result.success) {
+        return res.status(500).json({ msg: result.error.message });
+      }
+      return res.status(200).json(result.data);
+    }
+  )
+);
 
 router.post(
   "/",

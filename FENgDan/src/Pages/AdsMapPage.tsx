@@ -152,7 +152,6 @@ export default function AdsMapPage() {
   }
 
   const AdsClusterData = get_ad_cluster_createData();
-
   const AdsCluster = !AdsClusterData ? undefined : (
     <AdsClusterMarker<typeof AdsGeoJson.AdsGeoJsonPropertySchema>
       geoJsonPropertySchema={AdsGeoJson.AdsGeoJsonPropertySchema}
