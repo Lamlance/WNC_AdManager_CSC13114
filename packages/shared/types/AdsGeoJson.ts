@@ -85,6 +85,9 @@ const AdMethodCreateSchema = AdMethodSchema.omit({
 const AdMethodUpdateSchema = AdMethodSchema.omit({
   id_htqc: true,
 });
+const AdmethodDeleteSchema = z.object({
+  id_htqc: z.number(),
+});
 
 type AdsProperty = z.infer<typeof AdsPropertySchema>;
 type PlaceProperty = z.infer<typeof PlacePropertySchema>;
@@ -93,6 +96,7 @@ type ReportGeoJsonProperty = z.infer<typeof ReportGeoJsonPropertySchema>;
 type AdMethodProperty = z.infer<typeof AdMethodSchema>;
 type AdMethodCreateProperty = z.infer<typeof AdMethodCreateSchema>;
 type AdMethodUpdateProperty = z.infer<typeof AdMethodUpdateSchema>;
+type AdMethodDeleteProperty = z.infer<typeof AdmethodDeleteSchema>;
 
 type GeoJsonProperty<P extends object> = {
   type: "Feature";
@@ -125,6 +129,7 @@ export type {
   AdMethodProperty,
   AdMethodCreateProperty,
   AdMethodUpdateProperty,
+  AdMethodDeleteProperty,
 };
 
 export {
@@ -135,4 +140,5 @@ export {
   AdMethodSchema,
   AdMethodCreateSchema,
   AdMethodUpdateSchema,
+  AdmethodDeleteSchema,
 };

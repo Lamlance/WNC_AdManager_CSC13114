@@ -5,6 +5,7 @@ import type { ColumnsType } from "antd/es/table";
 import { Modal } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import {
+  useDeleteAdMethodMutation,
   useGetAllAdsMethodQuery,
   useSubmitAdMethodMutation,
   useSubmitUpdateAdMethodMutation,
@@ -57,14 +58,17 @@ function AdsMethodPage() {
   const [isOpen, setIsopen] = useState(false);
   const { data, error, isLoading } = useGetAllAdsMethodQuery();
   const [isUpdate, setIsUpdate] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
   const [submitAdMethod] = useSubmitAdMethodMutation();
   const [submitUpdateAdMethod] = useSubmitUpdateAdMethodMutation();
-
+  const [deleteAdMethod] = useDeleteAdMethodMutation();
   const handleAddAd = () => {
     setSelectedAds(null);
     setIsopen(true);
   };
-  const handleDeleteAd = () => {};
+  const handleDeleteAd = () => {
+    setIsDelete(true);
+  };
   const openModal = () => {
     setIsopen(true);
   };
@@ -82,7 +86,18 @@ function AdsMethodPage() {
     if (form.getFieldValue("hinh_thuc_qc")) {
       setIsUpdate(true);
     }
-  }, [selectedAds, form]);
+    if (isDelete) {
+      const realData: AdsGeoJson.AdMethodDeleteProperty = {
+        id_htqc: selectedAds!.id_htqc,
+      };
+      console.log("id_htqc", selectedAds);
+      const deleteData = AdsGeoJson.AdmethodDeleteSchema.safeParse(realData);
+
+      if (deleteData.success == false) return console.log(deleteData.error);
+      deleteAdMethod(deleteData.data).then((v) => console.log(v));
+      window.location.reload();
+    }
+  }, [selectedAds, form, isDelete]);
 
   const [componentSize, setComponentSize] = useState<SizeType | "default">(
     "default",

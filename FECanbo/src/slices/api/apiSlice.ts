@@ -92,6 +92,16 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    deleteAdMethod: builder.mutation<any, AdsGeoJson.AdMethodDeleteProperty>({
+      query: (data) => ({
+        url: `/hinh-thuc-quang-cao/${data.id_htqc}`,
+        method: "DELETE",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
 
     submitUpdateAdRequestStatus: builder.mutation<
       any,
@@ -160,4 +170,5 @@ export const {
   useSubmitUpdateAdMethodMutation,
   useSubmitUpdateAdRequestStatusMutation,
   useSubmitUpdateAdChangeRequestStatusMutation,
+  useDeleteAdMethodMutation,
 } = apiSlice;

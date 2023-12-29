@@ -33,3 +33,12 @@ export async function updateAdMethod(data: AdsGeoJson.AdMethodProperty) {
 
   return res;
 }
+export async function deleteAdMethod(data: AdsGeoJson.AdMethodDeleteProperty) {
+  const { id_htqc } = data;
+
+  const res = await pg_client
+    .delete(AdsSchema.HinhThucQC)
+    .where(eq(AdsSchema.HinhThucQC.id_htqc, id_htqc));
+
+  return res;
+}

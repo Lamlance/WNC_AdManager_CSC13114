@@ -2,6 +2,7 @@ import { Router } from "express";
 import { CallAndCatchAsync } from "../../utils/CallCatch.js";
 import {
   createAdMethod,
+  deleteAdMethod,
   getAllAdsMethod,
   updateAdMethod,
 } from "../../db/service/ads-method.js";
@@ -47,6 +48,25 @@ router.put(
         hinh_thuc_qc: res.locals.body.hinh_thuc_qc,
       };
       const result = await CallAndCatchAsync(updateAdMethod, data);
+      if (!result.success) {
+        return res.status(500).json({ error: result.error.message });
+      }
+      return res.status(200).json(result.data);
+    }
+  )
+);
+
+router.delete(
+  "/:id",
+  ValidatorMwBuilder(
+    undefined,
+    AdsGeoJson.AdmethodDeleteSchema,
+    async function (req, res) {
+      const { id } = req.params;
+      const data: AdsGeoJson.AdMethodDeleteProperty = {
+        id_htqc: Number(id),
+      };
+      const result = await CallAndCatchAsync(deleteAdMethod, data);
       if (!result.success) {
         return res.status(500).json({ error: result.error.message });
       }
