@@ -18,6 +18,7 @@ import AdManagement from "./components/vhtt/AdManagement";
 import AdsRequestVHTTPage from "./components/vhtt/ads-request/AdsRequestVHTTPage";
 import EditRequest from "./components/vhtt/requestedit-ads/EditRequest";
 import EditRequestComponent from "./components/vhtt/EditRequestComponent";
+import ReportTypeComponent from "./components/vhtt/ReportTypeComponent";
 import EditUserInfo from "./components/user/EditUserInfo";
 import ResolveReport from "./components/report-info/ResolveReport";
 
@@ -64,14 +65,20 @@ const itemVHTTs: Item[] = [
   {
     key: "5",
     icon: <UploadOutlined />,
-    label: "Yêu cầu chỉnh sủa QC",
+    label: "Yêu cầu chỉnh sửa QC",
     title: "/vhtt/edit-ad-request",
   },
   {
     key: "6",
     icon: <UploadOutlined />,
-    label: "Yêu cầu chỉnh sủa địa điểm",
+    label: "Yêu cầu chỉnh sửa địa điểm",
     title: "/vhtt/edit-place-request",
+  },
+  {
+    key: "2",
+    icon: <UploadOutlined />,
+    label: "Các loại hình thức báo cáo",
+    title: "/vhtt/reporttype",
   },
 ];
 const App = () => {
@@ -91,6 +98,7 @@ const App = () => {
           <Route path="createaccount" element={<CreateAccount />} />
           <Route path="edit-ad-request" element={<EditRequest />} />
           <Route path="edit-place-request" element={<EditRequestComponent />} />
+          <Route path="reporttype" element={<ReportTypeComponent />} />
         </Route>
       </Routes>
     </div>

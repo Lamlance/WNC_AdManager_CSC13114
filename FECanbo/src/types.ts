@@ -72,4 +72,18 @@ export interface EditRequest {
   lng: number;
   lat: number;
   status: string;
-}
+  
+// const AdChangeRequestSchema = z
+//   .object({
+//     id_yeu_cau: z.number(),
+//     thoi_diem_chinh_sua: z.date(),
+//     trang_thai: z.string(),
+//     id_quang_cao: z.string(),
+//   })
+//   .merge(AdChangeRequestCreateSchema);
+
+// const AdChangeRequestResponseSchema = z.object({
+//   chinh_sua: AdChangeRequestSchema,
+//   thong_tin_qc: AdsGeoJson.AdsPropertySchema,
+// });
+}  

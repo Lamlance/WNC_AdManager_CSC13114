@@ -163,6 +163,5 @@ export {
   LoaiBaoCao,
   BaoCao,
   YeuCauCapPhep,
-  YeuCauChinhSua,
-  YeuCauChinhSuaDiaDiem,
+  YeuCauChinhSua,YeuCauChinhSuaDiaDiem,
 };
