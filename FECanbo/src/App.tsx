@@ -81,9 +81,9 @@ const itemVHTTs: Item[] = [
     icon: <UploadOutlined />,
     label: "Quản lý hình thức quảng cáo",
     title: "/vhtt/manage-ad-method",
-    key: "2",
   },
   {
+    key: "2",
     icon: <UploadOutlined />,
     label: "Các loại hình thức báo cáo",
     title: "/vhtt/reporttype",
