@@ -8,7 +8,12 @@ function ReportInfor() {
         <div className="">
           <p className="text-base">Báo cáo: {selected?.loai_bao_cao}</p>
           <p className="text-base">
-            <span className="font-semibold">{selected?.bao_cao.noi_dung}</span>
+            <span
+              className="font-semibold "
+              dangerouslySetInnerHTML={{
+                __html: selected?.bao_cao.noi_dung || "",
+              }}
+            ></span>
           </p>
         </div>
       </div>

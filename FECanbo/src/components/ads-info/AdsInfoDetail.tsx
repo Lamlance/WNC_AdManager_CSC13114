@@ -66,8 +66,7 @@ const AdInfoDetail = ({ ad, place, onRequestChange }: AdsInfoDetailProps) => {
         onClick={() => onRequestChange({ ...ad, ...place })}
         className=" self-center"
       >
-        {" "}
-        Yêu cầu chỉnh sửa{" "}
+        Yêu cầu chỉnh sửa
       </Button>
     </div>
   );

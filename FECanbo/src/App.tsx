@@ -18,6 +18,8 @@ import AdManagement from "./components/vhtt/AdManagement";
 import AdsRequestVHTTPage from "./components/vhtt/ads-request/AdsRequestVHTTPage";
 import EditRequest from "./components/vhtt/requestedit-ads/EditRequest";
 import EditRequestComponent from "./components/vhtt/EditRequestComponent";
+import EditUserInfo from "./components/user/EditUserInfo";
+import ResolveReport from "./components/report-info/ResolveReport";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
@@ -38,6 +40,12 @@ const items: Item[] = [
     icon: <UploadOutlined />,
     label: "Báo cáo từ người dân",
     title: "/reports",
+  },
+  {
+    key: "4",
+    icon: <UploadOutlined />,
+    label: "Chỉnh sửa thông tin cá nhân",
+    title: "/user",
   },
 ];
 const itemVHTTs: Item[] = [
@@ -74,6 +82,8 @@ const App = () => {
           <Route index element={<AdsRequestPage />} />
           <Route path="advertisements" element={<AdsInfo />} />
           <Route path="reports" element={<ReportInfo />} />
+          <Route path="user" element={<EditUserInfo />} />
+          <Route path="resolve" element={<ResolveReport />} />
         </Route>
         <Route path="vhtt" element={<PageLayout items={itemVHTTs} />}>
           <Route index element={<AdManagement />} />
