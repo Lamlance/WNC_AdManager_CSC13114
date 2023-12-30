@@ -18,6 +18,8 @@ import AdManagement from "./components/vhtt/AdManagement";
 import AdsRequestVHTTPage from "./components/vhtt/ads-request/AdsRequestVHTTPage";
 import EditRequest from "./components/vhtt/requestedit-ads/EditRequest";
 import EditRequestComponent from "./components/vhtt/EditRequestComponent";
+import LoginPage from "./routes/LoginPage";
+import RegisterPage from "./routes/RegisterPage";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
@@ -81,6 +83,10 @@ const App = () => {
           <Route path="createaccount" element={<CreateAccount />} />
           <Route path="edit-ad-request" element={<EditRequest />} />
           <Route path="edit-place-request" element={<EditRequestComponent />} />
+        </Route>
+        <Route path="/auth">
+          <Route path="login" element={<LoginPage /> } />
+          <Route path="register" element={<RegisterPage />} />
         </Route>
       </Routes>
     </div>

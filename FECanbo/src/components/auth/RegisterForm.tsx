@@ -1,13 +1,12 @@
 import Icon from "@ant-design/icons";
-import { Checkbox } from "antd";
 import Button from "antd/es/button";
 import Form from "antd/es/form";
 import Input from "antd/es/input";
 
-const LoginForm = () => {
+const RegisterForm = () => {
   return (
     <div className="w-50 flex flex-col">
-      <h3 className="font-semibold text-2xl self-center my-5"> Sign In </h3> 
+      <h3 className="font-semibold text-2xl self-center my-5"> Register </h3> 
       <Form className="max-w-80">
         <Form.Item>
           <Input
@@ -23,17 +22,18 @@ const LoginForm = () => {
           />
         </Form.Item>
         <Form.Item>
-          <div className="my-3">
-            <Checkbox> Remember me </Checkbox>
-            <a className="float-right" href="auth/forgot-password">
-              Forgot password?
-            </a>
-          </div>
+          <Input
+            prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+            type="retype-password"
+            placeholder="Retype password"
+          />
+        </Form.Item>
+        <Form.Item>
           <Button type="primary" htmlType="submit" className="w-full min-w-80">
-            Log in
+            Register account
           </Button>
           <div className="my-3">
-            Or <a href="auth/register">register now!</a>
+            Or <a href="auth/login">login now!</a>
           </div>
         </Form.Item>
       </Form>
@@ -41,4 +41,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
