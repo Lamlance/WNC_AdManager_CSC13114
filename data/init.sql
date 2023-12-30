@@ -359,29 +359,3 @@ VALUES
 ('Phạm Thị Hoa', 'hoapham@hotmail.com', '+84 812394057', 'Khen ngợi dịch vụ chăm sóc khách hàng', 1),
 ('Đỗ Minh Long', 'minhlong.do@company.com', '+84 125739864', 'Báo cáo vi phạm quy định cộng đồng', 4),
 ('Nguyễn Thị Mai', 'mainguyen@web.net', '+84 654208731', 'Cảm ơn về trải nghiệm sử dụng dịch vụ', 1);
-
-
-INSERT INTO public."YeuCauChinhSua"(
-  id_yeu_cau, ly_do_chinh_sua, thoi_diem_chinh_sua, trang_thai, thong_tin_moi)
-VALUES (
-  1, 
-  'Thay đổi kích thước bảng quảng cáo', 
-  '2023-06-12', 
-  'đã xử lý',
-  jsonb_build_object(
-    'id', 'e1be2069-8b4c-4253-8390-79862d3e4227',
-    'adsType', 'Trụ bảng hiflex',
-    'address', 'Phường 6 quận 3',
-    'generalInfo', jsonb_build_object(
-      'size', jsonb_build_object('width', 5, 'height', 5),
-      'number', 2
-    ),
-    'contentType', 'Cổ động chính trị',
-    'placeType', 'Trung tâm thương mại',
-    'status', 'đã xử lý',
-    'effectDate', '2023-06-12',
-    'expireDate', '2023-06-12',
-    'img', 'https://chupgiare.com/wp-content/uploads/2023/02/Chup-Anh-quang-cao-Spa-de-lam-gi-hoangkhoiproduction.jpg',
-    'img2', 'https://gtvseo.com/wp-content/uploads/2021/03/anh-quang-cao-facebook-la-gi.jpg'
-  )::jsonb
-);

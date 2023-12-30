@@ -75,7 +75,7 @@ export const apiSlice = createApi({
         url: "/cap-phep-quang-cao/",
         method: "POST",
         body: formData,
-      }),
+        }),
     }),
     submitAdMethod: builder.mutation<any, AdsGeoJson.AdMethodCreateProperty>({
       query: (formData) => ({
@@ -121,7 +121,6 @@ export const apiSlice = createApi({
         },
       }),
     }),
-
     submitUpdateAdChangeRequestStatus: builder.mutation<
       any,
       AdChangeApi.AdChangeStatusRequestUpdate
@@ -135,7 +134,6 @@ export const apiSlice = createApi({
         },
       }),
     }),
-
     getAllPlaceChangeRequest: builder.query<
       PlaceChangeApi.PlaceChangeRequestResponse[],
       void
@@ -144,7 +142,6 @@ export const apiSlice = createApi({
         url: "dia-diem/chinh-sua",
       }),
     }),
-
     submitPlaceChangeRequest: builder.mutation<
       any,
       PlaceChangeApi.PlaceChangeRequestCreate

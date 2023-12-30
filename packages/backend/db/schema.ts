@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   integer,
   pgEnum,
@@ -152,6 +153,15 @@ const YeuCauChinhSuaDiaDiem = pgTable("YeuCauChinhSuaDiaDiem", {
   dia_chi: varchar("dia_chi", { length: 255 }),
   ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
 });
+
+const TKNguoiDung = pgTable("TKNguoiDung", {
+  id_tk: uuid("id_tk").primaryKey().defaultRandom(),
+  ten_tk: varchar("ten_tk", { length: 255 }).notNull().unique(),
+  mat_khau: varchar("mat_khau", { length: 255 }).notNull(),
+  cap_tk: varchar("cap_tk", { length: 255 }).notNull(),
+  thoi_diem_tao: date("thoi_diem_tao").notNull().default(sql`CURRENT_TIMESTAMP`)
+})
+
 export {
   LoaiViTri,
   HinhThucQC,
@@ -163,5 +173,7 @@ export {
   LoaiBaoCao,
   BaoCao,
   YeuCauCapPhep,
-  YeuCauChinhSua,YeuCauChinhSuaDiaDiem,
+  YeuCauChinhSua,
+  YeuCauChinhSuaDiaDiem,
+  TKNguoiDung
 };

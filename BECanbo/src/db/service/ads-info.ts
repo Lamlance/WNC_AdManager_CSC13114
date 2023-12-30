@@ -7,7 +7,6 @@ import {
 } from "@admanager/backend/db/schema";
 import { pg_client } from "../db";
 import { eq } from "drizzle-orm";
-import { AdsSchema } from "@admanager/backend";
 import { AdsGeoJson } from "@admanager/shared";
 
 export const getAllAdsInfo = async () => {
@@ -41,30 +40,30 @@ export const getAllAdsInfo = async () => {
 export async function GetQuangManyCaoData() {
   const data = await pg_client
     .select({
-      dia_diem: AdsSchema.DiaDiem,
-      quang_cao: AdsSchema.QuangCao,
-      loai_vitri: AdsSchema.LoaiViTri.loai_vitri,
-      hinh_thuc: AdsSchema.HinhThucQC.hinh_thuc_qc,
-      bang_qc: AdsSchema.LoaiBangQC.loai_bang_qc,
+      dia_diem: DiaDiem,
+      quang_cao: QuangCao,
+      loai_vitri: LoaiViTri.loai_vitri,
+      hinh_thuc: HinhThucQC.hinh_thuc_qc,
+      bang_qc: LoaiBangQC.loai_bang_qc,
     })
-    .from(AdsSchema.QuangCao)
+    .from(QuangCao)
     .innerJoin(
-      AdsSchema.DiaDiem,
-      eq(AdsSchema.QuangCao.id_dia_diem, AdsSchema.DiaDiem.id_dia_diem)
+      DiaDiem,
+      eq(QuangCao.id_dia_diem, DiaDiem.id_dia_diem)
     )
     .innerJoin(
-      AdsSchema.LoaiViTri,
-      eq(AdsSchema.LoaiViTri.id_loai_vt, AdsSchema.QuangCao.id_loai_vitri)
+      LoaiViTri,
+      eq(LoaiViTri.id_loai_vt, QuangCao.id_loai_vitri)
     )
     .innerJoin(
-      AdsSchema.HinhThucQC,
-      eq(AdsSchema.HinhThucQC.id_htqc, AdsSchema.QuangCao.id_hinh_thuc)
+      HinhThucQC,
+      eq(HinhThucQC.id_htqc, QuangCao.id_hinh_thuc)
     )
     .innerJoin(
-      AdsSchema.LoaiBangQC,
+      LoaiBangQC,
       eq(
-        AdsSchema.LoaiBangQC.id_loai_bang_qc,
-        AdsSchema.QuangCao.id_loai_bang_qc
+        LoaiBangQC.id_loai_bang_qc,
+        QuangCao.id_loai_bang_qc
       )
     );
 
@@ -98,4 +97,4 @@ export async function GetQuangManyCaoData() {
   }
 
   return grp_by_location;
-}
+};

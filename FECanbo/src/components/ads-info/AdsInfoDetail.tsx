@@ -69,6 +69,7 @@ const AdInfoDetail = ({ ad, place, onRequestChange }: AdsInfoDetailProps) => {
         Yêu cầu chỉnh sửa
       </Button>
     </div>
+    
   );
 };
 
