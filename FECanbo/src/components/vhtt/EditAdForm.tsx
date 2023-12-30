@@ -1,13 +1,6 @@
-import { FC, useEffect, useRef, useState } from "react";
-import {
-  Select,
-  DatePicker,
-  InputNumber,
-  Form,
-  Input,
-  Button,
-  InputRef,
-} from "antd";
+import { FC, useEffect, useState } from "react";
+import { Select, DatePicker, InputNumber, Form, Input, Button } from "antd";
+
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
 import type { RcFile, UploadProps } from "antd/es/upload";
@@ -80,6 +73,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList2, setFileList2] = useState<UploadFile[]>([]);
   const [mapModalOpen, setOpenMapModal] = useState<boolean>(false);
   const [address, setAddress] = useState<string>("");
 
@@ -89,12 +83,34 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
     const files: UploadFile[] = [];
     if (ad?.hinh_1) {
       files.push({ uid: "1", name: "Image 1", status: "done", url: ad.hinh_1 });
+      setFileList(
+        files.filter((file) => {
+          return file.uid === "1";
+        }),
+      );
     }
     if (ad?.hinh_2) {
       files.push({ uid: "2", name: "Image 2", status: "done", url: ad.hinh_2 });
+      setFileList2(
+        files.filter((file) => {
+          return file.uid === "2";
+        }),
+      );
     }
-    setFileList(files);
-    if (ad && type === "AdInfo") setAddress(ad.dia_chi);
+
+    if (ad && type === "AdInfo") {
+      setAddress(ad.dia_chi);
+    }
+
+    form.setFieldsValue({
+      so_luong: ad?.so_luong,
+      chieu_dai_m: ad?.chieu_dai_m,
+      chieu_rong_m: ad?.chieu_rong_m,
+      bang_qc: ad?.bang_qc,
+      loai_vitri: ad?.loai_vitri,
+      hinh_thuc: ad?.hinh_thuc,
+      ten_dia_diem: ad?.ten_dia_diem,
+    });
   }, [ad]);
 
   const handlePreview = async (file: UploadFile) => {
@@ -120,6 +136,17 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
       setFileList(newFileList);
     }
   };
+  const handleChange2: UploadProps["onChange"] = async ({
+    fileList: newFileList,
+    file,
+  }) => {
+    if (file && file.type && file.type.startsWith("image/")) {
+      const preview = await getBase64(file.originFileObj as RcFile);
+      setFileList2([{ ...file, status: "done", url: preview }]);
+    } else {
+      setFileList2(newFileList);
+    }
+  };
 
   const uploadButton = (
     <div>
@@ -134,6 +161,9 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
 
   const handleCancelModal = () => {
     onClose();
+    setAddress("");
+    setFileList([]);
+    setFileList2([]);
   };
   const [isOpen, setIsopen] = useState(false);
   useEffect(() => {
@@ -186,7 +216,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
           <div className="grid grid-cols-2 gap-5  ">
             <Form.Item<AdChangeFormValue>
               label=" Loại quảng cáo"
-              name={"id_loai_bang_qc"}
+              name={"bang_qc"}
             >
               <Select value={ad?.bang_qc}>
                 {AdTableType.map((value) => (
@@ -196,11 +226,8 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item<AdChangeFormValue>
-              name={"id_hinh_thuc"}
-              label=" Hình thức"
-            >
-              <Select value={ad?.hinh_thuc}>
+            <Form.Item<AdChangeFormValue> name={"hinh_thuc"} label=" Hình thức">
+              <Select defaultValue={ad?.hinh_thuc}>
                 {AdType.map((value) => (
                   <Option key={value} value={value}>
                     {value}
@@ -209,10 +236,10 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
               </Select>
             </Form.Item>
             <Form.Item<AdChangeFormValue>
-              name={"id_loai_vitri"}
+              name={"loai_vitri"}
               label="Loại vị trí"
             >
-              <Select value={ad?.loai_vitri}>
+              <Select defaultValue={ad?.loai_vitri}>
                 {LocateType.map((value) => (
                   <Option key={value} value={value}>
                     {value}
@@ -220,29 +247,31 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
                 ))}
               </Select>
             </Form.Item>
-            <div className=" flex flex-row">
-              <Form.Item<AdChangeFormValue>
-                name={"chieu_dai_m"}
-                initialValue={ad?.chieu_dai_m || 0}
-              >
-                <InputNumber className="h-8 w-12 " min={1} max={10} />
-              </Form.Item>
-              <span className="mx-2">x</span>
-              <Form.Item<AdChangeFormValue>
-                name={"chieu_rong_m"}
-                initialValue={ad?.chieu_rong_m || 0}
-              >
-                <InputNumber className="h-8 w-12" min={1} max={10} />
-              </Form.Item>
-              <span className="mx-2">(mxm)</span>
-            </div>
-
             <Form.Item<AdChangeFormValue>
-              name={"ngay_het_han"}
-              label="Ngày hết hạn"
-              initialValue={dayjs(`${ad?.ngay_het_han || today}`, dateFormat)}
+              label="Vị trí"
+              name={"ten_dia_diem"}
+              initialValue={ad?.ten_dia_diem}
             >
-              <DatePicker format={dateFormat} />
+              <Input />
+            </Form.Item>
+
+            <Form.Item<AdChangeFormValue> label="Kích thước">
+              <div className=" flex flex-row">
+                <Form.Item<AdChangeFormValue>
+                  name={"chieu_dai_m"}
+                  initialValue={ad?.chieu_dai_m || 0}
+                >
+                  <InputNumber className="h-8 w-12 " min={1} max={10} />
+                </Form.Item>
+                <span className="mx-2">x</span>
+                <Form.Item<AdChangeFormValue>
+                  name={"chieu_rong_m"}
+                  initialValue={ad?.chieu_rong_m || 0}
+                >
+                  <InputNumber className="h-8 w-12" min={1} max={10} />
+                </Form.Item>
+                <span className="mx-2">(mxm)</span>
+              </div>
             </Form.Item>
             <Form.Item<AdChangeFormValue>
               name={"so_luong"}
@@ -251,7 +280,24 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
             >
               <InputNumber className="h-8 w-12 " min={1} />
             </Form.Item>
-            <Form.Item label="Hình ảnh">
+
+            <Form.Item<AdChangeFormValue>
+              name={"ngay_hieu_luc"}
+              label="Ngày hiệu lực"
+              initialValue={dayjs(`${ad?.ngay_hieu_luc || today}`, dateFormat)}
+            >
+              <DatePicker format={dateFormat} />
+            </Form.Item>
+
+            <Form.Item<AdChangeFormValue>
+              name={"ngay_het_han"}
+              label="Ngày hết hạn"
+              initialValue={dayjs(`${ad?.ngay_het_han || today}`, dateFormat)}
+            >
+              <DatePicker format={dateFormat} />
+            </Form.Item>
+
+            <Form.Item label="Hình ảnh 1">
               <Upload
                 action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                 listType="picture-card"
@@ -260,6 +306,29 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
                 onChange={handleChange}
               >
                 {fileList.length >= 2 ? null : uploadButton}
+              </Upload>
+              <Modal
+                open={previewOpen}
+                title={previewTitle}
+                footer={null}
+                onCancel={handleCancel}
+              >
+                <img
+                  alt="example"
+                  style={{ width: "100%" }}
+                  src={previewImage}
+                />
+              </Modal>
+            </Form.Item>
+            <Form.Item label="Hình ảnh 2">
+              <Upload
+                action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                listType="picture-card"
+                fileList={fileList2}
+                onPreview={handlePreview}
+                onChange={handleChange2}
+              >
+                {fileList2.length >= 2 ? null : uploadButton}
               </Upload>
               <Modal
                 open={previewOpen}

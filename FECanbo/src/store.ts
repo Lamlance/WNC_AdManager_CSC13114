@@ -1,5 +1,6 @@
 import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./slices/api/apiSlice";
+
 //import pointSlice from "./slices/pointSlice";
 import modalSlice from "./slices/modalSlice";
 import GoongApi from "./slices/GoongApi";
@@ -19,6 +20,7 @@ const store = configureStore({
 });
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+
 export default store;
 export type AppDispatch = typeof store.dispatch;
 

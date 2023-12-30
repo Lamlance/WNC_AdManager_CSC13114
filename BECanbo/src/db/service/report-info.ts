@@ -6,13 +6,24 @@ import {
   LoaiBaoCao,
   QuangCao,
 } from "@admanager/backend/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, ilike, inArray, or } from "drizzle-orm";
 import { AdsGeoJson, ReportApi } from "@admanager/shared";
 
-export const getALLReportInfo = async function (): Promise<
-  ReportApi.ReportResponse[]
-> {
-  const data = await pg_client
+type GetALLReportInfoArgs = {
+  phuong_id?: number[];
+};
+
+export const getALLReportInfo = async function (
+  args: GetALLReportInfoArgs
+): Promise<ReportApi.ReportResponse[]> {
+  const ward_list =
+    args.phuong_id &&
+    (await pg_client
+      .select()
+      .from(AdsSchema.Phuong)
+      .where(inArray(AdsSchema.Phuong.id_phuong, args.phuong_id)));
+  console.log(ward_list);
+  const query = pg_client
     .select({
       bao_cao: AdsSchema.BaoCao,
       loai_bc: AdsSchema.LoaiBaoCao.loai_bao_cao,
@@ -31,16 +42,34 @@ export const getALLReportInfo = async function (): Promise<
       eq(AdsSchema.DiaDiem.id_dia_diem, AdsSchema.QuangCao.id_dia_diem)
     );
 
-  return data;
+  if (ward_list) {
+    query.where(
+      or(
+        ...ward_list.map((p) =>
+          ilike(AdsSchema.BaoCao.dia_chi, `%${p.ten_phuong}%`)
+        )
+      )
+    );
+  }
+
+  return await query;
 };
 
 export async function createReportInfo(
-  data: typeof AdsSchema.BaoCao.$inferInsert
+  data: Zod.infer<typeof AdsZodSchema.createBaoCaoSchema>
 ) {
-  const res = await pg_client.insert(AdsSchema.BaoCao).values(data).returning({
-    insertId: AdsSchema.BaoCao.id_bao_cao,
-  });
-  if (res.length <= 0) return null;
+  const res = await pg_client
+    .insert(AdsSchema.BaoCao)
+    .values({
+      ...data,
+      trang_thai: data.trang_thai || undefined,
+      thoi_diem_bc: data.thoi_diem_bc || undefined,
+    })
+    .returning({
+      insertId: AdsSchema.BaoCao.id_bao_cao,
+    });
+
+  if (typeof res[0]?.insertId !== "number") return null;
   const rpGeo: AdsGeoJson.ReportGeoJsonProperty[] = await pg_client
     .select({
       bao_cao: AdsSchema.BaoCao,
@@ -52,7 +81,7 @@ export async function createReportInfo(
     .where(eq(AdsSchema.BaoCao.id_bao_cao, res[0].insertId))
     .innerJoin(
       AdsSchema.LoaiBaoCao,
-      eq(AdsSchema.BaoCao.id_bao_cao, AdsSchema.LoaiBaoCao.id_loai_bc)
+      eq(AdsSchema.BaoCao.id_loai_bc, AdsSchema.LoaiBaoCao.id_loai_bc)
     )
     .leftJoin(
       AdsSchema.QuangCao,
@@ -60,7 +89,7 @@ export async function createReportInfo(
     )
     .leftJoin(
       AdsSchema.DiaDiem,
-      eq(AdsSchema.DiaDiem.id_dia_diem, AdsSchema.QuangCao.id_dia_diem)
+      eq(AdsSchema.BaoCao.id_dia_diem, AdsSchema.DiaDiem.id_dia_diem)
     );
-  return rpGeo.length > 0 ? rpGeo[0] : null;
+  return rpGeo[0] || null;
 }

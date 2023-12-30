@@ -1,5 +1,5 @@
-import { Button } from "antd";
-import ReportModal from "./ReportModal";
+import { Button, UploadFile } from "antd";
+import ReportModal, { ReportFormPropery } from "./ReportModal";
 import { useState } from "react";
 import { REPORT_KEY } from "../models/report_form_values";
 import { InfoCircleOutlined } from "@ant-design/icons";
@@ -24,7 +24,7 @@ interface AdsItemProps {
   Place: AdsGeoJson.PlaceProperty | ReportApi.ReportPlace;
 
   onReportSubmit: (
-    report: ReportApi.ReportFormValues,
+    report: ReportFormPropery,
     place: AdsGeoJson.PlaceProperty | ReportApi.ReportPlace,
     ad?: AdsGeoJson.AdsProperty,
   ) => void;
@@ -46,7 +46,7 @@ function EmptyAdItem({ Place, onReportSubmit }: EmptyAdItemProps) {
     setIsModalOpen(true);
   };
 
-  const handleReportModalSubmit = (values: ReportApi.ReportFormValues) => {
+  const handleReportModalSubmit = (values: ReportFormPropery) => {
     console.log("Report form submitted with values:", values);
     setIsReportModalVisible(false);
     onReportSubmit(values, Place);
@@ -206,15 +206,39 @@ function AdsInfos() {
         .safeParse(JSON.parse(localStorage.getItem(REPORT_KEY) || "[]"));
       if (oldReport.success == false) return console.log(oldReport.error);
 
-      const BaoCaoGeoJson = await uploadReport({
-        ...report,
-        ...place,
-        id_quang_cao: ad?.id_quang_cao,
-      }).unwrap();
-      if (!data) return;
-      oldReport.data.push(BaoCaoGeoJson);
-      localStorage.setItem(REPORT_KEY, JSON.stringify(oldReport.data));
-      dispatch(addReportData([BaoCaoGeoJson]));
+      const formData = new FormData();
+      Object.entries(report).forEach(([k, v]) => {
+        if (!v) return;
+        if ((k as keyof ReportFormPropery) === "images") {
+          const files = v as UploadFile[];
+          files.forEach((f) => {
+            if (f.originFileObj) {
+              console.log(f.originFileObj);
+              formData.append("hinh_anh", f.originFileObj);
+            }
+          });
+          return;
+        }
+        formData.append(k, v.toString());
+      });
+
+      Object.entries(place).forEach(([k, v]) => {
+        if (!v) return;
+        formData.append(k, v.toString());
+      });
+
+      if (ad?.id_quang_cao) {
+        formData.append("id_quang_cao", ad.id_quang_cao);
+      }
+
+      try {
+        const geojson = await uploadReport(formData).unwrap();
+        oldReport.data.push(geojson);
+        localStorage.setItem(REPORT_KEY, JSON.stringify(oldReport.data));
+        dispatch(addReportData([geojson]));
+      } catch (e) {
+        console.warn(e);
+      }
     } catch (e) {
       console.warn(e);
     }

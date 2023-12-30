@@ -3,6 +3,7 @@ import {
   GetAllAdsRequest,
   GetAllAdsReqRequest,
   GetAllReportsRequest,
+  GetAllAdsMethod,
 } from "../../types/request";
 import {
   AdChangeApi,
@@ -12,7 +13,12 @@ import {
   ReportApi,
 } from "@admanager/shared";
 
-
+type WardItem = {
+  phuong: { id_phuong: number; ten_phuong: string; id_quan: number };
+  quan: { id_quan: number; ten_quan: string };
+};
+type GetAllWardArgs = { id_quan?: number[] };
+type GetALLReportInfoArgs = { phuong_id?: number[] };
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:4030/api" }),
@@ -23,6 +29,13 @@ export const apiSlice = createApi({
     >({
       query: () => "/quang-cao",
     }),
+    getAllAdsMethod: builder.query<
+      AdsGeoJson.AdMethodProperty[],
+      GetAllAdsMethod | void
+    >({
+      query: () => "/hinh-thuc-quang-cao",
+    }),
+
     getAllAdsReq: builder.query<
       AdsReqApi.ManyAdsRequestResponse[],
       GetAllAdsReqRequest | void
@@ -31,9 +44,12 @@ export const apiSlice = createApi({
     }),
     getAllReportInfo: builder.query<
       ReportApi.ReportResponse[],
-      GetAllReportsRequest | void
+      GetALLReportInfoArgs
     >({
-      query: () => "/bao-cao",
+      query: ({ phuong_id }) => ({
+        url: "/bao-cao",
+        params: { phuong_id },
+      }),
     }),
     getAllAdChangeRequest: builder.query<
       AdChangeApi.AdChangeRequestResponse[],
@@ -54,11 +70,65 @@ export const apiSlice = createApi({
         },
       }),
     }),
-    submitAdRequest: builder.mutation<any, AdsReqApi.AdRequestCreate>({
+    submitAdRequest: builder.mutation<any, FormData>({
       query: (formData) => ({
         url: "/cap-phep-quang-cao/",
         method: "POST",
         body: formData,
+        }),
+    }),
+    submitAdMethod: builder.mutation<any, AdsGeoJson.AdMethodCreateProperty>({
+      query: (formData) => ({
+        url: "/hinh-thuc-quang-cao/",
+        method: "POST",
+        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    submitUpdateAdMethod: builder.mutation<any, AdsGeoJson.AdMethodProperty>({
+      query: (body) => ({
+        url: `/hinh-thuc-quang-cao/${body.id_htqc}`,
+        method: "PUT",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    deleteAdMethod: builder.mutation<any, AdsGeoJson.AdMethodDeleteProperty>({
+      query: (data) => ({
+        url: `/hinh-thuc-quang-cao/${data.id_htqc}`,
+        method: "DELETE",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
+    submitUpdateAdRequestStatus: builder.mutation<
+      any,
+      AdsReqApi.AdRequestUpdateStatus2
+    >({
+      query: (body) => ({
+        url: `/cap-phep-quang-cao/${body.id_yeu_cau}`,
+        method: "PUT",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    submitUpdateAdChangeRequestStatus: builder.mutation<
+      any,
+      AdChangeApi.AdChangeStatusRequestUpdate
+    >({
+      query: (body) => ({
+        url: `/yeu-cau-quang-cao/chinh-sua/${body.id_yeu_cau}`,
+        method: "PUT",
+        body: body,
         headers: {
           "Content-Type": "application/json",
         },
@@ -85,6 +155,17 @@ export const apiSlice = createApi({
         },
       }),
     }),
+
+    getImageUrl: builder.query<{ url: string }, string>({
+      query: (img_name) => `/image/${img_name}`,
+    }),
+
+    getAllWard: builder.query<WardItem[], GetAllWardArgs>({
+      query: ({ id_quan }) => ({
+        url: "/phuong",
+        params: { id_quan },
+      }),
+    }),
   }),
 });
 
@@ -97,4 +178,17 @@ export const {
   useSubmitAdChangeRequestMutation,
   useGetAllPlaceChangeRequestQuery,
   useSubmitPlaceChangeRequestMutation,
+  useGetAllAdsMethodQuery,
+  useSubmitAdMethodMutation,
+  useSubmitUpdateAdMethodMutation,
+  useSubmitUpdateAdRequestStatusMutation,
+  useSubmitUpdateAdChangeRequestStatusMutation,
+  useDeleteAdMethodMutation,
+
+  useGetImageUrlQuery,
+  useLazyGetImageUrlQuery,
+
+  useLazyGetAllReportInfoQuery: useLazyGetAllReportInfo,
+  useGetAllWardQuery: useGetAllWards,
+  useLazyGetAllWardQuery: useLazyGetAllWards,
 } = apiSlice;

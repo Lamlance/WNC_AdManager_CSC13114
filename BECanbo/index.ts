@@ -8,6 +8,7 @@ import { configDotenv } from "dotenv";
 import passport from "passport";
 
 configDotenv();
+import MulterMw from "./src/utils/Multer.js";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -20,6 +21,11 @@ passport.use(strategy);
 
 app.get("/", function (req, res) {
   return res.status(200).json({ Hello: "World" });
+});
+
+app.post("/test", MulterMw.array("hinh_anh"), function (req, res) {
+  console.log(req.files, req.body);
+  return res.status(200).json({ ok: "ok" });
 });
 
 app.use("/auth", authRouter);

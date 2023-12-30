@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import { EditAdRequest } from "../../../types";
+import React, { useEffect, useState } from "react";
+
 import { Button, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import EditAdForm from "../EditAdForm";
 import { AdChangeApi } from "@admanager/shared";
-import { useGetAllAdChangeRequestQuery } from "../../../slices/api/apiSlice";
+import {
+  useGetAllAdChangeRequestQuery,
+  useSubmitUpdateAdChangeRequestStatusMutation,
+} from "../../../slices/api/apiSlice";
 
 function EditRequest() {
   const { data } = useGetAllAdChangeRequestQuery();
@@ -12,7 +15,8 @@ function EditRequest() {
     useState<AdChangeApi.AdChangeRequestResponse | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isApprove, setIsApprove] = useState(false);
+  const [isReject, setIsReject] = useState(false);
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -49,7 +53,11 @@ function EditRequest() {
       key: "xetduyet",
       align: "center",
 
-      render: () => <Button type="primary">Xét duyệt</Button>,
+      render: () => (
+        <Button type="primary" onClick={handleApprove}>
+          Xét duyệt
+        </Button>
+      ),
     },
     {
       title: "Từ chối",
@@ -58,12 +66,40 @@ function EditRequest() {
       align: "center",
 
       render: () => (
-        <Button type="primary" className="bg-red-500">
+        <Button type="primary" className="bg-red-500" onClick={handleReject}>
           Từ chối
         </Button>
       ),
     },
   ];
+  const [submitAdChangeStatus] = useSubmitUpdateAdChangeRequestStatusMutation();
+
+  useEffect(() => {
+    if (isApprove) {
+      const data: AdChangeApi.AdChangeStatusRequestUpdate = {
+        id_yeu_cau: selectedAds!.chinh_sua.id_yeu_cau,
+        trang_thai: "Approve",
+      };
+
+      submitAdChangeStatus(data).then((v) => console.log(v));
+      window.location.reload();
+    }
+    if (isReject) {
+      const data: AdChangeApi.AdChangeStatusRequestUpdate = {
+        id_yeu_cau: selectedAds!.chinh_sua.id_yeu_cau,
+        trang_thai: "Reject",
+      };
+
+      submitAdChangeStatus(data).then((v) => console.log(v));
+      window.location.reload();
+    }
+  }, [selectedAds, isApprove, isReject]);
+  const handleApprove = () => {
+    setIsApprove(true);
+  };
+  const handleReject = () => {
+    setIsReject(true);
+  };
 
   return (
     <div>
@@ -72,6 +108,7 @@ function EditRequest() {
         dataSource={data}
         onRow={(record: AdChangeApi.AdChangeRequestResponse) => ({
           onClick: () => {
+            console.log("ggg", record);
             setSelectedAds(record);
           },
         })}

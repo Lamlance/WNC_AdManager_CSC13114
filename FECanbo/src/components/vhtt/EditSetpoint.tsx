@@ -1,6 +1,4 @@
 import { Modal, Input, Button, Form } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store.ts";
 // import { onChangeLocation, onChangeAddress } from '../../slices/pointSlice.tsx';
@@ -8,6 +6,7 @@ import { setSelectedPlace, showModalClose } from "../../slices/modalSlice.tsx";
 import AdsMapModal from "../AdsMap/AdsMapModal.tsx";
 import { useState } from "react";
 import { PlaceChangeApi } from "@admanager/shared";
+
 
 type EditPlaceFormValue =
   | PlaceChangeApi.PlaceChangeRequestCreate
@@ -83,6 +82,7 @@ function EditSetpoint(props: EditSetpointProps) {
               }
             />{" "}
             <Button onClick={() => setAdMapOpen(true)}>🗺️</Button>
+            
           </Form.Item>
 
           <Form.Item className="flex justify-center">
