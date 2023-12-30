@@ -56,20 +56,26 @@ const ReportPropertySchema = z.object({
   dien_thoai: z.string().nullish(),
   noi_dung: z.string(),
   trang_thai: z.string(),
-  thoi_diem_bc: z.date(),
+  thoi_diem_bc: z.date().or(z.string()),
 });
 
 const ReportGeoJsonPropertySchema = z.preprocess(
   StringParsePreprocess,
   z.object({
-    bao_cao: ReportPropertySchema,
+    bao_cao: z.preprocess(StringParsePreprocess, ReportPropertySchema),
     loai_bao_cao: z.string(),
-    dia_diem: PlacePropertySchema.nullish(),
-    quang_cao: AdsPropertySchema.omit({
-      loai_vitri: true,
-      hinh_thuc: true,
-      bang_qc: true,
-    }).nullish(),
+    dia_diem: z.preprocess(
+      StringParsePreprocess,
+      PlacePropertySchema.nullish()
+    ),
+    quang_cao: z.preprocess(
+      StringParsePreprocess,
+      AdsPropertySchema.omit({
+        loai_vitri: true,
+        hinh_thuc: true,
+        bang_qc: true,
+      }).nullish()
+    ),
   })
 );
 

@@ -75,21 +75,21 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
   }
 
   function show_ads_check_handler(is_check: boolean) {
-    if (!mapRef.current) return;
-    if (!AdsClusterInfo) return;
+    if (!mapRef.current) return console.log("Invalid mapRef");
+    if (!AdsClusterInfo) return console.log("Imavlid cluster info");
     const visible = is_check ? "visible" : "none";
     mapRef.current.setLayoutProperty(
-      AdsClusterInfo.props.Uncluster.id,
+      AdsClusterInfo.props.markerData.Uncluster.id,
       "visibility",
       visible
     );
     mapRef.current.setLayoutProperty(
-      AdsClusterInfo.props.ClusterCount.id,
+      AdsClusterInfo.props.markerData.ClusterCount.id,
       "visibility",
       visible
     );
     mapRef.current.setLayoutProperty(
-      AdsClusterInfo.props.Cluster.id,
+      AdsClusterInfo.props.markerData.Cluster.id,
       "visibility",
       visible
     );
@@ -105,7 +105,6 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
     <div className=" relative h-full w-full">
       <div id="locationIQ_map" ref={mapEleRef} className=" h-full w-full"></div>
       <div
-        className=" absolute left-4 right-4 top-4"
         style={{
           position: "absolute",
           left: "1rem",
@@ -133,15 +132,25 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
               mapRef: mapRef.current,
             })}
       </div>
-      <div className=" absolute bottom-2 left-4 right-4 flex flex-row bg-white bg-opacity-80 p-2">
-        <div className="flex flex-row gap-x-2">
-          {!AdsClusterInfo ? null : (
+      <div
+        style={{
+          position: "absolute",
+          bottom: "0.5rem",
+          left: "1rem",
+          right: "1rem",
+          flexDirection: "row",
+          background: "rgba(239, 239, 239, 0.5)",
+          padding: "0.5rem",
+        }}
+      >
+        {!AdsClusterInfo ? null : (
+          <div className="flex flex-row gap-x-2">
             <>
               <p className=" font-semibold">Hiện địa điểm quảng cáo</p>
               <Switch defaultChecked={true} onChange={show_ads_check_handler} />
             </>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
