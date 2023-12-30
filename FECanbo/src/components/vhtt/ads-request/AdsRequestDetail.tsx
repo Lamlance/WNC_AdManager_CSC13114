@@ -1,7 +1,7 @@
 import React from "react";
-import { AdRequest } from "../../../types";
 import { Button } from "antd";
 import { AdsReqApi } from "@admanager/shared";
+import { useSubmitUpdateAdRequestStatusMutation } from "../../../slices/api/apiSlice";
 
 interface AdDetailsSectionProps {
   ad: AdsReqApi.ManyAdsRequestResponse | null;
@@ -20,6 +20,25 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
       width: "100%",
       borderRadius: "4px",
     },
+  };
+  const [submitAdMethod] = useSubmitUpdateAdRequestStatusMutation();
+  const handleApprove = () => {
+    const data: AdsReqApi.AdRequestUpdateStatus2 = {
+      id_yeu_cau: ad!.yeu_cau.id_yeu_cau,
+      trang_thai: "Approve",
+    };
+
+    submitAdMethod(data).then((v) => console.log(v));
+    window.location.reload();
+  };
+  const handleReject = () => {
+    const data: AdsReqApi.AdRequestUpdateStatus2 = {
+      id_yeu_cau: ad!.yeu_cau.id_yeu_cau,
+      trang_thai: "Reject",
+    };
+
+    submitAdMethod(data).then((v) => console.log(v));
+    window.location.reload();
   };
 
   return (
@@ -68,24 +87,30 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
             <span className="font-semibold">Nội dung: </span>
             <span>{ad.yeu_cau.noi_dung_qc}</span>
           </p>
-          <div className="my-3 flex justify-between">
-            {ad.yeu_cau.trang_thai == "Đã phê duyệt" ? (
+
+          {ad.yeu_cau.trang_thai !== "Waiting" ? (
+            <div className="my-3 flex justify-between">
               <Button className="bg-neutral-300" disabled type="primary">
                 Phê duyệt
               </Button>
-            ) : (
-              <Button type="primary">Phê duyệt</Button>
-            )}
-            {ad.yeu_cau.trang_thai == "Đã từ chối" ? (
               <Button disabled type="primary" className="bg-red-500">
                 Từ chối
               </Button>
-            ) : (
-              <Button type="primary" className="bg-red-500">
+            </div>
+          ) : (
+            <div className="my-3 flex justify-between">
+              <Button type="primary" onClick={handleApprove}>
+                Phê duyệt
+              </Button>
+              <Button
+                type="primary"
+                className="bg-red-500"
+                onClick={handleReject}
+              >
                 Từ chối
               </Button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       ) : (
         <p>Please select an ad from the table.</p>

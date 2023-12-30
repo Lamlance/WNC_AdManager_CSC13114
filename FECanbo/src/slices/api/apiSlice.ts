@@ -3,6 +3,7 @@ import {
   GetAllAdsRequest,
   GetAllAdsReqRequest,
   GetAllReportsRequest,
+  GetAllAdsMethod,
 } from "../../types/request";
 import {
   AdChangeApi,
@@ -28,6 +29,13 @@ export const apiSlice = createApi({
     >({
       query: () => "/quang-cao",
     }),
+    getAllAdsMethod: builder.query<
+      AdsGeoJson.AdMethodProperty[],
+      GetAllAdsMethod | void
+    >({
+      query: () => "/hinh-thuc-quang-cao",
+    }),
+
     getAllAdsReq: builder.query<
       AdsReqApi.ManyAdsRequestResponse[],
       GetAllAdsReqRequest | void
@@ -67,6 +75,64 @@ export const apiSlice = createApi({
         url: "/cap-phep-quang-cao/",
         method: "POST",
         body: formData,
+      }),
+    }),
+    submitAdMethod: builder.mutation<any, AdsGeoJson.AdMethodCreateProperty>({
+      query: (formData) => ({
+        url: "/hinh-thuc-quang-cao/",
+        method: "POST",
+        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    submitUpdateAdMethod: builder.mutation<any, AdsGeoJson.AdMethodProperty>({
+      query: (body) => ({
+        url: `/hinh-thuc-quang-cao/${body.id_htqc}`,
+        method: "PUT",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    deleteAdMethod: builder.mutation<any, AdsGeoJson.AdMethodDeleteProperty>({
+      query: (data) => ({
+        url: `/hinh-thuc-quang-cao/${data.id_htqc}`,
+        method: "DELETE",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
+    submitUpdateAdRequestStatus: builder.mutation<
+      any,
+      AdsReqApi.AdRequestUpdateStatus2
+    >({
+      query: (body) => ({
+        url: `/cap-phep-quang-cao/${body.id_yeu_cau}`,
+        method: "PUT",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
+    submitUpdateAdChangeRequestStatus: builder.mutation<
+      any,
+      AdChangeApi.AdChangeStatusRequestUpdate
+    >({
+      query: (body) => ({
+        url: `/yeu-cau-quang-cao/chinh-sua/${body.id_yeu_cau}`,
+        method: "PUT",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+        },
       }),
     }),
 
@@ -115,6 +181,13 @@ export const {
   useSubmitAdChangeRequestMutation,
   useGetAllPlaceChangeRequestQuery,
   useSubmitPlaceChangeRequestMutation,
+  useGetAllAdsMethodQuery,
+  useSubmitAdMethodMutation,
+  useSubmitUpdateAdMethodMutation,
+  useSubmitUpdateAdRequestStatusMutation,
+  useSubmitUpdateAdChangeRequestStatusMutation,
+  useDeleteAdMethodMutation,
+
   useGetImageUrlQuery,
   useLazyGetImageUrlQuery,
 

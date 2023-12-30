@@ -46,6 +46,7 @@ export interface ReportInfoRecord {
   status: string;
 }
 
+
 export interface EditAdRequest {
   id: string;
   timeRequest: string;
