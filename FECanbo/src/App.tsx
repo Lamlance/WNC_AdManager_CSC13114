@@ -20,6 +20,9 @@ import AdsRequestVHTTPage from "./components/vhtt/ads-request/AdsRequestVHTTPage
 import EditRequest from "./components/vhtt/requestedit-ads/EditRequest";
 import EditRequestComponent from "./components/vhtt/EditRequestComponent";
 import AdsMethodPage from "./routes/AdsMethodPage";
+import ReportTypeComponent from "./components/vhtt/ReportTypeComponent";
+import EditUserInfo from "./components/user/EditUserInfo";
+import ResolveReport from "./components/report-info/ResolveReport";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
@@ -40,6 +43,12 @@ const items: Item[] = [
     icon: <UploadOutlined />,
     label: "Báo cáo từ người dân",
     title: "/reports",
+  },
+  {
+    key: "4",
+    icon: <UploadOutlined />,
+    label: "Chỉnh sửa thông tin cá nhân",
+    title: "/user",
   },
 ];
 const itemVHTTs: Item[] = [
@@ -72,6 +81,12 @@ const itemVHTTs: Item[] = [
     icon: <UploadOutlined />,
     label: "Quản lý hình thức quảng cáo",
     title: "/vhtt/manage-ad-method",
+    key: "2",
+  },
+  {
+    icon: <UploadOutlined />,
+    label: "Các loại hình thức báo cáo",
+    title: "/vhtt/reporttype",
   },
 ];
 const App = () => {
@@ -82,6 +97,8 @@ const App = () => {
           <Route index element={<AdsRequestPage />} />
           <Route path="advertisements" element={<AdsInfo />} />
           <Route path="reports" element={<ReportInfo />} />
+          <Route path="user" element={<EditUserInfo />} />
+          <Route path="resolve" element={<ResolveReport />} />
         </Route>
         <Route path="vhtt" element={<PageLayout items={itemVHTTs} />}>
           <Route index element={<AdManagement />} />
@@ -90,6 +107,7 @@ const App = () => {
           <Route path="edit-ad-request" element={<EditRequest />} />
           <Route path="edit-place-request" element={<EditRequestComponent />} />
           <Route path="manage-ad-method" element={<AdsMethodPage />} />
+          <Route path="reporttype" element={<ReportTypeComponent />} />
         </Route>
       </Routes>
     </div>

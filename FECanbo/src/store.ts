@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./slices/api/apiSlice";
+
 //import pointSlice from "./slices/pointSlice";
 import modalSlice from "./slices/modalSlice";
 import GoongApi from "./slices/GoongApi";
@@ -23,4 +24,5 @@ export type AppDispatch = typeof store.dispatch;
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+
 export default store;

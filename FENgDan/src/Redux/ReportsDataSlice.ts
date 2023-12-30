@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 type ReportDataType = {
   data: AdsGeoJson.ReportGeoJsonProperty[];
-  selectedReport: AdsGeoJson.ReportGeoJsonProperty[] | null;
+  selectedReport: AdsGeoJson.ReportGeoJsonProperty | null;
 };
 
 const initialState: ReportDataType = {
@@ -24,7 +24,7 @@ const ReportsDataSlice = createSlice({
 
     setSelectedReport: function (
       state,
-      action: PayloadAction<AdsGeoJson.ReportGeoJsonProperty[] | null>,
+      action: PayloadAction<AdsGeoJson.ReportGeoJsonProperty | null>,
     ) {
       state.selectedReport = action.payload;
     },

@@ -107,6 +107,9 @@ const BaoCao = pgTable("BaoCao", {
   lng: doublePrecision("kinh_do").notNull(),
   lat: doublePrecision("vi_do").notNull(),
 
+  hinh_1: varchar("hinh_1", { length: 255 }),
+  hinh_2: varchar("hinh_2", { length: 255 }),
+
   id_loai_bc: integer("id_loai_bc")
     .notNull()
     .references(() => LoaiBaoCao.id_loai_bc),
@@ -126,6 +129,7 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
   ngay_het_han: timestamp("ngay_het_han").defaultNow().notNull(),
   trang_thai: varchar("trang_thai").notNull().default("Waiting"),
   hinh_anh: varchar("hinh_1", { length: 255 }),
+  hinh_anh_2: varchar("hinh_2", { length: 255 }),
 });
 
 const YeuCauChinhSua = pgTable("YeuCauChinhSua", {
@@ -159,6 +163,5 @@ export {
   LoaiBaoCao,
   BaoCao,
   YeuCauCapPhep,
-  YeuCauChinhSua,
-  YeuCauChinhSuaDiaDiem,
+  YeuCauChinhSua,YeuCauChinhSuaDiaDiem,
 };

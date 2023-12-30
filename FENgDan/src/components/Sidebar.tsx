@@ -19,6 +19,7 @@ function Sidebar() {
     dispatch(setSelectedReport(null));
   }
 
+  console.log(selectedReport);
   return (
     <div>
       <Drawer

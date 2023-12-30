@@ -14,6 +14,7 @@ const AdsRequestSchema = z.object({
   ngay_het_han: z.coerce.date(),
   trang_thai: z.string().nullish(),
   hinh_anh: z.string().nullish(),
+  hinh_anh_2: z.string().nullish(),
 });
 
 const ManyAdsRequestResponseSchema = z.object({

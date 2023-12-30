@@ -10,7 +10,7 @@ interface modalState {
 }
 
 const initialState: modalState = {
-  isModalOpen: true,
+  isModalOpen: false,
   selectedPlace: null,
 };
 
