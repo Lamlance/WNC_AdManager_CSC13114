@@ -33,7 +33,7 @@ const ReportInfoDetail = ({ bao_cao, loai_bc }: ReportApi.ReportResponse) => {
       </p>
       <p>
         <span className="font-semibold"> Nội dung báo cáo: </span>
-        <p> {bao_cao.noi_dung} </p>
+        <span dangerouslySetInnerHTML={{ __html: bao_cao.noi_dung }}></span>
       </p>
       <p>
         <span className="font-semibold"> Địa điểm quảng cáo: </span>

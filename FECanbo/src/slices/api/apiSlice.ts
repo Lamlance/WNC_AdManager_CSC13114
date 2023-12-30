@@ -11,8 +11,13 @@ import {
   PlaceChangeApi,
   ReportApi,
 } from "@admanager/shared";
-import { query } from "express";
 
+type WardItem = {
+  phuong: { id_phuong: number; ten_phuong: string; id_quan: number };
+  quan: { id_quan: number; ten_quan: string };
+};
+type GetAllWardArgs = { id_quan?: number[] };
+type GetALLReportInfoArgs = { phuong_id?: number[] };
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:4030/api" }),
@@ -31,9 +36,12 @@ export const apiSlice = createApi({
     }),
     getAllReportInfo: builder.query<
       ReportApi.ReportResponse[],
-      GetAllReportsRequest | void
+      GetALLReportInfoArgs
     >({
-      query: () => "/bao-cao",
+      query: ({ phuong_id }) => ({
+        url: "/bao-cao",
+        params: { phuong_id },
+      }),
     }),
     getAllAdChangeRequest: builder.query<
       AdChangeApi.AdChangeRequestResponse[],
@@ -54,14 +62,11 @@ export const apiSlice = createApi({
         },
       }),
     }),
-    submitAdRequest: builder.mutation<any, AdsReqApi.AdRequestCreate>({
+    submitAdRequest: builder.mutation<any, FormData>({
       query: (formData) => ({
         url: "/cap-phep-quang-cao/",
         method: "POST",
         body: formData,
-        headers: {
-          "Content-Type": "application/json",
-        },
       }),
     }),
 
@@ -87,6 +92,17 @@ export const apiSlice = createApi({
         },
       }),
     }),
+
+    getImageUrl: builder.query<{ url: string }, string>({
+      query: (img_name) => `/image/${img_name}`,
+    }),
+
+    getAllWard: builder.query<WardItem[], GetAllWardArgs>({
+      query: ({ id_quan }) => ({
+        url: "/phuong",
+        params: { id_quan },
+      }),
+    }),
   }),
 });
 
@@ -99,4 +115,10 @@ export const {
   useSubmitAdChangeRequestMutation,
   useGetAllPlaceChangeRequestQuery,
   useSubmitPlaceChangeRequestMutation,
+  useGetImageUrlQuery,
+  useLazyGetImageUrlQuery,
+
+  useLazyGetAllReportInfoQuery: useLazyGetAllReportInfo,
+  useGetAllWardQuery: useGetAllWards,
+  useLazyGetAllWardQuery: useLazyGetAllWards,
 } = apiSlice;

@@ -38,16 +38,21 @@ function AdsClusterMarker<S extends ZodType>({
     hadInitMarker.current = true;
 
     mapRef.on("click", markerData.Uncluster.id, function (e) {
+      e.originalEvent.stopPropagation();
       const points = e.features?.[0].geometry;
       if (!points) return;
       const marker_data = geoJsonPropertySchema.safeParse(
-        e.features?.[0].properties
+        e.features?.[0].properties[0]
+          ? Object.values(e.features?.[0].properties)
+          : e.features?.[0].properties
       );
 
       if (marker_data.success === true) onMarkerClick?.(marker_data.data);
     });
 
     mapRef.on("mouseenter", markerData.Uncluster.id, function (e) {
+      e.originalEvent.stopPropagation();
+
       if (!popUpBuilder) return;
 
       const points = e.features?.[0].geometry;
@@ -55,15 +60,20 @@ function AdsClusterMarker<S extends ZodType>({
       mapRef.getCanvas().style.cursor = "pointer";
 
       const [lng, lat] = (points as GeoJSON.Point).coordinates.slice();
+
       const marker_data = geoJsonPropertySchema.safeParse(
-        e.features?.[0].properties
+        e.features?.[0].properties[0]
+          ? Object.values(e.features?.[0].properties)
+          : e.features?.[0].properties
       );
-      if (marker_data.success === false) return;
+
+      if (marker_data.success === false) return console.log(marker_data.error);
       popUpRef.current = popUpBuilder(marker_data.data, [lng, lat]);
       popUpRef.current.addTo(mapRef);
     });
 
-    mapRef.on("mouseleave", markerData.Uncluster.id, function () {
+    mapRef.on("mouseleave", markerData.Uncluster.id, function (e) {
+      e.originalEvent.stopPropagation();
       popUpRef.current?.remove();
     });
   }

@@ -17,6 +17,7 @@ import { useSubmitAdRequestMutation } from "../../slices/api/apiSlice";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { AdsReqApi } from "@admanager/shared";
 import AdsMapModal from "../AdsMap/AdsMapModal";
+import dayjs from "dayjs";
 
 const { TextArea } = Input;
 
@@ -25,24 +26,48 @@ interface AdsRequestFormProps {
   isVisible: boolean;
 }
 
-type AdReqFormValue = AdsReqApi.AdRequestCreate;
+type AdReqFormValue = Omit<
+  AdsReqApi.AdRequestCreate & {
+    ngay_bat_dau: dayjs.Dayjs;
+    ngay_ket_thuc: dayjs.Dayjs;
+  },
+  "ngay_hieu_luc" | "ngay_het_han" | "hinh_anh"
+>;
 
-const getBase64 = (file: RcFile): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
+type GetImgBase64CallBack =
+  | { success: true; url: string }
+  | { success: false; error: any };
+const GetImageBase64 = (
+  file: RcFile,
+  callBack: (data: GetImgBase64CallBack) => void,
+) => {
+  return {
+    success: true,
+    url: URL.createObjectURL(file),
+  };
+};
+
+const checkValidFile = (
+  file: RcFile,
+): { valid: true } | { valid: false; msg: string } => {
+  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  if (!isJpgOrPng) {
+    return { valid: false, msg: "Must be jpeg/png file" };
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    return { valid: false, msg: "Image must smaller than 2MB!" };
+  }
+  return { valid: isJpgOrPng && isLt2M };
+};
 
 const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
   isVisible,
   onCancel,
 }) => {
   const [submitAdRequest, { isLoading }] = useSubmitAdRequestMutation();
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [previewTitle, setPreviewTitle] = useState<string | null>(null);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const [isMapOpen, setMapOpen] = useState<boolean>(false);
@@ -52,23 +77,41 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
     formatted_address: string;
   } | null>(null);
 
-  const handleCancelPreview = () => setPreviewOpen(false);
-
-  const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as RcFile);
+  const setupPreviewImg = (file?: UploadFile) => {
+    if (!file) {
+      setPreviewImage(null);
+      setPreviewTitle(null);
+      return;
     }
 
     setPreviewImage(file.url || (file.preview as string));
-    setPreviewOpen(true);
     setPreviewTitle(
       file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1),
     );
   };
 
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview && file.originFileObj) {
+      return GetImageBase64(file.originFileObj, (data) => {
+        if (data.success == false) return console.warn(data.error);
+        file.preview = data.url;
+        file.url = data.url;
+        setupPreviewImg(file);
+      });
+    }
+    setupPreviewImg(file);
+  };
+
   const handleChangeUpload: UploadProps["onChange"] = ({
     fileList: newFileList,
   }) => setFileList(newFileList);
+
+  const onBeforeFileUpload: UploadProps["beforeUpload"] = (file) => {
+    const res = checkValidFile(file);
+    if (res.valid) return true;
+    console.warn(res.msg);
+    return false;
+  };
 
   const commonLabelCol = { span: 8 };
   const commonWrapperCol = { span: 12 };
@@ -82,13 +125,25 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
   };
 
   const onFinish = async (values: AdReqFormValue) => {
-    values.ngay_het_han = (values.ngay_het_han as any)["$d"];
-    values.ngay_hieu_luc = (values.ngay_hieu_luc as any)["$d"];
-    const data = AdsReqApi.AdRequestCreateSchema.safeParse(values);
-    console.log(values);
+    const submitData: AdsReqApi.AdRequestCreate = {
+      ...values,
+      ngay_hieu_luc: values.ngay_bat_dau.toDate(),
+      ngay_het_han: values.ngay_ket_thuc.toDate(),
+    };
+    const data = AdsReqApi.AdRequestCreateSchema.safeParse(submitData);
     if (data.success == false) return console.log(data.error);
 
-    submitAdRequest(data.data).then((v) => console.log(v));
+    const formData = new FormData();
+    Object.keys(data.data).forEach((k) => {
+      const value = data.data[k as keyof AdsReqApi.AdRequestCreate];
+      if (value) formData.append(k, value.toString());
+    });
+
+    for (let i = 0; i < fileList.length; i++) {
+      const obj = fileList[i].originFileObj;
+      if (obj) formData.append("hinh_anh", obj);
+    }
+    submitAdRequest(formData).then((v) => console.log(v));
     handleOk();
   };
 
@@ -103,17 +158,9 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
     <>
       <AdsMapModal
         open={isMapOpen}
-        onClose={() => {
-          setMapOpen(false);
-        }}
-        initPos={{
-          lng: 106.69385883068848,
-          lat: 10.78873001700875,
-        }}
-        onPlaceSelect={(data) => {
-          console.log(data);
-          setSelectedLoc(data);
-        }}
+        onClose={() => setMapOpen(false)}
+        initPos={{ lng: 106.69385883068848, lat: 10.78873001700875 }}
+        onPlaceSelect={(data) => setSelectedLoc(data)}
       />
       <Modal
         title="TẠO YÊU CẦU CẤP PHÉP"
@@ -126,7 +173,6 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
           <Row gutter={15}>
             <Col span={12}>
               <Form.Item
-                name="image"
                 label="Hình ảnh pano"
                 labelCol={commonLabelCol}
                 wrapperCol={commonWrapperCol}
@@ -136,23 +182,24 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
                   listType="picture-card"
                   fileList={fileList}
                   onPreview={handlePreview}
+                  beforeUpload={onBeforeFileUpload}
                   onChange={handleChangeUpload}
                 >
-                  {fileList.length >= 8 ? null : uploadButton}
+                  {fileList.length >= 2 ? null : uploadButton}
                 </Upload>
-                <Modal
-                  open={previewOpen}
-                  title={previewTitle}
-                  footer={null}
-                  onCancel={handleCancelPreview}
-                >
-                  <img
-                    alt="example"
-                    style={{ width: "100%" }}
-                    src={previewImage}
-                  />
-                </Modal>
               </Form.Item>
+              <Modal
+                open={!!previewImage}
+                title={previewTitle}
+                footer={null}
+                onCancel={() => setupPreviewImg()}
+              >
+                <img
+                  alt="example"
+                  style={{ width: "100%" }}
+                  src={previewImage || ""}
+                />
+              </Modal>
             </Col>
 
             <Col span={12}>
@@ -252,7 +299,7 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
           <Row gutter={15}>
             <Col span={12}>
               <Form.Item<AdReqFormValue>
-                name="ngay_hieu_luc"
+                name="ngay_bat_dau"
                 label="Ngày bắt đầu hợp đồng"
                 rules={[
                   {
@@ -268,7 +315,7 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
             </Col>
             <Col span={12}>
               <Form.Item<AdReqFormValue>
-                name="ngay_het_han"
+                name="ngay_ket_thuc"
                 label="Ngày kết thúc hợp đồng"
                 rules={[
                   {
