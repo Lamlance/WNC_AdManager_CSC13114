@@ -21,7 +21,7 @@ const SendVerificationCodeToEmailSchema = z.object({
 });
 
 const VerifyEmailSchema = z.object({
-  token: z.string().min(10),
+  confirmToken: z.string().min(10),
   code: z.string().length(6),
 });
 
@@ -29,7 +29,7 @@ const ChangePasswordTokenSchema = z.object({
   oldPassword: z.string().min(6),
   newPassword: z.string().min(6),
   confirmToken: z.string(),
-  code: z.string(),
+  code: z.string().length(6),
 });
 
 const ChangePasswordSchema = z.object({

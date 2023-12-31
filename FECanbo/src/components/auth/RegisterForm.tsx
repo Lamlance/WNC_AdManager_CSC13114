@@ -13,13 +13,10 @@ import Form from "antd/es/form";
 import FormItem from "antd/es/form/FormItem";
 import Input from "antd/es/input";
 import { useState } from "react";
+import { useGetAllWards } from "../../slices/api/apiSlice";
 
 const RegisterForm = () => {
-  const [data, setData] = useState<string[]>(["Quận 5", "Quận 6", "Quận 7"]);
-  const [selectedDistrict, setSelectedDistrict] = useState<string[]>([
-    "Quận 5",
-    "Quận 6",
-  ]);
+  const [data, error, isLoading ] = useGetAllWards();
 
   return (
     <div className="w-50 flex flex-col">

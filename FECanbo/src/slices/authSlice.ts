@@ -6,12 +6,16 @@ const initialState = {
     token: null,
     loading: false,
     error: null,
+    confirmToken: null,
 }
 
 const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
+        verify: (state, action) => {
+            state.confirmToken = action.payload.confirmToken
+        },
         loginStart: (state) => {
             state.loading = true;
             state.error = null;
@@ -34,5 +38,5 @@ const authSlice = createSlice({
     }
 })
 
-export const { loginStart, loginSuccess, loginFailure, logout } = authSlice.actions;
+export const { verify, loginStart, loginSuccess, loginFailure, logout } = authSlice.actions;
 export default authSlice.reducer;

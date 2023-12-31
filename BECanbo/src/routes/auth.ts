@@ -120,7 +120,7 @@ router.post(
       let user: VerificationPayload;
       try {
         user = jwt.verify(
-          res.locals.body.token,
+          res.locals.body.confirmToken,
           JWT_SECRET_KEY
         ) as VerificationPayload;
       } catch (err) {
