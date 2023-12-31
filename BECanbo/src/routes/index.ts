@@ -17,4 +17,5 @@ router.use("/dia-diem", PlaceRouter);
 router.use("/hinh-thuc-quang-cao", adMethodRouter);
 router.use("/image", ImageRouter);
 router.use("/phuong", WardRouter);
+
 export default router;

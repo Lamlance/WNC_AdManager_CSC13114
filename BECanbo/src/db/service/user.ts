@@ -1,33 +1,100 @@
 import { AdsSchema } from "@admanager/backend";
 import { pg_client } from "../db";
-import { eq } from "drizzle-orm";
-import { TKNguoiDung } from "@admanager/backend/db/schema";
+import { and, eq } from "drizzle-orm";
+import {
+  QuanLyPhuong,
+  QuanLyQuan,
+  TKNguoiDung,
+} from "@admanager/backend/db/schema";
 import { AuthApi } from "@admanager/shared";
+
+type ReturnUser = {
+  userId: string;
+  username: string;
+  name: string;
+  accLevel: string;
+  pwd: string;
+  email: string;
+  phone: string;
+  managedDistricts: number[];
+  managedWards: number[];
+};
 
 export const createAnUser = async (body: AuthApi.RegisterRequest) => {
   const data = await pg_client
-    .insert(AdsSchema.TKNguoiDung)
+    .insert(TKNguoiDung)
     .values({
       ten_tk: body.username,
       mat_khau: body.pwd,
-      cap_tk: body.role || "viewer",
+      cap_tk: body.accLevel || "viewer",
+      ten_ng_dung: body.name,
+      sdt: body.phone,
+      email: body.email,
     })
     .returning({
-      id: TKNguoiDung.id_tk,
+      userId: TKNguoiDung.id_tk,
       username: TKNguoiDung.ten_tk,
-      password: TKNguoiDung.mat_khau,
-      role: TKNguoiDung.cap_tk,
+      name: TKNguoiDung.ten_ng_dung,
+      accLevel: TKNguoiDung.cap_tk,
+      pwd: TKNguoiDung.mat_khau,
+      email: TKNguoiDung.email,
+      phone: TKNguoiDung.sdt,
     });
 
-  return data;
+  const insertedUser = data[0] as ReturnUser;
+
+  if (body.managedDistricts.length > 0) {
+    const res2 = await pg_client
+      .insert(QuanLyQuan)
+      .values(
+        body.managedDistricts.map((districtId) => {
+          return {
+            id_tk: data[0].userId,
+            id_quan: districtId,
+          };
+        })
+      )
+      .returning();
+
+    insertedUser.managedDistricts = res2
+      .map((managedDistrict) => managedDistrict.id_quan as number)
+      .filter((id) => id !== null);
+  }
+
+  if (body.managedWards.length > 0) {
+    const res3 = await pg_client
+      .insert(QuanLyPhuong)
+      .values(
+        body.managedWards.map((wardId) => {
+          return {
+            id_tk: data[0].userId,
+            id_phuong: wardId,
+          };
+        })
+      )
+      .returning();
+    insertedUser.managedDistricts = res3
+      .map((managedWard) => managedWard.id_phuong as number)
+      .filter((id) => id !== null);
+  }
+
+  return insertedUser;
 };
 
 export const getUserById = async (id: string) => {
   const data = await pg_client
-    .select()
+    .select({
+      userId: TKNguoiDung.id_tk,
+      username: TKNguoiDung.ten_tk,
+      name: TKNguoiDung.ten_ng_dung,
+      accLevel: TKNguoiDung.cap_tk,
+      pwd: TKNguoiDung.mat_khau,
+      email: TKNguoiDung.email,
+      phone: TKNguoiDung.sdt,
+      isActivated: TKNguoiDung.trang_thai_xac_thuc,
+    })
     .from(AdsSchema.TKNguoiDung)
     .where(eq(AdsSchema.TKNguoiDung.id_tk, id));
-
   return data;
 };
 
@@ -36,11 +103,84 @@ export const getAnUserByUsername = async (username: string) => {
     .select({
       userId: TKNguoiDung.id_tk,
       username: TKNguoiDung.ten_tk,
-      role: TKNguoiDung.cap_tk,
-      pwd: TKNguoiDung.mat_khau
+      name: TKNguoiDung.ten_ng_dung,
+      accLevel: TKNguoiDung.cap_tk,
+      pwd: TKNguoiDung.mat_khau,
+      email: TKNguoiDung.email,
+      phone: TKNguoiDung.sdt,
+      isActivated: TKNguoiDung.trang_thai_xac_thuc,
     })
-    .from(AdsSchema.TKNguoiDung)
-    .where(eq(AdsSchema.TKNguoiDung.ten_tk, username));
+    .from(TKNguoiDung)
+    .where(eq(TKNguoiDung.ten_tk, username));
 
   return data;
+};
+
+export const getAnUserByEmail = async (email: string) => {
+  const data = await pg_client
+    .select({
+      userId: TKNguoiDung.id_tk,
+      username: TKNguoiDung.ten_tk,
+      name: TKNguoiDung.ten_ng_dung,
+      accLevel: TKNguoiDung.cap_tk,
+      pwd: TKNguoiDung.mat_khau,
+      email: TKNguoiDung.email,
+      phone: TKNguoiDung.sdt,
+      isActivated: TKNguoiDung.trang_thai_xac_thuc,
+    })
+    .from(TKNguoiDung)
+    .where(eq(TKNguoiDung.email, email));
+  return data;
+};
+
+type UpdateVerStatusUserParams = {
+  username: string;
+  verificationStatus: boolean;
+};
+
+export const updateVerificationStatusOfUser = async ({
+  username,
+  verificationStatus,
+}: UpdateVerStatusUserParams) => {
+  const [ res ] = await pg_client
+    .update(TKNguoiDung)
+    .set({ trang_thai_xac_thuc: verificationStatus })
+    .where(eq(TKNguoiDung.ten_tk, username))
+    .returning({
+      userId: TKNguoiDung.id_tk,
+      username: TKNguoiDung.ten_tk,
+      name: TKNguoiDung.ten_ng_dung,
+      accLevel: TKNguoiDung.cap_tk,
+      pwd: TKNguoiDung.mat_khau,
+      email: TKNguoiDung.email,
+      phone: TKNguoiDung.sdt,
+      isActivated: TKNguoiDung.trang_thai_xac_thuc
+    });
+  return res;
+};
+
+type UpdatePasswordParams = {
+  username: string;
+  newPassword: string;
+};
+
+export const updatePasswordUser = async ({
+  username,
+  newPassword,
+}: UpdatePasswordParams) => {
+  const res = pg_client
+    .update(TKNguoiDung)
+    .set({ mat_khau: newPassword })
+    .where(eq(TKNguoiDung.ten_tk, username))
+    .returning({
+      userId: TKNguoiDung.id_tk,
+      username: TKNguoiDung.ten_tk,
+      name: TKNguoiDung.ten_ng_dung,
+      accLevel: TKNguoiDung.cap_tk,
+      pwd: TKNguoiDung.mat_khau,
+      email: TKNguoiDung.email,
+      phone: TKNguoiDung.sdt,
+      isActivated: TKNguoiDung.trang_thai_xac_thuc,
+    });
+  return res;
 };
