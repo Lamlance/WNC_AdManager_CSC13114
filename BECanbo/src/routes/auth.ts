@@ -137,7 +137,7 @@ router.post(
         return res.status(400).json({ msg: "Invalid token" });
       }
 
-      const data = result.data[0];
+      const data = result.data;
 
       const result2 = await CallAndCatchAsync(updateVerificationStatusOfUser, {
         username: data.username,
@@ -231,7 +231,7 @@ router.post(
         return res.status(500).json({ err: result.error });
       }
 
-      const userData = result.data[0];
+      const userData = result.data;
       const passwordMatch = await bcrypt.compare(
         res.locals.body.oldPassword,
         userData.pwd
@@ -254,7 +254,7 @@ router.post(
           return res.status(500).json({ err: result2.error });
         }
 
-        const user = result2.data[0];
+        const user = result2.data;
 
         const authToken = jwt.sign(user, JWT_SECRET_KEY, {
           expiresIn: "10d",

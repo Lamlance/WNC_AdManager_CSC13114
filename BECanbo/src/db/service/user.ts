@@ -82,7 +82,7 @@ export const createAnUser = async (body: AuthApi.RegisterRequest) => {
 };
 
 export const getUserById = async (id: string) => {
-  const data = await pg_client
+  const [ data ] = await pg_client
     .select({
       userId: TKNguoiDung.id_tk,
       username: TKNguoiDung.ten_tk,
@@ -168,7 +168,7 @@ export const updatePasswordUser = async ({
   username,
   newPassword,
 }: UpdatePasswordParams) => {
-  const res = pg_client
+  const [ res ] = await pg_client
     .update(TKNguoiDung)
     .set({ mat_khau: newPassword })
     .where(eq(TKNguoiDung.ten_tk, username))
