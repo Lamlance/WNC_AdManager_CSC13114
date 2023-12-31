@@ -23,6 +23,8 @@ import AdsMethodPage from "./routes/AdsMethodPage";
 import ReportTypeComponent from "./components/vhtt/ReportTypeComponent";
 import EditUserInfo from "./components/user/EditUserInfo";
 import ResolveReport from "./components/report-info/ResolveReport";
+import LoginPage from "./routes/LoginPage";
+import RegisterPage from "./routes/RegisterPage";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
@@ -108,6 +110,10 @@ const App = () => {
           <Route path="edit-place-request" element={<EditRequestComponent />} />
           <Route path="manage-ad-method" element={<AdsMethodPage />} />
           <Route path="reporttype" element={<ReportTypeComponent />} />
+        </Route>
+        <Route path="/auth">
+          <Route path="login" element={<LoginPage /> } />
+          <Route path="register" element={<RegisterPage />} />
         </Route>
       </Routes>
     </div>
