@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   GetAllAdsRequest,
   GetAllAdsReqRequest,
-  GetAllReportsRequest,
   GetAllAdsMethod,
 } from "../../types/request";
 import {
@@ -23,7 +22,7 @@ type GetALLReportInfoArgs = { phuong_id?: number[] };
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:4030/api",
+    baseUrl: "http://localhost:4030/",
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
@@ -37,27 +36,27 @@ export const apiSlice = createApi({
       AdsGeoJson.AdsGeoJsonProperty[],
       GetAllAdsRequest | void
     >({
-      query: () => "/quang-cao",
+      query: () => "api/quang-cao",
     }),
     getAllAdsMethod: builder.query<
       AdsGeoJson.AdMethodProperty[],
       GetAllAdsMethod | void
     >({
-      query: () => "/hinh-thuc-quang-cao",
+      query: () => "api/hinh-thuc-quang-cao",
     }),
 
     getAllAdsReq: builder.query<
       AdsReqApi.ManyAdsRequestResponse[],
       GetAllAdsReqRequest | void
     >({
-      query: () => "/cap-phep-quang-cao",
+      query: () => "api/cap-phep-quang-cao",
     }),
     getAllReportInfo: builder.query<
       ReportApi.ReportResponse[],
       GetALLReportInfoArgs
     >({
       query: ({ phuong_id }) => ({
-        url: "/bao-cao",
+        url: "api/bao-cao",
         params: { phuong_id },
       }),
     }),
@@ -65,14 +64,14 @@ export const apiSlice = createApi({
       AdChangeApi.AdChangeRequestResponse[],
       void
     >({
-      query: () => "/yeu-cau-quang-cao/chinh-sua",
+      query: () => "api/yeu-cau-quang-cao/chinh-sua",
     }),
     submitAdChangeRequest: builder.mutation<
       void,
       AdChangeApi.AdChangeRequestCreate
     >({
       query: (body) => ({
-        url: "/yeu-cau-quang-cao/chinh-sua",
+        url: "api/yeu-cau-quang-cao/chinh-sua",
         method: "POST",
         body: body,
         headers: {
@@ -82,14 +81,14 @@ export const apiSlice = createApi({
     }),
     submitAdRequest: builder.mutation<any, FormData>({
       query: (formData) => ({
-        url: "/cap-phep-quang-cao/",
+        url: "api/cap-phep-quang-cao/",
         method: "POST",
         body: formData,
       }),
     }),
     submitAdMethod: builder.mutation<any, AdsGeoJson.AdMethodCreateProperty>({
       query: (formData) => ({
-        url: "/hinh-thuc-quang-cao/",
+        url: "api/hinh-thuc-quang-cao/",
         method: "POST",
         body: formData,
         headers: {
@@ -99,7 +98,7 @@ export const apiSlice = createApi({
     }),
     submitUpdateAdMethod: builder.mutation<any, AdsGeoJson.AdMethodProperty>({
       query: (body) => ({
-        url: `/hinh-thuc-quang-cao/${body.id_htqc}`,
+        url: `api/hinh-thuc-quang-cao/${body.id_htqc}`,
         method: "PUT",
         body: body,
         headers: {
@@ -109,7 +108,7 @@ export const apiSlice = createApi({
     }),
     deleteAdMethod: builder.mutation<any, AdsGeoJson.AdMethodDeleteProperty>({
       query: (data) => ({
-        url: `/hinh-thuc-quang-cao/${data.id_htqc}`,
+        url: `api/hinh-thuc-quang-cao/${data.id_htqc}`,
         method: "DELETE",
         body: data,
         headers: {
@@ -123,7 +122,7 @@ export const apiSlice = createApi({
       AdsReqApi.AdRequestUpdateStatus2
     >({
       query: (body) => ({
-        url: `/cap-phep-quang-cao/${body.id_yeu_cau}`,
+        url: `api/cap-phep-quang-cao/${body.id_yeu_cau}`,
         method: "PUT",
         body: body,
         headers: {
@@ -136,7 +135,7 @@ export const apiSlice = createApi({
       AdChangeApi.AdChangeStatusRequestUpdate
     >({
       query: (body) => ({
-        url: `/yeu-cau-quang-cao/chinh-sua/${body.id_yeu_cau}`,
+        url: `api/yeu-cau-quang-cao/chinh-sua/${body.id_yeu_cau}`,
         method: "PUT",
         body: body,
         headers: {
@@ -149,7 +148,7 @@ export const apiSlice = createApi({
       void
     >({
       query: () => ({
-        url: "dia-diem/chinh-sua",
+        url: "api/dia-diem/chinh-sua",
       }),
     }),
     submitPlaceChangeRequest: builder.mutation<
@@ -157,7 +156,7 @@ export const apiSlice = createApi({
       PlaceChangeApi.PlaceChangeRequestCreate
     >({
       query: (body) => ({
-        url: "dia-diem/chinh-sua",
+        url: "api/dia-diem/chinh-sua",
         method: "POST",
         body,
         headers: {
@@ -170,10 +169,67 @@ export const apiSlice = createApi({
     }),
     getAllWard: builder.query<WardItem[], GetAllWardArgs>({
       query: ({ id_quan }) => ({
-        url: "public/phuong",
+        url: "api/public/phuong",
         params: { id_quan },
       }),
-    })
+    }),
+    loginAccount: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "auth/login",
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    registerAccount: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "auth/register",
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    sendVerificationCode: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "auth/register",
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    verifyEmail: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "auth/register",
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    changePasswordWithToken: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "auth/change-password-token",
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    getAccountProfile: builder.query<any, any>({
+      query: ({ authToken }) => ({
+        url: "user/",
+        params: { token: authToken },
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -199,4 +255,11 @@ export const {
   useLazyGetAllReportInfoQuery: useLazyGetAllReportInfo,
   useGetAllWardQuery: useGetAllWards,
   useLazyGetAllWardQuery: useLazyGetAllWards,
+
+  useLoginAccountMutation,
+  useRegisterAccountMutation,
+  useSendVerificationCodeMutation,
+  useVerifyEmailMutation,
+  useChangePasswordWithTokenMutation,
+  useGetAccountProfileQuery
 } = apiSlice;
