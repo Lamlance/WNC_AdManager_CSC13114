@@ -78,8 +78,6 @@ const AdManagement = () => {
   ];
   const { data, error, isLoading } = useGetAllAdsInfoQuery();
 
-  console.log("vvv", data);
-
   const [selectedAds, setSelectedAds] = useState<AdsInfoRecord2 | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);

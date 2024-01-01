@@ -22,7 +22,7 @@ export const getAllAdsRequests = async (): Promise<
     })
     .from(YeuCauCapPhep)
     .leftJoin(DiaDiem, eq(DiaDiem.id_dia_diem, YeuCauCapPhep.id_diem_dat));
-  console.log(data);
+
   return data;
 };
 

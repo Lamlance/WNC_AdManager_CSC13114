@@ -85,7 +85,7 @@ export const apiSlice = createApi({
         url: "/cap-phep-quang-cao/",
         method: "POST",
         body: formData,
-        }),
+      }),
     }),
     submitAdMethod: builder.mutation<any, AdsGeoJson.AdMethodCreateProperty>({
       query: (formData) => ({
@@ -173,7 +173,17 @@ export const apiSlice = createApi({
         url: "public/phuong",
         params: { id_quan },
       }),
-    })
+    }),
+    updateAdInfodata: builder.mutation<any, AdsGeoJson.AdsProperty>({
+      query: (body) => ({
+        url: `/quang-cao/${body.id_quang_cao}`,
+        method: "PUT",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
   }),
 });
 
@@ -195,6 +205,7 @@ export const {
 
   useGetImageUrlQuery,
   useLazyGetImageUrlQuery,
+  useUpdateAdInfodataMutation,
 
   useLazyGetAllReportInfoQuery: useLazyGetAllReportInfo,
   useGetAllWardQuery: useGetAllWards,

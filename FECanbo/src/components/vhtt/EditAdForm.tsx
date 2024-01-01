@@ -12,6 +12,8 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import { AdChangeApi, AdsGeoJson } from "@admanager/shared";
 import AdsMapModal from "../AdsMap/AdsMapModal";
 import { MapSearchProps } from "../AdsMap/MapSearch";
+import { nullable } from "zod";
+import { useUpdateAdInfodataMutation } from "../../slices/api/apiSlice";
 const AdTableType = [
   "Trụ bảng hiflex",
   "Trụ màn hình điện tử LED",
@@ -77,6 +79,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
   const [mapModalOpen, setOpenMapModal] = useState<boolean>(false);
 
   const handleCancel = () => setPreviewOpen(false);
+  const [updateAdInfoData] = useUpdateAdInfodataMutation();
 
   useEffect(() => {
     const files: UploadFile[] = [];
@@ -108,6 +111,8 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
       dia_chi: ad?.dia_chi,
       hinh_1: ad?.hinh_1,
       hinh_2: ad?.hinh_2,
+      ngay_het_han: dayjs(`${ad?.ngay_het_han || today}`, dateFormat) as any,
+      ngay_hieu_luc: dayjs(`${ad?.ngay_hieu_luc || today}`, dateFormat) as any,
     });
   }, [ad]);
 
@@ -181,6 +186,27 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
     });
   };
 
+  const onFinish = (values: AdsGeoJson.AdsProperty) => {
+    const data: AdsGeoJson.AdsProperty = {
+      id_quang_cao: ad!.id_quang_cao as string,
+      bang_qc: values.bang_qc,
+      dia_chi: values.dia_chi,
+      hinh_thuc: values.hinh_thuc,
+      loai_vitri: values.loai_vitri,
+      quy_hoach: values.quy_hoach,
+      so_luong: values.so_luong,
+      ten_dia_diem: values.ten_dia_diem,
+      chieu_dai_m: values.chieu_dai_m,
+      chieu_rong_m: values.chieu_rong_m,
+      hinh_1: values.hinh_1,
+      hinh_2: values.hinh_2,
+      ngay_het_han: values.ngay_het_han,
+      ngay_hieu_luc: values.ngay_hieu_luc,
+    };
+    updateAdInfoData(data).then((v) => console.log(v));
+    //window.location.reload();
+  };
+
   return (
     <>
       {!ad || type === "AdChange" ? null : (
@@ -204,7 +230,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
         </h1>
         <Form
           form={form}
-          onFinish={(v) => console.log(v)}
+          onFinish={onFinish}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 16 }}
           layout="horizontal"
@@ -252,7 +278,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
               name={"ten_dia_diem"}
               initialValue={ad?.ten_dia_diem}
             >
-              <Input />
+              <Input disabled />
             </Form.Item>
 
             <Form.Item<AdChangeFormValue> label="Kích thước">
@@ -292,9 +318,10 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
             <Form.Item<AdChangeFormValue>
               name={"ngay_het_han"}
               label="Ngày hết hạn"
-              initialValue={dayjs(`${ad?.ngay_het_han || today}`, dateFormat)}
             >
-              <DatePicker format={dateFormat} />
+              <DatePicker
+                value={dayjs(`${ad?.ngay_het_han || today}`, dateFormat)}
+              />
             </Form.Item>
 
             <Form.Item<AdChangeFormValue>
