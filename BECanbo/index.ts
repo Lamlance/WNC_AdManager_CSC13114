@@ -4,6 +4,7 @@ import GeoJsonRouter from "./src/routes/GeoJson";
 import { privateRouter, publicRouter } from "./src/routes/index";
 import authRouter from "./src/routes/auth";
 import { strategy as jwtStrategy, strategy } from "./src/utils/JwtPassport"
+import { strategy as jwtStrategy, strategy } from "./src/utils/JwtPassport";
 import { configDotenv } from "dotenv";
 import passport from "passport";
 

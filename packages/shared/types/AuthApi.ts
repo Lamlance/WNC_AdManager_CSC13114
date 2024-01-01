@@ -37,6 +37,7 @@ const ChangePasswordSchema = z.object({
   newPassword: z.string().min(6),
 })
 
+
 type RegisterRequest = z.infer<typeof RegisterRequestSchema>;
 type LoginRequest = z.infer<typeof LoginRequestSchema>;
 type SendVerificationCodeToEmailRequest = z.infer<
@@ -61,5 +62,5 @@ export type {
   SendVerificationCodeToEmailRequest,
   VerifyEmailRequest,
   ChangePasswordRequest,
-  ChangePasswordTokenRequest
+  ChangePasswordTokenRequest,
 };

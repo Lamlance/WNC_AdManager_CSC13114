@@ -113,6 +113,18 @@
           "columnsTo": [
             "id"
           ],
+
+          "columnsFrom": ["id_quang_cao"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "BaoCao_id_dia_diem_DiaDiem_id_dia_diem_fk": {
+          "name": "BaoCao_id_dia_diem_DiaDiem_id_dia_diem_fk",
+          "tableFrom": "BaoCao",
+          "tableTo": "DiaDiem",
+          "columnsFrom": ["id_dia_diem"],
+          "columnsTo": ["id_dia_diem"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -133,12 +145,8 @@
           "name": "BaoCao_id_loai_bc_LoaiBaoCao_id_loai_bc_fk",
           "tableFrom": "BaoCao",
           "tableTo": "LoaiBaoCao",
-          "columnsFrom": [
-            "id_loai_bc"
-          ],
-          "columnsTo": [
-            "id_loai_bc"
-          ],
+          "columnsFrom": ["id_loai_bc"],
+          "columnsTo": ["id_loai_bc"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -199,12 +207,8 @@
           "name": "DiaDiem_id_phuong_Phuong_id_fk",
           "tableFrom": "DiaDiem",
           "tableTo": "Phuong",
-          "columnsFrom": [
-            "id_phuong"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id_phuong"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -329,12 +333,8 @@
           "name": "Phuong_id_quan_Quan_id_fk",
           "tableFrom": "Phuong",
           "tableTo": "Quan",
-          "columnsFrom": [
-            "id_quan"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id_quan"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -456,12 +456,8 @@
           "name": "QuangCao_id_loai_bang_qc_LoaiBangQC_id_loai_bang_qc_fk",
           "tableFrom": "QuangCao",
           "tableTo": "LoaiBangQC",
-          "columnsFrom": [
-            "id_loai_bang_qc"
-          ],
-          "columnsTo": [
-            "id_loai_bang_qc"
-          ],
+          "columnsFrom": ["id_loai_bang_qc"],
+          "columnsTo": ["id_loai_bang_qc"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -469,12 +465,8 @@
           "name": "QuangCao_id_dia_diem_DiaDiem_id_dia_diem_fk",
           "tableFrom": "QuangCao",
           "tableTo": "DiaDiem",
-          "columnsFrom": [
-            "id_dia_diem"
-          ],
-          "columnsTo": [
-            "id_dia_diem"
-          ],
+          "columnsFrom": ["id_dia_diem"],
+          "columnsTo": ["id_dia_diem"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -482,12 +474,8 @@
           "name": "QuangCao_id_hinh_thuc_HinhThucQC_id_fk",
           "tableFrom": "QuangCao",
           "tableTo": "HinhThucQC",
-          "columnsFrom": [
-            "id_hinh_thuc"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id_hinh_thuc"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -495,12 +483,8 @@
           "name": "QuangCao_id_loai_vitri_LoaiViTri_id_fk",
           "tableFrom": "QuangCao",
           "tableTo": "LoaiViTri",
-          "columnsFrom": [
-            "id_loai_vitri"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id_loai_vitri"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -596,6 +580,8 @@
           "columnsTo": [
             "id"
           ],
+          "columnsFrom": ["id_phuong"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -609,6 +595,8 @@
           "columnsTo": [
             "id"
           ],
+          "columnsFrom": ["id_quan"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -621,6 +609,7 @@
           "columns": [
             "ten_tk"
           ]
+          "columns": ["ten_tk"]
         }
       }
     },
@@ -710,12 +699,127 @@
           "name": "YeuCauCapPhep_id_diem_dat_DiaDiem_id_dia_diem_fk",
           "tableFrom": "YeuCauCapPhep",
           "tableTo": "DiaDiem",
-          "columnsFrom": [
-            "id_diem_dat"
-          ],
-          "columnsTo": [
-            "id_dia_diem"
-          ],
+          "columnsFrom": ["id_diem_dat"],
+          "columnsTo": ["id_dia_diem"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "YeuCauChinhSua": {
+      "name": "YeuCauChinhSua",
+      "schema": "",
+      "columns": {
+        "id_yeu_cau": {
+          "name": "id_yeu_cau",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ly_do_chinh_sua": {
+          "name": "ly_do_chinh_sua",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "thoi_diem_chinh_sua": {
+          "name": "thoi_diem_chinh_sua",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "trang_thai": {
+          "name": "trang_thai",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_quang_cao": {
+          "name": "id_quang_cao",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "thong_tin_sua": {
+          "name": "thong_tin_sua",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "YeuCauChinhSua_id_quang_cao_QuangCao_id_fk": {
+          "name": "YeuCauChinhSua_id_quang_cao_QuangCao_id_fk",
+          "tableFrom": "YeuCauChinhSua",
+          "tableTo": "QuangCao",
+          "columnsFrom": ["id_quang_cao"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "YeuCauChinhSuaDiaDiem": {
+      "name": "YeuCauChinhSuaDiaDiem",
+      "schema": "",
+      "columns": {
+        "id_yeu_cau": {
+          "name": "id_yeu_cau",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "id_dia_diem": {
+          "name": "id_dia_diem",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kinh_do": {
+          "name": "kinh_do",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vi_do": {
+          "name": "vi_do",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ten_dia_diem": {
+          "name": "ten_dia_diem",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dia_chi": {
+          "name": "dia_chi",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ly_do_chinh_sua": {
+          "name": "ly_do_chinh_sua",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "YeuCauChinhSuaDiaDiem_id_dia_diem_DiaDiem_id_dia_diem_fk": {
+          "name": "YeuCauChinhSuaDiaDiem_id_dia_diem_DiaDiem_id_dia_diem_fk",
+          "tableFrom": "YeuCauChinhSuaDiaDiem",
+          "tableTo": "DiaDiem",
+          "columnsFrom": ["id_dia_diem"],
+          "columnsTo": ["id_dia_diem"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

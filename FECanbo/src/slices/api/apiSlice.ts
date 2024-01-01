@@ -85,7 +85,7 @@ export const apiSlice = createApi({
         url: "/cap-phep-quang-cao/",
         method: "POST",
         body: formData,
-      }),
+        }),
     }),
     submitAdMethod: builder.mutation<any, AdsGeoJson.AdMethodCreateProperty>({
       query: (formData) => ({

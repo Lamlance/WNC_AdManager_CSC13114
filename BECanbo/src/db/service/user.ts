@@ -154,7 +154,7 @@ export const updateVerificationStatusOfUser = async ({
       pwd: TKNguoiDung.mat_khau,
       email: TKNguoiDung.email,
       phone: TKNguoiDung.sdt,
-      isActivated: TKNguoiDung.trang_thai_xac_thuc
+      isActivated: TKNguoiDung.trang_thai_xac_thuc,
     });
   return res;
 };
@@ -168,7 +168,7 @@ export const updatePasswordUser = async ({
   username,
   newPassword,
 }: UpdatePasswordParams) => {
-  const [ res ] = await pg_client
+  const [res] = await pg_client
     .update(TKNguoiDung)
     .set({ mat_khau: newPassword })
     .where(eq(TKNguoiDung.ten_tk, username))

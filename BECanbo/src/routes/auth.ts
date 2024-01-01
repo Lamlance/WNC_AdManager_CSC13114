@@ -203,8 +203,6 @@ router.post(
   )
 );
 
-
-
 router.post(
   "/change-password-token",
   ValidatorMwBuilder(
