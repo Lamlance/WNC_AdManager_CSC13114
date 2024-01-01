@@ -13,18 +13,30 @@ import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder.js";
 import { AdChangeApi, AdsReqApi } from "@admanager/shared";
 import MulterMw from "../../utils/Multer.js";
 import { Minio_UploadImg } from "../../db/minio.js";
-
+import z from "zod";
+import { WardArraySchema } from "../../utils/WardArray.js";
 const router = Router();
 
 // Get all ads request records
-router.get("/", async (req, res, next) => {
-  const result = await CallAndCatchAsync(getAllAdsRequests, undefined);
-  if (!result.success) {
-    return res.status(500).json({ error: result.error.message });
-  }
+router.get(
+  "/",
+  ValidatorMwBuilder(
+    z.object({
+      phuonf_id: WardArraySchema.nullish(),
+    }),
+    undefined,
+    async (req, res, next) => {
+      const result = await CallAndCatchAsync(getAllAdsRequests, {
+        phuong_id: res.locals.query.phuonf_id || undefined,
+      });
+      if (!result.success) {
+        return res.status(500).json({ error: result.error.message });
+      }
 
-  return res.status(200).json(result.data);
-});
+      return res.status(200).json(result.data);
+    }
+  )
+);
 
 router.post(
   "/",
