@@ -29,7 +29,8 @@ app.post("/test", MulterMw.array("hinh_anh"), function (req, res) {
 });
 
 app.use("/auth", authRouter);
-app.use("/api", passport.authenticate('jwt', { session: false }), router);
+// app.use("/api", passport.authenticate('jwt', { session: false }), router);
+app.use("/api", router);
 app.use("/geojson", GeoJsonRouter);
 app.listen(PORT, function () {
   console.log(`App BECanbo on http://localhost:${PORT}`);

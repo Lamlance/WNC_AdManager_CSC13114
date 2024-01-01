@@ -38,8 +38,9 @@ const ReportResponseSchema = z.object({
 
 
 const ReportTypeSchema = z.object({
-  id_loai_bao_cao: z.coerce.number(),
-  ten_loai_bao_cao: z.string(),
+  id_loai_bc: z.number(),
+  loai_bao_cao: z.string(),
+  // so_bao_cao: z.number().default(0),
 });
 
 
@@ -47,7 +48,7 @@ type ReportCreateBody = z.infer<typeof ReportCreateSchema>;
 type ReportFormValues = z.infer<typeof ReportFormValuesSchema>;
 type ReportPlace = z.infer<typeof ReportPlaceSchema>;
 type ReportResponse = z.infer<typeof ReportResponseSchema>;
-type ReportType = z.infer<typeof ReportTypeSchema>;
+type ReportTypeProperty = z.infer<typeof ReportTypeSchema>;
 
-export type { ReportResponse, ReportCreateBody, ReportFormValues, ReportPlace, ReportType };
+export type { ReportResponse, ReportCreateBody, ReportFormValues, ReportPlace, ReportTypeProperty };
 export { ReportCreateSchema, ReportFormValuesSchema, ReportPlaceSchema, ReportTypeSchema };

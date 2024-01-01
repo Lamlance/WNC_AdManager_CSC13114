@@ -16,3 +16,8 @@ export interface GetAllAdsMethod {
   take?: number;
   skip?: number;
 }
+
+export interface GetAllReportsType {
+  take?: number;
+  skip?: number;
+}

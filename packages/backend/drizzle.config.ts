@@ -9,7 +9,7 @@ export default {
     port: 5432,
     //port: 6543,
     user: "postgres",
-    password: "postgresql",
+    password: "12345",
     database: "AdsManager",
   },
 } satisfies Config;

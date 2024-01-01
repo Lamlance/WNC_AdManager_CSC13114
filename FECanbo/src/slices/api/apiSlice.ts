@@ -4,6 +4,7 @@ import {
   GetAllAdsReqRequest,
   GetAllReportsRequest,
   GetAllAdsMethod,
+  GetAllReportsType,
 } from "../../types/request";
 import {
   AdChangeApi,
@@ -35,6 +36,8 @@ export const apiSlice = createApi({
     >({
       query: () => "/hinh-thuc-quang-cao",
     }),
+    //call report method from backend
+    getAllReportsType: builder.query<ReportApi.ReportTypeProperty[], GetAllReportsType | void>({ query: () => "/loai-bao-cao"}),
 
     getAllAdsReq: builder.query<
       AdsReqApi.ManyAdsRequestResponse[],
@@ -75,7 +78,7 @@ export const apiSlice = createApi({
         url: "/cap-phep-quang-cao/",
         method: "POST",
         body: formData,
-        }),
+      }),
     }),
     submitAdMethod: builder.mutation<any, AdsGeoJson.AdMethodCreateProperty>({
       query: (formData) => ({
@@ -87,6 +90,19 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    
+    //submit new report method to backend
+    submitCreateReportType: builder.mutation<any, ReportApi.ReportTypeProperty>({ 
+      query: (formData) => ({
+        url: "/loai-bao-cao",
+        method: "POST",
+        body: formData,
+        headers: {
+          "Content_Type": "application/json",
+        },
+      }),
+    }),
+
     submitUpdateAdMethod: builder.mutation<any, AdsGeoJson.AdMethodProperty>({
       query: (body) => ({
         url: `/hinh-thuc-quang-cao/${body.id_htqc}`,
@@ -97,9 +113,34 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    
+    //submit update report method to backend
+    submitUpdateReportType: builder.mutation<any, ReportApi.ReportTypeProperty>({
+      query: (body) => ({
+        url: `/loai-bao-cao/${body.id_loai_bc}`,
+        method: "PUT",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
     deleteAdMethod: builder.mutation<any, AdsGeoJson.AdMethodDeleteProperty>({
       query: (data) => ({
         url: `/hinh-thuc-quang-cao/${data.id_htqc}`,
+        method: "DELETE",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
+    //submit delete report method to back end
+    deleteReportType: builder.mutation<any, ReportApi.ReportTypeProperty>({
+      query: (data) => ({
+        url: `/loai-bao-cao/${data.id_loai_bc}`,
         method: "DELETE",
         body: data,
         headers: {
@@ -184,6 +225,11 @@ export const {
   useSubmitUpdateAdRequestStatusMutation,
   useSubmitUpdateAdChangeRequestStatusMutation,
   useDeleteAdMethodMutation,
+
+  useGetAllReportsTypeQuery,
+  useSubmitCreateReportTypeMutation,
+  useSubmitUpdateReportTypeMutation,
+  useDeleteReportTypeMutation,
 
   useGetImageUrlQuery,
   useLazyGetImageUrlQuery,
