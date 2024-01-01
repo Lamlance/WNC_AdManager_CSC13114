@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { CallAndCatchAsync } from "../../utils/CallCatch.js";
 import {
+  CreateQuangManyCaoData,
   GetQuangManyCaoData,
   UpdateQuangManyCaoData,
 } from "../../db/service/ads-info.js";
@@ -23,6 +24,24 @@ router.get("/", async (req, res, next) => {
   }));
   return res.status(200).json(flattenData);
 });
+
+router.post(
+  "/",
+  ValidatorMwBuilder(
+    undefined,
+    AdsGeoJson.AdsProPertyCreateSchema,
+    async function (req, res) {
+      const result = await CallAndCatchAsync(
+        CreateQuangManyCaoData,
+        res.locals.body
+      );
+      if (!result.success) {
+        return res.status(500).json({ error: result.error.message });
+      }
+      return res.status(200).json(result.data);
+    }
+  )
+);
 
 router.put(
   "/:id",

@@ -13,7 +13,10 @@ import { AdChangeApi, AdsGeoJson } from "@admanager/shared";
 import AdsMapModal from "../AdsMap/AdsMapModal";
 import { MapSearchProps } from "../AdsMap/MapSearch";
 import { nullable } from "zod";
-import { useUpdateAdInfodataMutation } from "../../slices/api/apiSlice";
+import {
+  useCreateAdInfoDataMutation,
+  useUpdateAdInfodataMutation,
+} from "../../slices/api/apiSlice";
 const AdTableType = [
   "Trụ bảng hiflex",
   "Trụ màn hình điện tử LED",
@@ -80,6 +83,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
 
   const handleCancel = () => setPreviewOpen(false);
   const [updateAdInfoData] = useUpdateAdInfodataMutation();
+  const [createAdInfoData] = useCreateAdInfoDataMutation();
 
   useEffect(() => {
     const files: UploadFile[] = [];
@@ -187,24 +191,44 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
   };
 
   const onFinish = (values: AdsGeoJson.AdsProperty) => {
-    const data: AdsGeoJson.AdsProperty = {
-      id_quang_cao: ad!.id_quang_cao as string,
-      bang_qc: values.bang_qc,
-      dia_chi: values.dia_chi,
-      hinh_thuc: values.hinh_thuc,
-      loai_vitri: values.loai_vitri,
-      quy_hoach: values.quy_hoach,
-      so_luong: values.so_luong,
-      ten_dia_diem: values.ten_dia_diem,
-      chieu_dai_m: values.chieu_dai_m,
-      chieu_rong_m: values.chieu_rong_m,
-      hinh_1: values.hinh_1,
-      hinh_2: values.hinh_2,
-      ngay_het_han: values.ngay_het_han,
-      ngay_hieu_luc: values.ngay_hieu_luc,
-    };
-    updateAdInfoData(data).then((v) => console.log(v));
-    //window.location.reload();
+    if (ad?.id_quang_cao) {
+      const data: AdsGeoJson.AdsProperty = {
+        id_quang_cao: ad!.id_quang_cao as string,
+        bang_qc: values.bang_qc,
+        dia_chi: values.dia_chi,
+        hinh_thuc: values.hinh_thuc,
+        loai_vitri: values.loai_vitri,
+        quy_hoach: values.quy_hoach,
+        so_luong: values.so_luong,
+        ten_dia_diem: values.ten_dia_diem,
+        chieu_dai_m: values.chieu_dai_m,
+        chieu_rong_m: values.chieu_rong_m,
+        hinh_1: values.hinh_1,
+        hinh_2: values.hinh_2,
+        ngay_het_han: values.ngay_het_han,
+        ngay_hieu_luc: values.ngay_hieu_luc,
+      };
+      updateAdInfoData(data).then((v) => console.log(v));
+      window.location.reload();
+    } else {
+      const data: AdsGeoJson.AdsCreateProPerty = {
+        bang_qc: values.bang_qc,
+        dia_chi: values.dia_chi,
+        hinh_thuc: values.hinh_thuc,
+        loai_vitri: values.loai_vitri,
+        quy_hoach: false,
+        so_luong: values.so_luong,
+        chieu_dai_m: values.chieu_dai_m,
+        chieu_rong_m: values.chieu_rong_m,
+        hinh_1: values.hinh_1,
+        hinh_2: values.hinh_2,
+        ngay_het_han: values.ngay_het_han,
+        ngay_hieu_luc: values.ngay_hieu_luc,
+      };
+
+      createAdInfoData(data).then((v) => console.log(v));
+      window.location.reload();
+    }
   };
 
   return (

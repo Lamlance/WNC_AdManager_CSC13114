@@ -109,14 +109,11 @@ export async function UpdateQuangManyCaoData(data: AdsGeoJson.AdsProperty) {
     .where(eq(LoaiViTri.loai_vitri, data.loai_vitri))
     .then((result) => result && result[0] && result[0].id_loai_vi_tri);
 
-  console.log("aaaa", idLoaiViTri);
   const idDiaDiem = await pg_client
     .select({ id_dia_diem: DiaDiem.id_dia_diem })
     .from(DiaDiem)
-    .where(eq(DiaDiem.dia_chi, data.dia_chi))
+    .where(eq(DiaDiem.dia_chi, data.dia_chi as string))
     .then((result) => result && result[0] && result[0].id_dia_diem);
-
-  console.log("nnnnn", idDiaDiem);
 
   const res = await pg_client
     .update(QuangCao)
@@ -134,6 +131,53 @@ export async function UpdateQuangManyCaoData(data: AdsGeoJson.AdsProperty) {
       id_loai_vitri: idLoaiViTri,
     })
     .where(eq(QuangCao.id_quang_cao, id_quang_cao));
+
+  return res;
+}
+
+export async function CreateQuangManyCaoData(
+  data: AdsGeoJson.AdsCreateProPerty
+) {
+  const idLoaiBangQuangCao = await pg_client
+    .select({ id_loai_bang_quang_cao: LoaiBangQC.id_loai_bang_qc })
+    .from(AdsSchema.LoaiBangQC)
+    .where(eq(LoaiBangQC.loai_bang_qc, data.bang_qc))
+    .then((result) => result && result[0] && result[0].id_loai_bang_quang_cao);
+  const idHinhThucQC = await pg_client
+    .select({ id_ht_qc: HinhThucQC.id_htqc })
+    .from(HinhThucQC)
+    .where(eq(HinhThucQC.hinh_thuc_qc, data.hinh_thuc))
+    .then((result) => result && result[0] && result[0].id_ht_qc);
+
+  const idLoaiViTri = await pg_client
+    .select({ id_loai_vi_tri: LoaiViTri.id_loai_vt })
+    .from(LoaiViTri)
+    .where(eq(LoaiViTri.loai_vitri, data.loai_vitri))
+    .then((result) => result && result[0] && result[0].id_loai_vi_tri);
+
+  const idDiaDiem = await pg_client
+    .select({ id_dia_diem: DiaDiem.id_dia_diem })
+    .from(DiaDiem)
+    .where(eq(DiaDiem.dia_chi, data.dia_chi as string))
+    .then((result) => result && result[0] && result[0].id_dia_diem);
+
+  const res = await pg_client
+    .insert(AdsSchema.QuangCao)
+    .values({
+      ngay_hieu_luc: data.ngay_hieu_luc,
+      ngay_het_han: data.ngay_het_han,
+      hinh_1: data.hinh_1,
+      hinh_2: data.hinh_2,
+      so_luong: data.so_luong,
+      chieu_dai_m: data.chieu_dai_m,
+      chieu_rong_m: data.chieu_rong_m,
+      id_loai_bang_qc: idLoaiBangQuangCao,
+      id_dia_diem: idDiaDiem,
+      id_hinh_thuc: idHinhThucQC,
+      id_loai_vitri: idLoaiViTri,
+      quy_hoach: false,
+    })
+    .returning({ insertedId: AdsSchema.QuangCao.id_quang_cao });
 
   return res;
 }

@@ -26,8 +26,12 @@ const AdsPropertySchema = z.object({
   loai_vitri: z.string(),
   hinh_thuc: z.string(),
   bang_qc: z.string(),
-  ten_dia_diem: z.string(),
-  dia_chi: z.string(),
+  ten_dia_diem: z.string().nullish(),
+  dia_chi: z.string().nullish(),
+});
+const AdsProPertyCreateSchema = AdsPropertySchema.omit({
+  id_quang_cao: true,
+  ten_dia_diem: true,
 });
 
 const PlacePropertySchema = z.object({
@@ -97,6 +101,8 @@ const AdmethodDeleteSchema = z.object({
 });
 
 type AdsProperty = z.infer<typeof AdsPropertySchema>;
+type AdsCreateProPerty = z.infer<typeof AdsProPertyCreateSchema>;
+
 type PlaceProperty = z.infer<typeof PlacePropertySchema>;
 type AdsGeoJsonProperty = z.infer<typeof AdsGeoJsonPropertySchema>;
 type ReportGeoJsonProperty = z.infer<typeof ReportGeoJsonPropertySchema>;
@@ -137,10 +143,12 @@ export type {
   AdMethodCreateProperty,
   AdMethodUpdateProperty,
   AdMethodDeleteProperty,
+  AdsCreateProPerty,
 };
 
 export {
   AdsPropertySchema,
+  AdsProPertyCreateSchema,
   PlacePropertySchema,
   AdsGeoJsonPropertySchema,
   ReportGeoJsonPropertySchema,

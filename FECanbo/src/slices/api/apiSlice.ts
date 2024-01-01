@@ -174,6 +174,16 @@ export const apiSlice = createApi({
         params: { id_quan },
       }),
     }),
+    createAdInfoData: builder.mutation<void, AdsGeoJson.AdsCreateProPerty>({
+      query: (body) => ({
+        url: "/quang-cao",
+        method: "POST",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
     updateAdInfodata: builder.mutation<any, AdsGeoJson.AdsProperty>({
       query: (body) => ({
         url: `/quang-cao/${body.id_quang_cao}`,
@@ -205,6 +215,7 @@ export const {
 
   useGetImageUrlQuery,
   useLazyGetImageUrlQuery,
+  useCreateAdInfoDataMutation,
   useUpdateAdInfodataMutation,
 
   useLazyGetAllReportInfoQuery: useLazyGetAllReportInfo,
