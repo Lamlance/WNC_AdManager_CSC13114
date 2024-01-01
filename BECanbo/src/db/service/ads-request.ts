@@ -1,6 +1,5 @@
 import { AdsSchema } from "@admanager/backend";
 import { pg_client } from "../db";
-
 import {
   QuangCao,
   YeuCauCapPhep,
@@ -50,7 +49,6 @@ export async function getAllAdsChangeRequest(): Promise<
       },
     })
     .from(YeuCauChinhSua)
-
     .innerJoin(QuangCao, eq(QuangCao.id_quang_cao, YeuCauChinhSua.id_quang_cao))
     .innerJoin(LoaiViTri, eq(LoaiViTri.id_loai_vt, QuangCao.id_loai_vitri))
     .innerJoin(HinhThucQC, eq(HinhThucQC.id_htqc, QuangCao.id_hinh_thuc))

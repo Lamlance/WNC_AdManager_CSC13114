@@ -8,15 +8,18 @@ import reportTypeRouter from "./controllers/reports-type.js";
 import ImageRouter from "./controllers/images.js";
 import WardRouter from "./controllers/ward.js";
 
-const router = Router();
+const privateRouter = Router();
 
-router.use("/quang-cao", adsInfoRouter);
-router.use("/yeu-cau-quang-cao", adsRequestRouter);
-router.use("/cap-phep-quang-cao", adsRequestRouter);
-router.use("/bao-cao", reportInfoRouter);
-router.use("/dia-diem", PlaceRouter);
-router.use("/hinh-thuc-quang-cao", adMethodRouter);
-router.use("/loai-bao-cao", reportTypeRouter);
-router.use("/image", ImageRouter);
-router.use("/phuong", WardRouter);
-export default router;
+const publicRouter = Router();
+
+privateRouter.use("/quang-cao", adsInfoRouter);
+privateRouter.use("/yeu-cau-quang-cao", adsRequestRouter);
+privateRouter.use("/cap-phep-quang-cao", adsRequestRouter);
+privateRouter.use("/bao-cao", reportInfoRouter);
+privateRouter.use("/dia-diem", PlaceRouter);
+privateRouter.use("/hinh-thuc-quang-cao", adMethodRouter);
+privateRouter.use("/loai-bao-cao", reportTypeRouter);
+privateRouter.use("/image", ImageRouter);
+publicRouter.use("/phuong", WardRouter);
+
+export { privateRouter, publicRouter };
