@@ -5,6 +5,7 @@ import { apiSlice } from "./slices/api/apiSlice";
 import modalSlice from "./slices/modalSlice";
 import GoongApi from "./slices/GoongApi";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import authSlice from "./slices/authSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     [GoongApi.reducerPath]: GoongApi.reducer,
     //point: pointSlice,
     PlaceEditModal: modalSlice,
+    auth: authSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

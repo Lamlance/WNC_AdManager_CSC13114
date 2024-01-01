@@ -159,8 +159,48 @@ const TKNguoiDung = pgTable("TKNguoiDung", {
   ten_tk: varchar("ten_tk", { length: 255 }).notNull().unique(),
   mat_khau: varchar("mat_khau", { length: 255 }).notNull(),
   cap_tk: varchar("cap_tk", { length: 255 }).notNull(),
-  thoi_diem_tao: date("thoi_diem_tao").notNull().default(sql`CURRENT_TIMESTAMP`)
-})
+  ten_ng_dung: varchar("ten_ng_dung", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
+  sdt: varchar("phone", { length: 10 }).notNull(),
+  trang_thai_xac_thuc: boolean("trang_thai_xac_thuc").notNull().default(false),
+  thoi_diem_tao: date("thoi_diem_tao")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+});
+
+const QuanLyQuan = pgTable(
+  "QuanLyQuan",
+  {
+    id_tk: uuid("id_tk").references(() => TKNguoiDung.id_tk),
+    id_quan: integer("id_quan").references(() => Quan.id_quan),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.id_tk, table.id_quan] }),
+      pkWithCustomName: primaryKey({
+        name: "id_qly_quan",
+        columns: [table.id_tk, table.id_quan],
+      }),
+    };
+  }
+);
+
+const QuanLyPhuong = pgTable(
+  "QuanLyPhuong",
+  {
+    id_tk: uuid("id_tk").references(() => TKNguoiDung.id_tk),
+    id_phuong: integer("id_phuong").references(() => Phuong.id_phuong),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.id_tk, table.id_phuong] }),
+      pkWithCustomName: primaryKey({
+        name: "id_qly_phuong",
+        columns: [table.id_tk, table.id_phuong],
+      }),
+    };
+  }
+);
 
 export {
   LoaiViTri,
@@ -175,5 +215,7 @@ export {
   YeuCauCapPhep,
   YeuCauChinhSua,
   YeuCauChinhSuaDiaDiem,
-  TKNguoiDung
+  TKNguoiDung,
+  QuanLyPhuong,
+  QuanLyQuan,
 };

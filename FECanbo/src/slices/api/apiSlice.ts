@@ -12,6 +12,7 @@ import {
   PlaceChangeApi,
   ReportApi,
 } from "@admanager/shared";
+import { RootState } from "../../store";
 
 type WardItem = {
   phuong: { id_phuong: number; ten_phuong: string; id_quan: number };
@@ -21,7 +22,16 @@ type GetAllWardArgs = { id_quan?: number[] };
 type GetALLReportInfoArgs = { phuong_id?: number[] };
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:4030/api" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:4030/api",
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).auth.token;
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     getAllAdsInfo: builder.query<
       AdsGeoJson.AdsGeoJsonProperty[],
@@ -155,17 +165,15 @@ export const apiSlice = createApi({
         },
       }),
     }),
-
     getImageUrl: builder.query<{ url: string }, string>({
       query: (img_name) => `/image/${img_name}`,
     }),
-
     getAllWard: builder.query<WardItem[], GetAllWardArgs>({
       query: ({ id_quan }) => ({
-        url: "/phuong",
+        url: "public/phuong",
         params: { id_quan },
       }),
-    }),
+    })
   }),
 });
 
