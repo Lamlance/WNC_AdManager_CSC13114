@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import EditAdForm from "./EditAdForm";
 
 import { DeleteOutlined } from "@ant-design/icons";
-import { useGetAllAdsInfoQuery } from "../../slices/api/apiSlice";
+import {
+  useDeleteAdInfoDataMutation,
+  useGetAllAdsInfoQuery,
+} from "../../slices/api/apiSlice";
 import { AdsGeoJson } from "@admanager/shared";
 
 type AdsInfoRecord2 = AdsGeoJson.PlaceProperty & AdsGeoJson.AdsProperty;
@@ -53,7 +56,7 @@ const AdManagement = () => {
     },
 
     {
-      title: "",
+      title: "Chỉnh sửa",
       key: "operation",
       fixed: "right",
       width: 110,
@@ -64,7 +67,7 @@ const AdManagement = () => {
       ),
     },
     {
-      title: "",
+      title: "Xóa",
       key: "operation",
       fixed: "right",
       width: 60,
@@ -81,6 +84,8 @@ const AdManagement = () => {
   const [selectedAds, setSelectedAds] = useState<AdsInfoRecord2 | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+  const [deleteAdInfo] = useDeleteAdInfoDataMutation();
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -93,7 +98,23 @@ const AdManagement = () => {
     setIsModalOpen(true);
   };
 
-  const handleDeleteAd = () => {};
+  const handleDeleteAd = () => {
+    setIsDelete(true);
+  };
+
+  useEffect(() => {
+    if (isDelete) {
+      const realData: AdsGeoJson.AdsDeleteProPerty = {
+        id_quang_cao: selectedAds!.id_quang_cao,
+      };
+
+      const deleteData = AdsGeoJson.AdsProPertyDeleteSchema.safeParse(realData);
+
+      if (deleteData.success == false) return console.log(deleteData.error);
+      deleteAdInfo(deleteData.data).then((v) => console.log(v));
+      window.location.reload();
+    }
+  }, [selectedAds, isDelete]);
 
   return (
     <>

@@ -194,6 +194,16 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    deleteAdInfoData: builder.mutation<any, AdsGeoJson.AdsDeleteProPerty>({
+      query: (data) => ({
+        url: `/quang-cao/${data.id_quang_cao}`,
+        method: "DELETE",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
   }),
 });
 
@@ -217,6 +227,7 @@ export const {
   useLazyGetImageUrlQuery,
   useCreateAdInfoDataMutation,
   useUpdateAdInfodataMutation,
+  useDeleteAdInfoDataMutation,
 
   useLazyGetAllReportInfoQuery: useLazyGetAllReportInfo,
   useGetAllWardQuery: useGetAllWards,

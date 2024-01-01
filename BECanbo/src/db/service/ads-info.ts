@@ -181,3 +181,13 @@ export async function CreateQuangManyCaoData(
 
   return res;
 }
+
+export async function deleteAdInfoData(data: AdsGeoJson.AdsDeleteProPerty) {
+  const { id_quang_cao } = data;
+
+  const res = await pg_client
+    .delete(AdsSchema.QuangCao)
+    .where(eq(AdsSchema.QuangCao.id_quang_cao, id_quang_cao));
+
+  return res;
+}

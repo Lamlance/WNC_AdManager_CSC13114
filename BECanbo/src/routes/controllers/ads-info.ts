@@ -4,6 +4,7 @@ import {
   CreateQuangManyCaoData,
   GetQuangManyCaoData,
   UpdateQuangManyCaoData,
+  deleteAdInfoData,
 } from "../../db/service/ads-info.js";
 import { AdsGeoJson, AdsReqApi } from "@admanager/shared";
 import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder.js";
@@ -72,6 +73,25 @@ router.put(
 
       const result = await CallAndCatchAsync(UpdateQuangManyCaoData, data);
 
+      if (!result.success) {
+        return res.status(500).json({ error: result.error.message });
+      }
+      return res.status(200).json(result.data);
+    }
+  )
+);
+
+router.delete(
+  "/:id",
+  ValidatorMwBuilder(
+    undefined,
+    AdsGeoJson.AdsProPertyDeleteSchema,
+    async function (req, res) {
+      const { id } = req.params;
+      const data: AdsGeoJson.AdsDeleteProPerty = {
+        id_quang_cao: id,
+      };
+      const result = await CallAndCatchAsync(deleteAdInfoData, data);
       if (!result.success) {
         return res.status(500).json({ error: result.error.message });
       }
