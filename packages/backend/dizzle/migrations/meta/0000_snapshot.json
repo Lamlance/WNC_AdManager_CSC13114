@@ -1,5 +1,5 @@
 {
-  "id": "e92caf09-2fcb-4d93-8dd1-a30823d8c468",
+  "id": "2553ffd4-452b-4a9a-b9fd-3869ef1502f1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -82,6 +82,18 @@
           "primaryKey": false,
           "notNull": true
         },
+        "hinh_1": {
+          "name": "hinh_1",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hinh_2": {
+          "name": "hinh_2",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "id_loai_bc": {
           "name": "id_loai_bc",
           "type": "integer",
@@ -95,12 +107,8 @@
           "name": "BaoCao_id_quang_cao_QuangCao_id_fk",
           "tableFrom": "BaoCao",
           "tableTo": "QuangCao",
-          "columnsFrom": [
-            "id_quang_cao"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id_quang_cao"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -108,12 +116,8 @@
           "name": "BaoCao_id_dia_diem_DiaDiem_id_dia_diem_fk",
           "tableFrom": "BaoCao",
           "tableTo": "DiaDiem",
-          "columnsFrom": [
-            "id_dia_diem"
-          ],
-          "columnsTo": [
-            "id_dia_diem"
-          ],
+          "columnsFrom": ["id_dia_diem"],
+          "columnsTo": ["id_dia_diem"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -121,12 +125,8 @@
           "name": "BaoCao_id_loai_bc_LoaiBaoCao_id_loai_bc_fk",
           "tableFrom": "BaoCao",
           "tableTo": "LoaiBaoCao",
-          "columnsFrom": [
-            "id_loai_bc"
-          ],
-          "columnsTo": [
-            "id_loai_bc"
-          ],
+          "columnsFrom": ["id_loai_bc"],
+          "columnsTo": ["id_loai_bc"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -187,12 +187,8 @@
           "name": "DiaDiem_id_phuong_Phuong_id_fk",
           "tableFrom": "DiaDiem",
           "tableTo": "Phuong",
-          "columnsFrom": [
-            "id_phuong"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id_phuong"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -317,12 +313,8 @@
           "name": "Phuong_id_quan_Quan_id_fk",
           "tableFrom": "Phuong",
           "tableTo": "Quan",
-          "columnsFrom": [
-            "id_quan"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id_quan"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -444,12 +436,8 @@
           "name": "QuangCao_id_loai_bang_qc_LoaiBangQC_id_loai_bang_qc_fk",
           "tableFrom": "QuangCao",
           "tableTo": "LoaiBangQC",
-          "columnsFrom": [
-            "id_loai_bang_qc"
-          ],
-          "columnsTo": [
-            "id_loai_bang_qc"
-          ],
+          "columnsFrom": ["id_loai_bang_qc"],
+          "columnsTo": ["id_loai_bang_qc"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -457,12 +445,8 @@
           "name": "QuangCao_id_dia_diem_DiaDiem_id_dia_diem_fk",
           "tableFrom": "QuangCao",
           "tableTo": "DiaDiem",
-          "columnsFrom": [
-            "id_dia_diem"
-          ],
-          "columnsTo": [
-            "id_dia_diem"
-          ],
+          "columnsFrom": ["id_dia_diem"],
+          "columnsTo": ["id_dia_diem"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -470,12 +454,8 @@
           "name": "QuangCao_id_hinh_thuc_HinhThucQC_id_fk",
           "tableFrom": "QuangCao",
           "tableTo": "HinhThucQC",
-          "columnsFrom": [
-            "id_hinh_thuc"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id_hinh_thuc"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -483,12 +463,8 @@
           "name": "QuangCao_id_loai_vitri_LoaiViTri_id_fk",
           "tableFrom": "QuangCao",
           "tableTo": "LoaiViTri",
-          "columnsFrom": [
-            "id_loai_vitri"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id_loai_vitri"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -525,24 +501,80 @@
           "primaryKey": false,
           "notNull": true
         },
+        "ten_ng_dung": {
+          "name": "ten_ng_dung",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trang_thai_xac_thuc": {
+          "name": "trang_thai_xac_thuc",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
         "thoi_diem_tao": {
           "name": "thoi_diem_tao",
           "type": "date",
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
+        },
+        "id_phuong": {
+          "name": "id_phuong",
+          "type": "integer[]",
+          "primaryKey": false,
+          "notNull": false,
+          "default": []
+        },
+        "id_quan": {
+          "name": "id_quan",
+          "type": "integer[]",
+          "primaryKey": false,
+          "notNull": false,
+          "default": []
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "TKNguoiDung_id_phuong_Phuong_id_fk": {
+          "name": "TKNguoiDung_id_phuong_Phuong_id_fk",
+          "tableFrom": "TKNguoiDung",
+          "tableTo": "Phuong",
+          "columnsFrom": ["id_phuong"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "TKNguoiDung_id_quan_Quan_id_fk": {
+          "name": "TKNguoiDung_id_quan_Quan_id_fk",
+          "tableFrom": "TKNguoiDung",
+          "tableTo": "Quan",
+          "columnsFrom": ["id_quan"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "TKNguoiDung_ten_tk_unique": {
           "name": "TKNguoiDung_ten_tk_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "ten_tk"
-          ]
+          "columns": ["ten_tk"]
         }
       }
     },
@@ -618,6 +650,12 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
+        },
+        "hinh_2": {
+          "name": "hinh_2",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -626,12 +664,8 @@
           "name": "YeuCauCapPhep_id_diem_dat_DiaDiem_id_dia_diem_fk",
           "tableFrom": "YeuCauCapPhep",
           "tableTo": "DiaDiem",
-          "columnsFrom": [
-            "id_diem_dat"
-          ],
-          "columnsTo": [
-            "id_dia_diem"
-          ],
+          "columnsFrom": ["id_diem_dat"],
+          "columnsTo": ["id_dia_diem"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -687,12 +721,8 @@
           "name": "YeuCauChinhSua_id_quang_cao_QuangCao_id_fk",
           "tableFrom": "YeuCauChinhSua",
           "tableTo": "QuangCao",
-          "columnsFrom": [
-            "id_quang_cao"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id_quang_cao"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -753,12 +783,8 @@
           "name": "YeuCauChinhSuaDiaDiem_id_dia_diem_DiaDiem_id_dia_diem_fk",
           "tableFrom": "YeuCauChinhSuaDiaDiem",
           "tableTo": "DiaDiem",
-          "columnsFrom": [
-            "id_dia_diem"
-          ],
-          "columnsTo": [
-            "id_dia_diem"
-          ],
+          "columnsFrom": ["id_dia_diem"],
+          "columnsTo": ["id_dia_diem"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

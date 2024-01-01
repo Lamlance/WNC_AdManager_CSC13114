@@ -1,6 +1,14 @@
 import { AdsSchema } from "@admanager/backend";
 import { pg_client } from "../db";
-import { QuangCao, YeuCauCapPhep, DiaDiem, LoaiBangQC, LoaiViTri, HinhThucQC, YeuCauChinhSua } from "@admanager/backend/db/schema";
+import {
+  QuangCao,
+  YeuCauCapPhep,
+  DiaDiem,
+  LoaiBangQC,
+  LoaiViTri,
+  HinhThucQC,
+  YeuCauChinhSua,
+} from "@admanager/backend/db/schema";
 import { AdChangeApi, AdsReqApi } from "@admanager/shared";
 import { eq } from "drizzle-orm";
 
@@ -13,10 +21,8 @@ export const getAllAdsRequests = async (): Promise<
       dia_diem: AdsSchema.DiaDiem,
     })
     .from(YeuCauCapPhep)
-    .innerJoin(
-      DiaDiem,
-      eq(DiaDiem.id_dia_diem, YeuCauCapPhep.id_diem_dat)
-    );
+    .leftJoin(DiaDiem, eq(DiaDiem.id_dia_diem, YeuCauCapPhep.id_diem_dat));
+  console.log(data);
   return data;
 };
 
@@ -43,24 +49,12 @@ export async function getAllAdsChangeRequest(): Promise<
       },
     })
     .from(YeuCauChinhSua)
-    .innerJoin(
-      QuangCao,
-      eq(QuangCao.id_quang_cao, YeuCauChinhSua.id_quang_cao)
-    )
-    .innerJoin(
-      LoaiViTri,
-      eq(LoaiViTri.id_loai_vt, QuangCao.id_loai_vitri)
-    )
-    .innerJoin(
-      HinhThucQC,
-      eq(HinhThucQC.id_htqc, QuangCao.id_hinh_thuc)
-    )
+    .innerJoin(QuangCao, eq(QuangCao.id_quang_cao, YeuCauChinhSua.id_quang_cao))
+    .innerJoin(LoaiViTri, eq(LoaiViTri.id_loai_vt, QuangCao.id_loai_vitri))
+    .innerJoin(HinhThucQC, eq(HinhThucQC.id_htqc, QuangCao.id_hinh_thuc))
     .innerJoin(
       LoaiBangQC,
-      eq(
-        LoaiBangQC.id_loai_bang_qc,
-        QuangCao.id_loai_bang_qc
-      )
+      eq(LoaiBangQC.id_loai_bang_qc, QuangCao.id_loai_bang_qc)
     );
 
   return data;

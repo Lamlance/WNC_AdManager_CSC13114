@@ -20,4 +20,8 @@ router.get("/", async (req, res, next) => {
   return res.status(200).json(flattenData);
 });
 
+router.get("/test", async (req, res, next) => {
+  return res.status(200).json(req.user);
+})
+
 export default router;
