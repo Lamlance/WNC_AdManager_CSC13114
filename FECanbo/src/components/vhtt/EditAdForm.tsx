@@ -75,7 +75,6 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [fileList2, setFileList2] = useState<UploadFile[]>([]);
   const [mapModalOpen, setOpenMapModal] = useState<boolean>(false);
-  const [address, setAddress] = useState<string>("");
 
   const handleCancel = () => setPreviewOpen(false);
 
@@ -98,10 +97,6 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
       );
     }
 
-    if (ad && type === "AdInfo") {
-      setAddress(ad.dia_chi);
-    }
-
     form.setFieldsValue({
       so_luong: ad?.so_luong,
       chieu_dai_m: ad?.chieu_dai_m,
@@ -110,6 +105,9 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
       loai_vitri: ad?.loai_vitri,
       hinh_thuc: ad?.hinh_thuc,
       ten_dia_diem: ad?.ten_dia_diem,
+      dia_chi: ad?.dia_chi,
+      hinh_1: ad?.hinh_1,
+      hinh_2: ad?.hinh_2,
     });
   }, [ad]);
 
@@ -132,6 +130,9 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
     if (file && file.type && file.type.startsWith("image/")) {
       const preview = await getBase64(file.originFileObj as RcFile);
       setFileList([{ ...file, status: "done", url: preview }]);
+      setPreviewTitle(
+        file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1),
+      );
     } else {
       setFileList(newFileList);
     }
@@ -161,9 +162,6 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
 
   const handleCancelModal = () => {
     onClose();
-    setAddress("");
-    setFileList([]);
-    setFileList2([]);
   };
   const [isOpen, setIsopen] = useState(false);
   useEffect(() => {
@@ -178,7 +176,9 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
   };
 
   const onMapSelect: MapSearchProps["onPlaceSelect"] = function (data) {
-    setAddress(data.formatted_address);
+    form.setFieldsValue({
+      dia_chi: data.formatted_address,
+    });
   };
 
   return (
@@ -297,7 +297,11 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
               <DatePicker format={dateFormat} />
             </Form.Item>
 
-            <Form.Item label="Hình ảnh 1">
+            <Form.Item<AdChangeFormValue>
+              name="hinh_1"
+              label="Hình ảnh 1"
+              initialValue={ad?.hinh_1}
+            >
               <Upload
                 action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                 listType="picture-card"
@@ -320,7 +324,11 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
                 />
               </Modal>
             </Form.Item>
-            <Form.Item label="Hình ảnh 2">
+            <Form.Item<AdChangeFormValue>
+              name={"hinh_2"}
+              label="Hình ảnh 2"
+              initialValue={ad?.hinh_2}
+            >
               <Upload
                 action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                 listType="picture-card"
@@ -350,8 +358,10 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
               className=" flex-1"
               labelCol={{ span: 3 }}
               wrapperCol={{ span: 20 }}
+              initialValue={ad?.dia_chi}
+              name={"dia_chi"}
             >
-              <Input value={address} />
+              <Input />
             </Form.Item>
             <Button onClick={() => setOpenMapModal(true)}>🗺️</Button>
           </div>

@@ -47,24 +47,12 @@ export async function GetQuangManyCaoData() {
       bang_qc: LoaiBangQC.loai_bang_qc,
     })
     .from(QuangCao)
-    .innerJoin(
-      DiaDiem,
-      eq(QuangCao.id_dia_diem, DiaDiem.id_dia_diem)
-    )
-    .innerJoin(
-      LoaiViTri,
-      eq(LoaiViTri.id_loai_vt, QuangCao.id_loai_vitri)
-    )
-    .innerJoin(
-      HinhThucQC,
-      eq(HinhThucQC.id_htqc, QuangCao.id_hinh_thuc)
-    )
+    .innerJoin(DiaDiem, eq(QuangCao.id_dia_diem, DiaDiem.id_dia_diem))
+    .innerJoin(LoaiViTri, eq(LoaiViTri.id_loai_vt, QuangCao.id_loai_vitri))
+    .innerJoin(HinhThucQC, eq(HinhThucQC.id_htqc, QuangCao.id_hinh_thuc))
     .innerJoin(
       LoaiBangQC,
-      eq(
-        LoaiBangQC.id_loai_bang_qc,
-        QuangCao.id_loai_bang_qc
-      )
+      eq(LoaiBangQC.id_loai_bang_qc, QuangCao.id_loai_bang_qc)
     );
 
   const grp_by_location: {
@@ -95,6 +83,7 @@ export async function GetQuangManyCaoData() {
       };
     }
   }
+  console.log("ggg", grp_by_location);
 
   return grp_by_location;
-};
+}
