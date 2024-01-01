@@ -9,6 +9,7 @@ import ImageRouter from "./controllers/images.js";
 import WardRouter from "./controllers/ward.js";
 
 const router = Router();
+
 router.use("/quang-cao", adsInfoRouter);
 router.use("/yeu-cau-quang-cao", adsRequestRouter);
 router.use("/cap-phep-quang-cao", adsRequestRouter);

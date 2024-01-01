@@ -1,5 +1,6 @@
 {
-  "id": "e92caf09-2fcb-4d93-8dd1-a30823d8c468",
+
+  "id": "2553ffd4-452b-4a9a-b9fd-3869ef1502f1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -81,6 +82,19 @@
           "type": "double precision",
           "primaryKey": false,
           "notNull": true
+        },
+
+        "hinh_1": {
+          "name": "hinh_1",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hinh_2": {
+          "name": "hinh_2",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
         },
         "id_loai_bc": {
           "name": "id_loai_bc",
@@ -525,16 +539,84 @@
           "primaryKey": false,
           "notNull": true
         },
+
+        "ten_ng_dung": {
+          "name": "ten_ng_dung",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trang_thai_xac_thuc": {
+          "name": "trang_thai_xac_thuc",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
         "thoi_diem_tao": {
           "name": "thoi_diem_tao",
           "type": "date",
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
+
+        },
+        "id_phuong": {
+          "name": "id_phuong",
+          "type": "integer[]",
+          "primaryKey": false,
+          "notNull": false,
+          "default": []
+        },
+        "id_quan": {
+          "name": "id_quan",
+          "type": "integer[]",
+          "primaryKey": false,
+          "notNull": false,
+          "default": []
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "TKNguoiDung_id_phuong_Phuong_id_fk": {
+          "name": "TKNguoiDung_id_phuong_Phuong_id_fk",
+          "tableFrom": "TKNguoiDung",
+          "tableTo": "Phuong",
+          "columnsFrom": [
+            "id_phuong"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "TKNguoiDung_id_quan_Quan_id_fk": {
+          "name": "TKNguoiDung_id_quan_Quan_id_fk",
+          "tableFrom": "TKNguoiDung",
+          "tableTo": "Quan",
+          "columnsFrom": [
+            "id_quan"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "TKNguoiDung_ten_tk_unique": {
@@ -615,6 +697,12 @@
         },
         "hinh_1": {
           "name": "hinh_1",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hinh_2": {
+          "name": "hinh_2",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false

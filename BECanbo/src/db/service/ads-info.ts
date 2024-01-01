@@ -97,4 +97,4 @@ export async function GetQuangManyCaoData() {
   }
 
   return grp_by_location;
-};
+}
