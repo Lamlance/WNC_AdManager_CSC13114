@@ -72,6 +72,7 @@ export async function GetQuangManyCaoData() {
       ten_dia_diem: qc.dia_diem.ten_dia_diem,
     };
     const trimProp = AdsGeoJson.AdsPropertySchema.safeParse(prop);
+    console.log("hhhwdwqd", trimProp);
     if (trimProp.success == false) continue;
 
     if (grp_by_location[qc.dia_diem.id_dia_diem]) {
@@ -83,7 +84,6 @@ export async function GetQuangManyCaoData() {
       };
     }
   }
-  console.log("ggg", grp_by_location);
 
   return grp_by_location;
 }
