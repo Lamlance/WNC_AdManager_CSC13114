@@ -3,7 +3,7 @@ import cors from "cors";
 import GeoJsonRouter from "./src/routes/GeoJson";
 import router from "./src/routes/index";
 import authRouter from "./src/routes/auth";
-import { strategy as jwtStrategy, strategy } from "./src/utils/JwtPassport"
+import { strategy as jwtStrategy, strategy } from "./src/utils/JwtPassport";
 import { configDotenv } from "dotenv";
 import passport from "passport";
 
@@ -15,7 +15,7 @@ const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(cors());
-app.use(passport.initialize())
+app.use(passport.initialize());
 
 passport.use(strategy);
 
@@ -29,7 +29,9 @@ app.post("/test", MulterMw.array("hinh_anh"), function (req, res) {
 });
 
 app.use("/auth", authRouter);
-app.use("/api", passport.authenticate('jwt', { session: false }), router);
+// app.use("/api", passport.authenticate('jwt', { session: false }), router);
+app.use("/api", router);
+
 app.use("/geojson", GeoJsonRouter);
 app.listen(PORT, function () {
   console.log(`App BECanbo on http://localhost:${PORT}`);

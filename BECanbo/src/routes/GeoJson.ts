@@ -6,6 +6,8 @@ import { AdsGeoJson } from "@admanager/shared";
 import { pg_client } from "../db/db.js";
 import z from "zod";
 import { GetQuangManyCaoData } from "../db/service/ads-info.js";
+import { ValidatorMwBuilder } from "../utils/ValidationMiddlewareBuilder.js";
+import { PhuongIdArrayScheama } from "../utils/PhuongIdArray.js";
 
 async function GetReportData() {
   const data = await pg_client
@@ -53,40 +55,51 @@ async function GetReportData() {
 
 const GeoJsonRouter = Router();
 
-GeoJsonRouter.get("/", async function (req, res) {
-  const qc_data = await CallAndCatchAsync(GetQuangManyCaoData, undefined);
-  if (qc_data.success == false)
-    return res.status(500).json({ error: qc_data.error });
+GeoJsonRouter.get(
+  "/",
+  ValidatorMwBuilder(
+    z.object({
+      phuong_id: PhuongIdArrayScheama.nullish(),
+    }),
+    undefined,
+    async function (req, res) {
+      const qc_data = await CallAndCatchAsync(GetQuangManyCaoData, {
+        phuong_id: res.locals.query.phuong_id || undefined,
+      });
+      if (qc_data.success == false)
+        return res.status(500).json({ error: qc_data.error });
 
-  const geo_json: AdsGeoJson.AdsGeoJson = {
-    type: "FeatureCollection",
-    crs: {
-      properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
-      type: "name",
-    },
-    features: [],
-  };
+      const geo_json: AdsGeoJson.AdsGeoJson = {
+        type: "FeatureCollection",
+        crs: {
+          properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+          type: "name",
+        },
+        features: [],
+      };
 
-  const geo_data = Object.entries(qc_data.data);
+      const geo_data = Object.entries(qc_data.data);
 
-  for (let i = 0; i < geo_data.length; i++) {
-    const qc = geo_data[i];
-    const prop: AdsGeoJson.AdsGeoJsonProperty = {
-      ads: qc[1].ads,
-      place: qc[1].dd,
-    };
-    geo_json.features.push({
-      type: "Feature",
-      properties: prop,
-      geometry: {
-        type: "Point",
-        coordinates: [qc[1].dd.lng, qc[1].dd.lat, 0],
-      },
-    });
-  }
+      for (let i = 0; i < geo_data.length; i++) {
+        const qc = geo_data[i];
+        const prop: AdsGeoJson.AdsGeoJsonProperty = {
+          ads: qc[1].ads,
+          place: qc[1].dd,
+        };
+        geo_json.features.push({
+          type: "Feature",
+          properties: prop,
+          geometry: {
+            type: "Point",
+            coordinates: [qc[1].dd.lng, qc[1].dd.lat, 0],
+          },
+        });
+      }
 
-  return res.status(200).json(geo_json);
-});
+      return res.status(200).json(geo_json);
+    }
+  )
+);
 
 GeoJsonRouter.get("/report", async function (req, res) {
   const rp_data = await CallAndCatchAsync(GetReportData, undefined);

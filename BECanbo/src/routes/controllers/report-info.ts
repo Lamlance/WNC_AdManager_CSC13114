@@ -10,14 +10,10 @@ import { AdsZodSchema } from "@admanager/backend";
 import MulterMw from "../../utils/Multer";
 import { Minio_UploadImg, Minio_UploadMulterImgs } from "../../db/minio";
 import z from "zod";
+import { PhuongIdArrayScheama } from "../../utils/PhuongIdArray";
 
 const GetALLReportInfoQuery = z.object({
-  phuong_id: z
-    .preprocess(
-      (v) => (typeof v === "string" ? v.split(",") : v),
-      z.array(z.coerce.number())
-    )
-    .nullish(),
+  phuong_id: PhuongIdArrayScheama.nullish(),
 });
 
 const router = Router();
