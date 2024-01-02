@@ -1,7 +1,6 @@
 // AdTable.tsx
 import React from "react";
 import { Table } from "antd";
-import { AdRequest } from "../../../types";
 import { AdsReqApi } from "@admanager/shared";
 import { ColumnsType } from "antd/es/table";
 

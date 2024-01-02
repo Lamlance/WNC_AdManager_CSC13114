@@ -89,7 +89,7 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
           </p>
 
           {ad.yeu_cau.trang_thai !== "Waiting" ? (
-            <div className="my-3 flex justify-between">
+            <div className=" my-3 flex justify-end gap-3">
               <Button className="bg-neutral-300" disabled type="primary">
                 Phê duyệt
               </Button>
@@ -98,7 +98,7 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
               </Button>
             </div>
           ) : (
-            <div className="my-3 flex justify-between">
+            <div className="my-3 flex justify-end gap-3">
               <Button type="primary" onClick={handleApprove}>
                 Phê duyệt
               </Button>

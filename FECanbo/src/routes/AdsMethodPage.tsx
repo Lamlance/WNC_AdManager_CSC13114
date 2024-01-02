@@ -22,17 +22,20 @@ function AdsMethodPage() {
       title: "#",
       dataIndex: "id_htqc",
       key: "id_htqc",
+      align: "center",
     },
     {
       title: "Hình thức quảng cáo",
       dataIndex: "hinh_thuc_qc",
       key: "hinh_thuc_qc",
+      align: "center",
     },
 
     {
-      title: "",
+      title: "Xem chi tiết",
       key: "operation",
       fixed: "right",
+      align: "center",
 
       render: () => (
         <a className="text-blue-500 underline" onClick={() => openModal()}>
@@ -41,9 +44,10 @@ function AdsMethodPage() {
       ),
     },
     {
-      title: "",
+      title: "Xóa",
       key: "operation",
       fixed: "right",
+      align: "center",
 
       render: () => (
         <DeleteOutlined

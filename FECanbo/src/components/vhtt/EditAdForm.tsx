@@ -15,6 +15,7 @@ import { MapSearchProps } from "../AdsMap/MapSearch";
 import { nullable } from "zod";
 import {
   useCreateAdInfoDataMutation,
+  useGetAllAdsMethodQuery,
   useUpdateAdInfodataMutation,
 } from "../../slices/api/apiSlice";
 const AdTableType = [
@@ -37,7 +38,6 @@ const LocateType = [
   "Cây xăng",
   "Nhà chờ xe buýt",
 ];
-const AdType = ["Cổ động chính trị", "Quảng cáo thương mại", "Xã hội hoá"];
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -84,6 +84,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
   const handleCancel = () => setPreviewOpen(false);
   const [updateAdInfoData] = useUpdateAdInfodataMutation();
   const [createAdInfoData] = useCreateAdInfoDataMutation();
+  const { data: AdType } = useGetAllAdsMethodQuery();
 
   useEffect(() => {
     const files: UploadFile[] = [];
@@ -103,6 +104,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
         }),
       );
     }
+    console.log("bbbb", ad?.dia_chi);
 
     form.setFieldsValue({
       so_luong: ad?.so_luong,
@@ -278,9 +280,9 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
             </Form.Item>
             <Form.Item<AdChangeFormValue> name={"hinh_thuc"} label=" Hình thức">
               <Select defaultValue={ad?.hinh_thuc}>
-                {AdType.map((value) => (
-                  <Option key={value} value={value}>
-                    {value}
+                {AdType?.map((value) => (
+                  <Option key={value.id_htqc} value={value.hinh_thuc_qc}>
+                    {value.hinh_thuc_qc}
                   </Option>
                 ))}
               </Select>

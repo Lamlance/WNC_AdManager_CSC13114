@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col } from "antd";
 import AdsRequestTable from "./AdsRequestTable";
 import AdsRequestDetail from "./AdsRequestDetail";
-import { AdRequest } from "../../../types";
+
 import { useGetAllAdsReqQuery } from "../../../slices/api/apiSlice";
 import { AdsReqApi } from "@admanager/shared";
 
@@ -15,7 +15,7 @@ const AdsRequest: React.FC<MainContentSectionProps> = ({
   onRowClick,
   selectedAd,
 }) => {
-  const { data, error, isLoading } = useGetAllAdsReqQuery();
+  const { data } = useGetAllAdsReqQuery();
   return (
     <Row
       gutter={20}

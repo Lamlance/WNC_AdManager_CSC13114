@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { AdRequest } from "../../../types";
+
 import AdsRequest from "./AdsRequest";
-import { useGetAllAdsReqQuery } from "../../../slices/api/apiSlice";
+
 import { AdsReqApi } from "@admanager/shared";
 
 function AdsRequestVHTTPage() {
