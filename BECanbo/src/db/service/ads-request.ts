@@ -46,12 +46,15 @@ export async function getAllAdsChangeRequest(): Promise<
         loai_vitri: LoaiViTri.loai_vitri,
         hinh_thuc: HinhThucQC.hinh_thuc_qc,
         bang_qc: LoaiBangQC.loai_bang_qc,
+        dia_chi: DiaDiem.dia_chi,
+        ten_dia_diem: DiaDiem.ten_dia_diem,
       },
     })
     .from(YeuCauChinhSua)
     .innerJoin(QuangCao, eq(QuangCao.id_quang_cao, YeuCauChinhSua.id_quang_cao))
     .innerJoin(LoaiViTri, eq(LoaiViTri.id_loai_vt, QuangCao.id_loai_vitri))
     .innerJoin(HinhThucQC, eq(HinhThucQC.id_htqc, QuangCao.id_hinh_thuc))
+    .innerJoin(DiaDiem, eq(DiaDiem.id_dia_diem, QuangCao.id_dia_diem))
     .innerJoin(
       LoaiBangQC,
       eq(LoaiBangQC.id_loai_bang_qc, QuangCao.id_loai_bang_qc)

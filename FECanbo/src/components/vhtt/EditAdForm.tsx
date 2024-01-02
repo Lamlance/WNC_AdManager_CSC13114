@@ -104,7 +104,6 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
         }),
       );
     }
-    console.log("bbbb", ad?.dia_chi);
 
     form.setFieldsValue({
       so_luong: ad?.so_luong,
