@@ -20,7 +20,7 @@ import AdsRequestVHTTPage from "./components/vhtt/ads-request/AdsRequestVHTTPage
 import EditRequest from "./components/vhtt/requestedit-ads/EditRequest";
 import EditRequestComponent from "./components/vhtt/EditRequestComponent";
 import AdsMethodPage from "./routes/AdsMethodPage";
-import ReportTypeComponent from "./components/vhtt/ReportTypeComponent";
+import ReportTypePage from "./routes/ReportTypePage";
 import EditUserInfo from "./components/user/EditUserInfo";
 import ResolveReport from "./components/report-info/ResolveReport";
 import LoginPage from "./routes/LoginPage";
@@ -73,16 +73,16 @@ const itemVHTTs: Item[] = [
     title: "/vhtt/edit-ad-request",
   },
   {
-    key: "6",
-    icon: <UploadOutlined />,
-    label: "Yêu cầu chỉnh sửa địa điểm",
-    title: "/vhtt/edit-place-request",
-  },
-  {
     key: "7",
     icon: <UploadOutlined />,
     label: "Quản lý hình thức quảng cáo",
     title: "/vhtt/manage-ad-method",
+  },
+  {
+    key: "6",
+    icon: <UploadOutlined />,
+    label: "Yêu cầu chỉnh sửa địa điểm",
+    title: "/vhtt/edit-place-request",
   },
   {
     key: "2",
@@ -109,7 +109,7 @@ const App = () => {
           <Route path="edit-ad-request" element={<EditRequest />} />
           <Route path="edit-place-request" element={<EditRequestComponent />} />
           <Route path="manage-ad-method" element={<AdsMethodPage />} />
-          <Route path="reporttype" element={<ReportTypeComponent />} />
+          <Route path="reporttype" element={<ReportTypePage />} />
         </Route>
         <Route path="/auth">
           <Route path="login" element={<LoginPage /> } />

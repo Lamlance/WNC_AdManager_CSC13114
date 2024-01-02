@@ -1,4 +1,4 @@
-import { LoaiBaoCao } from "@admanager/backend/db/schema";
+import { LoaiBaoCao, BaoCao } from "@admanager/backend/db/schema";
 import { pg_client } from "../db";
 import { ReportApi } from "@admanager/shared";
 import { eq } from "drizzle-orm";
@@ -9,8 +9,9 @@ export const getAllReportsType = async () => {
       id_loai_bc: LoaiBaoCao.id_loai_bc,
       loai_bao_cao: LoaiBaoCao.loai_bao_cao,
     })
-    .from(LoaiBaoCao);
-
+    .from(LoaiBaoCao)
+  //   .innerJoin(BaoCao, eq(LoaiBaoCao.id_loai_bc, BaoCao.id_loai_bc));
+  // console.log(data)
   return data;
 };
 
