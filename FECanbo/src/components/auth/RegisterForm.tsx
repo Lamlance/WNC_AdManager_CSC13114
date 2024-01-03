@@ -5,12 +5,18 @@ import {
   PhoneOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Select } from "antd";
+import { Select, notification } from "antd";
 import Button from "antd/es/button";
 import Form from "antd/es/form";
 import Input from "antd/es/input";
-import { useGetAllWards } from "../../slices/api/apiSlice";
-import { useState } from "react";
+import {
+  useGetAllWards,
+  useRegisterAccountMutation,
+} from "../../slices/api/apiSlice";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { verify } from "../../slices/authSlice";
 
 type DistrictElement = {
   districtId: number;
@@ -23,13 +29,59 @@ type WardElement = {
 };
 
 const RegisterForm = () => {
-  const { data, error, isLoading } = useGetAllWards({});
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { data: wards } = useGetAllWards({});
   const [selectedDistricts, setSelectedDistricts] = useState<number[]>([]);
+  const [registerAccount, { data: registerResponse, error }] =
+    useRegisterAccountMutation();
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotification = (type: string) => {
+    if (type == "error") {
+      api[type]({
+        message: "Register failed!",
+        description:
+          JSON.stringify(error) ||
+          "Cannot register account right now!. Contact your admin to check this error.",
+      });
+    } else if (type == "success") {
+      api[type]({
+        message:
+          "Register successfully! Please check your email to get OTP to verify account!",
+      });
+    }
+  };
+
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
     console.log("Success: ", values);
+
+    registerAccount({
+      username: values.username,
+      pwd: values.password,
+      name: values.name,
+      phone: values.phone,
+      email: values.email,
+      accLevel: values.accLevel,
+      managedDistricts: values.managedDistricts,
+      managedWards: values.managedWards,
+    });
   };
+
+  useEffect(() => {
+    if (registerResponse) {
+      openNotification("success");
+      console.log(registerResponse);
+      dispatch(verify(registerResponse));
+      navigate("/auth/verify-account");
+    }
+    if (error) {
+      openNotification("error");
+    }
+  }, [registerResponse, error]);
 
   const layout = {
     labelCol: { span: 6 },
@@ -38,6 +90,7 @@ const RegisterForm = () => {
 
   return (
     <div className="w-50 flex flex-col">
+      {contextHolder}
       <h3 className="my-5 self-center text-2xl font-semibold"> Register </h3>
       <Form
         form={form}
@@ -59,7 +112,7 @@ const RegisterForm = () => {
               message: "Please input your fullname!",
             },
           ]}
-          name="fullName"
+          name="name"
           label="fullName"
         >
           <Input
@@ -131,6 +184,10 @@ const RegisterForm = () => {
               required: true,
               message: "Please input your email!",
             },
+            {
+              type: "email",
+              message: "The input is not valid E-mail!",
+            }
           ]}
           name="email"
           label="Email"
@@ -146,11 +203,7 @@ const RegisterForm = () => {
             {
               required: true,
               message: "Please input your email!",
-            },
-            {
-              type: "email",
-              message: "The input is not valid E-mail!",
-            },
+            }
           ]}
           name="phone"
           label="Phone"
@@ -187,7 +240,7 @@ const RegisterForm = () => {
             onChange={(values: number[]) => {
               setSelectedDistricts(values);
             }}
-            options={(data || [])
+            options={(wards || [])
               .reduce((acc, item) => {
                 if (!acc.map((i) => i.districtId).includes(item.quan.id_quan)) {
                   acc.push({
@@ -207,7 +260,7 @@ const RegisterForm = () => {
             mode="multiple"
             allowClear
             placeholder="Please select ward"
-            options={(data || [])
+            options={(wards || [])
               .filter((e) => selectedDistricts.includes(e.quan.id_quan))
               .reduce((acc, item) => {
                 if (!acc.map((i) => i.wardId).includes(item.phuong.id_phuong)) {
@@ -223,9 +276,7 @@ const RegisterForm = () => {
               })}
           />
         </Form.Item>
-        <Form.Item
-          wrapperCol={{ offset: 6, span: 16 }}
-        >
+        <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
           <Button type="primary" htmlType="submit" className="w-full min-w-80">
             Register account
           </Button>

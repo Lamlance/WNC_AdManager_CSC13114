@@ -1,4 +1,3 @@
-import { AdsSchema } from "@admanager/backend";
 import { pg_client } from "../db";
 import { and, eq } from "drizzle-orm";
 import {
@@ -82,54 +81,81 @@ export const createAnUser = async (body: AuthApi.RegisterRequest) => {
 };
 
 export const getUserById = async (id: string) => {
-  const [ data ] = await pg_client
-    .select({
-      userId: TKNguoiDung.id_tk,
-      username: TKNguoiDung.ten_tk,
-      name: TKNguoiDung.ten_ng_dung,
-      accLevel: TKNguoiDung.cap_tk,
-      pwd: TKNguoiDung.mat_khau,
-      email: TKNguoiDung.email,
-      phone: TKNguoiDung.sdt,
-      isActivated: TKNguoiDung.trang_thai_xac_thuc,
-    })
-    .from(AdsSchema.TKNguoiDung)
-    .where(eq(AdsSchema.TKNguoiDung.id_tk, id));
+  const data = await pg_client.query.TKNguoiDung.findFirst({
+    where: (TKNguoiDung, { eq }) => eq(TKNguoiDung.id_tk, id),
+    with: {
+      quan_quan_ly: true,
+      phuong_quan_ly: true,
+    },
+  });
+
+  if (data) {
+    const returnUser: ReturnUser = {
+      userId: data.id_tk,
+      name: data.ten_ng_dung,
+      username: data.ten_tk,
+      pwd: data.mat_khau,
+      accLevel: data.cap_tk,
+      email: data.email,
+      phone: data.sdt,
+      managedDistricts: data.quan_quan_ly.map((e) => e.id_quan as number),
+      managedWards: data.phuong_quan_ly.map((e) => e.id_phuong as number),
+    };
+    return returnUser;
+  }
   return data;
 };
 
 export const getAnUserByUsername = async (username: string) => {
-  const data = await pg_client
-    .select({
-      userId: TKNguoiDung.id_tk,
-      username: TKNguoiDung.ten_tk,
-      name: TKNguoiDung.ten_ng_dung,
-      accLevel: TKNguoiDung.cap_tk,
-      pwd: TKNguoiDung.mat_khau,
-      email: TKNguoiDung.email,
-      phone: TKNguoiDung.sdt,
-      isActivated: TKNguoiDung.trang_thai_xac_thuc,
-    })
-    .from(TKNguoiDung)
-    .where(eq(TKNguoiDung.ten_tk, username));
+  const data = await pg_client.query.TKNguoiDung.findFirst({
+    where: (TKNguoiDung, { eq }) => eq(TKNguoiDung.ten_tk, username),
+    with: {
+      quan_quan_ly: true,
+      phuong_quan_ly: true,
+    },
+  });
+
+  if (data) {
+    const returnUser: ReturnUser = {
+      userId: data.id_tk,
+      name: data.ten_ng_dung,
+      username: data.ten_tk,
+      pwd: data.mat_khau,
+      accLevel: data.cap_tk,
+      email: data.email,
+      phone: data.sdt,
+      managedDistricts: data.quan_quan_ly.map((e) => e.id_quan as number),
+      managedWards: data.phuong_quan_ly.map((e) => e.id_phuong as number),
+    };
+    return returnUser;
+  }
 
   return data;
 };
 
 export const getAnUserByEmail = async (email: string) => {
-  const data = await pg_client
-    .select({
-      userId: TKNguoiDung.id_tk,
-      username: TKNguoiDung.ten_tk,
-      name: TKNguoiDung.ten_ng_dung,
-      accLevel: TKNguoiDung.cap_tk,
-      pwd: TKNguoiDung.mat_khau,
-      email: TKNguoiDung.email,
-      phone: TKNguoiDung.sdt,
-      isActivated: TKNguoiDung.trang_thai_xac_thuc,
-    })
-    .from(TKNguoiDung)
-    .where(eq(TKNguoiDung.email, email));
+  const data = await pg_client.query.TKNguoiDung.findFirst({
+    where: (TKNguoiDung, { eq }) => eq(TKNguoiDung.ten_tk, email),
+    with: {
+      quan_quan_ly: true,
+      phuong_quan_ly: true,
+    },
+  });
+
+  if (data) {
+    const returnUser: ReturnUser = {
+      userId: data.id_tk,
+      name: data.ten_ng_dung,
+      username: data.ten_tk,
+      pwd: data.mat_khau,
+      accLevel: data.cap_tk,
+      email: data.email,
+      phone: data.sdt,
+      managedDistricts: data.quan_quan_ly.map((e) => e.id_quan as number),
+      managedWards: data.phuong_quan_ly.map((e) => e.id_phuong as number),
+    };
+    return returnUser;
+  }
   return data;
 };
 
@@ -142,7 +168,7 @@ export const updateVerificationStatusOfUser = async ({
   username,
   verificationStatus,
 }: UpdateVerStatusUserParams) => {
-  const [ res ] = await pg_client
+  const [res] = await pg_client
     .update(TKNguoiDung)
     .set({ trang_thai_xac_thuc: verificationStatus })
     .where(eq(TKNguoiDung.ten_tk, username))
@@ -154,7 +180,7 @@ export const updateVerificationStatusOfUser = async ({
       pwd: TKNguoiDung.mat_khau,
       email: TKNguoiDung.email,
       phone: TKNguoiDung.sdt,
-      isActivated: TKNguoiDung.trang_thai_xac_thuc
+      isActivated: TKNguoiDung.trang_thai_xac_thuc,
     });
   return res;
 };
@@ -168,7 +194,7 @@ export const updatePasswordUser = async ({
   username,
   newPassword,
 }: UpdatePasswordParams) => {
-  const [ res ] = await pg_client
+  const [res] = await pg_client
     .update(TKNguoiDung)
     .set({ mat_khau: newPassword })
     .where(eq(TKNguoiDung.ten_tk, username))

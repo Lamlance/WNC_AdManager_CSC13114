@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   integer,
   pgEnum,
@@ -160,7 +160,7 @@ const TKNguoiDung = pgTable("TKNguoiDung", {
   mat_khau: varchar("mat_khau", { length: 255 }).notNull(),
   cap_tk: varchar("cap_tk", { length: 255 }).notNull(),
   ten_ng_dung: varchar("ten_ng_dung", { length: 255 }).notNull(),
-  email: varchar("email", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
   sdt: varchar("phone", { length: 10 }).notNull(),
   trang_thai_xac_thuc: boolean("trang_thai_xac_thuc").notNull().default(false),
   thoi_diem_tao: date("thoi_diem_tao")
@@ -176,7 +176,6 @@ const QuanLyQuan = pgTable(
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.id_tk, table.id_quan] }),
       pkWithCustomName: primaryKey({
         name: "id_qly_quan",
         columns: [table.id_tk, table.id_quan],
@@ -193,7 +192,6 @@ const QuanLyPhuong = pgTable(
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.id_tk, table.id_phuong] }),
       pkWithCustomName: primaryKey({
         name: "id_qly_phuong",
         columns: [table.id_tk, table.id_phuong],
@@ -201,6 +199,25 @@ const QuanLyPhuong = pgTable(
     };
   }
 );
+
+export const TKNguoiDungRelations = relations(TKNguoiDung, ({ many }) => ({
+  quan_quan_ly: many(QuanLyQuan),
+  phuong_quan_ly: many(QuanLyPhuong),
+}));
+
+export const QuanLyPhuongRelations = relations(QuanLyPhuong, ({ one }) => ({
+  tai_khoan: one(TKNguoiDung, {
+    fields: [QuanLyPhuong.id_tk],
+    references: [TKNguoiDung.id_tk],
+  }),
+}));
+
+export const QuanLyQuanRelations = relations(QuanLyQuan, ({ one }) => ({
+  tai_khoan: one(TKNguoiDung, {
+    fields: [QuanLyQuan.id_tk],
+    references: [TKNguoiDung.id_tk],
+  }),
+}));
 
 export {
   LoaiViTri,
@@ -217,5 +234,5 @@ export {
   YeuCauChinhSuaDiaDiem,
   TKNguoiDung,
   QuanLyPhuong,
-  QuanLyQuan
+  QuanLyQuan,
 };

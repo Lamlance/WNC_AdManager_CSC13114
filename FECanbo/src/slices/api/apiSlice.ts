@@ -8,6 +8,7 @@ import {
   AdChangeApi,
   AdsGeoJson,
   AdsReqApi,
+  AuthApi,
   PlaceChangeApi,
   ReportApi,
 } from "@admanager/shared";
@@ -24,7 +25,7 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:4030/",
     prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.token;
+      const token = (getState() as RootState).auth.authToken;
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
@@ -173,27 +174,22 @@ export const apiSlice = createApi({
         params: { id_quan },
       }),
     }),
-    loginAccount: builder.mutation<any, any>({
-      query: (body) => ({
-        url: "auth/login",
-        method: "POST",
-        body,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }),
-    }),
-    registerAccount: builder.mutation<any, any>({
-      query: (body) => ({
-        url: "auth/register",
-        method: "POST",
-        body,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }),
-    }),
-    sendVerificationCode: builder.mutation<any, any>({
+    loginAccount: builder.mutation<AuthApi.LoginResponse, AuthApi.LoginRequest>(
+      {
+        query: (body) => ({
+          url: "auth/login",
+          method: "POST",
+          body,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }),
+      },
+    ),
+    registerAccount: builder.mutation<
+      AuthApi.RegisterResponse,
+      AuthApi.RegisterRequest
+    >({
       query: (body) => ({
         url: "auth/register",
         method: "POST",
@@ -203,9 +199,12 @@ export const apiSlice = createApi({
         },
       }),
     }),
-    verifyEmail: builder.mutation<any, any>({
+    sendVerificationCode: builder.mutation<
+      AuthApi.SendVerificationCodeToEmailResponse,
+      AuthApi.SendVerificationCodeToEmailRequest
+    >({
       query: (body) => ({
-        url: "auth/register",
+        url: "auth/send-verification-code",
         method: "POST",
         body,
         headers: {
@@ -213,7 +212,23 @@ export const apiSlice = createApi({
         },
       }),
     }),
-    changePasswordWithToken: builder.mutation<any, any>({
+    verifyEmail: builder.mutation<
+      AuthApi.VerifyEmailResponse,
+      AuthApi.VerifyEmailRequest
+    >({
+      query: (body) => ({
+        url: "auth/verify-email",
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    changePasswordWithToken: builder.mutation<
+      AuthApi.ChangePasswordTokenResponse,
+      AuthApi.ChangePasswordTokenRequest
+    >({
       query: (body) => ({
         url: "auth/change-password-token",
         method: "POST",
@@ -223,13 +238,13 @@ export const apiSlice = createApi({
         },
       }),
     }),
-    getAccountProfile: builder.query<any, any>({
-      query: ({ authToken }) => ({
-        url: "user/",
-        params: { token: authToken },
-        method: "GET",
-      }),
-    }),
+    // getAccountProfile: builder.query<any, any>({
+    //   query: ({ authToken }) => ({
+    //     url: "user/",
+    //     params: { token: authToken },
+    //     method: "GET",
+    //   }),
+    // }),
   }),
 });
 
@@ -261,5 +276,5 @@ export const {
   useSendVerificationCodeMutation,
   useVerifyEmailMutation,
   useChangePasswordWithTokenMutation,
-  useGetAccountProfileQuery
+  // useGetAccountProfileQuery,
 } = apiSlice;

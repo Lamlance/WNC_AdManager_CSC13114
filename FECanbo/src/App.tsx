@@ -26,6 +26,7 @@ import ResolveReport from "./components/report-info/ResolveReport";
 import LoginPage from "./routes/LoginPage";
 import RegisterPage from "./routes/RegisterPage";
 import ForgotPasswordPage from "./routes/ForgotPassword";
+import VerifyAccountPage from "./routes/VerifyAccountPage";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
@@ -116,6 +117,7 @@ const App = () => {
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="verify-account" element={<VerifyAccountPage /> } />
         </Route>
       </Routes>
     </div>
