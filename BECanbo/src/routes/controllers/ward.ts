@@ -2,7 +2,7 @@ import { Router } from "express";
 import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder";
 import z from "zod";
 import { CallAndCatchAsync } from "../../utils/CallCatch";
-import { GetAllWard } from "../../db/service/ward";
+import { CreateWard, GetAllWard } from "../../db/service/ward";
 const WardRouter = Router();
 
 const GetAllWardQuerySchema = z.object({
@@ -12,6 +12,11 @@ const GetAllWardQuerySchema = z.object({
       return v;
     }, z.array(z.coerce.number()))
     .nullish(),
+});
+
+const CreateWardBodySchema = z.object({
+  ten_phuong: z.string(),
+  id_quan: z.number(),
 });
 
 WardRouter.get(
@@ -27,6 +32,28 @@ WardRouter.get(
         return res.status(500).json({ error: data.error });
 
       return res.status(200).json(data.data);
+    }
+  )
+);
+
+WardRouter.post(
+  "/",
+  ValidatorMwBuilder(
+    CreateWardBodySchema,
+    undefined,
+    async function (req, res) {
+      console.log("aaaaaaaaaaaaaaa");
+      const { ten_phuong, id_quan } = req.body;
+      const data = await CallAndCatchAsync(CreateWard, {
+        ten_phuong,
+        id_quan,
+      });
+
+      if (data.success === false) {
+        return res.status(500).json({ error: data.error });
+      }
+
+      return res.status(201).json(data.data);
     }
   )
 );
