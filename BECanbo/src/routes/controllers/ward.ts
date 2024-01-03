@@ -39,8 +39,8 @@ WardRouter.get(
 WardRouter.post(
   "/",
   ValidatorMwBuilder(
-    CreateWardBodySchema,
     undefined,
+    CreateWardBodySchema,
     async function (req, res) {
       console.log("aaaaaaaaaaaaaaa");
       const { ten_phuong, id_quan } = req.body;
