@@ -23,12 +23,17 @@ export async function createPlaceChangeRequest(
 
 
 // action for place 
-export async function getAllPlace() {
+export async function getAllPlace(data: number) {
+  return pg_client.select().from(AdsSchema.DiaDiem)
+  .where(eq(AdsSchema.DiaDiem.id_phuong, data));
+}
+export async function getAllPlaces() {
   return pg_client.select().from(AdsSchema.DiaDiem);
 }
 
 export async function createPlace(data: PlaceApi.PlaceProperty) {
   const { id_dia_diem, ...body } = data;
+  console.log(id_dia_diem)
   const res = await pg_client
     .insert(AdsSchema.DiaDiem)
     .values(body)

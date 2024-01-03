@@ -5,6 +5,7 @@ import {
   GetAllReportsRequest,
   GetAllAdsMethod,
   GetAllReportsType,
+  GetAllDistrict,
 } from "../../types/request";
 import {
   AdChangeApi,
@@ -12,6 +13,7 @@ import {
   AdsReqApi,
   PlaceChangeApi,
   ReportApi,
+  PlaceApi,
 } from "@admanager/shared";
 import { RootState } from "../../store";
 
@@ -20,6 +22,7 @@ type WardItem = {
   quan: { id_quan: number; ten_quan: string };
 };
 type GetAllWardArgs = { id_quan?: number[] };
+type GetAllPlaceArgs = { id_phuong?: number };
 type GetALLReportInfoArgs = { phuong_id?: number[] };
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -185,6 +188,49 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    //place info 
+    getAllDistrict: builder.query<PlaceApi.DistrictProperty[], GetAllDistrict | void>({
+      query: () => ({ url: "/quan", }),
+    }),
+    getAllWard2: builder.query<PlaceApi.WardProperty[], number>({
+      query: (id_quan) => ({ url: `/phuong/thuoc/${id_quan}` }),
+    }),
+    getAllPlace: builder.query<PlaceApi.PlaceProperty[], number>({
+      query: (id_phuong) => ({ url: `/dia-diem/thuoc/${id_phuong}` }),
+    }),
+    submitCreatePlace: builder.mutation<any, PlaceApi.PlaceProperty>({ 
+      query: (formData) => ({
+        url: "/dia-diem",
+        method: "POST",
+        body: formData,
+        headers: {
+          "Content_Type": "application/json",
+        },
+      }),
+    }),
+    submitUpdatePlace: builder.mutation<any, PlaceApi.PlaceProperty>({
+      query: (body) => ({
+        url: `/dia-diem`,
+        method: "PUT",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    deletePlace: builder.mutation<any, PlaceApi.PlaceProperty>({
+      query: (data) => ({
+        url: `/dia-diem`,
+        method: "DELETE",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    //end place info
+
+    //place change request
     getAllPlaceChangeRequest: builder.query<
       PlaceChangeApi.PlaceChangeRequestResponse[],
       void
@@ -245,4 +291,13 @@ export const {
   useLazyGetAllReportInfoQuery: useLazyGetAllReportInfo,
   useGetAllWardQuery: useGetAllWards,
   useLazyGetAllWardQuery: useLazyGetAllWards,
+
+  useGetAllDistrictQuery,
+  useGetAllWard2Query,
+  useGetAllPlaceQuery,
+  useSubmitCreatePlaceMutation,
+  useSubmitUpdatePlaceMutation,
+  useDeletePlaceMutation,
+
+
 } = apiSlice;

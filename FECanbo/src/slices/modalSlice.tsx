@@ -3,6 +3,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface modalState {
   isModalOpen: boolean;
+  isAddPlaceModalOpen: boolean;
+  isEditPlaceModalOpen: boolean;
   selectedPlace:
     | PlaceChangeApi.PlaceChangeRequestResponse
     | PlaceChangeApi.PlaceChangeRequestCreate
@@ -11,10 +13,12 @@ interface modalState {
 
 const initialState: modalState = {
   isModalOpen: false,
+  isAddPlaceModalOpen: false,
+  isEditPlaceModalOpen: false,
   selectedPlace: null,
 };
 
-const pointSlice = createSlice({
+const modalSlice = createSlice({
   name: "modal",
   initialState,
   reducers: {
@@ -23,6 +27,18 @@ const pointSlice = createSlice({
     },
     showModalOpen: (state) => {
       state.isModalOpen = true;
+    },
+    showAddPlaceModalClose: (state) => {
+      state.isAddPlaceModalOpen = false;
+    },
+    showAddPlaceModalOpen: (state) => {
+      state.isAddPlaceModalOpen = true;
+    },
+    showEditPlaceModalClose: (state) => {
+      state.isEditPlaceModalOpen = false;
+    },
+    showEditPlaceModalOpen: (state) => {
+      state.isEditPlaceModalOpen = true;
     },
     setSelectedPlace: (
       state,
@@ -33,7 +49,7 @@ const pointSlice = createSlice({
   },
 });
 
-export const { showModalOpen, showModalClose, setSelectedPlace } =
-  pointSlice.actions;
+export const { showModalOpen, showModalClose, showAddPlaceModalOpen, showAddPlaceModalClose, showEditPlaceModalOpen, showEditPlaceModalClose, setSelectedPlace } =
+  modalSlice.actions;
 
-export default pointSlice.reducer;
+export default modalSlice.reducer;

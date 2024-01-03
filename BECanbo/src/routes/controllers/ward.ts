@@ -2,7 +2,7 @@ import { Router } from "express";
 import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder";
 import z from "zod";
 import { CallAndCatchAsync } from "../../utils/CallCatch";
-import { GetAllWard, GetAllWardFromDistrict } from "../../db/service/ward";
+import { GetAllWard, getAllWard2 } from "../../db/service/ward";
 const WardRouter = Router();
 
 const GetAllWardQuerySchema = z.object({
@@ -31,11 +31,9 @@ WardRouter.get(
   )
 );
 
-
-WardRouter.get("/thuoc-quan/:id", async (req, res, next) => {
-  const districtId: number | undefined = parseInt(req.params.id) || 0;
-
-  const result = await CallAndCatchAsync(GetAllWardFromDistrict, districtId);
+WardRouter.get("/thuoc/:id", async (req, res, next) => {
+  const id_quan = parseInt(req.params.id);
+  const result = await CallAndCatchAsync(getAllWard2, id_quan);
   if (!result.success) {
     return res.status(500).json({ msg: result.error.message });
   }

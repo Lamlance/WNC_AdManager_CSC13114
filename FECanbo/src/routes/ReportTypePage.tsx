@@ -23,8 +23,8 @@ function ReportTypeComponent() {
   const [showModalEdit, setshowModalEdit] = useState(false);
 
   const dispatch = useDispatch();
-  const modal = useSelector((state: RootState) => state.ReportTypeSlice);
-  const { reportTypeId, reportTypeName, reportTypeList } = modal;
+  const type = useSelector((state: RootState) => state.ReportTypeSlice);
+  const { reportTypeId, reportTypeName, reportTypeList } = type;
 
   const [formAdd] = useForm<ReportType>();
   const [formEdit] = useForm<ReportType>();
@@ -33,7 +33,7 @@ function ReportTypeComponent() {
   dispatch(loadData(data));
   useEffect(() => {
     refetch();
-  }, [modal, reportTypeName, reportTypeList]);
+  }, [showModalAdd, showModalEdit, reportTypeName, reportTypeList]);
 
   const handleAddClick = () => {
     setshowModalAdd(true);
@@ -114,9 +114,9 @@ function ReportTypeComponent() {
 
   return (
     <>
-      <div className="w-full h-1/5 flex justify-center items-center"><h1 className="h-fit text-5xl font-semibold">Danh sách các loại hình báo cáo</h1></div>
+      <div className="w-full flex justify-center h-14"><h1 className="h-fit text-4xl font-bold">DANH SÁCH CÁC LOẠI HÌNH BÁO CÁO</h1></div>
       <div className="my-4">
-        <Button onClick={handleAddClick} className="bg-sky-500 text-white">Thêm mới</Button>
+        <div className="flex justify-end"><Button onClick={handleAddClick} className="text-semibold text-base h-10 w-40 bg-sky-300 text-slate-950 border-2 border-cyan-500">Thêm mới</Button></div>
         <Modal open={showModalAdd} onCancel={() => setshowModalAdd(false)} title="Thêm loại hình thức báo cáo" footer={null}>
           <Form
             form={formAdd} onFinish={handleCreate}
@@ -138,7 +138,7 @@ function ReportTypeComponent() {
       <Table
         columns={columns}
         dataSource={reportTypeList}
-        pagination={{ pageSize: 6 }}
+        pagination={{ pageSize: 5 }}
       />
       <Modal open={showModalEdit} onCancel={() => setshowModalEdit(false)} footer={null}>
         <Form

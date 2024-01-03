@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { CallAndCatchAsync } from "../../utils/CallCatch";
-import { createPlaceChangeRequest, getAllPlaceChangeRequest, getAllPlace, createPlace,updatePlace, deletePlace } from "../../db/service/place-info";
+import { createPlaceChangeRequest, getAllPlaceChangeRequest, getAllPlace, createPlace,updatePlace, deletePlace, getAllPlaces } from "../../db/service/place-info";
 import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder";
 import { PlaceChangeApi, PlaceApi } from "@admanager/shared";
 
@@ -32,7 +32,16 @@ PlaceRouter.post(
 
 // place infor 
 PlaceRouter.get("/", async (req, res, next) => {
-  const result = await CallAndCatchAsync(getAllPlace, undefined);
+  const result = await CallAndCatchAsync(getAllPlaces, undefined);
+  if (!result.success) {
+    return res.status(500).json({ msg: result.error.message });
+  }
+  return res.status(200).json(result.data);
+});
+
+PlaceRouter.get("/thuoc/:id", async (req, res, next) => {
+  const id_phuong = parseInt(req.params.id);
+  const result = await CallAndCatchAsync(getAllPlace, id_phuong);
   if (!result.success) {
     return res.status(500).json({ msg: result.error.message });
   }
@@ -45,6 +54,7 @@ PlaceRouter.post(
     undefined,
     PlaceApi.PlaceSchema,
     async function (req, res) {
+      console.log('da cvao')
       const result = await CallAndCatchAsync(createPlace, res.locals.body);
       if (!result.success) {
         return res.status(500).json({ error: result.error.message });

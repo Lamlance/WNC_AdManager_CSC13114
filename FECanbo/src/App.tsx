@@ -18,9 +18,10 @@ import AdsRequestPage from "./routes/AdsRequestPage";
 import AdManagement from "./components/vhtt/AdManagement";
 import AdsRequestVHTTPage from "./components/vhtt/ads-request/AdsRequestVHTTPage";
 import EditRequest from "./components/vhtt/requestedit-ads/EditRequest";
-import EditRequestComponent from "./components/vhtt/EditRequestComponent";
 import AdsMethodPage from "./routes/AdsMethodPage";
+import EditRequestComponent from "./components/vhtt/EditRequestComponent";
 import ReportTypePage from "./routes/ReportTypePage";
+import PlaceManagePage from "./routes/PlaceManagePage"
 import EditUserInfo from "./components/user/EditUserInfo";
 import ResolveReport from "./components/report-info/ResolveReport";
 import LoginPage from "./routes/LoginPage";
@@ -79,6 +80,12 @@ const itemVHTTs: Item[] = [
     title: "/vhtt/manage-ad-method",
   },
   {
+    key: "8",
+    icon: <UploadOutlined />,
+    label: "Quản lý địa điểm",
+    title: "/vhtt/place-manage",
+  },
+  {
     key: "6",
     icon: <UploadOutlined />,
     label: "Yêu cầu chỉnh sửa địa điểm",
@@ -107,8 +114,9 @@ const App = () => {
           <Route path="requestad" element={<AdsRequestVHTTPage />} />
           <Route path="createaccount" element={<CreateAccount />} />
           <Route path="edit-ad-request" element={<EditRequest />} />
-          <Route path="edit-place-request" element={<EditRequestComponent />} />
           <Route path="manage-ad-method" element={<AdsMethodPage />} />
+          <Route path="place-manage" element={<PlaceManagePage />} />
+          <Route path="edit-place-request" element={<EditRequestComponent />} />
           <Route path="reporttype" element={<ReportTypePage />} />
         </Route>
         <Route path="/auth">

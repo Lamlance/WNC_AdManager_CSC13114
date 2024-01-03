@@ -21,3 +21,8 @@ export interface GetAllReportsType {
   take?: number;
   skip?: number;
 }
+
+export interface GetAllDistrict {
+  take?: number;
+  skip?: number;
+}
