@@ -45,7 +45,7 @@ const ForgotPassword = () => {
     if (data) {
       dispatch(verify(data));
       openNotification("success");
-      navigate("auth/verify-account");
+      navigate("/auth/verify-account");
     }
     if (error) {
       openNotification("error");

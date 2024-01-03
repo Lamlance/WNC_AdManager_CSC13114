@@ -47,7 +47,7 @@ const VerifyOTP = () => {
   useEffect(() => {
     if (data) {
       openNotification("success");
-      navigate("auth/login");
+      navigate("/auth/login");
     }
     if (error) {
       console.log(error);
