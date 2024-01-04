@@ -33,7 +33,7 @@ function PlaceManagePage() {
     //distrcit dropdown
     const handleSelectDistrict: MenuProps['onClick'] = (e) => {
         dispatch(PlaceReducer.setDistrict(e.key))
-        dispatch(PlaceReducer.setDistrictName(place.districtList[parseInt(e.key) - 1].ten_quan))
+        dispatch(PlaceReducer.setDistrictName(place.districtList.find(obj => obj.id === Number(e.key))?.ten_quan))
         dispatch(PlaceReducer.setWardName("Chọn phường"))
     };
     const { data: districtData } = useGetAllDistrictQuery();
@@ -49,7 +49,7 @@ function PlaceManagePage() {
     const handleSelectWard: MenuProps['onClick'] = (e) => {
         console.log(place.wardList)
         dispatch(PlaceReducer.setWard(e.key))
-        dispatch(PlaceReducer.setWardName(place.wardList[parseInt(e.key) - 1].ten_phuong))
+        dispatch(PlaceReducer.setWardName(place.wardList.find(obj => obj.id_phuong === Number(e.key))?.ten_phuong))
     };
     const { data: wardData, refetch: wardRefetch } = useGetAllWard2Query(place.districtId);
     dispatch(PlaceReducer.loadWard(wardData))
@@ -91,40 +91,46 @@ function PlaceManagePage() {
             title: "#",
             dataIndex: "id_dia_diem",
             key: "id_dia_diem",
+            width: '1%',
         },
         {
             title: "Địa điểm",
             dataIndex: "ten_dia_diem",
             key: "ten_dia_diem",
+            width: '15%',
         },
         {
             title: "Địa chỉ",
             dataIndex: "dia_chi",
             key: "dia_chi",
+            width: '30%',
         },
         {
             title: "Số biển quảng cáo",
             dataIndex: "count",
             key: "count",
+            width: '13%',
             render: (() => (<span>10</span>))
         },
         {
             title: "Vị trí",
             dataIndex: "coordinates",
             key: "coordinates",
+            width: '20%',
             render: ((text: string, row: Place) => (<div>{`${row.lng}, ${row.lat}`}</div>)),
         },
         {
             title: "Chi tiết",
             dataIndex: "detail",
             key: "detail",
-            render: ((text: string, row: Place) => (<div className="text-blue-500 underline cursor-pointer" onClick={() => handleEditClick(row)}>Chi tiết</div>)),
+            width: '7%',
+            render: ((text: string, row: Place) => (<div className="text-blue-500 cursor-pointer" onClick={() => handleEditClick(row)}>Chi tiết</div>)),
         },
         {
             title: "",
             dataIndex: "delete",
             key: "delete",
-            render: ((text: string, row: Place) => (<Button icon={<DeleteOutlined />} onClick={() => handleDelete(row)}>Xóa</Button>)),
+            render: ((text: string, row: Place) => (<Button icon={<DeleteOutlined />} onClick={() => handleDelete(row)} style={{ color: "red", }}>Xóa</Button>)),
         },
     ];
 

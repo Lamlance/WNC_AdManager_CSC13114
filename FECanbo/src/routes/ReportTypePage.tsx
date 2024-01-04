@@ -102,7 +102,7 @@ function ReportTypeComponent() {
       title: "Chi tiết",
       dataIndex: "detail",
       key: "detail",
-      render: ((text: string, row: ReportType) => (<div className="text-blue-500 underline cursor-pointer" onClick={() => handleEditClick(row)}>Chi tiết</div>)),
+      render: ((text: string, row: ReportType) => (<div className="text-blue-500 cursor-pointer" onClick={() => handleEditClick(row)}>Chi tiết</div>)),
     },
     {
       title: "",
