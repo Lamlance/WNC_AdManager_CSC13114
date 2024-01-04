@@ -72,14 +72,25 @@ router.post(
   )
 );
 
-router.get("/chinh-sua", async function (req, res) {
-  const result = await CallAndCatchAsync(getAllAdsChangeRequest, undefined);
-  if (!result.success) {
-    return res.status(500).json({ error: result.error.message });
-  }
+router.get(
+  "/chinh-sua",
+  ValidatorMwBuilder(
+    z.object({
+      phuong_id: WardArraySchema.nullish(),
+    }),
+    undefined,
+    async function (req, res) {
+      const result = await CallAndCatchAsync(getAllAdsChangeRequest, {
+        phuong_id: res.locals.query.phuong_id || undefined,
+      });
+      if (!result.success) {
+        return res.status(500).json({ error: result.error.message });
+      }
 
-  return res.status(200).json(result.data);
-});
+      return res.status(200).json(result.data);
+    }
+  )
+);
 
 router.post(
   "/chinh-sua",

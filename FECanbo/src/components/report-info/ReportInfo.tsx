@@ -1,12 +1,7 @@
 import { Col, Row, Switch } from "antd";
 import ReportInfoTable from "./ReportInfoTable";
 import ReportInfoDetail from "./ReportInfoDetail";
-import {
-  useGetAllReportInfoQuery,
-  useGetAllWards,
-  useLazyGetAllReportInfo,
-  useLazyGetAllWards,
-} from "../../slices/api/apiSlice";
+import { useLazyGetAllReportInfo } from "../../slices/api/apiSlice";
 import { fromReportResponse2ReportRecord } from "../../types/mapper";
 import { useEffect, useRef, useState } from "react";
 import { ReportApi } from "@admanager/shared";
@@ -44,7 +39,9 @@ const ReportInfo = () => {
           <ReportInfoTable data={data || []} onRowSelect={setSelectedRow} />
         </Col>
         <Col span={7}>
-          {selectedRow && <ReportInfoDetail {...selectedRow} />}
+          {selectedRow && (
+            <ReportInfoDetail {...selectedRow} lineClamp={true} />
+          )}
         </Col>
       </Row>
     </>

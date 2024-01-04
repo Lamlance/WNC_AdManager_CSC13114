@@ -9,6 +9,7 @@ import {
   AdChangeApi,
   AdsGeoJson,
   AdsReqApi,
+  ImageApi,
   PlaceChangeApi,
   ReportApi,
 } from "@admanager/shared";
@@ -59,6 +60,17 @@ export const apiSlice = createApi({
       query: ({ phuong_id }) => ({
         url: "/bao-cao",
         params: { phuong_id },
+      }),
+    }),
+    updateReportStatus: builder.mutation<
+      ReportApi.ReportResponse["bao_cao"],
+      ReportApi.ReportUpdate
+    >({
+      query: (body) => ({
+        url: "/bao-cao",
+        method: "PUT",
+        body: body,
+        headers: { "Content-Type": "application/json" },
       }),
     }),
     getAllAdChangeRequest: builder.query<
@@ -165,15 +177,21 @@ export const apiSlice = createApi({
         },
       }),
     }),
-    getImageUrl: builder.query<{ url: string }, string>({
-      query: (img_name) => `/image/${img_name}`,
+    getImageUrl: builder.query<
+      ImageApi.GetImageQueryResponse,
+      ImageApi.GetImageQuery
+    >({
+      query: ({ filename, bkname }) => ({
+        url: `/image/`,
+        params: { filename, bkname },
+      }),
     }),
     getAllWard: builder.query<WardItem[], GetAllWardArgs>({
       query: ({ id_quan }) => ({
         url: "public/phuong",
         params: { id_quan },
       }),
-    })
+    }),
   }),
 });
 
@@ -199,4 +217,5 @@ export const {
   useLazyGetAllReportInfoQuery: useLazyGetAllReportInfo,
   useGetAllWardQuery: useGetAllWards,
   useLazyGetAllWardQuery: useLazyGetAllWards,
+  useUpdateReportStatusMutation,
 } = apiSlice;

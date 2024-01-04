@@ -21,6 +21,8 @@ const ReportPlaceSchema = z.object({
 const ReportCreateSchema = z
   .object({
     id_quang_cao: z.string().nullish(),
+    hinh_1: z.string().nullish(),
+    hinh_2: z.string().nullish(),
   })
   .merge(ReportPlaceSchema)
   .merge(ReportFormValuesSchema);
@@ -31,23 +33,42 @@ const ReportResponseSchema = z.object({
       id_bao_cao: z.number(),
       trang_thai: z.string(),
       thoi_diem_bc: z.date(),
+      phan_hoi: z.string().nullish(),
     })
     .merge(ReportCreateSchema.omit({ ten_dia_diem: true })),
   loai_bc: z.string(),
 });
-
 
 const ReportTypeSchema = z.object({
   id_loai_bao_cao: z.coerce.number(),
   ten_loai_bao_cao: z.string(),
 });
 
+const ReportUpdateSchema = z.object({
+  id_bao_cao: z.number(),
+  phan_hoi: z.string(),
+  trang_thai: z.string(),
+});
 
 type ReportCreateBody = z.infer<typeof ReportCreateSchema>;
 type ReportFormValues = z.infer<typeof ReportFormValuesSchema>;
 type ReportPlace = z.infer<typeof ReportPlaceSchema>;
 type ReportResponse = z.infer<typeof ReportResponseSchema>;
 type ReportType = z.infer<typeof ReportTypeSchema>;
+type ReportUpdate = z.infer<typeof ReportUpdateSchema>;
 
-export type { ReportResponse, ReportCreateBody, ReportFormValues, ReportPlace, ReportType };
-export { ReportCreateSchema, ReportFormValuesSchema, ReportPlaceSchema, ReportTypeSchema };
+export type {
+  ReportResponse,
+  ReportCreateBody,
+  ReportFormValues,
+  ReportPlace,
+  ReportType,
+  ReportUpdate,
+};
+export {
+  ReportCreateSchema,
+  ReportFormValuesSchema,
+  ReportPlaceSchema,
+  ReportTypeSchema,
+  ReportUpdateSchema,
+};

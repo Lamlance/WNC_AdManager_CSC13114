@@ -1,15 +1,16 @@
 import { Router } from "express";
 import { CallAndCatchAsync } from "../../utils/CallCatch";
-import { getAllAdsInfo } from "../../db/service/ads-info";
 import {
   createReportInfo,
   getALLReportInfo,
+  updateStatusReport,
 } from "../../db/service/report-info";
 import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder";
 import { AdsZodSchema } from "@admanager/backend";
 import MulterMw from "../../utils/Multer";
 import { Minio_UploadImg, Minio_UploadMulterImgs } from "../../db/minio";
 import z from "zod";
+import { ReportApi } from "@admanager/shared";
 
 const GetALLReportInfoQuery = z.object({
   phuong_id: z
@@ -68,6 +69,20 @@ router.post(
         return res.status(500).json({ error: data.error });
       if (data.data) return res.status(200).json(data.data);
       return res.status(500).json({ error: "Cant create BaoCao" });
+    }
+  )
+);
+
+router.put(
+  "/",
+  ValidatorMwBuilder(
+    undefined,
+    ReportApi.ReportUpdateSchema,
+    async function (req, res) {
+      const data = await CallAndCatchAsync(updateStatusReport, res.locals.body);
+      if (data.success == false)
+        return res.status(500).json({ error: data.error });
+      return res.status(200).json(data.data);
     }
   )
 );

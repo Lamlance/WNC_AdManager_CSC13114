@@ -95,3 +95,15 @@ export async function createReportInfo(
     );
   return rpGeo[0] || null;
 }
+
+export async function updateStatusReport(params: ReportApi.ReportUpdate) {
+  const data = await pg_client
+    .update(AdsSchema.BaoCao)
+    .set({
+      trang_thai: params.trang_thai,
+      phan_hoi: params.phan_hoi,
+    })
+    .where(eq(AdsSchema.BaoCao.id_bao_cao, params.id_bao_cao))
+    .returning({ updated: AdsSchema.BaoCao });
+  return data[0] ? data[0].updated : null;
+}

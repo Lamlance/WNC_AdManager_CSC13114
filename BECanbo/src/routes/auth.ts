@@ -18,8 +18,8 @@ import { sendCodeToEmail } from "../utils/SendCodeToEmail";
 
 configDotenv();
 
-const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "";
-const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || "0");
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "abc123";
+const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || "1");
 
 const router = Router();
 
@@ -28,7 +28,7 @@ type VerificationPayload = {
   confirmCode: string;
 };
 
-router.get(
+router.post(
   "/login",
   ValidatorMwBuilder(
     undefined,
@@ -41,26 +41,22 @@ router.get(
 
       if (!result.success) {
         return res.status(500).json({ err: result.error });
-      } else {
-        const user = result.data[0];
-
-        if (user) {
-          const passwordMatch = await bcrypt.compare(password, user.pwd);
-
-          if (passwordMatch) {
-            const authToken = jwt.sign(user, JWT_SECRET_KEY, {
-              expiresIn: "10d",
-            });
-            return res.status(200).json({ token: authToken, ...user });
-          } else {
-            return res
-              .status(400)
-              .json({ msg: "Invalid username or password" });
-          }
-        } else {
-          return res.status(400).json({ msg: "Invalid username or password" });
-        }
       }
+      if (result.data.length <= 0) {
+        return res.status(400).json({ msg: "Invalid username or password" });
+      }
+      const user = result.data[0];
+      const passwordMatch = await bcrypt.compare(password, user.pwd);
+
+      if (passwordMatch == false) {
+        return res.status(400).json({ msg: "Invalid username or password" });
+      }
+
+      const authToken = jwt.sign(user, JWT_SECRET_KEY, {
+        expiresIn: "10d",
+      });
+
+      return res.status(200).json({ token: authToken, ...user });
     }
   )
 );
@@ -84,28 +80,41 @@ router.post(
       } else {
         const data = result.data;
         const confirmCode = generate({ length: 6, charset: "numeric" });
+        const authToken = jwt.sign(data, JWT_SECRET_KEY);
+        const confirmCodeToken = jwt.sign(
+          {
+            userId: data.userId,
+            confirmCode: confirmCode,
+          },
+          JWT_SECRET_KEY,
+          { expiresIn: "5m" }
+        );
+        return res.status(201).json({
+          token: authToken,
+          user: data,
+          confirmCodeToken: confirmCodeToken,
+        });
+        // sendCodeToEmail(data.email, data.name, confirmCode, "register")
+        //   .then((success) => {
+        //     const authToken = jwt.sign(data, JWT_SECRET_KEY);
+        //     const confirmCodeToken = jwt.sign(
+        //       {
+        //         userId: data.userId,
+        //         confirmCode: confirmCode,
+        //       },
+        //       JWT_SECRET_KEY,
+        //       { expiresIn: "5m" }
+        //     );
 
-        sendCodeToEmail(data.email, data.name, confirmCode, "register")
-          .then((success) => {
-            const authToken = jwt.sign(data, JWT_SECRET_KEY);
-            const confirmCodeToken = jwt.sign(
-              {
-                userId: data.userId,
-                confirmCode: confirmCode,
-              },
-              JWT_SECRET_KEY,
-              { expiresIn: "5m" }
-            );
-
-            return res.status(201).json({
-              token: authToken,
-              user: data,
-              confirmCodeToken: confirmCodeToken,
-            });
-          })
-          .catch((err) => {
-            return res.status(500).json({ msg: "Can not register right now!" });
-          });
+        //     return res.status(201).json({
+        //       token: authToken,
+        //       user: data,
+        //       confirmCodeToken: confirmCodeToken,
+        //     });
+        //   })
+        //   .catch((err) => {
+        //     return res.status(500).json({ msg: "Can not register right now!" });
+        //   });
       }
     }
   )
@@ -202,8 +211,6 @@ router.post(
     }
   )
 );
-
-
 
 router.post(
   "/change-password-token",

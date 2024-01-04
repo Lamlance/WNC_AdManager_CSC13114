@@ -1,3 +1,4 @@
+import { ImageApi } from "@admanager/shared";
 import { Client as MinioClient, UploadedObjectInfo } from "minio";
 export const minio_client = new MinioClient({
   endPoint: "localhost",
@@ -15,10 +16,7 @@ type Minio_UploadImgArgs = {
   filePath: string;
   delAfterLoad?: boolean;
 };
-type Minio_GetImgLinkArgs = Omit<
-  Minio_UploadImgArgs,
-  "filePath" | "delAfterLoad"
->;
+type Minio_GetImgLinkArgs = ImageApi.GetImageQuery;
 
 type Minio_UploadMulterImgArggs = {
   files: Express.Multer.File[];
@@ -67,10 +65,10 @@ export function Minio_UploadMulterImgs(args: Minio_UploadMulterImgArggs) {
 }
 
 export async function Minio_GetImgLink({
-  bkName,
+  bkname,
   filename,
 }: Minio_GetImgLinkArgs) {
   //86400 ~ 1day
-  const url = await minio_client.presignedUrl("GET", bkName, filename);
+  const url = await minio_client.presignedUrl("GET", bkname, filename);
   return url;
 }

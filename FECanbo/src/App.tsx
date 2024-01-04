@@ -7,6 +7,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UploadOutlined,
+  UserAddOutlined,
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
@@ -22,7 +23,7 @@ import EditRequestComponent from "./components/vhtt/EditRequestComponent";
 import AdsMethodPage from "./routes/AdsMethodPage";
 import ReportTypeComponent from "./components/vhtt/ReportTypeComponent";
 import EditUserInfo from "./components/user/EditUserInfo";
-import ResolveReport from "./components/report-info/ResolveReport";
+import ResolveReport from "./routes/ResolveReport";
 import LoginPage from "./routes/LoginPage";
 import RegisterPage from "./routes/RegisterPage";
 
@@ -90,6 +91,12 @@ const itemVHTTs: Item[] = [
     label: "Các loại hình thức báo cáo",
     title: "/vhtt/reporttype",
   },
+  {
+    key: "8",
+    icon: <UserAddOutlined />,
+    label: "Thêm tài khoản cán bộ",
+    title: "/vhtt/register",
+  },
 ];
 const App = () => {
   return (
@@ -100,7 +107,7 @@ const App = () => {
           <Route path="advertisements" element={<AdsInfo />} />
           <Route path="reports" element={<ReportInfo />} />
           <Route path="user" element={<EditUserInfo />} />
-          <Route path="resolve" element={<ResolveReport />} />
+          <Route path="resolve/:report_id?" element={<ResolveReport />} />
         </Route>
         <Route path="vhtt" element={<PageLayout items={itemVHTTs} />}>
           <Route index element={<AdManagement />} />
@@ -110,9 +117,10 @@ const App = () => {
           <Route path="edit-place-request" element={<EditRequestComponent />} />
           <Route path="manage-ad-method" element={<AdsMethodPage />} />
           <Route path="reporttype" element={<ReportTypeComponent />} />
+          <Route path="register" element={<RegisterPage />} />
         </Route>
         <Route path="/auth">
-          <Route path="login" element={<LoginPage /> } />
+          <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
         </Route>
       </Routes>

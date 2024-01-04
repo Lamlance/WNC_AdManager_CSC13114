@@ -41,7 +41,11 @@ export const createAnUser = async (body: AuthApi.RegisterRequest) => {
       phone: TKNguoiDung.sdt,
     });
 
-  const insertedUser = data[0] as ReturnUser;
+  const insertedUser: Omit<ReturnUser, "pwd"> = {
+    ...data[0],
+    managedDistricts: [],
+    managedWards: [],
+  };
 
   if (body.managedDistricts.length > 0) {
     const res2 = await pg_client
@@ -82,7 +86,7 @@ export const createAnUser = async (body: AuthApi.RegisterRequest) => {
 };
 
 export const getUserById = async (id: string) => {
-  const [ data ] = await pg_client
+  const [data] = await pg_client
     .select({
       userId: TKNguoiDung.id_tk,
       username: TKNguoiDung.ten_tk,
@@ -142,7 +146,7 @@ export const updateVerificationStatusOfUser = async ({
   username,
   verificationStatus,
 }: UpdateVerStatusUserParams) => {
-  const [ res ] = await pg_client
+  const [res] = await pg_client
     .update(TKNguoiDung)
     .set({ trang_thai_xac_thuc: verificationStatus })
     .where(eq(TKNguoiDung.ten_tk, username))
@@ -154,7 +158,7 @@ export const updateVerificationStatusOfUser = async ({
       pwd: TKNguoiDung.mat_khau,
       email: TKNguoiDung.email,
       phone: TKNguoiDung.sdt,
-      isActivated: TKNguoiDung.trang_thai_xac_thuc
+      isActivated: TKNguoiDung.trang_thai_xac_thuc,
     });
   return res;
 };
@@ -168,7 +172,7 @@ export const updatePasswordUser = async ({
   username,
   newPassword,
 }: UpdatePasswordParams) => {
-  const [ res ] = await pg_client
+  const [res] = await pg_client
     .update(TKNguoiDung)
     .set({ mat_khau: newPassword })
     .where(eq(TKNguoiDung.ten_tk, username))

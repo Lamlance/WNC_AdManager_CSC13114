@@ -7,8 +7,8 @@ const RegisterRequestSchema = z.object({
   phone: z.string(),
   email: z.string(),
   accLevel: z.string().optional(),
-  managedWards: z.number().array(),
-  managedDistricts: z.number().array(),
+  managedWards: z.number().array().default([]),
+  managedDistricts: z.number().array().default([]),
 });
 
 const LoginRequestSchema = z.object({
@@ -35,7 +35,7 @@ const ChangePasswordTokenSchema = z.object({
 const ChangePasswordSchema = z.object({
   oldPassword: z.string().min(6),
   newPassword: z.string().min(6),
-})
+});
 
 type RegisterRequest = z.infer<typeof RegisterRequestSchema>;
 type LoginRequest = z.infer<typeof LoginRequestSchema>;
@@ -52,7 +52,7 @@ export {
   SendVerificationCodeToEmailSchema,
   VerifyEmailSchema,
   ChangePasswordSchema,
-  ChangePasswordTokenSchema
+  ChangePasswordTokenSchema,
 };
 
 export type {
@@ -61,5 +61,5 @@ export type {
   SendVerificationCodeToEmailRequest,
   VerifyEmailRequest,
   ChangePasswordRequest,
-  ChangePasswordTokenRequest
+  ChangePasswordTokenRequest,
 };
