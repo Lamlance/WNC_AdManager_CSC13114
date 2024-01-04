@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   integer,
   pgEnum,
@@ -200,6 +200,25 @@ const QuanLyPhuong = pgTable(
     };
   }
 );
+
+export const TKNguoiDungRelations = relations(TKNguoiDung, ({ many }) => ({
+  quan_quan_ly: many(QuanLyQuan),
+  phuong_quan_ly: many(QuanLyPhuong),
+}));
+
+export const QuanLyPhuongRelations = relations(QuanLyPhuong, ({ one }) => ({
+  tai_khoan: one(TKNguoiDung, {
+    fields: [QuanLyPhuong.id_tk],
+    references: [TKNguoiDung.id_tk],
+  }),
+}));
+
+export const QuanLyQuanRelations = relations(QuanLyQuan, ({ one }) => ({
+  tai_khoan: one(TKNguoiDung, {
+    fields: [QuanLyQuan.id_tk],
+    references: [TKNguoiDung.id_tk],
+  }),
+}));
 
 export {
   LoaiViTri,

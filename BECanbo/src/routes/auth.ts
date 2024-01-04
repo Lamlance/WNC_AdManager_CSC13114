@@ -80,6 +80,7 @@ router.post(
       } else {
         const data = result.data;
         const confirmCode = generate({ length: 6, charset: "numeric" });
+
         const authToken = jwt.sign(data, JWT_SECRET_KEY);
         const confirmCodeToken = jwt.sign(
           {
@@ -124,7 +125,7 @@ router.post(
   "/verify-email",
   ValidatorMwBuilder(
     undefined,
-    AuthApi.VerifyEmailSchema,
+    AuthApi.VerifyEmailRequestSchema,
     async (req, res, next) => {
       let user: VerificationPayload;
       try {
@@ -133,7 +134,7 @@ router.post(
           JWT_SECRET_KEY
         ) as VerificationPayload;
       } catch (err) {
-        return res.status(400).json({ msg: "Invalid token" });
+        return res.status(400).json({ err: "Invalid token" });
       }
 
       const result = await CallAndCatchAsync(getUserById, user.userId);
@@ -143,23 +144,32 @@ router.post(
       }
 
       if (res.locals.body.code !== user.confirmCode) {
-        return res.status(400).json({ msg: "Invalid token" });
+        return res.status(400).json({ err: "Invalid token" });
       }
 
       const data = result.data;
 
-      const result2 = await CallAndCatchAsync(updateVerificationStatusOfUser, {
-        username: data.username,
-        verificationStatus: true,
-      });
+      if (data) {
+        const result2 = await CallAndCatchAsync(
+          updateVerificationStatusOfUser,
+          {
+            username: data.username,
+            verificationStatus: true,
+          }
+        );
 
-      if (!result2.success) {
-        return res.status(500).json({ err: result2.error });
+        if (!result2.success) {
+          return res.status(500).json({ err: result2.error });
+        }
+
+        return res.status(200).json({
+          msg: "Verify email successful!",
+        });
+      } else {
+        return res.status(400).json({
+          err: "Invalid token",
+        });
       }
-
-      return res.status(200).json({
-        user: result2.data,
-      });
     }
   )
 );
@@ -168,7 +178,7 @@ router.post(
   "/send-verification-code",
   ValidatorMwBuilder(
     undefined,
-    AuthApi.SendVerificationCodeToEmailSchema,
+    AuthApi.SendVerificationCodeToEmailRequestSchema,
     async (req, res, next) => {
       const result = await CallAndCatchAsync(
         getAnUserByEmail,
@@ -176,9 +186,13 @@ router.post(
       );
 
       if (!result.success) {
-        return res.status(500).json({ msg: result.error });
+        return res.status(500).json({ err: result.error });
       }
-      const user = result.data[0];
+      const user = result.data;
+
+      if (user == null) {
+        return res.status(400).json({ err: "Not found user by email" });
+      }
 
       const result2 = await CallAndCatchAsync(updateVerificationStatusOfUser, {
         username: user.username,
@@ -186,7 +200,7 @@ router.post(
       });
 
       if (!result2.success) {
-        return res.status(500).json({ msg: result2.error });
+        return res.status(500).json({ err: result2.error });
       }
 
       const confirmCode = generate({ length: 6, charset: "numeric" });
@@ -206,7 +220,7 @@ router.post(
         .catch((error) => {
           return res
             .status(500)
-            .json({ msg: "Can not verify email right now!" });
+            .json({ err: "Can not verify email right now!" });
         });
     }
   )
@@ -216,7 +230,7 @@ router.post(
   "/change-password-token",
   ValidatorMwBuilder(
     undefined,
-    AuthApi.ChangePasswordTokenSchema,
+    AuthApi.ChangePasswordTokenRequestSchema,
     async (req, res, next) => {
       let user: VerificationPayload;
       try {
@@ -225,11 +239,11 @@ router.post(
           JWT_SECRET_KEY
         ) as VerificationPayload;
       } catch (err) {
-        return res.status(400).json({ msg: "Invalid token" });
+        return res.status(400).json({ err: "Invalid token" });
       }
 
       if (res.locals.body.code !== user.confirmCode) {
-        return res.status(400).json({ msg: "Invalid token" });
+        return res.status(400).json({ err: "Invalid token" });
       }
 
       const result = await CallAndCatchAsync(getUserById, user.userId);
@@ -239,12 +253,8 @@ router.post(
       }
 
       const userData = result.data;
-      const passwordMatch = await bcrypt.compare(
-        res.locals.body.oldPassword,
-        userData.pwd
-      );
 
-      if (passwordMatch) {
+      if (userData) {
         const saltRounds = SALT_ROUNDS;
         const salt = await bcrypt.genSalt(saltRounds);
         const newHashPassword = await bcrypt.hash(
@@ -261,15 +271,15 @@ router.post(
           return res.status(500).json({ err: result2.error });
         }
 
-        const user = result2.data;
+        const updatedUser = result2.data;
 
-        const authToken = jwt.sign(user, JWT_SECRET_KEY, {
+        const authToken = jwt.sign(updatedUser, JWT_SECRET_KEY, {
           expiresIn: "10d",
         });
 
-        return res.status(200).json({ token: authToken, user });
+        return res.status(200).json({ authToken: authToken });
       } else {
-        return res.status(400).json({ msg: "Your token is invalid!" });
+        return res.status(400).json({ err: "Invalid token " });
       }
     }
   )
