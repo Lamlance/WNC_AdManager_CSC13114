@@ -11,7 +11,7 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "";
 
 const opts: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: JWT_SECRET_KEY,
+  secretOrKey: JWT_SECRET_KEY || "abc123",
 };
 
 function isTokenExpired(payload: any) {

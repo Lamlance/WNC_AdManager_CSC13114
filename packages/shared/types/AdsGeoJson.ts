@@ -26,7 +26,6 @@ const AdsPropertySchema = z.object({
   loai_vitri: z.string(),
   hinh_thuc: z.string(),
   bang_qc: z.string(),
-  ten_dia_diem: z.string(),
 });
 
 const PlacePropertySchema = z.object({

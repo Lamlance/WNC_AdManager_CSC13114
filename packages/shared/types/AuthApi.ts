@@ -7,8 +7,8 @@ const RegisterRequestSchema = z.object({
   phone: z.string(),
   email: z.string(),
   accLevel: z.string().optional(),
-  managedWards: z.number().array(),
-  managedDistricts: z.number().array(),
+  managedWards: z.number().array().default([]),
+  managedDistricts: z.number().array().default([]),
 });
 
 const LoginRequestSchema = z.object({
@@ -79,6 +79,10 @@ export {
   VerifyEmailRequestSchema,
   ChangePasswordRequestSchema,
   ChangePasswordTokenRequestSchema,
+  SendVerificationCodeToEmailSchema,
+  VerifyEmailSchema,
+  ChangePasswordSchema,
+  ChangePasswordTokenSchema,
 };
 
 export type {
@@ -94,4 +98,5 @@ export type {
   ChangePasswordRespone,
   ChangePasswordTokenRequest,
   ChangePasswordTokenResponse,
+  ChangePasswordTokenRequest,
 };

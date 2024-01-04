@@ -40,7 +40,11 @@ export const createAnUser = async (body: AuthApi.RegisterRequest) => {
       phone: TKNguoiDung.sdt,
     });
 
-  const insertedUser = data[0] as ReturnUser;
+  const insertedUser: Omit<ReturnUser, "pwd"> = {
+    ...data[0],
+    managedDistricts: [],
+    managedWards: [],
+  };
 
   if (body.managedDistricts.length > 0) {
     const res2 = await pg_client
@@ -103,6 +107,7 @@ export const getUserById = async (id: string) => {
     };
     return returnUser;
   }
+
   return data;
 };
 

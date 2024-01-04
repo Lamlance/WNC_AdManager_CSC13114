@@ -10,6 +10,7 @@ import PictureWallUpload from "./Quill/PictureWallUpload";
 import Upload, { RcFile, UploadProps } from "antd/es/upload";
 import { PlusOutlined } from "@ant-design/icons";
 import { checkValidFile } from "../utils/ImageUpload";
+import { default as ReCAPTCHA } from "react-google-recaptcha";
 
 const { Option } = Select;
 
@@ -33,13 +34,16 @@ function ReportModal({
   const [form] = Form.useForm();
   const quillRef = useRef<Quill | null>(null);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const captchaRef = useRef<ReCAPTCHA | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   const handleFinish = (values: ReportFormPropery) => {
-    let quillContent = "";
-    if (quillRef.current) {
-      quillContent = quillRef.current.root.innerHTML.trim();
-    }
+    if (!quillRef.current) return;
+    if (!captchaRef.current) return;
 
+    const captchaToken = captchaRef.current.getValue();
+    console.log(captchaToken);
+    const quillContent = quillRef.current.root.innerHTML.trim();
     const updatedValues = {
       ...values,
       noi_dung: quillContent,
@@ -145,9 +149,15 @@ function ReportModal({
           </p>
           <QuillEditor forwardedRef={quillRef} />
         </div>
-
+        <div className="grid place-items-center">
+          <ReCAPTCHA
+            onChange={(t) => setCaptchaToken(t)}
+            ref={captchaRef}
+            sitekey="6Ldu8kIpAAAAAEuWZdVaMdlvcaHCRi8HbKMczqD9"
+          />
+        </div>
         <Form.Item className="flex justify-center text-center">
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" disabled={!captchaToken}>
             Nộp đơn
           </Button>
         </Form.Item>

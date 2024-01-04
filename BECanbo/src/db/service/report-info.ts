@@ -6,8 +6,9 @@ import {
   LoaiBaoCao,
   QuangCao,
 } from "@admanager/backend/db/schema";
-import { eq, ilike, inArray, or } from "drizzle-orm";
+import { SQL, eq, ilike, inArray, or } from "drizzle-orm";
 import { AdsGeoJson, ReportApi } from "@admanager/shared";
+import { VNCharToEN } from "../../utils/VNCharToEN.js";
 
 type GetALLReportInfoArgs = {
   phuong_id?: number[];
@@ -22,7 +23,6 @@ export const getALLReportInfo = async function (
       .select()
       .from(AdsSchema.Phuong)
       .where(inArray(AdsSchema.Phuong.id_phuong, args.phuong_id)));
-  console.log(ward_list);
   const query = pg_client
     .select({
       bao_cao: AdsSchema.BaoCao,
@@ -43,13 +43,15 @@ export const getALLReportInfo = async function (
     );
 
   if (ward_list) {
-    query.where(
-      or(
-        ...ward_list.map((p) =>
-          ilike(AdsSchema.BaoCao.dia_chi, `%${p.ten_phuong}%`)
-        )
-      )
-    );
+    const q = ward_list.reduce((acum, curr) => {
+      acum.push(ilike(AdsSchema.BaoCao.dia_chi, `%${curr.ten_phuong}%`));
+      acum.push(
+        ilike(AdsSchema.BaoCao.dia_chi, `%${VNCharToEN(curr.ten_phuong)}%`)
+      );
+      return acum;
+    }, [] as SQL[]);
+
+    query.where(or(...q));
   }
 
   return await query;
@@ -92,4 +94,16 @@ export async function createReportInfo(
       eq(AdsSchema.BaoCao.id_dia_diem, AdsSchema.DiaDiem.id_dia_diem)
     );
   return rpGeo[0] || null;
+}
+
+export async function updateStatusReport(params: ReportApi.ReportUpdate) {
+  const data = await pg_client
+    .update(AdsSchema.BaoCao)
+    .set({
+      trang_thai: params.trang_thai,
+      phan_hoi: params.phan_hoi,
+    })
+    .where(eq(AdsSchema.BaoCao.id_bao_cao, params.id_bao_cao))
+    .returning({ updated: AdsSchema.BaoCao });
+  return data[0] ? data[0].updated : null;
 }
