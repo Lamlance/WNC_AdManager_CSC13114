@@ -79,10 +79,6 @@ export {
   VerifyEmailRequestSchema,
   ChangePasswordRequestSchema,
   ChangePasswordTokenRequestSchema,
-  SendVerificationCodeToEmailSchema,
-  VerifyEmailSchema,
-  ChangePasswordSchema,
-  ChangePasswordTokenSchema,
 };
 
 export type {
@@ -96,7 +92,6 @@ export type {
   VerifyEmailResponse,
   ChangePasswordRequest,
   ChangePasswordRespone,
-  ChangePasswordTokenRequest,
   ChangePasswordTokenResponse,
   ChangePasswordTokenRequest,
 };

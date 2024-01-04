@@ -33,6 +33,7 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
 
     Promise.allSettled(imgs).then((data) => {
       const urls: string[] = [];
+      console.log(data);
       data.forEach((d) => {
         if (d.status === "fulfilled" && d.value.data) {
           urls.push(d.value.data.url);

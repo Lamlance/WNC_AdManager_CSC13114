@@ -42,10 +42,10 @@ router.post(
       if (!result.success) {
         return res.status(500).json({ err: result.error });
       }
-      if (result.data.length <= 0) {
+      if (!result.data) {
         return res.status(400).json({ msg: "Invalid username or password" });
       }
-      const user = result.data[0];
+      const user = result.data;
       const passwordMatch = await bcrypt.compare(password, user.pwd);
 
       if (passwordMatch == false) {

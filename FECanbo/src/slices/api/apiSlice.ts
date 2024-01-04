@@ -182,7 +182,7 @@ export const apiSlice = createApi({
       ImageApi.GetImageQuery
     >({
       query: ({ filename, bkname }) => ({
-        url: `/image/`,
+        url: `api/image/`,
         params: { filename, bkname },
       }),
     }),
