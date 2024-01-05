@@ -7,6 +7,7 @@ import {
   DeleteWard,
   GetAllWard,
   GetWard,
+  UpdateWard,
 } from "../../db/service/ward";
 const WardRouter = Router();
 
@@ -30,6 +31,12 @@ const DeleteWardRequest = z.object({
 
 const GetWardRequest = z.object({
   id: z.string(),
+});
+
+const UpdateWardBodySchema = z.object({
+  id: z.number(),
+  ten_phuong: z.string().nullable(),
+  id_quan: z.number().nullable(),
 });
 
 WardRouter.get(
@@ -97,6 +104,29 @@ WardRouter.get(
 
     return res.status(200).json(result.data);
   })
+);
+
+WardRouter.put(
+  "/",
+  ValidatorMwBuilder(
+    undefined,
+    UpdateWardBodySchema,
+    async function (req, res) {
+      const { id, ten_phuong, id_quan } = req.body;
+
+      const data = await CallAndCatchAsync(UpdateWard, {
+        id,
+        ten_phuong,
+        id_quan,
+      });
+
+      if (data.success === false) {
+        return res.status(500).json({ error: data.error });
+      }
+
+      return res.status(200).json(data.data);
+    }
+  )
 );
 
 export default WardRouter;
