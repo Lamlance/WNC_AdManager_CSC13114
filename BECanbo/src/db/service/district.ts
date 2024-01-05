@@ -17,6 +17,11 @@ type DeleteDistrictByIdArgs = {
   id: string;
 };
 
+type UpdateDistrictArgs = {
+  id: number;
+  ten_quan: string;
+};
+
 export async function GetAllDistrict({}: GetAllDistrictArgs) {
   return await pg_client.select({ quan: Quan }).from(Quan);
 }
@@ -49,11 +54,11 @@ export async function GetDistrictById({ id }: GetDistrictByIdArgs) {
 
     const district = await pg_client
       .select({
-        id_quan: AdsSchema.Quan.id_quan,
-        ten_quan: AdsSchema.Quan.ten_quan,
+        id_quan: Quan.id_quan,
+        ten_quan: Quan.ten_quan,
       })
-      .from(AdsSchema.Quan)
-      .where(eq(AdsSchema.Quan.id_quan, numericId));
+      .from(Quan)
+      .where(eq(Quan.id_quan, numericId));
 
     if (district.length === 0) {
       return { success: false, error: "District not found." };
@@ -71,13 +76,40 @@ export async function DeleteDistrictById({ id }: DeleteDistrictByIdArgs) {
     const numericId = parseInt(id, 10);
 
     const res = await pg_client
-      .delete(AdsSchema.Quan)
-      .where(eq(AdsSchema.Quan.id_quan, numericId))
-      .returning({ deletedId: AdsSchema.Quan.id_quan });
+      .delete(Quan)
+      .where(eq(Quan.id_quan, numericId))
+      .returning({ deletedId: Quan.id_quan });
 
     return res[0]?.deletedId;
   } catch (error) {
     console.error("Error deleting district:", error);
+    return { success: false, error: "Internal Server Error" };
+  }
+}
+
+export async function UpdateDistrict({ id, ten_quan }: UpdateDistrictArgs) {
+  try {
+    const existingDistrict = await pg_client
+      .select({
+        quan: Quan,
+      })
+      .from(Quan)
+      .where(eq(Quan.id_quan, id));
+
+    if (existingDistrict.length === 0) {
+      return { success: false, error: "District not found." };
+    }
+
+    const updatedDistrict = await pg_client
+      .update(Quan)
+      .set({
+        ten_quan,
+      })
+      .where(eq(Quan.id_quan, id));
+
+    return { success: true, data: updatedDistrict };
+  } catch (error) {
+    console.error("Error updating district:", error);
     return { success: false, error: "Internal Server Error" };
   }
 }

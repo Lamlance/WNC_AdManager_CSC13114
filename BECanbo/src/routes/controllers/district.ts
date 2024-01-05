@@ -7,6 +7,7 @@ import {
   DeleteDistrictById,
   GetAllDistrict,
   GetDistrictById,
+  UpdateDistrict,
 } from "../../db/service/district";
 const DistrictRouter = Router();
 
@@ -22,6 +23,11 @@ const CreateDistrictBodySchema = z.object({
 
 const DeleteDistrictByIdParamsSchema = z.object({
   id: z.string(),
+});
+
+const UpdateDistrictBodySchema = z.object({
+  id: z.number(),
+  ten_quan: z.string(),
 });
 
 DistrictRouter.get(
@@ -90,6 +96,28 @@ DistrictRouter.delete(
       const { id } = req.params;
       const data = await CallAndCatchAsync(DeleteDistrictById, {
         id,
+      });
+
+      if (data.success === false) {
+        return res.status(500).json({ error: data.error });
+      }
+
+      return res.status(200).json(data.data);
+    }
+  )
+);
+
+DistrictRouter.put(
+  "/",
+  ValidatorMwBuilder(
+    undefined,
+    UpdateDistrictBodySchema,
+    async function (req, res) {
+      const { id, ten_quan } = req.body;
+
+      const data = await CallAndCatchAsync(UpdateDistrict, {
+        id,
+        ten_quan,
       });
 
       if (data.success === false) {
