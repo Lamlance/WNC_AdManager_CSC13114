@@ -95,6 +95,10 @@ export async function GetWard({ id }: GetWardArgs) {
       .innerJoin(Quan, eq(Phuong.id_quan, Quan.id_quan))
       .where(eq(Phuong.id_phuong, numericId));
 
+    if (ward.length === 0) {
+      return { success: false, error: "Ward not found." };
+    }
+
     return { success: true, data: ward };
   } catch (error) {
     console.error("Error retrieving ward:", error);
