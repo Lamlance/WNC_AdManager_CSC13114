@@ -4,6 +4,7 @@ import z from "zod";
 import { CallAndCatchAsync } from "../../utils/CallCatch";
 import {
   CreateDistrict,
+  DeleteDistrictById,
   GetAllDistrict,
   GetDistrictById,
 } from "../../db/service/district";
@@ -12,11 +13,15 @@ const DistrictRouter = Router();
 const GetAllDistrictQuerySchema = z.object({});
 
 const GetDistrictByIdParamsSchema = z.object({
-  id: z.number(),
+  id: z.string(),
 });
 
 const CreateDistrictBodySchema = z.object({
   ten_quan: z.string(),
+});
+
+const DeleteDistrictByIdParamsSchema = z.object({
+  id: z.string(),
 });
 
 DistrictRouter.get(
@@ -44,7 +49,7 @@ DistrictRouter.get(
     async function (req, res) {
       const { id } = req.params;
       const data = await CallAndCatchAsync(GetDistrictById, {
-        id: parseInt(id, 10),
+        id,
       });
 
       if (data.success === false) {
@@ -72,6 +77,26 @@ DistrictRouter.post(
       }
 
       return res.status(201).json(data.data);
+    }
+  )
+);
+
+DistrictRouter.delete(
+  "/:id",
+  ValidatorMwBuilder(
+    undefined,
+    DeleteDistrictByIdParamsSchema,
+    async function (req, res) {
+      const { id } = req.params;
+      const data = await CallAndCatchAsync(DeleteDistrictById, {
+        id,
+      });
+
+      if (data.success === false) {
+        return res.status(500).json({ error: data.error });
+      }
+
+      return res.status(200).json(data.data);
     }
   )
 );

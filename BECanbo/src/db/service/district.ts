@@ -6,15 +6,19 @@ import { Quan } from "@admanager/backend/db/schema";
 type GetAllDistrictArgs = {};
 
 type GetDistrictByIdArgs = {
-  id: number;
+  id: string;
 };
 
 type CreateDistrictArgs = {
   ten_quan: string;
 };
 
+type DeleteDistrictByIdArgs = {
+  id: string;
+};
+
 export async function GetAllDistrict({}: GetAllDistrictArgs) {
-  return await pg_client.select({ quan: AdsSchema.Quan }).from(AdsSchema.Quan);
+  return await pg_client.select({ quan: Quan }).from(Quan);
 }
 
 export async function CreateDistrict({ ten_quan }: CreateDistrictArgs) {
@@ -40,8 +44,40 @@ export async function CreateDistrict({ ten_quan }: CreateDistrictArgs) {
 }
 
 export async function GetDistrictById({ id }: GetDistrictByIdArgs) {
-  return await pg_client
-    .select({ quan: AdsSchema.Quan })
-    .from(AdsSchema.Quan)
-    .where(eq(AdsSchema.Quan.id_quan, id));
+  try {
+    const numericId = parseInt(id, 10);
+
+    const district = await pg_client
+      .select({
+        id_quan: AdsSchema.Quan.id_quan,
+        ten_quan: AdsSchema.Quan.ten_quan,
+      })
+      .from(AdsSchema.Quan)
+      .where(eq(AdsSchema.Quan.id_quan, numericId));
+
+    if (district.length === 0) {
+      return { success: false, error: "District not found." };
+    }
+
+    return { success: true, data: district[0] };
+  } catch (error) {
+    console.error("Error retrieving district:", error);
+    return { success: false, error: "Internal Server Error" };
+  }
+}
+
+export async function DeleteDistrictById({ id }: DeleteDistrictByIdArgs) {
+  try {
+    const numericId = parseInt(id, 10);
+
+    const res = await pg_client
+      .delete(AdsSchema.Quan)
+      .where(eq(AdsSchema.Quan.id_quan, numericId))
+      .returning({ deletedId: AdsSchema.Quan.id_quan });
+
+    return res[0]?.deletedId;
+  } catch (error) {
+    console.error("Error deleting district:", error);
+    return { success: false, error: "Internal Server Error" };
+  }
 }
