@@ -2,7 +2,7 @@ import { Router } from "express";
 import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder";
 import z from "zod";
 import { CallAndCatchAsync } from "../../utils/CallCatch";
-import { CreateWard, GetAllWard } from "../../db/service/ward";
+import { CreateWard, DeleteWard, GetAllWard } from "../../db/service/ward";
 const WardRouter = Router();
 
 const GetAllWardQuerySchema = z.object({
@@ -17,6 +17,10 @@ const GetAllWardQuerySchema = z.object({
 const CreateWardBodySchema = z.object({
   ten_phuong: z.string(),
   id_quan: z.number(),
+});
+
+const DeleteWardRequest = z.object({
+  id: z.string(),
 });
 
 WardRouter.get(
@@ -42,7 +46,6 @@ WardRouter.post(
     undefined,
     CreateWardBodySchema,
     async function (req, res) {
-      console.log("aaaaaaaaaaaaaaa");
       const { ten_phuong, id_quan } = req.body;
       const data = await CallAndCatchAsync(CreateWard, {
         ten_phuong,
@@ -56,6 +59,21 @@ WardRouter.post(
       return res.status(201).json(data.data);
     }
   )
+);
+
+WardRouter.delete(
+  "/:id",
+  ValidatorMwBuilder(undefined, DeleteWardRequest, async function (req, res) {
+    const { id } = req.params;
+
+    const result = await CallAndCatchAsync(DeleteWard, { id });
+
+    if (!result.success) {
+      return res.status(500).json({ error: result.error.message });
+    }
+
+    return res.status(200).json(result.data);
+  })
 );
 
 export default WardRouter;

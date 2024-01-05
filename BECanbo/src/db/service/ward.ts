@@ -12,6 +12,10 @@ type CreateWardArgs = {
   id_quan: number;
 };
 
+type DeleteWardArgs = {
+  id: string;
+};
+
 export async function GetAllWard({ id_quan }: GetAllWardArgs) {
   const getPhuong = pg_client
     .select({
@@ -42,7 +46,6 @@ export async function CreateWard({ ten_phuong, id_quan }: CreateWardArgs) {
       return { success: false, error: "District not found." };
     }
 
-    console.log(existingDistrict);
     const newWard = await pg_client
       .insert(AdsSchema.Phuong)
       .values({ ten_phuong, id_quan });
@@ -50,6 +53,21 @@ export async function CreateWard({ ten_phuong, id_quan }: CreateWardArgs) {
     return { success: true, data: newWard };
   } catch (error) {
     console.error("Error creating ward:", error);
+    return { success: false, error: "Internal Server Error" };
+  }
+}
+
+export async function DeleteWard({ id }: DeleteWardArgs) {
+  try {
+    const numericId = parseInt(id, 10);
+
+    const deletedWard = await pg_client
+      .delete(AdsSchema.Phuong)
+      .where(eq(AdsSchema.Phuong.id_phuong, numericId));
+
+    return { success: true, data: deletedWard };
+  } catch (error) {
+    console.error("Error deleting ward:", error);
     return { success: false, error: "Internal Server Error" };
   }
 }
