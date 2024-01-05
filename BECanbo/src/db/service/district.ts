@@ -3,9 +3,15 @@ import { pg_client } from "../db";
 import { eq } from "drizzle-orm";
 import { Quan } from "@admanager/backend/db/schema";
 
+type GetAllDistrictArgs = {};
+
 type CreateDistrictArgs = {
   ten_quan: string;
 };
+
+export async function GetAllDistrict({}: GetAllDistrictArgs) {
+  return await pg_client.select({ quan: AdsSchema.Quan }).from(AdsSchema.Quan);
+}
 
 export async function CreateDistrict({ ten_quan }: CreateDistrictArgs) {
   try {

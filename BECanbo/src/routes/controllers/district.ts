@@ -2,12 +2,31 @@ import { Router } from "express";
 import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder";
 import z from "zod";
 import { CallAndCatchAsync } from "../../utils/CallCatch";
-import { CreateDistrict } from "../../db/service/district";
+import { CreateDistrict, GetAllDistrict } from "../../db/service/district";
 const DistrictRouter = Router();
+
+const GetAllDistrictQuerySchema = z.object({});
 
 const CreateDistrictBodySchema = z.object({
   ten_quan: z.string(),
 });
+
+DistrictRouter.get(
+  "/",
+  ValidatorMwBuilder(
+    GetAllDistrictQuerySchema,
+    undefined,
+    async function (req, res) {
+      const data = await CallAndCatchAsync(GetAllDistrict, {});
+
+      if (data.success === false) {
+        return res.status(500).json({ error: data.error });
+      }
+
+      return res.status(200).json(data.data);
+    }
+  )
+);
 
 DistrictRouter.post(
   "/",
