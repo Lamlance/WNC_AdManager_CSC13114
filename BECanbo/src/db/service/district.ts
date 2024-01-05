@@ -5,6 +5,10 @@ import { Quan } from "@admanager/backend/db/schema";
 
 type GetAllDistrictArgs = {};
 
+type GetDistrictByIdArgs = {
+  id: number;
+};
+
 type CreateDistrictArgs = {
   ten_quan: string;
 };
@@ -33,4 +37,11 @@ export async function CreateDistrict({ ten_quan }: CreateDistrictArgs) {
     console.error("Error creating ward:", error);
     return { success: false, error: "Internal Server Error" };
   }
+}
+
+export async function GetDistrictById({ id }: GetDistrictByIdArgs) {
+  return await pg_client
+    .select({ quan: AdsSchema.Quan })
+    .from(AdsSchema.Quan)
+    .where(eq(AdsSchema.Quan.id_quan, id));
 }
