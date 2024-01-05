@@ -70,9 +70,10 @@ export async function DeleteWard({ id }: DeleteWardArgs) {
 
     const deletedWard = await pg_client
       .delete(Phuong)
-      .where(eq(Phuong.id_phuong, numericId));
+      .where(eq(Phuong.id_phuong, numericId))
+      .returning({ deletedId: Phuong.id_phuong });
 
-    return { success: true, data: deletedWard };
+    return { success: true, data: deletedWard[0]?.deletedId };
   } catch (error) {
     console.error("Error deleting ward:", error);
     return { success: false, error: "Internal Server Error" };
