@@ -31,11 +31,12 @@ const VerifyOTP = () => {
 
   const onFinish = (values: any) => {
     values.otp = values.otp.join("");
+    if (!authState.isLoggedIn) return;
 
     console.log({
       confirmToken: authState.confirmToken,
       code: values.otp,
-    })
+    });
     if (authState.confirmToken) {
       verifyEmail({
         confirmToken: authState.confirmToken,

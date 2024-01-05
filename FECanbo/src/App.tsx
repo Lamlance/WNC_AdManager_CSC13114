@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { Button, Layout, Menu } from "antd";
 import { ReactElement } from "react";
 
@@ -28,6 +28,8 @@ import LoginPage from "./routes/LoginPage";
 import RegisterPage from "./routes/RegisterPage";
 import ForgotPasswordPage from "./routes/ForgotPassword";
 import VerifyAccountPage from "./routes/VerifyAccountPage";
+import { useAppSelector } from "./hooks";
+import AccountManager from "./routes/AccountManager";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
@@ -99,6 +101,12 @@ const itemVHTTs: Item[] = [
     label: "Thêm tài khoản cán bộ",
     title: "/vhtt/register",
   },
+  {
+    key: "9",
+    icon: <UserOutlined />,
+    label: "Quản lí tài khoản cán bộ",
+    title: "/vhtt/accounts",
+  },
 ];
 const App = () => {
   return (
@@ -120,6 +128,7 @@ const App = () => {
           <Route path="manage-ad-method" element={<AdsMethodPage />} />
           <Route path="reporttype" element={<ReportTypeComponent />} />
           <Route path="register" element={<RegisterPage />} />
+          <Route path="accounts" element={<AccountManager />} />
         </Route>
         <Route path="/auth">
           <Route path="login" element={<LoginPage />} />
@@ -145,6 +154,11 @@ interface PageLayoutProps {
 const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+  const authUser = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    console.log(authUser);
+  }, [authUser]);
 
   return (
     <Layout className="min-h-full">
@@ -179,18 +193,31 @@ const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
           background: "#ffffff",
         }}
       >
-        <Header style={{ padding: 0, background: "#ffffff" }}>
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: "16px",
-              width: 50,
-              height: 50,
-              background: "#ffffff",
-            }}
-          />
+        <Header
+          style={{ padding: 0, background: "#ffffff" }}
+          className=" flex flex-row justify-between align-middle"
+        >
+          <div>
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                fontSize: "16px",
+                width: 50,
+                height: 50,
+                background: "#ffffff",
+              }}
+            />
+          </div>
+
+          <div className=" pr-8">
+            {!authUser.isLoggedIn ? (
+              <Link to={"/auth/login"}>LOGIN</Link>
+            ) : (
+              <p>{`Hello user ${authUser.user.username}`}</p>
+            )}
+          </div>
         </Header>
         <Content
           style={{

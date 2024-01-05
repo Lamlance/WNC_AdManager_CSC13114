@@ -26,9 +26,9 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:4030/",
     prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.authToken;
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
+      const authState = (getState() as RootState).auth;
+      if (authState && authState.isLoggedIn) {
+        headers.set("Authorization", `Bearer ${authState.authToken}`);
       }
       return headers;
     },
@@ -263,6 +263,19 @@ export const apiSlice = createApi({
     //     method: "GET",
     //   }),
     // }),
+    getAllAccount: builder.query<{ data: AuthApi.FullUserData[] }, void>({
+      query: () => "/api/user/all",
+    }),
+    updateAccount: builder.mutation<
+      void,
+      { user_id: string; body: Partial<AuthApi.UserUpdateRequest> }
+    >({
+      query: ({ user_id, body }) => ({
+        url: `/api/user/${user_id}`,
+        method: "PUT",
+        body: { ...body },
+      }),
+    }),
   }),
 });
 
@@ -297,4 +310,7 @@ export const {
   // useGetAccountProfileQuery,
 
   useUpdateReportStatusMutation,
+  useGetAllAccountQuery,
+  useLazyGetAllAccountQuery,
+  useUpdateAccountMutation,
 } = apiSlice;

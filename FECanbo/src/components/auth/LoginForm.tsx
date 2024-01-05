@@ -34,7 +34,7 @@ const LoginForm = () => {
   const onFinish = (values: any) => {
     loginAccount({
       username: values.username,
-      pwd: values.password
+      pwd: values.password,
     });
   };
 
@@ -42,7 +42,7 @@ const LoginForm = () => {
     if (data) {
       dispatch(login(data));
       openNotification("success");
-      navigate("/");
+      setTimeout(() => navigate("/"), 2000);
     }
     if (error) {
       openNotification("error");

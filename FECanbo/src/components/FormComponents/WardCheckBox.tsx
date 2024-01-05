@@ -5,18 +5,19 @@ import { Button, Checkbox } from "antd";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import WardList from "./WardFilter";
 
+type PhuongType = { id_phuong: number; ten_phuong: string; id_quan: number };
 interface WardCheckBoxListProps {
   onWardListChange?: (phuong_ids: number[]) => void;
 }
 
 function WardCheckBoxList(props: WardCheckBoxListProps) {
-  const phuongIdList = useRef<number[]>([]);
+  const phuongIdList = useRef<PhuongType[]>([]);
   const [showList, setShowList] = useState<boolean>(false);
   const [validFilter, setValidFilter] = useState<boolean>(false);
 
-  function onWardListChange(phuong_id: number[]) {
+  function onWardListChange(phuong_id: PhuongType[]) {
     setValidFilter(!!phuong_id.length);
-    props.onWardListChange?.(phuong_id);
+    props.onWardListChange?.(phuong_id.map((v) => v.id_phuong));
   }
 
   return (

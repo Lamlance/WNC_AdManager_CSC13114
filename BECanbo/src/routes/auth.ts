@@ -56,7 +56,11 @@ router.post(
         expiresIn: "10d",
       });
 
-      return res.status(200).json({ token: authToken, ...user });
+      const loginResponse: AuthApi.LoginResponse = {
+        authToken,
+        user,
+      };
+      return res.status(200).json(loginResponse);
     }
   )
 );

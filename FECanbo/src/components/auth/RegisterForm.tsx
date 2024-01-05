@@ -13,10 +13,14 @@ import {
   useGetAllWards,
   useRegisterAccountMutation,
 } from "../../slices/api/apiSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { verify } from "../../slices/authSlice";
+import WardList from "../FormComponents/WardFilter";
+import { AuthApi } from "@admanager/shared";
+
+type PhuongType = { id_phuong: number; ten_phuong: string; id_quan: number };
 
 type DistrictElement = {
   districtId: number;
@@ -27,17 +31,23 @@ type WardElement = {
   wardId: number;
   wardName: string;
 };
-
-const RegisterForm = () => {
+interface RegisterFormProps {
+  overrideSubmit?: (values: AuthApi.RegisterRequest) => void;
+  initalValue?: Partial<AuthApi.RegisterRequest>;
+  checkedWardId?: number[];
+}
+const RegisterForm = (props: RegisterFormProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const { data: wards } = useGetAllWards({});
-  const [selectedDistricts, setSelectedDistricts] = useState<number[]>([]);
+  const wardsRef = useRef<PhuongType[]>([]);
+  const [currLevel, setLevel] =
+    useState<AuthApi.RegisterRequest["accLevel"]>("ward");
+  // const { data: wards } = useGetAllWards({});
+  // const [selectedDistricts, setSelectedDistricts] = useState<number[]>([]);
   const [registerAccount, { data: registerResponse, error }] =
     useRegisterAccountMutation();
   const [api, contextHolder] = notification.useNotification();
-
+  console.log(props.initalValue);
   const openNotification = (type: string) => {
     if (type == "error") {
       api[type]({
@@ -56,19 +66,24 @@ const RegisterForm = () => {
 
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: AuthApi.RegisterRequest) => {
     console.log("Success: ", values);
 
-    registerAccount({
+    const regiData: AuthApi.RegisterRequest = {
       username: values.username,
-      pwd: values.password,
+      pwd: values.pwd,
       name: values.name,
       phone: values.phone,
       email: values.email,
       accLevel: values.accLevel,
-      managedDistricts: values.managedDistricts,
-      managedWards: values.managedWards,
-    });
+      managedDistricts: [],
+      managedWards: wardsRef.current.map((v) => v.id_phuong),
+    };
+    if (props.overrideSubmit) {
+      props.overrideSubmit(regiData);
+      return;
+    }
+    registerAccount(regiData);
   };
 
   useEffect(() => {
@@ -83,16 +98,23 @@ const RegisterForm = () => {
     }
   }, [registerResponse, error]);
 
+  useEffect(() => {
+    if (props.initalValue) form.setFieldsValue(props.initalValue);
+    else form.setFieldsValue({});
+  }, [props.initalValue]);
+
   const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 16 },
   };
 
   return (
-    <div className="w-50 flex flex-col">
-      {contextHolder}
-      <h3 className="my-5 self-center text-2xl font-semibold"> Register </h3>
-      <Form
+    <div className="w-50 grid grid-cols-2">
+      <div className=" col-span-2">{contextHolder}</div>
+      <h3 className="col-span-2 my-5 self-center text-2xl font-semibold">
+        Register
+      </h3>
+      <Form<AuthApi.RegisterRequest>
         form={form}
         {...layout}
         style={{ minWidth: 500 }}
@@ -105,7 +127,7 @@ const RegisterForm = () => {
         }}
         autoComplete="off"
       >
-        <Form.Item
+        <Form.Item<AuthApi.RegisterRequest>
           rules={[
             {
               required: true,
@@ -120,7 +142,7 @@ const RegisterForm = () => {
             placeholder="Fullname"
           />
         </Form.Item>
-        <Form.Item
+        <Form.Item<AuthApi.RegisterRequest>
           rules={[
             {
               required: true,
@@ -135,14 +157,14 @@ const RegisterForm = () => {
             placeholder="Username"
           />
         </Form.Item>
-        <Form.Item
+        <Form.Item<AuthApi.RegisterRequest>
           rules={[
             {
               required: true,
               message: "Please input your password!",
             },
           ]}
-          name="password"
+          name="pwd"
           label="Password"
         >
           <Input
@@ -160,7 +182,7 @@ const RegisterForm = () => {
             },
             ({ getFieldValue }) => ({
               validator(_, value) {
-                if (!value || getFieldValue("password") === value) {
+                if (!value || getFieldValue("pwd") === value) {
                   return Promise.resolve();
                 }
                 return Promise.reject(
@@ -178,7 +200,7 @@ const RegisterForm = () => {
             placeholder="Confirm password"
           />
         </Form.Item>
-        <Form.Item
+        <Form.Item<AuthApi.RegisterRequest>
           rules={[
             {
               required: true,
@@ -187,7 +209,7 @@ const RegisterForm = () => {
             {
               type: "email",
               message: "The input is not valid E-mail!",
-            }
+            },
           ]}
           name="email"
           label="Email"
@@ -198,12 +220,12 @@ const RegisterForm = () => {
             placeholder="Email"
           />
         </Form.Item>
-        <Form.Item
+        <Form.Item<AuthApi.RegisterRequest>
           rules={[
             {
               required: true,
-              message: "Please input your email!",
-            }
+              message: "Please input your phone!",
+            },
           ]}
           name="phone"
           label="Phone"
@@ -214,7 +236,7 @@ const RegisterForm = () => {
             placeholder="Phone"
           />
         </Form.Item>
-        <Form.Item
+        <Form.Item<AuthApi.RegisterRequest>
           rules={[
             {
               required: true,
@@ -225,55 +247,14 @@ const RegisterForm = () => {
           name="accLevel"
         >
           <Select
+            onChange={(v: AuthApi.RegisterRequest["accLevel"]) => {
+              setLevel(v);
+            }}
             options={[
               { value: "ward", label: "Cán bộ Phường" },
               { value: "district", label: "Cán bộ Quận" },
               { value: "department", label: "Cán bộ Sở VH-TT" },
             ]}
-          />
-        </Form.Item>
-        <Form.Item label="Quận" name="managedDistricts">
-          <Select
-            mode="multiple"
-            allowClear
-            placeholder="Please select district"
-            onChange={(values: number[]) => {
-              setSelectedDistricts(values);
-            }}
-            options={(wards || [])
-              .reduce((acc, item) => {
-                if (!acc.map((i) => i.districtId).includes(item.quan.id_quan)) {
-                  acc.push({
-                    districtId: item.quan.id_quan,
-                    districtName: item.quan.ten_quan,
-                  });
-                }
-                return acc;
-              }, [] as DistrictElement[])
-              .map((e) => {
-                return { value: e.districtId, label: e.districtName };
-              })}
-          />
-        </Form.Item>
-        <Form.Item label="Phường" name="managedWards">
-          <Select
-            mode="multiple"
-            allowClear
-            placeholder="Please select ward"
-            options={(wards || [])
-              .filter((e) => selectedDistricts.includes(e.quan.id_quan))
-              .reduce((acc, item) => {
-                if (!acc.map((i) => i.wardId).includes(item.phuong.id_phuong)) {
-                  acc.push({
-                    wardId: item.phuong.id_phuong,
-                    wardName: item.phuong.ten_phuong,
-                  });
-                }
-                return acc;
-              }, [] as WardElement[])
-              .map((e) => {
-                return { value: e.wardId, label: e.wardName };
-              })}
           />
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
@@ -285,6 +266,17 @@ const RegisterForm = () => {
           </div>
         </Form.Item>
       </Form>
+      <div
+        className={`flex flex-row gap-4 ${
+          currLevel && currLevel !== "department" ? "" : "hidden"
+        }`}
+      >
+        <WardList
+          defaultCheckedWard={props.checkedWardId}
+          wardIdsRef={wardsRef}
+          showOnlyDistrict={currLevel === "district"}
+        />
+      </div>
     </div>
   );
 };

@@ -3,7 +3,12 @@ import { Router } from "express";
 import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder";
 import { AuthApi } from "@admanager/shared";
 import { CallAndCatchAsync } from "../../utils/CallCatch";
-import { getUserById, updatePasswordUser } from "../../db/service/user";
+import {
+  getAllUsers,
+  getUserById,
+  updatePasswordUser,
+  updateUser,
+} from "../../db/service/user";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -25,11 +30,18 @@ type UserDto = {
   isActivated: boolean;
 };
 
+router.get("/all", async function (req, res) {
+  const data = await CallAndCatchAsync(getAllUsers, undefined);
+  if (data.success == false) return res.status(500).json({ err: data.error });
+
+  return res.status(200).json(data);
+});
+
 router.post(
   "/change-password",
   ValidatorMwBuilder(
     undefined,
-    AuthApi.ChangePasswordSchema,
+    AuthApi.ChangePasswordRequestSchema,
     async (req, res, next) => {
       const user = req.user as UserDto;
       const result = await CallAndCatchAsync(getUserById, user.userId);
@@ -38,7 +50,9 @@ router.post(
         return res.status(500).json({ err: result.error });
       }
       const userData = result.data;
-
+      if (!userData) {
+        return res.status(500).json({ err: "user not found" });
+      }
       const isPasswordMatch = await bcrypt.compare(user.pwd, userData.pwd);
 
       if (isPasswordMatch) {
@@ -72,3 +86,25 @@ router.post(
     }
   )
 );
+
+router.put(
+  "/:user_id",
+  ValidatorMwBuilder(
+    undefined,
+    AuthApi.UserUpdateRequestSchema.partial(),
+    async (req, res) => {
+      if (!req.params.user_id)
+        return res.status(400).json({ err: "Missing user id" });
+
+      const data = await CallAndCatchAsync(updateUser, {
+        update: res.locals.body,
+        id_tk: req.params.user_id,
+      });
+      if (data.success == false)
+        return res.status(500).json({ err: data.error });
+      return res.status(200).json({ status: "success" });
+    }
+  )
+);
+
+export default router;
