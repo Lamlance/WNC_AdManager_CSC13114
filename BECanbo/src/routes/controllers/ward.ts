@@ -79,8 +79,8 @@ WardRouter.post(
 
 WardRouter.delete(
   "/:id",
-  ValidatorMwBuilder(undefined, DeleteWardRequest, async function (req, res) {
-    const { id } = req.params;
+  ValidatorMwBuilder(DeleteWardRequest, undefined, async function (req, res) {
+    const { id } = res.locals.query;
 
     const result = await CallAndCatchAsync(DeleteWard, { id });
 
@@ -94,8 +94,8 @@ WardRouter.delete(
 
 WardRouter.get(
   "/:id",
-  ValidatorMwBuilder(undefined, GetWardRequest, async function (req, res) {
-    const { id } = req.params;
+  ValidatorMwBuilder(GetWardRequest, undefined, async function (req, res) {
+    const { id } = res.locals.query;
     const result = await CallAndCatchAsync(GetWard, { id });
 
     if (!result.success) {

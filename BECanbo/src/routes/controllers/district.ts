@@ -50,10 +50,11 @@ DistrictRouter.get(
 DistrictRouter.get(
   "/:id",
   ValidatorMwBuilder(
-    undefined,
     GetDistrictByIdParamsSchema,
+    undefined,
     async function (req, res) {
-      const { id } = req.params;
+      const { id } = res.locals.query;
+
       const data = await CallAndCatchAsync(GetDistrictById, {
         id,
       });
@@ -90,10 +91,10 @@ DistrictRouter.post(
 DistrictRouter.delete(
   "/:id",
   ValidatorMwBuilder(
-    undefined,
     DeleteDistrictByIdParamsSchema,
+    undefined,
     async function (req, res) {
-      const { id } = req.params;
+      const { id } = res.locals.query;
       const data = await CallAndCatchAsync(DeleteDistrictById, {
         id,
       });
