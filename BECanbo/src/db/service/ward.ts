@@ -1,4 +1,3 @@
-import { AdsSchema } from "@admanager/backend";
 import { pg_client } from "../db";
 import { eq, inArray } from "drizzle-orm";
 import { Quan, Phuong } from "@admanager/backend/db/schema";
