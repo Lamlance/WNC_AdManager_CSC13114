@@ -1,9 +1,10 @@
-import { Button, Table, Tabs } from "antd";
-import React, { useState } from "react";
+import { Button, Table, Tabs, Spin, Alert } from "antd";
+import React, { useEffect, useState } from "react";
 import DistrictModal from "../components/ward-district/DistrictModal";
 import WardModal from "../components/ward-district/WardModal";
 
 const { TabPane } = Tabs;
+
 interface District {
   id: number;
   ten_quan: string;
@@ -19,15 +20,14 @@ function WardDistrictManagementPage() {
   const [activeTab, setActiveTab] = useState("district");
   const [districtModalVisible, setDistrictModalVisible] = useState(false);
   const [wardModalVisible, setWardModalVisible] = useState(false);
+  const [districtLoading, setDistrictLoading] = useState(false);
+  const [wardLoading, setWardLoading] = useState(false);
 
-  const [districtData, setDistrictData] = useState<District[]>([
-    { id: 1, ten_quan: "District 1" },
-    { id: 2, ten_quan: "District 2" },
-  ]);
-  const [wardData, setWardData] = useState<Ward[]>([
-    { id: 1, ten_phuong: "Ward A", id_quan: 1 },
-    { id: 2, ten_phuong: "Ward B", id_quan: 1 },
-  ]);
+  const [districtError, setDistrictError] = useState<string | null>(null);
+  const [wardError, setWardError] = useState<string | null>(null);
+
+  const [districtData, setDistrictData] = useState<District[]>([]);
+  const [wardData, setWardData] = useState<Ward[]>([]);
 
   const handleTabChange = (key: string) => {
     setActiveTab(key);
@@ -36,8 +36,8 @@ function WardDistrictManagementPage() {
   const columnsDistrict = [
     {
       title: "ID",
-      dataIndex: "id",
-      key: "id",
+      dataIndex: "id_quan",
+      key: "id_quan",
     },
     {
       title: "District Name",
@@ -49,8 +49,8 @@ function WardDistrictManagementPage() {
   const columnsWard = [
     {
       title: "ID",
-      dataIndex: "id",
-      key: "id",
+      dataIndex: "id_phuong",
+      key: "id_phuong",
     },
     {
       title: "Ward Name",
@@ -95,9 +95,25 @@ function WardDistrictManagementPage() {
 
   const renderTable = () => {
     if (activeTab === "district") {
-      return <Table columns={columnsDistrict} dataSource={districtData} />;
+      return (
+        <>
+          {districtLoading && <Spin />}
+          {districtError && <Alert message={districtError} type="error" />}
+          {!districtLoading && !districtError && (
+            <Table columns={columnsDistrict} dataSource={districtData} />
+          )}
+        </>
+      );
     } else if (activeTab === "ward") {
-      return <Table columns={columnsWard} dataSource={wardData} />;
+      return (
+        <>
+          {wardLoading && <Spin />}
+          {wardError && <Alert message={wardError} type="error" />}
+          {!wardLoading && !wardError && (
+            <Table columns={columnsWard} dataSource={wardData} />
+          )}
+        </>
+      );
     }
     return null;
   };
@@ -105,6 +121,47 @@ function WardDistrictManagementPage() {
   const getAddButtonText = () => {
     return activeTab === "district" ? "Add District" : "Add Ward";
   };
+
+  useEffect(() => {
+    if (activeTab === "district") {
+      setDistrictLoading(true);
+      setDistrictError(null);
+
+      fetch("http://localhost:4030/api/public/quan")
+        .then((response) => response.json())
+        .then((data) => {
+          const districtData = data.map((item) => item.quan);
+          setDistrictData(districtData);
+        })
+        .catch((error) => {
+          console.error("Error fetching district data:", error);
+          setDistrictError("Error fetching district data");
+        })
+        .finally(() => setDistrictLoading(false));
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab === "ward") {
+      setWardLoading(true);
+      setWardError(null);
+
+      fetch("http://localhost:4030/api/public/phuong")
+        .then((response) => response.json())
+        .then((data) => {
+          const wardData = data.map((item) => ({
+            ...item.phuong,
+            quan: item.quan,
+          }));
+          setWardData(wardData);
+        })
+        .catch((error) => {
+          console.error("Error fetching ward data:", error);
+          setWardError("Error fetching ward data");
+        })
+        .finally(() => setWardLoading(false));
+    }
+  }, [activeTab]);
 
   return (
     <>
