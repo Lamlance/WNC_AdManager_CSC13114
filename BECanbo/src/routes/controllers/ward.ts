@@ -26,7 +26,7 @@ const CreateWardBodySchema = z.object({
 });
 
 const DeleteWardRequest = z.object({
-  id: z.string(),
+  id: z.number(),
 });
 
 const GetWardRequest = z.object({
@@ -78,9 +78,9 @@ WardRouter.post(
 );
 
 WardRouter.delete(
-  "/:id",
-  ValidatorMwBuilder(DeleteWardRequest, undefined, async function (req, res) {
-    const { id } = res.locals.query;
+  "/",
+  ValidatorMwBuilder(undefined, DeleteWardRequest, async function (req, res) {
+    const { id } = res.locals.body;
 
     const result = await CallAndCatchAsync(DeleteWard, { id });
 

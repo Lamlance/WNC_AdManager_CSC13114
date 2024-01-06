@@ -12,7 +12,7 @@ type CreateWardArgs = {
 };
 
 type DeleteWardArgs = {
-  id: string;
+  id: number;
 };
 
 type GetWardArgs = {
@@ -65,11 +65,9 @@ export async function CreateWard({ ten_phuong, id_quan }: CreateWardArgs) {
 
 export async function DeleteWard({ id }: DeleteWardArgs) {
   try {
-    const numericId = parseInt(id, 10);
-
     const deletedWard = await pg_client
       .delete(Phuong)
-      .where(eq(Phuong.id_phuong, numericId))
+      .where(eq(Phuong.id_phuong, id))
       .returning({ deletedId: Phuong.id_phuong });
 
     return { success: true, data: deletedWard[0]?.deletedId };
