@@ -60,11 +60,15 @@ const WardDistrictManagementPage: React.FC = () => {
     return null;
   };
 
+  const getAddButtonText = () => {
+    return activeTab === "district" ? "Add District" : "Add Ward";
+  };
+
   return (
     <>
       <div className="mb-3 flex justify-end">
         <Button onClick={() => {}} type="primary">
-          Add
+          {getAddButtonText()}
         </Button>
       </div>
       <Tabs
