@@ -44,6 +44,15 @@ function WardDistrictManagementPage() {
       dataIndex: "ten_quan",
       key: "ten_quan",
     },
+    {
+      title: "Action",
+      key: "action",
+      render: (text: any, record: District) => (
+        <Button type="primary" onClick={() => handleDeleteDistrict(record)}>
+          Delete
+        </Button>
+      ),
+    },
   ];
 
   const columnsWard = [
@@ -61,6 +70,15 @@ function WardDistrictManagementPage() {
       title: "District ID",
       dataIndex: "id_quan",
       key: "id_quan",
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (text: any, record: Ward) => (
+        <Button type="primary" onClick={() => handleDeleteWard(record)}>
+          Delete
+        </Button>
+      ),
     },
   ];
 
@@ -91,6 +109,14 @@ function WardDistrictManagementPage() {
 
   const handleWardModalCancel = () => {
     setWardModalVisible(false);
+  };
+
+  const handleDeleteWard = (record: Ward) => {
+    throw new Error("Function not implemented.");
+  };
+
+  const handleDeleteDistrict = (record: District) => {
+    throw new Error("Function not implemented.");
   };
 
   const renderTable = () => {
@@ -169,6 +195,9 @@ function WardDistrictManagementPage() {
 
   return (
     <>
+      <div className="flex items-center justify-center text-4xl font-bold">
+        <h1>Quản lý danh sách các Phường và Quận</h1>
+      </div>
       <div className="mb-3 flex justify-start">
         <Button
           onClick={activeTab === "district" ? showDistrictModal : showWardModal}
