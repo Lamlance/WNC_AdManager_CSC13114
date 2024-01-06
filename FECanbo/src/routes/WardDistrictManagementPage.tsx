@@ -130,7 +130,9 @@ function WardDistrictManagementPage() {
       fetch("http://localhost:4030/api/public/quan")
         .then((response) => response.json())
         .then((data) => {
-          const districtData = data.map((item) => item.quan);
+          const districtData = data.map(
+            (item: { quan: District }) => item.quan,
+          );
           setDistrictData(districtData);
         })
         .catch((error) => {
@@ -149,10 +151,12 @@ function WardDistrictManagementPage() {
       fetch("http://localhost:4030/api/public/phuong")
         .then((response) => response.json())
         .then((data) => {
-          const wardData = data.map((item) => ({
-            ...item.phuong,
-            quan: item.quan,
-          }));
+          const wardData = data.map(
+            (item: { phuong: Ward; quan: District }) => ({
+              ...item.phuong,
+              quan: item.quan,
+            }),
+          );
           setWardData(wardData);
         })
         .catch((error) => {
