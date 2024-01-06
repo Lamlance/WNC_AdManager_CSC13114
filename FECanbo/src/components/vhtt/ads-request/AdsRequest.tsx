@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Row, Col } from "antd";
 import AdsRequestTable from "./AdsRequestTable";
 import AdsRequestDetail from "./AdsRequestDetail";
 import { AdRequest } from "../../../types";
-import { useGetAllAdsReqQuery } from "../../../slices/api/apiSlice";
+import {
+  useGetAllAdsReqQuery,
+  useLazyGetAllAdsReq,
+} from "../../../slices/api/apiSlice";
 import { AdsReqApi } from "@admanager/shared";
+import { useAppSelector } from "../../../hooks";
 
 interface MainContentSectionProps {
   onRowClick: (record: AdsReqApi.ManyAdsRequestResponse) => void;
@@ -15,7 +19,14 @@ const AdsRequest: React.FC<MainContentSectionProps> = ({
   onRowClick,
   selectedAd,
 }) => {
-  const { data, error, isLoading } = useGetAllAdsReqQuery();
+  const [getAllAdsReq, { data, error, isLoading }] = useLazyGetAllAdsReq();
+  const authState = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!authState.isLoggedIn) return;
+    getAllAdsReq({});
+  }, [authState]);
+
   return (
     <Row
       gutter={20}

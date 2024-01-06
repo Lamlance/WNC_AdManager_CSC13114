@@ -36,9 +36,12 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     getAllAdsInfo: builder.query<
       AdsGeoJson.AdsGeoJsonProperty[],
-      GetAllAdsRequest | void
+      GetALLReportInfoArgs
     >({
-      query: () => "api/quang-cao",
+      query: (args) => ({
+        url: "api/quang-cao",
+        params: { phuong_id: args.phuong_id },
+      }),
     }),
     getAllAdsMethod: builder.query<
       AdsGeoJson.AdMethodProperty[],
@@ -49,17 +52,20 @@ export const apiSlice = createApi({
 
     getAllAdsReq: builder.query<
       AdsReqApi.ManyAdsRequestResponse[],
-      GetAllAdsReqRequest | void
+      GetALLReportInfoArgs
     >({
-      query: () => "api/cap-phep-quang-cao",
+      query: (args) => ({
+        url: "api/cap-phep-quang-cao",
+        params: { phuong_id: args.phuong_id },
+      }),
     }),
     getAllReportInfo: builder.query<
       ReportApi.ReportResponse[],
       GetALLReportInfoArgs
     >({
-      query: ({ phuong_id }) => ({
+      query: (args) => ({
         url: "api/bao-cao",
-        params: { phuong_id },
+        params: { phuong_id: args.phuong_id },
       }),
     }),
     updateReportStatus: builder.mutation<
@@ -276,11 +282,69 @@ export const apiSlice = createApi({
         body: { ...body },
       }),
     }),
-    getAdsGeoJson: builder.query<AdsGeoJson.AdsGeoJson, void>({
-      query: () => ({ url: "/geojson" }),
+
+    getAdsGeoJson: builder.query<AdsGeoJson.AdsGeoJson, GetALLReportInfoArgs>({
+      query: ({ phuong_id }) => ({ url: "/geojson", params: { phuong_id } }),
     }),
-    getReportGeoJson: builder.query<AdsGeoJson.ReportGeoJson, void>({
-      query: () => ({ url: "/geojson/report" }),
+    getReportGeoJson: builder.query<
+      AdsGeoJson.ReportGeoJson,
+      GetALLReportInfoArgs
+    >({
+      query: ({ phuong_id }) => ({
+        url: "/geojson/report",
+        params: { phuong_id },
+      }),
+    }),
+
+    getAllPublicWard: builder.query<{ phuong: WardItem["phuong"] }[], void>({
+      query: () => ({ url: "api/public/phuong" }),
+    }),
+    createPublicWard: builder.mutation<
+      void,
+      Omit<WardItem["phuong"], "id_phuong">
+    >({
+      query: (body) => ({
+        url: "api/public/phuong",
+        method: "POST",
+        body,
+        headers: { "Content-Type": "application/json" },
+      }),
+    }),
+    updatePublicWard: builder.mutation<
+      void,
+      Omit<WardItem["phuong"], "id_phuong">
+    >({
+      query: (body) => ({
+        url: "api/public/phuong",
+        method: "PUT",
+        body,
+        headers: { "Content-Type": "application/json" },
+      }),
+    }),
+    getAllPublicDistrict: builder.query<{ quan: WardItem["quan"] }[], void>({
+      query: () => ({ url: "api/public/quan" }),
+    }),
+    createPublicDistrict: builder.mutation<
+      void,
+      Omit<WardItem["quan"], "id_quan">
+    >({
+      query: (body) => ({
+        url: "api/public/quan",
+        method: "POST",
+        body,
+        headers: { "Content-Type": "application/json" },
+      }),
+    }),
+    updatePublicDistrict: builder.mutation<
+      void,
+      Omit<WardItem["quan"], "id_quan">
+    >({
+      query: (body) => ({
+        url: "api/public/quan",
+        method: "POST",
+        body,
+        headers: { "Content-Type": "application/json" },
+      }),
     }),
   }),
 });
@@ -305,6 +369,8 @@ export const {
   useLazyGetImageUrlQuery,
 
   useLazyGetAllReportInfoQuery: useLazyGetAllReportInfo,
+  useLazyGetAllAdsInfoQuery: useLazyGetAllAdsInfo,
+  useLazyGetAllAdsReqQuery: useLazyGetAllAdsReq,
   useGetAllWardQuery: useGetAllWards,
   useLazyGetAllWardQuery: useLazyGetAllWards,
 
@@ -324,4 +390,9 @@ export const {
   useLazyGetAdsGeoJsonQuery,
   useGetReportGeoJsonQuery,
   useLazyGetReportGeoJsonQuery,
+
+  useLazyGetAllPublicDistrictQuery: useLazyGetAllPublicDistrict,
+  useLazyGetAllPublicWardQuery: useLazyGetAllPublicWard,
+  useCreatePublicDistrictMutation: useCreatePublicDistrict,
+  useCreatePublicWardMutation: useCreatePublicWard,
 } = apiSlice;

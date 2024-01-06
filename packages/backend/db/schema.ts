@@ -124,6 +124,8 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
   id_diem_dat: integer("id_diem_dat").references(() => DiaDiem.id_dia_diem),
   noi_dung_qc: varchar("noi_dung_qc", { length: 255 }).notNull(),
 
+  dia_chi_qc: varchar("dia_chi_qc", { length: 255 }).notNull(),
+
   ten_cty: varchar("ten_cty", { length: 255 }).notNull(),
   dien_thoai_cty: varchar("dien_thoai_cty", { length: 127 }).notNull(),
   email_cty: varchar("email_cty", { length: 127 }).notNull(),
@@ -169,33 +171,41 @@ const TKNguoiDung = pgTable("TKNguoiDung", {
   thoi_diem_tao: timestamp("thoi_diem_tao").notNull().defaultNow(),
 });
 
-const QuanLyQuan = pgTable(
-  "QuanLyQuan",
+const QuanLyPhuong = pgTable(
+  "QuanLyPhuong",
   {
-    id_tk: uuid("id_tk").references(() => TKNguoiDung.id_tk),
-    id_quan: integer("id_quan").references(() => Quan.id_quan),
+    id_tk: uuid("id_tk")
+      .notNull()
+      .references(() => TKNguoiDung.id_tk),
+    id_phuong: integer("id_phuong")
+      .notNull()
+      .references(() => Phuong.id_phuong),
   },
   (table) => {
     return {
-      pkWithCustomName: primaryKey({
-        name: "id_qly_quan",
-        columns: [table.id_tk, table.id_quan],
+      idQlyPhuong: primaryKey({
+        columns: [table.id_tk, table.id_phuong],
+        name: "id_qly_phuong",
       }),
     };
   }
 );
 
-const QuanLyPhuong = pgTable(
-  "QuanLyPhuong",
+const QuanLyQuan = pgTable(
+  "QuanLyQuan",
   {
-    id_tk: uuid("id_tk").references(() => TKNguoiDung.id_tk),
-    id_phuong: integer("id_phuong").references(() => Phuong.id_phuong),
+    id_tk: uuid("id_tk")
+      .notNull()
+      .references(() => TKNguoiDung.id_tk),
+    id_quan: integer("id_quan")
+      .notNull()
+      .references(() => Quan.id_quan),
   },
   (table) => {
     return {
-      pkWithCustomName: primaryKey({
-        name: "id_qly_phuong",
-        columns: [table.id_tk, table.id_phuong],
+      idQlyQuan: primaryKey({
+        columns: [table.id_tk, table.id_quan],
+        name: "id_qly_quan",
       }),
     };
   }

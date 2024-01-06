@@ -6,16 +6,21 @@ import { fromReportResponse2ReportRecord } from "../../types/mapper";
 import { useEffect, useRef, useState } from "react";
 import { ReportApi } from "@admanager/shared";
 import WardCheckBoxList from "../FormComponents/WardCheckBox";
+import { useAppSelector } from "../../store";
 
 const ReportInfo = () => {
   const [getAllReportInfo, { data, error, isLoading }] =
     useLazyGetAllReportInfo();
+  const authState = useAppSelector((state) => state.auth);
   const [selectedRow, setSelectedRow] =
     useState<ReportApi.ReportResponse | null>(null);
 
   useEffect(() => {
-    getAllReportInfo({});
-  }, []);
+    if (!authState.isLoggedIn) return;
+    getAllReportInfo({
+      phuong_id: authState.user.managedWards,
+    }).then((d) => console.log("Reprots", d));
+  }, [authState]);
 
   const onWardFilter = (phuong_ids: number[]) => {
     getAllReportInfo({ phuong_id: phuong_ids });

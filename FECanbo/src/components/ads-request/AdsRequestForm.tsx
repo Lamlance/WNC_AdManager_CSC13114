@@ -127,6 +127,7 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
   const onFinish = async (values: AdReqFormValue) => {
     const submitData: AdsReqApi.AdRequestCreate = {
       ...values,
+      dia_chi_qc: selectedLoc?.formatted_address || "",
       ngay_hieu_luc: values.ngay_bat_dau.toDate(),
       ngay_het_han: values.ngay_ket_thuc.toDate(),
     };
@@ -178,11 +179,10 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
                 wrapperCol={commonWrapperCol}
               >
                 <Upload
-                  action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                   listType="picture-card"
                   fileList={fileList}
                   onPreview={handlePreview}
-                  beforeUpload={onBeforeFileUpload}
+                  beforeUpload={() => false}
                   onChange={handleChangeUpload}
                 >
                   {fileList.length >= 2 ? null : uploadButton}
@@ -204,8 +204,8 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
 
             <Col span={12}>
               <div className=" flex flex-row">
-                <Form.Item
-                  name="mapPosition"
+                <Form.Item<AdReqFormValue>
+                  name="dia_chi_qc"
                   label="Chọn điểm đặt"
                   // rules={[{ required: true, message: "Xin hãy chọn điểm đặt" }]}
                   labelCol={commonLabelCol}
@@ -216,7 +216,6 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
                     placeholder={
                       selectedLoc?.formatted_address || "Chọn điểm đặt"
                     }
-                    disabled
                     value={selectedLoc?.formatted_address || ""}
                   />
                 </Form.Item>

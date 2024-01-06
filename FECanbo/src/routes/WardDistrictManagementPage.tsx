@@ -4,16 +4,22 @@ import DistrictModal from "../components/ward-district/DistrictModal";
 import WardModal from "../components/ward-district/WardModal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  useCreatePublicDistrict,
+  useCreatePublicWard,
+  useLazyGetAllPublicDistrict,
+  useLazyGetAllPublicWard,
+} from "../slices/api/apiSlice";
 
 const { TabPane } = Tabs;
 
 interface District {
-  id: number;
+  id_quan: number;
   ten_quan: string;
 }
 
 interface Ward {
-  id: number;
+  id_phuong: number;
   ten_phuong: string;
   id_quan: number;
 }
@@ -22,14 +28,14 @@ function WardDistrictManagementPage() {
   const [activeTab, setActiveTab] = useState("district");
   const [districtModalVisible, setDistrictModalVisible] = useState(false);
   const [wardModalVisible, setWardModalVisible] = useState(false);
-  const [districtLoading, setDistrictLoading] = useState(false);
-  const [wardLoading, setWardLoading] = useState(false);
 
-  const [districtError, setDistrictError] = useState<string | null>(null);
-  const [wardError, setWardError] = useState<string | null>(null);
+  const [getAllWard, { data: wardData }] = useLazyGetAllPublicWard();
+  const [getAllDist, { data: distData }] = useLazyGetAllPublicDistrict();
 
-  const [districtData, setDistrictData] = useState<District[]>([]);
-  const [wardData, setWardData] = useState<Ward[]>([]);
+  const [modalState, setModalSate] = useState<"none" | "add" | "edit">("none");
+
+  const [createDist] = useCreatePublicDistrict();
+  const [createWard] = useCreatePublicWard();
 
   const handleTabChange = (key: string) => {
     setActiveTab(key);
@@ -38,19 +44,22 @@ function WardDistrictManagementPage() {
   const columnsDistrict = [
     {
       title: "ID",
-      dataIndex: "id_quan",
+      dataIndex: ["quan", "id_quan"],
       key: "id_quan",
     },
     {
       title: "District Name",
-      dataIndex: "ten_quan",
+      dataIndex: ["quan", "ten_quan"],
       key: "ten_quan",
     },
     {
       title: "Action",
       key: "action",
-      render: (text: any, record: District) => (
-        <Button type="primary" onClick={() => handleDeleteDistrict(record)}>
+      render: (text: any, record: { quan: District }) => (
+        <Button
+          type="primary"
+          onClick={() => handleDeleteDistrict(record.quan)}
+        >
           Delete
         </Button>
       ),
@@ -60,24 +69,24 @@ function WardDistrictManagementPage() {
   const columnsWard = [
     {
       title: "ID",
-      dataIndex: "id_phuong",
+      dataIndex: ["phuong", "id_phuong"],
       key: "id_phuong",
     },
     {
       title: "Ward Name",
-      dataIndex: "ten_phuong",
+      dataIndex: ["phuong", "ten_phuong"],
       key: "ten_phuong",
     },
     {
       title: "District ID",
-      dataIndex: "id_quan",
+      dataIndex: ["phuong", "id_quan"],
       key: "id_quan",
     },
     {
       title: "Action",
       key: "action",
-      render: (text: any, record: Ward) => (
-        <Button type="primary" onClick={() => handleDeleteWard(record)}>
+      render: (text: any, record: { phuong: Ward }) => (
+        <Button type="primary" onClick={() => handleDeleteWard(record.phuong)}>
           Delete
         </Button>
       ),
@@ -92,64 +101,41 @@ function WardDistrictManagementPage() {
     setWardModalVisible(true);
   };
 
-  const handleDistrictModalOk = (values: District) => {
-    toast.success("District created successfully");
-    notification.success({
-      message: "Ward Created",
-      description: `${values.ten_quan} has been created successfully.`,
-    });
-    // fetch("http://localhost:4030/api/public/quan", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(values),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     toast.success("District created successfully");
-
-    //     setDistrictData([...districtData, data.quan]);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error creating district:", error);
-    //     setDistrictError("Error creating district");
-    //   })
-    //   .finally(() => setDistrictModalVisible(false));
+  const handleDistrictModalOk = (values: Omit<District, "id_quan">) => {
+    if (modalState === "add") {
+      createDist({
+        ten_quan: values.ten_quan,
+      });
+      toast.success("District created successfully");
+      notification.success({
+        message: "Ward Created",
+        description: `${values.ten_quan} has been created successfully.`,
+      });
+    }
   };
 
-  const handleWardModalOk = (values: Ward) => {
-    toast.success("Ward created successfully");
-    notification.success({
-      message: "Ward Created",
-      description: `${values.ten_phuong} has been created successfully.`,
-    });
-    // fetch("http://localhost:4030/api/public/phuong", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(values),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     toast.success("Ward created successfully");
-
-    //     setWardData([...wardData, data.phuong]);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error creating ward:", error);
-    //     setWardError("Error creating ward");
-    //   })
-    //   .finally(() => setWardModalVisible(false));
+  const handleWardModalOk = (values: Omit<Ward, "id_phuong">) => {
+    if (modalState === "add") {
+      createWard({
+        ten_phuong: values.ten_phuong,
+        id_quan: values.id_quan,
+      });
+      toast.success("Ward created successfully");
+      notification.success({
+        message: "Ward Created",
+        description: `${values.ten_phuong} has been created successfully.`,
+      });
+    }
   };
 
   const handleDistrictModalCancel = () => {
     setDistrictModalVisible(false);
+    setModalSate("none");
   };
 
   const handleWardModalCancel = () => {
     setWardModalVisible(false);
+    setModalSate("none");
   };
 
   const handleDeleteWard = (record: Ward) => {
@@ -170,21 +156,13 @@ function WardDistrictManagementPage() {
     if (activeTab === "district") {
       return (
         <>
-          {districtLoading && <Spin />}
-          {districtError && <Alert message={districtError} type="error" />}
-          {!districtLoading && !districtError && (
-            <Table columns={columnsDistrict} dataSource={districtData} />
-          )}
+          <Table columns={columnsDistrict} dataSource={distData || []} />
         </>
       );
     } else if (activeTab === "ward") {
       return (
         <>
-          {wardLoading && <Spin />}
-          {wardError && <Alert message={wardError} type="error" />}
-          {!wardLoading && !wardError && (
-            <Table columns={columnsWard} dataSource={wardData} />
-          )}
+          <Table columns={columnsWard} dataSource={wardData || []} />
         </>
       );
     }
@@ -197,46 +175,9 @@ function WardDistrictManagementPage() {
 
   useEffect(() => {
     if (activeTab === "district") {
-      setDistrictLoading(true);
-      setDistrictError(null);
-
-      fetch("http://localhost:4030/api/public/quan")
-        .then((response) => response.json())
-        .then((data) => {
-          const districtData = data.map(
-            (item: { quan: District }) => item.quan,
-          );
-          setDistrictData(districtData);
-        })
-        .catch((error) => {
-          console.error("Error fetching district data:", error);
-          setDistrictError("Error fetching district data");
-        })
-        .finally(() => setDistrictLoading(false));
-    }
-  }, [activeTab]);
-
-  useEffect(() => {
-    if (activeTab === "ward") {
-      setWardLoading(true);
-      setWardError(null);
-
-      fetch("http://localhost:4030/api/public/phuong")
-        .then((response) => response.json())
-        .then((data) => {
-          const wardData = data.map(
-            (item: { phuong: Ward; quan: District }) => ({
-              ...item.phuong,
-              quan: item.quan,
-            }),
-          );
-          setWardData(wardData);
-        })
-        .catch((error) => {
-          console.error("Error fetching ward data:", error);
-          setWardError("Error fetching ward data");
-        })
-        .finally(() => setWardLoading(false));
+      getAllDist();
+    } else if (activeTab === "ward") {
+      getAllWard();
     }
   }, [activeTab]);
 
@@ -247,7 +188,10 @@ function WardDistrictManagementPage() {
       </div>
       <div className="mb-3 flex justify-start">
         <Button
-          onClick={activeTab === "district" ? showDistrictModal : showWardModal}
+          onClick={() => {
+            activeTab === "district" ? showDistrictModal() : showWardModal();
+            setModalSate("add");
+          }}
           type="primary"
         >
           {getAddButtonText()}
@@ -275,7 +219,7 @@ function WardDistrictManagementPage() {
         visible={wardModalVisible}
         onCancel={handleWardModalCancel}
         onOk={handleWardModalOk}
-        districtData={districtData}
+        districtData={distData || []}
       />
     </>
   );

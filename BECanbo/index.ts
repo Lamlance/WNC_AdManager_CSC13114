@@ -16,7 +16,10 @@ const PORT = process.env.PORT || 4030;
 app.use(express.json());
 app.use(cors());
 app.use(passport.initialize());
-
+app.use((req, res, next) => {
+  console.log(req.cookies);
+  next();
+});
 passport.use(strategy);
 
 app.get("/", function (req, res) {

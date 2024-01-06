@@ -5,6 +5,8 @@ const AdsRequestSchema = z.object({
   id_diem_dat: z.number().nullish(),
   noi_dung_qc: z.string(),
 
+  dia_chi_qc: z.string(),
+
   ten_cty: z.string(),
   dien_thoai_cty: z.string(),
   email_cty: z.string(),

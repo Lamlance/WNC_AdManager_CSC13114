@@ -1,13 +1,12 @@
 import { Row, Col, Button } from "antd";
 import AdsInfoTable from "./AdsInfoTable";
 import {
-  useGetAllAdsInfoQuery,
+  useLazyGetAllAdsInfo,
   useSubmitAdChangeRequestMutation,
-  useSubmitAdRequestMutation,
   useSubmitPlaceChangeRequestMutation,
 } from "../../slices/api/apiSlice";
 import AdsInfoSlider, { AdsInfoDetailProps } from "./AdsInfoDetail";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AdsGeoJson, PlaceChangeApi } from "@admanager/shared";
 import EditAdForm, { AdChangeFormValue } from "../vhtt/EditAdForm";
 import { useAppDispatch } from "../../store";
@@ -17,9 +16,11 @@ import {
   showModalOpen,
 } from "../../slices/modalSlice";
 import EditSetpoint from "../vhtt/EditSetpoint";
+import { useAppSelector } from "../../hooks";
 
 const AdsInfo = () => {
-  const { data, error, isLoading } = useGetAllAdsInfoQuery();
+  const [getAllAds, { data, error, isLoading }] = useLazyGetAllAdsInfo();
+  const authState = useAppSelector((state) => state.auth);
   const [selectedRow, setSelectedRow] =
     useState<AdsGeoJson.AdsGeoJsonProperty | null>(null);
   const [submitAdChangeReq] = useSubmitAdChangeRequestMutation();
@@ -28,6 +29,17 @@ const AdsInfo = () => {
   const [selectedAd, setSelectedAd] = useState<
     (AdsGeoJson.AdsProperty & AdsGeoJson.PlaceProperty) | null
   >(null);
+
+  useEffect(() => {
+    if (!authState.isLoggedIn) return;
+    if (authState.user.accLevel === "department") {
+      getAllAds({});
+      return;
+    }
+    getAllAds({
+      phuong_id: authState.user.managedWards,
+    });
+  }, [authState]);
 
   const dispatch = useAppDispatch();
 

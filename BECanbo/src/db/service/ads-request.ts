@@ -34,9 +34,14 @@ export const getAllAdsRequests = async (
 
   if (ward_list) {
     const q = ward_list.reduce((acum, curr) => {
-      acum.push(ilike(AdsSchema.BaoCao.dia_chi, `%${curr.ten_phuong}%`));
       acum.push(
-        ilike(AdsSchema.BaoCao.dia_chi, `%${VNCharToEN(curr.ten_phuong)}%`)
+        ilike(AdsSchema.YeuCauCapPhep.dia_chi_qc, `%${curr.ten_phuong}%`)
+      );
+      acum.push(
+        ilike(
+          AdsSchema.YeuCauCapPhep.dia_chi_qc,
+          `%${VNCharToEN(curr.ten_phuong)}%`
+        )
       );
       return acum;
     }, [] as SQL[]);

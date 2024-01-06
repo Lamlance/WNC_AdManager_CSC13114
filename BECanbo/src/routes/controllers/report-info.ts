@@ -56,11 +56,11 @@ router.post(
         })
       );
 
-      if (uploadImgs[0].status === "fulfilled" && files[0]) {
+      if (uploadImgs[0]?.status === "fulfilled" && files[0]) {
         res.locals.body.hinh_1 = files[0].filename;
       }
 
-      if (uploadImgs[1].status === "fulfilled" && files[1]) {
+      if (uploadImgs[1]?.status === "fulfilled" && files[1]) {
         res.locals.body.hinh_2 = files[1].filename;
       }
 

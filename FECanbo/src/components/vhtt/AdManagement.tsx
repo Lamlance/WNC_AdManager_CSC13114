@@ -76,7 +76,7 @@ const AdManagement = () => {
       ),
     },
   ];
-  const { data, error, isLoading } = useGetAllAdsInfoQuery();
+  const { data, error, isLoading } = useGetAllAdsInfoQuery({});
 
   const [selectedAds, setSelectedAds] = useState<AdsInfoRecord2 | null>(null);
 

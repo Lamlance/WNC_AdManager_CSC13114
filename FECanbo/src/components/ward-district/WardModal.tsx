@@ -2,12 +2,20 @@ import React from "react";
 import { Modal, Form, Input, Select } from "antd";
 
 const { Option } = Select;
-
+type Ward = {
+  id_phuong: number;
+  ten_phuong: string;
+  id_quan: number;
+};
+type District = {
+  id_quan: number;
+  ten_quan: string;
+};
 interface WardModalProps {
   visible: boolean;
   onCancel: () => void;
   onOk: (values: { ten_phuong: string; id_quan: number }) => void;
-  districtData: { id: number; ten_quan: string }[];
+  districtData: { quan: District }[];
 }
 
 function WardModal({ visible, onCancel, onOk, districtData }: WardModalProps) {
@@ -42,8 +50,8 @@ function WardModal({ visible, onCancel, onOk, districtData }: WardModalProps) {
         >
           <Select>
             {districtData.map((district) => (
-              <Option key={district.id} value={district.id}>
-                {district.ten_quan}
+              <Option key={district.quan.id_quan} value={district.quan.id_quan}>
+                {district.quan.ten_quan}
               </Option>
             ))}
           </Select>
