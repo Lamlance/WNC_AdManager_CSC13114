@@ -144,14 +144,14 @@ const YeuCauChinhSua = pgTable("YeuCauChinhSua", {
 
   thong_tin_sua: jsonb("thong_tin_sua").notNull(),
 });
+
 const YeuCauChinhSuaDiaDiem = pgTable("YeuCauChinhSuaDiaDiem", {
   id_yeu_cau: serial("id_yeu_cau").primaryKey(),
   id_dia_diem: integer("id_dia_diem").references(() => DiaDiem.id_dia_diem),
-  lng: doublePrecision("kinh_do"),
-  lat: doublePrecision("vi_do"),
-  ten_dia_diem: varchar("ten_dia_diem", { length: 255 }),
-  dia_chi: varchar("dia_chi", { length: 255 }),
   ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
+  thong_tin_sua: jsonb("thong_tin_sua").notNull(),
+  thoi_diem_chinh_sua: timestamp("thoi_diem_chinh_sua").defaultNow().notNull(),
+  trang_thai: varchar("trang_thai", { length: 255 }).notNull(),
 });
 
 const TKNguoiDung = pgTable("TKNguoiDung", {

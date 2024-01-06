@@ -241,9 +241,8 @@ INSERT INTO public."YeuCauChinhSua" (id_yeu_cau, ly_do_chinh_sua, thoi_diem_chin
 -- Data for Name: YeuCauChinhSuaDiaDiem; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public."YeuCauChinhSuaDiaDiem" (id_yeu_cau, kinh_do, vi_do, ten_dia_diem, dia_chi, ly_do_chinh_sua, id_dia_diem) VALUES (1, NULL, NULL, 'Nhà Thờ Lâm', NULL, 'Ly do nao do #2', NULL);
-INSERT INTO public."YeuCauChinhSuaDiaDiem" (id_yeu_cau, kinh_do, vi_do, ten_dia_diem, dia_chi, ly_do_chinh_sua, id_dia_diem) VALUES (2, NULL, NULL, 'Nhà Thờ Lâm #2', NULL, 'Ly do nao do #2', 1);
-
+INSERT INTO public."YeuCauChinhSuaDiaDiem" (id_yeu_cau, id_dia_diem, ly_do_chinh_sua, thong_tin_sua, thoi_diem_chinh_sua, trang_thai) VALUES (1, 1,  'Ly do nao do #2', '{"ten_dia_diem": "Nhà Thờ Lâm", "dia_chi": "123 cmt8, q3, hcmc", "id_phuong": 3 }', '2023-12-25 10:02:20.145525', 'Đã giải quyết');
+INSERT INTO public."YeuCauChinhSuaDiaDiem" (id_yeu_cau, id_dia_diem, ly_do_chinh_sua, thong_tin_sua, thoi_diem_chinh_sua, trang_thai) VALUES (2, 1,  'Ly do nao do #3', '{"ten_dia_diem": "Nhà Thờ Lâm2", "dia_chi": "1234 cmt8, q3, hcmc", "id_phuong": 3 }', '2023-12-25 10:02:20.145525', 'Chưa giải quyết');
 
 --
 -- TOC entry 3456 (class 0 OID 0)

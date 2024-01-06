@@ -78,7 +78,7 @@ function EditPlaceComponent() {
                     </Form.Item>
                     <Form.Item className="flex justify-center">
                         <Button type="primary" htmlType="submit">
-                            Thêm
+                            Cập nhật 
                         </Button>
                     </Form.Item>
                 </Form>

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { CallAndCatchAsync } from "../../utils/CallCatch";
-import { createPlaceChangeRequest, getAllPlaceChangeRequest, getAllPlace, createPlace,updatePlace, deletePlace, getAllPlaces } from "../../db/service/place-info";
+import { createPlaceChangeRequest, getAllPlaceChangeRequest, getAllPlace, get1Place, createPlace,updatePlace, deletePlace, getAllPlaces } from "../../db/service/place-info";
 import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder";
 import { PlaceChangeApi, PlaceApi } from "@admanager/shared";
 
@@ -33,6 +33,14 @@ PlaceRouter.post(
 // place infor 
 PlaceRouter.get("/", async (req, res, next) => {
   const result = await CallAndCatchAsync(getAllPlaces, undefined);
+  if (!result.success) {
+    return res.status(500).json({ msg: result.error.message });
+  }
+  return res.status(200).json(result.data);
+});
+PlaceRouter.get("/:id", async (req, res, next) => {
+  const id_dia_diem = parseInt(req.params.id);
+  const result = await CallAndCatchAsync(get1Place, id_dia_diem);
   if (!result.success) {
     return res.status(500).json({ msg: result.error.message });
   }
