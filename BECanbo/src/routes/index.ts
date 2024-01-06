@@ -7,6 +7,7 @@ import adMethodRouter from "./controllers/ads-method.js";
 import ImageRouter from "./controllers/images.js";
 import WardRouter from "./controllers/ward.js";
 import UserRouter from "./controllers/user.js";
+import DistrictRouter from "./controllers/district.js";
 
 const privateRouter = Router();
 
@@ -21,5 +22,6 @@ privateRouter.use("/hinh-thuc-quang-cao", adMethodRouter);
 privateRouter.use("/image", ImageRouter);
 privateRouter.use("/user", UserRouter);
 publicRouter.use("/phuong", WardRouter);
+publicRouter.use("/quan", DistrictRouter);
 
 export { privateRouter, publicRouter };

@@ -32,6 +32,7 @@ import VerifyAccountPage from "./routes/VerifyAccountPage";
 import { useAppSelector } from "./hooks";
 import AccountManager from "./routes/AccountManager";
 import AdsMapPage from "./routes/AdsMapPage";
+import WardDistrictManagementPage from "./routes/WardDistrictManagementPage";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
@@ -115,6 +116,12 @@ const itemVHTTs: Item[] = [
     label: "Quản lí tài khoản cán bộ",
     title: "/vhtt/accounts",
   },
+  {
+    key: "10",
+    icon: <UploadOutlined />,
+    label: "Quản lý phường và quận",
+    title: "/vhtt/ward-district-management",
+  },
 ];
 const App = () => {
   return (
@@ -138,6 +145,10 @@ const App = () => {
           <Route path="reporttype" element={<ReportTypeComponent />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="accounts" element={<AccountManager />} />
+          <Route
+            path="ward-district-management"
+            element={<WardDistrictManagementPage />}
+          />
         </Route>
         <Route path="/auth">
           <Route path="login" element={<LoginPage />} />
