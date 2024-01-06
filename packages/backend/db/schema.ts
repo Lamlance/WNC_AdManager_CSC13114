@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   integer,
   pgEnum,
@@ -14,6 +14,7 @@ import {
   date,
   jsonb,
   timestamp,
+  text,
 } from "drizzle-orm/pg-core";
 const LoaiViTri = pgTable("LoaiViTri", {
   id_loai_vt: serial("id").primaryKey(),
@@ -111,6 +112,8 @@ const BaoCao = pgTable("BaoCao", {
   hinh_1: varchar("hinh_1", { length: 255 }),
   hinh_2: varchar("hinh_2", { length: 255 }),
 
+  phan_hoi: text("phan_hoi"),
+
   id_loai_bc: integer("id_loai_bc")
     .notNull()
     .references(() => LoaiBaoCao.id_loai_bc),
@@ -161,11 +164,9 @@ const TKNguoiDung = pgTable("TKNguoiDung", {
   cap_tk: varchar("cap_tk", { length: 255 }).notNull(),
   ten_ng_dung: varchar("ten_ng_dung", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull(),
-  sdt: varchar("phone", { length: 10 }).notNull(),
+  sdt: varchar("phone", { length: 255 }).notNull(),
   trang_thai_xac_thuc: boolean("trang_thai_xac_thuc").notNull().default(false),
-  thoi_diem_tao: date("thoi_diem_tao")
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
+  thoi_diem_tao: timestamp("thoi_diem_tao").notNull().defaultNow(),
 });
 
 const QuanLyQuan = pgTable(
@@ -176,7 +177,6 @@ const QuanLyQuan = pgTable(
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.id_tk, table.id_quan] }),
       pkWithCustomName: primaryKey({
         name: "id_qly_quan",
         columns: [table.id_tk, table.id_quan],
@@ -193,7 +193,6 @@ const QuanLyPhuong = pgTable(
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.id_tk, table.id_phuong] }),
       pkWithCustomName: primaryKey({
         name: "id_qly_phuong",
         columns: [table.id_tk, table.id_phuong],
@@ -201,6 +200,25 @@ const QuanLyPhuong = pgTable(
     };
   }
 );
+
+export const TKNguoiDungRelations = relations(TKNguoiDung, ({ many }) => ({
+  quan_quan_ly: many(QuanLyQuan),
+  phuong_quan_ly: many(QuanLyPhuong),
+}));
+
+export const QuanLyPhuongRelations = relations(QuanLyPhuong, ({ one }) => ({
+  tai_khoan: one(TKNguoiDung, {
+    fields: [QuanLyPhuong.id_tk],
+    references: [TKNguoiDung.id_tk],
+  }),
+}));
+
+export const QuanLyQuanRelations = relations(QuanLyQuan, ({ one }) => ({
+  tai_khoan: one(TKNguoiDung, {
+    fields: [QuanLyQuan.id_tk],
+    references: [TKNguoiDung.id_tk],
+  }),
+}));
 
 export {
   LoaiViTri,
@@ -217,5 +235,5 @@ export {
   YeuCauChinhSuaDiaDiem,
   TKNguoiDung,
   QuanLyPhuong,
-  QuanLyQuan
+  QuanLyQuan,
 };

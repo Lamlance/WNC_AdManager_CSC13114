@@ -40,7 +40,8 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
 
   // console.log(AdsClusterInfo, ReportClusterInfo);
 
-  const [_, setAdsVisible] = useState<boolean>(true);
+  const [_adV, setAdsVisible] = useState<boolean>(true);
+  const [_reV, setReprotVisible] = useState<boolean>(true);
 
   const [refresh, forceRefresh] = useReducer((x) => x + 1, 0);
 
@@ -96,6 +97,28 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
     setAdsVisible(is_check);
   }
 
+  function show_report_check_handler(is_check: boolean) {
+    if (!mapRef.current) return console.log("Invalid mapRef");
+    if (!ReportClusterInfo) return console.log("Imavlid cluster info");
+    const visible = is_check ? "visible" : "none";
+    mapRef.current.setLayoutProperty(
+      ReportClusterInfo.props.markerData.Uncluster.id,
+      "visibility",
+      visible
+    );
+    mapRef.current.setLayoutProperty(
+      ReportClusterInfo.props.markerData.ClusterCount.id,
+      "visibility",
+      visible
+    );
+    mapRef.current.setLayoutProperty(
+      ReportClusterInfo.props.markerData.Cluster.id,
+      "visibility",
+      visible
+    );
+    setReprotVisible(is_check);
+  }
+
   useEffect(function () {
     if (!mapEleRef.current) return;
     initialize_map(mapEleRef.current);
@@ -141,6 +164,8 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
           flexDirection: "row",
           background: "rgba(239, 239, 239, 0.5)",
           padding: "0.5rem",
+          display: "flex",
+          gap: "2rem",
         }}
       >
         {!AdsClusterInfo ? null : (
@@ -148,6 +173,17 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
             <>
               <p className=" font-semibold">Hiện địa điểm quảng cáo</p>
               <Switch defaultChecked={true} onChange={show_ads_check_handler} />
+            </>
+          </div>
+        )}
+        {!ReportClusterInfo ? null : (
+          <div className="flex flex-row gap-x-2">
+            <>
+              <p className=" font-semibold">Hiện địa điểm báo cáo</p>
+              <Switch
+                defaultChecked={true}
+                onChange={show_report_check_handler}
+              />
             </>
           </div>
         )}

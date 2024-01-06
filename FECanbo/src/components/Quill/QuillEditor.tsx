@@ -1,64 +1,39 @@
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import "quill/dist/quill.snow.css";
 import Quill from "quill";
-import ImageEmbed from "./ImageEmbed";
-import { Button } from "antd";
 
-Quill.register(`formats/${ImageEmbed.blotName}`, ImageEmbed);
+interface QuillEditorProps {
+  forwardedRef: React.MutableRefObject<Quill | null>;
+}
 
-function QuillEditor() {
+function QuillEditor({ forwardedRef }: QuillEditorProps) {
   const editorEleRef = useRef<HTMLDivElement | null>(null);
   const toolbarEleRef = useRef<HTMLDivElement | null>(null);
-  const [editor, setEditor] = useState<Quill | null>(null);
 
-  const editorRef = useRef<Quill | null>(null);
+  useEffect(() => {
+    const initializeEditor = () => {
+      if (
+        forwardedRef.current ||
+        !editorEleRef.current ||
+        !toolbarEleRef.current
+      )
+        return;
 
-  function initalizeEditor() {
-    if (editor) return;
-    if (!editorEleRef.current || !toolbarEleRef.current) return;
-
-    const quill = new Quill(editorEleRef.current, {
-      modules: {
-        toolbar: {
-          container: toolbarEleRef.current,
-          handlers: {
-            image: customImgHanlder,
+      const quill = new Quill(editorEleRef.current, {
+        modules: {
+          toolbar: {
+            container: toolbarEleRef.current,
+            handlers: {},
           },
         },
-      },
-      theme: "snow",
-    });
+        theme: "snow",
+      });
 
-    editorRef.current = quill;
-    setEditor(quill);
-  }
-
-  function customImgHanlder() {
-    if (!editorRef.current) return;
-
-    const input = document.createElement("input");
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
-    input.click();
-    input.onchange = async function () {
-      const file = input.files?.[0];
-      if (!file || !editorRef.current) return;
-      const src = URL.createObjectURL(file);
-      const range = editorRef.current.getSelection();
-      editorRef.current.insertEmbed(
-        range?.index || 0,
-        ImageEmbed.blotName,
-        src,
-      );
+      forwardedRef.current = quill;
     };
-  }
 
-  function save_quill() {
-    if (!editor) return;
-    console.log(editor.root.innerHTML.trim());
-  }
-
-  useEffect(initalizeEditor, []);
+    initializeEditor();
+  }, [forwardedRef]);
 
   return (
     <>
@@ -75,13 +50,10 @@ function QuillEditor() {
         </span>
         <span className="ql-formats">
           <button className="ql-link"></button>
-          <button className="ql-image"></button>
           <button className="ql-video"></button>
         </span>
       </div>
-      <div ref={editorEleRef}></div>
-
-      <Button onClick={save_quill}>Save</Button>
+      <div ref={editorEleRef} style={{ minHeight: "200px" }}></div>
     </>
   );
 }

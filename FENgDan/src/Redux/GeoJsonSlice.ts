@@ -12,7 +12,7 @@ const GeoJsonApi = createApi({
 });
 
 export const {
-  useGetAdsGeoJsonQuery: useGetAdsGeoJson,
-  useLazyGetAdsGeoJsonQuery: useLazyGetAdsGeoJson,
+  useGetAdsGeoJsonQuery: useGetMockAdsGeoJson,
+  useLazyGetAdsGeoJsonQuery: useLazyGetMockAdsGeoJson,
 } = GeoJsonApi;
 export default GeoJsonApi;

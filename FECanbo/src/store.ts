@@ -13,7 +13,7 @@ const store = configureStore({
     [GoongApi.reducerPath]: GoongApi.reducer,
     //point: pointSlice,
     PlaceEditModal: modalSlice,
-    auth: authSlice
+    auth: authSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

@@ -16,11 +16,24 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
     setImgUrl([]);
     if (!ad?.yeu_cau) return;
     const imgs: Promise<{ data?: { url: string } }>[] = [];
-    if (ad.yeu_cau.hinh_anh) imgs.push(getImgUrl(ad.yeu_cau.hinh_anh));
-    if (ad.yeu_cau.hinh_anh_2) imgs.push(getImgUrl(ad.yeu_cau.hinh_anh_2));
+    if (ad.yeu_cau.hinh_anh)
+      imgs.push(
+        getImgUrl({
+          filename: ad.yeu_cau.hinh_anh,
+          bkname: "adsrequest",
+        }),
+      );
+    if (ad.yeu_cau.hinh_anh_2)
+      imgs.push(
+        getImgUrl({
+          filename: ad.yeu_cau.hinh_anh_2,
+          bkname: "adsrequest",
+        }),
+      );
 
     Promise.allSettled(imgs).then((data) => {
       const urls: string[] = [];
+      console.log(data);
       data.forEach((d) => {
         if (d.status === "fulfilled" && d.value.data) {
           urls.push(d.value.data.url);

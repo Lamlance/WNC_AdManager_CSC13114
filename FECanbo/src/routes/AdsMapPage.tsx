@@ -1,16 +1,14 @@
-import { AdsGeoJson, ReportApi } from "@admanager/shared";
-import { useEffect, useState } from "react";
-import { z } from "zod";
-import { useAppSelector, useAppDispatch } from "../Redux/ReduxStore";
-import { addReportData, setSelectedReport } from "../Redux/ReportsDataSlice";
-import { REPORT_KEY } from "../models/report_form_values";
-import { ClusterCreateData } from "../utils/AddClusterPoint";
+import { AdsGeoJson } from "@admanager/shared";
 import MapLibreGL from "maplibre-gl";
-import { setSelectedAdsLocation } from "../Redux/SelectedAdsSlice";
-import { setDblClick } from "../Redux/MapClickSlice";
+import z from "zod";
+import {
+  useGetAdsGeoJsonQuery,
+  useGetReportGeoJsonQuery,
+} from "../slices/api/apiSlice";
+import { ClusterCreateData } from "@admanager/frontend/src/utils/AddClusterPoint";
 import { AdsClusterMarker, AdsMap } from "@admanager/frontend";
 import MapSearchBar from "../components/AdsMap/MapSearch";
-import { useGetAdsGeoJson, useGetReportGeoJson } from "../Redux/AdsServerApi";
+
 const DefaultMapProps = {
   InitialPosition: {
     lng: 106.69379445290143,
@@ -24,7 +22,6 @@ const DefaultMapProps = {
     Uncluster: { id: "ads_unclustered_point", color: "#11b4da" },
   },
 };
-
 const GeoPropArr = z.array(AdsGeoJson.ReportGeoJsonPropertySchema);
 
 function createAdPopup(
@@ -61,12 +58,9 @@ function createReportPopup(
       <p class=" line-clamp-4">${data.bao_cao.noi_dung}</p>
     </div>`);
 }
-
-export default function AdsMapPage() {
-  const { data: adsGeoJson, error } = useGetAdsGeoJson();
-  const { data: reportGeoJson } = useGetReportGeoJson();
-  const reportGeoProperty = useAppSelector((state) => state.ReportsData.data);
-  const dispatch = useAppDispatch();
+function AdsMapPage() {
+  const { data: adsGeoJson, error } = useGetAdsGeoJsonQuery();
+  const { data: reportGeoJson } = useGetReportGeoJsonQuery();
 
   function get_ad_cluster_createData() {
     const AdsDataSoruce = !adsGeoJson
@@ -89,21 +83,11 @@ export default function AdsMapPage() {
     return ReportClusterCreate;
   }
 
-  function handle_ads_marker_click(data: AdsGeoJson.AdsGeoJsonProperty) {
-    dispatch(setSelectedAdsLocation(data));
-  }
-
-  function handle_report_marker_click(data: z.infer<typeof GeoPropArr>) {
-    console.log(data);
-    dispatch(setSelectedReport(data[0]));
-  }
-
   const AdsClusterData = get_ad_cluster_createData();
   const AdsCluster = !AdsClusterData ? undefined : (
     <AdsClusterMarker<typeof AdsGeoJson.AdsGeoJsonPropertySchema>
       geoJsonPropertySchema={AdsGeoJson.AdsGeoJsonPropertySchema}
       markerData={AdsClusterData}
-      onMarkerClick={handle_ads_marker_click}
       popUpBuilder={createAdPopup}
     />
   );
@@ -113,21 +97,32 @@ export default function AdsMapPage() {
     <AdsClusterMarker<typeof GeoPropArr>
       geoJsonPropertySchema={GeoPropArr}
       markerData={ReportClusterData}
-      onMarkerClick={handle_report_marker_click}
       popUpBuilder={createReportPopup}
     />
   );
 
   return (
-    <AdsMap
-      SearchBar={{
-        func: MapSearchBar,
-        args: [{ refresh: 0 }],
-      }}
-      onMapDblClick={(data) => dispatch(setDblClick(data))}
-      InitialPosition={DefaultMapProps.InitialPosition}
-      AdsClusterInfo={AdsCluster}
-      ReportClusterInfo={ReportCluster}
-    />
+    <div className=" relative h-full w-full">
+      <AdsMap
+        SearchBar={{
+          func: MapSearchBar,
+          args: [
+            {
+              refresh: 0,
+              onPlaceSelect: (place) => {
+                console.log(place);
+              },
+              initPos: DefaultMapProps.InitialPosition,
+            },
+          ],
+        }}
+        InitialPosition={DefaultMapProps.InitialPosition}
+        AdsClusterInfo={AdsCluster}
+        ReportClusterInfo={ReportCluster}
+        onMapDblClick={(coord) => console.log(coord)}
+      />
+    </div>
   );
 }
+
+export default AdsMapPage;

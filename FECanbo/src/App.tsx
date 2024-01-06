@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { Button, Layout, Menu } from "antd";
 import { ReactElement } from "react";
 
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  PictureOutlined,
   UploadOutlined,
+  UserAddOutlined,
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
@@ -22,13 +24,24 @@ import EditRequestComponent from "./components/vhtt/EditRequestComponent";
 import AdsMethodPage from "./routes/AdsMethodPage";
 import ReportTypeComponent from "./components/vhtt/ReportTypeComponent";
 import EditUserInfo from "./components/user/EditUserInfo";
-import ResolveReport from "./components/report-info/ResolveReport";
+import ResolveReport from "./routes/ResolveReport";
 import LoginPage from "./routes/LoginPage";
 import RegisterPage from "./routes/RegisterPage";
+import ForgotPasswordPage from "./routes/ForgotPassword";
+import VerifyAccountPage from "./routes/VerifyAccountPage";
+import { useAppSelector } from "./hooks";
+import AccountManager from "./routes/AccountManager";
+import AdsMapPage from "./routes/AdsMapPage";
 import WardDistrictManagementPage from "./routes/WardDistrictManagementPage";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
+  {
+    key: "5",
+    icon: <PictureOutlined />,
+    label: "Bản đồ",
+    title: "/map",
+  },
   {
     key: "1",
     icon: <UserOutlined />,
@@ -93,6 +106,18 @@ const itemVHTTs: Item[] = [
   },
   {
     key: "8",
+    icon: <UserAddOutlined />,
+    label: "Thêm tài khoản cán bộ",
+    title: "/vhtt/register",
+  },
+  {
+    key: "9",
+    icon: <UserOutlined />,
+    label: "Quản lí tài khoản cán bộ",
+    title: "/vhtt/accounts",
+  },
+  {
+    key: "10",
     icon: <UploadOutlined />,
     label: "Quản lý phường và quận",
     title: "/vhtt/ward-district-management",
@@ -104,10 +129,11 @@ const App = () => {
       <Routes>
         <Route path="/" element={<PageLayout items={items} />}>
           <Route index element={<AdsRequestPage />} />
+          <Route path="map" element={<AdsMapPage />} />
           <Route path="advertisements" element={<AdsInfo />} />
           <Route path="reports" element={<ReportInfo />} />
           <Route path="user" element={<EditUserInfo />} />
-          <Route path="resolve" element={<ResolveReport />} />
+          <Route path="resolve/:report_id?" element={<ResolveReport />} />
         </Route>
         <Route path="vhtt" element={<PageLayout items={itemVHTTs} />}>
           <Route index element={<AdManagement />} />
@@ -117,6 +143,8 @@ const App = () => {
           <Route path="edit-place-request" element={<EditRequestComponent />} />
           <Route path="manage-ad-method" element={<AdsMethodPage />} />
           <Route path="reporttype" element={<ReportTypeComponent />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="accounts" element={<AccountManager />} />
           <Route
             path="ward-district-management"
             element={<WardDistrictManagementPage />}
@@ -125,6 +153,8 @@ const App = () => {
         <Route path="/auth">
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
+          <Route path="forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="verify-account" element={<VerifyAccountPage />} />
         </Route>
       </Routes>
     </div>
@@ -144,6 +174,11 @@ interface PageLayoutProps {
 const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+  const authUser = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    console.log(authUser);
+  }, [authUser]);
 
   return (
     <Layout className="min-h-full">
@@ -178,18 +213,31 @@ const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
           background: "#ffffff",
         }}
       >
-        <Header style={{ padding: 0, background: "#ffffff" }}>
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: "16px",
-              width: 50,
-              height: 50,
-              background: "#ffffff",
-            }}
-          />
+        <Header
+          style={{ padding: 0, background: "#ffffff" }}
+          className=" flex flex-row justify-between align-middle"
+        >
+          <div>
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                fontSize: "16px",
+                width: 50,
+                height: 50,
+                background: "#ffffff",
+              }}
+            />
+          </div>
+
+          <div className=" pr-8">
+            {!authUser.isLoggedIn ? (
+              <Link to={"/auth/login"}>LOGIN</Link>
+            ) : (
+              <p>{`Hello user ${authUser.user.username}`}</p>
+            )}
+          </div>
         </Header>
         <Content
           style={{
