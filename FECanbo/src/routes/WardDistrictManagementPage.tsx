@@ -2,6 +2,8 @@ import { Button, Table, Tabs, Spin, Alert } from "antd";
 import React, { useEffect, useState } from "react";
 import DistrictModal from "../components/ward-district/DistrictModal";
 import WardModal from "../components/ward-district/WardModal";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const { TabPane } = Tabs;
 
@@ -91,16 +93,49 @@ function WardDistrictManagementPage() {
   };
 
   const handleDistrictModalOk = (values: District) => {
-    setDistrictData([
-      ...districtData,
-      { ...values, id: districtData.length + 1 },
-    ]);
-    setDistrictModalVisible(false);
+    toast.success("District created successfully");
+
+    // fetch("http://localhost:4030/api/public/quan", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(values),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     toast.success("District created successfully");
+
+    //     setDistrictData([...districtData, data.quan]);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error creating district:", error);
+    //     setDistrictError("Error creating district");
+    //   })
+    //   .finally(() => setDistrictModalVisible(false));
   };
 
   const handleWardModalOk = (values: Ward) => {
-    setWardData([...wardData, { ...values, id: wardData.length + 1 }]);
-    setWardModalVisible(false);
+    toast.success("Ward created successfully");
+
+    // fetch("http://localhost:4030/api/public/phuong", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(values),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     toast.success("Ward created successfully");
+
+    //     setWardData([...wardData, data.phuong]);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error creating ward:", error);
+    //     setWardError("Error creating ward");
+    //   })
+    //   .finally(() => setWardModalVisible(false));
   };
 
   const handleDistrictModalCancel = () => {
@@ -218,13 +253,12 @@ function WardDistrictManagementPage() {
           {renderTable()}
         </TabPane>
       </Tabs>
-
+      <ToastContainer />
       <DistrictModal
         visible={districtModalVisible}
         onCancel={handleDistrictModalCancel}
         onOk={handleDistrictModalOk}
       />
-
       <WardModal
         visible={wardModalVisible}
         onCancel={handleWardModalCancel}
