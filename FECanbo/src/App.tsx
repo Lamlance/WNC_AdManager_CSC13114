@@ -6,6 +6,7 @@ import { ReactElement } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  PictureOutlined,
   UploadOutlined,
   UserAddOutlined,
   UserOutlined,
@@ -30,9 +31,16 @@ import ForgotPasswordPage from "./routes/ForgotPassword";
 import VerifyAccountPage from "./routes/VerifyAccountPage";
 import { useAppSelector } from "./hooks";
 import AccountManager from "./routes/AccountManager";
+import AdsMapPage from "./routes/AdsMapPage";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
+  {
+    key: "5",
+    icon: <PictureOutlined />,
+    label: "Bản đồ",
+    title: "/map",
+  },
   {
     key: "1",
     icon: <UserOutlined />,
@@ -114,6 +122,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<PageLayout items={items} />}>
           <Route index element={<AdsRequestPage />} />
+          <Route path="map" element={<AdsMapPage />} />
           <Route path="advertisements" element={<AdsInfo />} />
           <Route path="reports" element={<ReportInfo />} />
           <Route path="user" element={<EditUserInfo />} />

@@ -276,6 +276,12 @@ export const apiSlice = createApi({
         body: { ...body },
       }),
     }),
+    getAdsGeoJson: builder.query<AdsGeoJson.AdsGeoJson, void>({
+      query: () => ({ url: "/geojson" }),
+    }),
+    getReportGeoJson: builder.query<AdsGeoJson.ReportGeoJson, void>({
+      query: () => ({ url: "/geojson/report" }),
+    }),
   }),
 });
 
@@ -313,4 +319,9 @@ export const {
   useGetAllAccountQuery,
   useLazyGetAllAccountQuery,
   useUpdateAccountMutation,
+
+  useGetAdsGeoJsonQuery,
+  useLazyGetAdsGeoJsonQuery,
+  useGetReportGeoJsonQuery,
+  useLazyGetReportGeoJsonQuery,
 } = apiSlice;

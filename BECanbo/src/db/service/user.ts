@@ -260,7 +260,6 @@ export async function updateUser(body: {
   update: Partial<AuthApi.UserUpdateRequest>;
   id_tk: string;
 }) {
-  console.log(body.update);
   const updateBody = { ...body.update };
   updateBody.ward_list = undefined;
 
