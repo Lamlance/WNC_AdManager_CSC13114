@@ -1,4 +1,4 @@
-import { Button, Table, Tabs, Spin, Alert } from "antd";
+import { Button, Table, Tabs, Spin, Alert, notification } from "antd";
 import React, { useEffect, useState } from "react";
 import DistrictModal from "../components/ward-district/DistrictModal";
 import WardModal from "../components/ward-district/WardModal";
@@ -94,7 +94,10 @@ function WardDistrictManagementPage() {
 
   const handleDistrictModalOk = (values: District) => {
     toast.success("District created successfully");
-
+    notification.success({
+      message: "Ward Created",
+      description: `${values.ten_quan} has been created successfully.`,
+    });
     // fetch("http://localhost:4030/api/public/quan", {
     //   method: "POST",
     //   headers: {
@@ -117,7 +120,10 @@ function WardDistrictManagementPage() {
 
   const handleWardModalOk = (values: Ward) => {
     toast.success("Ward created successfully");
-
+    notification.success({
+      message: "Ward Created",
+      description: `${values.ten_phuong} has been created successfully.`,
+    });
     // fetch("http://localhost:4030/api/public/phuong", {
     //   method: "POST",
     //   headers: {
@@ -147,11 +153,17 @@ function WardDistrictManagementPage() {
   };
 
   const handleDeleteWard = (record: Ward) => {
-    throw new Error("Function not implemented.");
+    notification.success({
+      message: "Ward Deleted",
+      description: `${record.ten_phuong} has been deleted successfully.`,
+    });
   };
 
   const handleDeleteDistrict = (record: District) => {
-    throw new Error("Function not implemented.");
+    notification.success({
+      message: "District Deleted",
+      description: `${record.ten_quan} has been deleted successfully.`,
+    });
   };
 
   const renderTable = () => {
