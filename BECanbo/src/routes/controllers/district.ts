@@ -22,7 +22,7 @@ const CreateDistrictBodySchema = z.object({
 });
 
 const DeleteDistrictByIdParamsSchema = z.object({
-  id: z.string(),
+  id: z.number(),
 });
 
 const UpdateDistrictBodySchema = z.object({
@@ -50,10 +50,10 @@ DistrictRouter.get(
 DistrictRouter.get(
   "/:id",
   ValidatorMwBuilder(
-    GetDistrictByIdParamsSchema,
     undefined,
+    GetDistrictByIdParamsSchema,
     async function (req, res) {
-      const { id } = res.locals.query;
+      const { id } = res.locals.body;
 
       const data = await CallAndCatchAsync(GetDistrictById, {
         id,
@@ -91,10 +91,11 @@ DistrictRouter.post(
 DistrictRouter.delete(
   "/:id",
   ValidatorMwBuilder(
-    DeleteDistrictByIdParamsSchema,
     undefined,
+    DeleteDistrictByIdParamsSchema,
     async function (req, res) {
-      const { id } = res.locals.query;
+      const { id } = res.locals.body;
+
       const data = await CallAndCatchAsync(DeleteDistrictById, {
         id,
       });

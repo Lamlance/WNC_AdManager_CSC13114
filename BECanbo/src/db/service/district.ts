@@ -14,7 +14,7 @@ type CreateDistrictArgs = {
 };
 
 type DeleteDistrictByIdArgs = {
-  id: string;
+  id: number;
 };
 
 type UpdateDistrictArgs = {
@@ -73,11 +73,9 @@ export async function GetDistrictById({ id }: GetDistrictByIdArgs) {
 
 export async function DeleteDistrictById({ id }: DeleteDistrictByIdArgs) {
   try {
-    const numericId = parseInt(id, 10);
-
     const res = await pg_client
       .delete(Quan)
-      .where(eq(Quan.id_quan, numericId))
+      .where(eq(Quan.id_quan, id))
       .returning({ deletedId: Quan.id_quan });
 
     return res[0]?.deletedId;
