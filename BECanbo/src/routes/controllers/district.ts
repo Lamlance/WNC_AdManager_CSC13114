@@ -89,7 +89,7 @@ DistrictRouter.post(
 );
 
 DistrictRouter.delete(
-  "/:id",
+  "/",
   ValidatorMwBuilder(
     undefined,
     DeleteDistrictByIdParamsSchema,
