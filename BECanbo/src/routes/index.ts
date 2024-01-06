@@ -6,6 +6,7 @@ import PlaceRouter from "./controllers/place-info.js";
 import adMethodRouter from "./controllers/ads-method.js";
 import ImageRouter from "./controllers/images.js";
 import WardRouter from "./controllers/ward.js";
+import DistrictRouter from "./controllers/district.js";
 
 const privateRouter = Router();
 
@@ -19,5 +20,6 @@ privateRouter.use("/dia-diem", PlaceRouter);
 privateRouter.use("/hinh-thuc-quang-cao", adMethodRouter);
 privateRouter.use("/image", ImageRouter);
 publicRouter.use("/phuong", WardRouter);
+publicRouter.use("/quan", DistrictRouter);
 
 export { privateRouter, publicRouter };

@@ -25,6 +25,7 @@ import EditUserInfo from "./components/user/EditUserInfo";
 import ResolveReport from "./components/report-info/ResolveReport";
 import LoginPage from "./routes/LoginPage";
 import RegisterPage from "./routes/RegisterPage";
+import WardDistrictManagementPage from "./routes/WardDistrictManagementPage";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
@@ -90,6 +91,12 @@ const itemVHTTs: Item[] = [
     label: "Các loại hình thức báo cáo",
     title: "/vhtt/reporttype",
   },
+  {
+    key: "8",
+    icon: <UploadOutlined />,
+    label: "Quản lý phường và quận",
+    title: "/vhtt/ward-district-management",
+  },
 ];
 const App = () => {
   return (
@@ -110,9 +117,13 @@ const App = () => {
           <Route path="edit-place-request" element={<EditRequestComponent />} />
           <Route path="manage-ad-method" element={<AdsMethodPage />} />
           <Route path="reporttype" element={<ReportTypeComponent />} />
+          <Route
+            path="ward-district-management"
+            element={<WardDistrictManagementPage />}
+          />
         </Route>
         <Route path="/auth">
-          <Route path="login" element={<LoginPage /> } />
+          <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
         </Route>
       </Routes>
