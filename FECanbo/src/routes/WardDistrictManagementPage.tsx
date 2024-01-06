@@ -15,7 +15,7 @@ interface Ward {
   id_quan: number;
 }
 
-const WardDistrictManagementPage: React.FC = () => {
+function WardDistrictManagementPage() {
   const [activeTab, setActiveTab] = useState("district");
   const [districtModalVisible, setDistrictModalVisible] = useState(false);
   const [wardModalVisible, setWardModalVisible] = useState(false);
@@ -143,6 +143,6 @@ const WardDistrictManagementPage: React.FC = () => {
       />
     </>
   );
-};
+}
 
 export default WardDistrictManagementPage;

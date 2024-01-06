@@ -10,12 +10,7 @@ interface WardModalProps {
   districtData: { id: number; ten_quan: string }[];
 }
 
-const WardModal: React.FC<WardModalProps> = ({
-  visible,
-  onCancel,
-  onOk,
-  districtData,
-}) => {
+function WardModal({ visible, onCancel, onOk, districtData }: WardModalProps) {
   const [form] = Form.useForm();
 
   const handleOk = () => {
@@ -56,6 +51,6 @@ const WardModal: React.FC<WardModalProps> = ({
       </Form>
     </Modal>
   );
-};
+}
 
 export default WardModal;

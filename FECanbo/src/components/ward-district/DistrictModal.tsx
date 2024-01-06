@@ -7,11 +7,7 @@ interface DistrictModalProps {
   onOk: (values: { ten_quan: string }) => void;
 }
 
-const DistrictModal: React.FC<DistrictModalProps> = ({
-  visible,
-  onCancel,
-  onOk,
-}) => {
+function DistrictModal({ visible, onCancel, onOk }: DistrictModalProps) {
   const [form] = Form.useForm();
 
   const handleOk = () => {
@@ -29,7 +25,7 @@ const DistrictModal: React.FC<DistrictModalProps> = ({
   return (
     <Modal
       title="Add District"
-      visible={visible}
+      open={visible}
       onOk={handleOk}
       onCancel={onCancel}
     >
@@ -44,6 +40,6 @@ const DistrictModal: React.FC<DistrictModalProps> = ({
       </Form>
     </Modal>
   );
-};
+}
 
 export default DistrictModal;
