@@ -1,8 +1,34 @@
 import { AdsSchema } from "@admanager/backend";
 import { pg_client } from "../db";
-import { PlaceChangeApi } from "@admanager/shared";
+import { PlaceApi, PlaceChangeApi } from "@admanager/shared";
 import { eq, inArray, sql } from "drizzle-orm";
 type getAllPlaceChangeRequestArgs = { phuong_id?: number[] };
+
+export async function getAllPlace() {
+  const data: PlaceApi.GetAllPlaceResponse[] = await pg_client
+    .select({ place: AdsSchema.DiaDiem })
+    .from(AdsSchema.DiaDiem);
+  return data;
+}
+
+export async function createPlaceInfo(data: PlaceApi.CreatePlaceBody) {
+  const res = await pg_client.insert(AdsSchema.DiaDiem).values(data).returning({
+    id_dia_diem: AdsSchema.DiaDiem.id_dia_diem,
+  });
+  return res[0] || null;
+}
+
+export async function updatePlaceInfo(data: PlaceApi.UpdatePlaceBody) {
+  const res = await pg_client
+    .update(AdsSchema.DiaDiem)
+    .set({ ...data, id_dia_diem: undefined })
+    .where(eq(AdsSchema.DiaDiem.id_dia_diem, data.id_dia_diem))
+    .returning({
+      id_dia_diem: AdsSchema.DiaDiem.id_dia_diem,
+    });
+  return res[0] || null;
+}
+
 export async function getAllPlaceChangeRequest(
   args: getAllPlaceChangeRequestArgs
 ): Promise<PlaceChangeApi.PlaceChangeRequestResponse[]> {

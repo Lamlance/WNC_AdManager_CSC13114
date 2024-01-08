@@ -2,21 +2,25 @@ import { Table, Input, Form, Modal, Button } from "antd";
 import { useState } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
 import FormItem from "antd/es/form/FormItem/index";
-import { ReportApi } from "@admanager/shared";
+import { ReportApi, ReportTypeApi } from "@admanager/shared";
+import { useGetAllReportTypeQuery } from "../../slices/api/apiSlice";
+import { ColumnsType } from "antd/es/table";
 // import { ReportType } from "../../types.tsx";
 
 type ReportType = ReportApi.ReportType;
 
-const data: ReportType[] = [
-  { id_loai_bao_cao: 1, ten_loai_bao_cao: "Tố giác sai phạm" },
-  { id_loai_bao_cao: 2, ten_loai_bao_cao: "Đăng ký nội dung" },
-  { id_loai_bao_cao: 3, ten_loai_bao_cao: "Đóng góp ý kiến" },
-  { id_loai_bao_cao: 4, ten_loai_bao_cao: "Giải đáp thắc mắc" },
-];
+// const data: ReportType[] = [
+//   { id_loai_bao_cao: 1, ten_loai_bao_cao: "Tố giác sai phạm" },
+//   { id_loai_bao_cao: 2, ten_loai_bao_cao: "Đăng ký nội dung" },
+//   { id_loai_bao_cao: 3, ten_loai_bao_cao: "Đóng góp ý kiến" },
+//   { id_loai_bao_cao: 4, ten_loai_bao_cao: "Giải đáp thắc mắc" },
+// ];
 
 function ReportTypeComponent() {
   const [showModal, setShowModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState<ReportType | null>(null);
+
+  const { data } = useGetAllReportTypeQuery();
 
   const handleEditClick = (row: ReportType) => {
     setSelectedRow(row);
@@ -30,44 +34,31 @@ function ReportTypeComponent() {
     setShowModal(false);
   };
 
-  const columns = [
+  const columns: ColumnsType<ReportTypeApi.GetAllReportTypeResponse> = [
     {
       title: "#",
-      dataIndex: "id_loai_bao_cao",
-      key: "id_loai_bao_cao",
+      dataIndex: ["loai_bc", "id_loai_bc"],
+      key: "id_loai_bc",
     },
     {
       title: "Loại hình thức báo cáo",
-      dataIndex: "ten_loai_bao_cao",
-      key: "ten_loai_bao_cao",
-    },
-    {
-      title: "Số lượng báo cáo",
-      dataIndex: "count",
-      key: "count",
-      render: () => <span>10</span>,
+      dataIndex: ["loai_bc", "loai_bao_cao"],
+      key: "loai_bao_cao",
     },
     {
       title: "Chi tiết",
       dataIndex: "detail",
       key: "detail",
-      render: (text: string, row: ReportType) => (
-        <div
-          className="cursor-pointer text-blue-500 underline"
-          onClick={() => handleEditClick(row)}
-        >
-          Chi tiết
-        </div>
+      render: (text: string, row) => (
+        <div className="cursor-pointer text-blue-500 underline">Chi tiết</div>
       ),
     },
     {
       title: "Thao tác",
       dataIndex: "delete",
       key: "delete",
-      render: (text: string, row: ReportType) => (
-        <Button icon={<DeleteOutlined />} onClick={() => handleEditClick(row)}>
-          Xóa
-        </Button>
+      render: (text: string, row) => (
+        <Button icon={<DeleteOutlined />}>Xóa</Button>
       ),
     },
   ];
@@ -92,7 +83,11 @@ function ReportTypeComponent() {
           </FormItem>
         </Form>
       </div>
-      <Table columns={columns} dataSource={data} pagination={{ pageSize: 5 }} />
+      <Table
+        columns={columns}
+        dataSource={data?.data || []}
+        pagination={{ pageSize: 5 }}
+      />
       <Modal open={showModal} onCancel={() => setShowModal(false)}>
         <Form
           // onFinish={onFormSubmit}

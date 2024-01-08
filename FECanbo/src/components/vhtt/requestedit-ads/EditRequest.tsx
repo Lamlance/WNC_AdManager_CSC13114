@@ -118,7 +118,7 @@ function EditRequest() {
           isModalOpen={isModalOpen}
           onClose={closeModal}
           type="AdChange"
-          ad={selectedAds ? selectedAds?.thong_tin_qc : null}
+          ad={selectedAds ? selectedAds?.chinh_sua.thong_tin_sua : null}
         />
       }
     </div>

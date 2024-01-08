@@ -5,13 +5,17 @@ import {
   GetAllAdsMethod,
 } from "../../types/request";
 import {
+  AdBoardApi,
   AdChangeApi,
   AdsGeoJson,
   AdsReqApi,
   AuthApi,
   ImageApi,
+  LandTypeApi,
+  PlaceApi,
   PlaceChangeApi,
   ReportApi,
+  ReportTypeApi,
 } from "@admanager/shared";
 import { RootState } from "../../store";
 
@@ -346,6 +350,46 @@ export const apiSlice = createApi({
         headers: { "Content-Type": "application/json" },
       }),
     }),
+    getAllPlaceInfo: builder.query<
+      { data: PlaceApi.GetAllPlaceResponse[] },
+      void
+    >({
+      query: () => "/api/dia-diem",
+    }),
+    createPlaceInfo: builder.mutation<any, PlaceApi.CreatePlaceBody>({
+      query: (body) => ({
+        url: "/api/dia-diem",
+        method: "POST",
+        body,
+        headers: { "Content-Type": "application/json" },
+      }),
+    }),
+    updatePlaceInfo: builder.mutation<any, PlaceApi.UpdatePlaceBody>({
+      query: (body) => ({
+        url: "/api/dia-diem",
+        method: "PUT",
+        body,
+        headers: { "Content-Type": "application/json" },
+      }),
+    }),
+    getAllReportType: builder.query<
+      { data: ReportTypeApi.GetAllReportTypeResponse[] },
+      void
+    >({
+      query: () => "/api/loai-bc",
+    }),
+    getAllBoardType: builder.query<
+      { data: AdBoardApi.GetAllBoardTypeResponse[] },
+      void
+    >({
+      query: () => "/api/bang-qc",
+    }),
+    getAllLandType: builder.query<
+      { data: LandTypeApi.GetAllLandTypeResponse[] },
+      void
+    >({
+      query: () => "/api/vi-tri",
+    }),
   }),
 });
 
@@ -395,4 +439,16 @@ export const {
   useLazyGetAllPublicWardQuery: useLazyGetAllPublicWard,
   useCreatePublicDistrictMutation: useCreatePublicDistrict,
   useCreatePublicWardMutation: useCreatePublicWard,
+
+  useGetAllPlaceInfoQuery,
+  useLazyGetAllPlaceInfoQuery,
+  useCreatePlaceInfoMutation,
+  useUpdatePlaceInfoMutation,
+
+  useGetAllReportTypeQuery,
+  useLazyGetAllReportTypeQuery,
+  useGetAllBoardTypeQuery,
+  useLazyGetAllBoardTypeQuery,
+  useGetAllLandTypeQuery,
+  useLazyGetAllLandTypeQuery,
 } = apiSlice;

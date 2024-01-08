@@ -40,6 +40,7 @@ import AdsMapPage from "./routes/AdsMapPage";
 import WardDistrictManagementPage from "./routes/WardDistrictManagementPage";
 import { useAppDispatch } from "./store";
 import { logout } from "./slices/authSlice";
+import PlaceManagemnetPlace from "./routes/PlaceManagementPage";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
@@ -98,6 +99,12 @@ const itemVHTTs: Item[] = [
     icon: <VideoCameraOutlined />,
     label: "Quản lý bảng quảng cáo",
     title: "/vhtt",
+  },
+  {
+    key: "11",
+    icon: <VideoCameraOutlined />,
+    label: "Quản lý điểm quảng cáo",
+    title: "/vhtt/place-manager",
   },
   {
     key: "4",
@@ -162,8 +169,8 @@ const App = () => {
         </Route>
         <Route path="vhtt" element={<PageLayout items={itemVHTTs} />}>
           <Route index element={<AdManagement />} />
+          <Route path="place-manager" element={<PlaceManagemnetPlace />} />
           <Route path="requestad" element={<AdsRequestVHTTPage />} />
-          <Route path="createaccount" element={<CreateAccount />} />
           <Route path="edit-ad-request" element={<EditRequest />} />
           <Route path="edit-place-request" element={<EditRequestComponent />} />
           <Route path="manage-ad-method" element={<AdsMethodPage />} />

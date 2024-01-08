@@ -8,6 +8,9 @@ import ImageRouter from "./controllers/images.js";
 import WardRouter from "./controllers/ward.js";
 import UserRouter from "./controllers/user.js";
 import DistrictRouter from "./controllers/district.js";
+import ReportTypeRouter from "./controllers/report-type.js";
+import AdsBoardRouter from "./controllers/ad-board.js";
+import LandTypeRouter from "./controllers/land-type.js";
 
 const privateRouter = Router();
 
@@ -21,6 +24,9 @@ privateRouter.use("/dia-diem", PlaceRouter);
 privateRouter.use("/hinh-thuc-quang-cao", adMethodRouter);
 privateRouter.use("/image", ImageRouter);
 privateRouter.use("/user", UserRouter);
+privateRouter.use("/loai-bc", ReportTypeRouter);
+privateRouter.use("/bang-qc", AdsBoardRouter);
+privateRouter.use("/vi-tri", LandTypeRouter);
 publicRouter.use("/phuong", WardRouter);
 publicRouter.use("/quan", DistrictRouter);
 

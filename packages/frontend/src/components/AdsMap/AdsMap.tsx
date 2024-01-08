@@ -7,7 +7,6 @@ import { Switch } from "antd";
 
 type MapSearchProps = {
   MapRef?: Map | null;
-  refresh: number;
 };
 
 import AdsClusterMarker from "./AdsClusterMarker";
@@ -26,6 +25,7 @@ interface AdsMapProps<S extends MapSearchProps = MapSearchProps> {
     args: Parameters<(props: S) => JSX.Element>;
   };
   onMapDblClick: (lngLat: { lng: number; lat: number }) => void;
+  onMapLoaded?: () => any;
 }
 
 function AdsMap<S extends MapSearchProps = MapSearchProps>({
@@ -33,10 +33,11 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
   InitialPosition,
   AdsClusterInfo,
   ReportClusterInfo,
+  onMapLoaded,
   onMapDblClick,
 }: AdsMapProps<S>) {
   const mapEleRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<Map | null>(null);
+  const [mapRef, setMapRef] = useState<{ current: Map } | null>(null);
 
   // console.log(AdsClusterInfo, ReportClusterInfo);
 
@@ -46,7 +47,7 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
   const [refresh, forceRefresh] = useReducer((x) => x + 1, 0);
 
   function initialize_map(container: HTMLElement) {
-    if (mapRef.current) return;
+    if (mapRef?.current) return;
 
     const token = (import.meta as any).env.VITE_LOCATION_IQ_KEY;
     if (!token) return;
@@ -61,22 +62,23 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
       doubleClickZoom: false,
     });
 
-    map.once("render", function () {
-      mapRef.current = map;
+    map.once("load", function (e) {
       //initialize_ads_markers();
-      mapRef.current.addControl(
+      e.target.addControl(
         new MapLibreGL.GeolocateControl({ trackUserLocation: true })
       );
-      mapRef.current.on("dblclick", function (e) {
+      e.target.on("dblclick", function (e) {
         onMapDblClick?.({ lng: e.lngLat.lng, lat: e.lngLat.lat });
       });
       onMapDblClick?.({ ...InitialPosition });
-      forceRefresh();
+      onMapLoaded?.();
+      setMapRef({ current: e.target });
+      //forceRefresh();
     });
   }
 
   function show_ads_check_handler(is_check: boolean) {
-    if (!mapRef.current) return console.log("Invalid mapRef");
+    if (!mapRef?.current) return console.log("Invalid mapRef");
     if (!AdsClusterInfo) return console.log("Imavlid cluster info");
     const visible = is_check ? "visible" : "none";
     mapRef.current.setLayoutProperty(
@@ -98,7 +100,7 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
   }
 
   function show_report_check_handler(is_check: boolean) {
-    if (!mapRef.current) return console.log("Invalid mapRef");
+    if (!mapRef?.current) return console.log("Invalid mapRef");
     if (!ReportClusterInfo) return console.log("Imavlid cluster info");
     const visible = is_check ? "visible" : "none";
     mapRef.current.setLayoutProperty(
@@ -127,8 +129,9 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
   useEffect(
     function () {
       forceRefresh();
+      console.log(AdsClusterInfo, ReportClusterInfo);
     },
-    [AdsClusterInfo, ReportClusterInfo]
+    [AdsClusterInfo, ReportClusterInfo, SearchBar]
   );
 
   return (
@@ -142,20 +145,20 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
           top: "2rem",
         }}
       >
-        {SearchBar ? (
+        {SearchBar && mapRef?.current ? (
           <SearchBar.func
             {...SearchBar.args[0]}
             refresh={refresh}
             MapRef={mapRef.current}
           />
         ) : null}
-        {!AdsClusterInfo || !mapRef.current || refresh <= 0
+        {!AdsClusterInfo || !mapRef?.current
           ? null
           : ReactCloneEle(AdsClusterInfo, {
               ...AdsClusterInfo.props,
               mapRef: mapRef.current,
             })}
-        {!ReportClusterInfo || !mapRef.current || refresh <= 0
+        {!ReportClusterInfo || !mapRef?.current
           ? null
           : ReactCloneEle(ReportClusterInfo, {
               ...ReportClusterInfo.props,

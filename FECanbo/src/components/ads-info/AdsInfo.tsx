@@ -63,7 +63,11 @@ const AdsInfo = () => {
     submitAdChangeReq({
       id_quang_cao: selectedAd.id_quang_cao,
       ly_do_chinh_sua: "Ly do gi đó",
-      thong_tin_sua: data,
+      thong_tin_sua: {
+        ...data,
+        ngay_hieu_luc: data.ngay_hieu_luc?.toDate().toString(),
+        ngay_het_han: data.ngay_het_han?.toDate().toString(),
+      },
     }).then((v) => console.log(v));
   }
 

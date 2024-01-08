@@ -6,6 +6,9 @@ import * as PlaceChangeApi from "./types/PlaceChangeApi.js";
 import * as AuthApi from "./types/AuthApi.js";
 import * as ImageApi from "./types/ImagesApi.js";
 import * as PlaceApi from "./types/PlaceApi.js";
+import * as ReportTypeApi from "./types/ReportTypeApi.js";
+import * as AdBoardApi from "./types/AdBoardApi.js";
+import * as LandTypeApi from "./types/LandTypeApi.js";
 
 export {
   AdsGeoJson,
@@ -16,4 +19,7 @@ export {
   AuthApi,
   ImageApi,
   PlaceApi,
+  ReportTypeApi,
+  AdBoardApi,
+  LandTypeApi,
 };

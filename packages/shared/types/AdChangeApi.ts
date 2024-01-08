@@ -8,7 +8,13 @@ const AdChangeDataSchema = z
     id_hinh_thuc: z.number().nullish(),
     id_loai_vitri: z.number().nullish(),
   })
-  .merge(AdsGeoJson.AdsPropertySchema.partial());
+  .merge(
+    AdsGeoJson.AdsPropertySchema.omit({
+      loai_vitri: true,
+      bang_qc: true,
+      hinh_thuc: true,
+    }).partial()
+  );
 
 const AdChangeRequestCreateSchema = z.object({
   ly_do_chinh_sua: z.string(),

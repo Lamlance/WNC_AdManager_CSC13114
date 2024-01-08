@@ -2,6 +2,7 @@ import { Drawer, Modal } from "antd";
 import { AdsMap } from "@admanager/frontend";
 import MapSearchBar, { MapSearchProps } from "./MapSearch";
 import "maplibre-gl/dist/maplibre-gl.css";
+import { useRef, useState } from "react";
 
 const DefaultMapProps = {
   InitialPosition: {
@@ -26,20 +27,26 @@ function AdsMapModal({
   const onMapClick = function (lngLat: { lng: number; lat: number }) {
     console.log(lngLat);
   };
-
   const onPlace: MapSearchProps["onPlaceSelect"] = function (data) {
     onPlaceSelect?.(data);
     onClose();
   };
 
+  const [mapSearchArgs, setMapSearchArgs] = useState<any>();
+
+  function onMapLoaded() {
+    setMapSearchArgs({
+      func: MapSearchBar,
+      args: [{ onPlaceSelect: onPlace, initPos: initPos }],
+    });
+  }
+
   return (
     <Drawer width={"100vw"} open={open} onClose={onClose}>
       <div className=" relative h-full w-full">
         <AdsMap<MapSearchProps>
-          SearchBar={{
-            func: MapSearchBar,
-            args: [{ refresh: 0, onPlaceSelect: onPlace, initPos: initPos }],
-          }}
+          SearchBar={mapSearchArgs}
+          onMapLoaded={onMapLoaded}
           InitialPosition={DefaultMapProps.InitialPosition}
           onMapDblClick={onMapClick}
         />
