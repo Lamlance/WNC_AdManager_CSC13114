@@ -23,7 +23,6 @@ const AdsRequest: React.FC<MainContentSectionProps> = ({
   const authState = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!authState.isLoggedIn) return;
     getAllAdsReq({});
   }, [authState]);
 
@@ -34,10 +33,10 @@ const AdsRequest: React.FC<MainContentSectionProps> = ({
         minHeight: "100vh",
       }}
     >
-      <Col span={17}>
+      <Col span={!!selectedAd ? 17 : 24}>
         <AdsRequestTable data={data || []} onRowClick={onRowClick} />
       </Col>
-      <Col span={7}>
+      <Col span={!!selectedAd ? 7 : 0}>
         <AdsRequestDetail ad={selectedAd} />
       </Col>
     </Row>

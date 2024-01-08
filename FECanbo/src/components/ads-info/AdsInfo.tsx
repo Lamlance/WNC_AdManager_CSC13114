@@ -97,7 +97,7 @@ const AdsInfo = () => {
       {error && <div>There was an error</div>}
       {isLoading && <div>Loading data </div>}
       <Row gutter={20} style={{ minHeight: "100vh" }}>
-        <Col span={17}>
+        <Col span={!!selectedRow ? 17 : 24}>
           <AdsInfoTable
             data={(data || []).map((v) => ({
               ...v,
@@ -107,7 +107,7 @@ const AdsInfo = () => {
             onRequestChangePlace={onRequestChangePlace}
           />
         </Col>
-        <Col span={7}>
+        <Col span={!!selectedRow ? 7 : 0}>
           {selectedRow && (
             <AdsInfoSlider
               data={selectedRow}

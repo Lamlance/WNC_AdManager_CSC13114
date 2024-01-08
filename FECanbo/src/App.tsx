@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, Outlet, Route, Routes, useNavigate } from "react-router-dom";
-import { Button, Layout, Menu } from "antd";
+import { Button, Layout, Menu, Popover } from "antd";
 import { ReactElement } from "react";
 
 import {
+  FileAddOutlined,
+  FlagOutlined,
+  InfoCircleOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PictureOutlined,
@@ -11,6 +14,8 @@ import {
   UserAddOutlined,
   UserOutlined,
   VideoCameraOutlined,
+  YuqueFilled,
+  YuqueOutlined,
 } from "@ant-design/icons";
 
 import AdsInfo from "./components/ads-info/AdsInfo";
@@ -33,36 +38,56 @@ import { useAppSelector } from "./hooks";
 import AccountManager from "./routes/AccountManager";
 import AdsMapPage from "./routes/AdsMapPage";
 import WardDistrictManagementPage from "./routes/WardDistrictManagementPage";
+import { useAppDispatch } from "./store";
+import { logout } from "./slices/authSlice";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
   {
     key: "5",
-    icon: <PictureOutlined />,
+    icon: (
+      <span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+          <line x1="8" y1="2" x2="8" y2="18"></line>
+          <line x1="16" y1="6" x2="16" y2="22"></line>
+        </svg>
+      </span>
+    ),
     label: "Bản đồ",
     title: "/map",
   },
   {
     key: "1",
-    icon: <UserOutlined />,
+    icon: <FileAddOutlined />,
     label: "Yêu cầu cấp phép",
     title: "/",
   },
   {
     key: "2",
-    icon: <VideoCameraOutlined />,
+    icon: <InfoCircleOutlined />,
     label: "Thông tin điểm quảng cáo",
     title: "/advertisements",
   },
   {
     key: "3",
-    icon: <UploadOutlined />,
+    icon: <FlagOutlined />,
     label: "Báo cáo từ người dân",
     title: "/reports",
   },
   {
     key: "4",
-    icon: <UploadOutlined />,
+    icon: <UserOutlined />,
     label: "Chỉnh sửa thông tin cá nhân",
     title: "/user",
   },
@@ -176,13 +201,16 @@ const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
   const navigate = useNavigate();
   const authUser = useAppSelector((state) => state.auth);
 
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     console.log(authUser);
   }, [authUser]);
 
   return (
-    <Layout className="min-h-full">
+    <Layout className=" h-screen overflow-scroll pb-2">
       <Sider
+        className=" bg-blue-950"
         trigger={null}
         collapsedWidth={0}
         width={280}
@@ -190,14 +218,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
         collapsed={collapsed}
       >
         <div className="my-4 flex flex-row justify-center">
-          <span className="text-base font-bold text-white"> Ads Manager </span>
+          <span className=" flex flex-row gap-x-2 text-xl font-bold text-white">
+            <YuqueFilled />
+            <span>City Ads Manager</span>
+          </span>
         </div>
         <Menu
           theme="dark"
           mode="inline"
-          style={{
-            fontSize: "16px",
-          }}
+          className=" bg-blue-950 text-base font-semibold text-white"
           defaultSelectedKeys={["1"]}
           items={items}
           onSelect={({ key }) => {
@@ -214,7 +243,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
         }}
       >
         <Header
-          style={{ padding: 0, background: "#ffffff" }}
+          style={{ padding: 0, background: "#e3e7f3" }}
           className=" flex flex-row justify-between align-middle"
         >
           <div>
@@ -226,24 +255,43 @@ const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
                 fontSize: "16px",
                 width: 50,
                 height: 50,
-                background: "#ffffff",
+                background: "#e3e7f3",
               }}
             />
           </div>
 
           <div className=" pr-8">
             {!authUser.isLoggedIn ? (
-              <Link to={"/auth/login"}>LOGIN</Link>
+              <Link to={"/auth/login"} className="text-base font-semibold">
+                Đăng nhập
+              </Link>
             ) : (
-              <p>{`Hello user ${authUser.user.username}`}</p>
+              <Popover
+                content={
+                  <Button
+                    danger
+                    type="primary"
+                    onClick={() => {
+                      dispatch(logout());
+                    }}
+                  >
+                    Đăng xuất
+                  </Button>
+                }
+              >
+                <span>
+                  <span className="text-base font-semibold">
+                    {authUser.user.username}
+                  </span>
+                  <UserOutlined className=" ml-2" />
+                </span>
+              </Popover>
             )}
           </div>
         </Header>
         <Content
+          className=" overflow-scroll px-4 pt-4"
           style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: 280,
             background: "#ffffff",
           }}
         >

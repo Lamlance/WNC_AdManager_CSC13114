@@ -33,9 +33,11 @@ const AdsRequestTable: React.FC<AdsRequestTableProps> = ({
     {
       title: "THỜI GIAN ĐẶT",
       render: (_, record) =>
-        `${(record.yeu_cau.ngay_hieu_luc as unknown as string).split("T")} - ${(
-          record.yeu_cau.ngay_het_han as unknown as string
-        ).split("T")}`,
+        `${new Date(
+          record.yeu_cau.ngay_hieu_luc,
+        ).toLocaleDateString()} - ${new Date(
+          record.yeu_cau.ngay_het_han,
+        ).toLocaleDateString()}`,
     },
     {
       title: "TRẠNG THÁI",

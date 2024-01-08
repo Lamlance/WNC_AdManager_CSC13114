@@ -10,7 +10,6 @@ interface AdDetailsSectionProps {
 const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
   const containerStyle = {
     padding: "10px",
-    backgroundColor: "#DBF1EA",
     borderRadius: "8px",
   };
 
@@ -42,7 +41,7 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
   };
 
   return (
-    <div style={containerStyle}>
+    <div style={containerStyle} className="bg-cream">
       {ad ? (
         <div>
           <h2 className="font-bold">CHI TIẾT YÊU CẦU</h2>
@@ -113,7 +112,7 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
           )}
         </div>
       ) : (
-        <p>Please select an ad from the table.</p>
+        <p>Hãy chọn một yêu cầu</p>
       )}
     </div>
   );

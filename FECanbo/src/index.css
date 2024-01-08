@@ -3,5 +3,8 @@
 @tailwind utilities;
 
 .ant-table-thead .ant-table-cell {
-  background-color: #91caff !important;
+  background-color: #e3e7f3 !important;
+}
+.ant-menu-item-selected {
+  /* background-color: #e3e7f3 !important; */
 }

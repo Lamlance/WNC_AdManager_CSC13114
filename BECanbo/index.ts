@@ -9,6 +9,7 @@ import passport from "passport";
 
 configDotenv();
 import MulterMw from "./src/utils/Multer.js";
+import { sendCodeToEmail } from "./src/utils/SendCodeToEmail";
 
 const app = express();
 const PORT = process.env.PORT || 4030;
@@ -29,6 +30,18 @@ app.get("/", function (req, res) {
 app.post("/test", MulterMw.array("hinh_anh"), function (req, res) {
   console.log(req.files, req.body);
   return res.status(200).json({ ok: "ok" });
+});
+
+app.use("/testmail", async function (req, res) {
+  sendCodeToEmail("lamhoangdien113@gmail.com", "LAM", "123", "register")
+    .then((success) => {
+      return res.status(201).json({
+        success,
+      });
+    })
+    .catch((err) => {
+      return res.status(500).json({ msg: "Can not register right now!" });
+    });
 });
 
 app.use("/auth", authRouter);

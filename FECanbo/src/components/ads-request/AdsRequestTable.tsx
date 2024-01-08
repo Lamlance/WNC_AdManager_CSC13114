@@ -7,17 +7,20 @@ import { AdsReqApi } from "@admanager/shared";
 
 const columns = [
   {
-    title: "NỘI DUNG PANO",
+    title: "Nội dung pano",
     dataIndex: ["yeu_cau", "noi_dung_qc"],
+    align: "center",
     key: "noi_dung_qc",
   },
   {
-    title: "CÔNG TY ĐẶT QUẢNG CÁO",
+    title: "Công ty đặt",
+    align: "center",
     dataIndex: ["yeu_cau", "ten_cty"],
     key: "ten_cty",
   },
   {
-    title: "THỜI GIAN ĐẶT",
+    title: "Thời gian đặt",
+    align: "center",
     key: "effectedDate",
     render: (v: AdsReqApi.ManyAdsRequestResponse) =>
       `${(v.yeu_cau.ngay_hieu_luc as unknown as string).split("T")[0]} - ${

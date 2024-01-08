@@ -31,7 +31,6 @@ function EditUserInfo() {
       render: <Input />,
       initValue: (authuser.isLoggedIn && authuser.user.name) || undefined,
     },
-    { label: "Ngày sinh", name: "ngay_sinh", render: <DatePicker /> },
     {
       label: "Email",
       name: "email",
@@ -44,12 +43,13 @@ function EditUserInfo() {
       render: <Input />,
       initValue: (authuser.isLoggedIn && authuser.user.phone) || undefined,
     },
+    { label: "Ngày sinh", name: "ngay_sinh", render: <DatePicker /> },
   ];
 
   return (
     <div>
-      <Form onFinish={onFormFinish}>
-        <table className=" min-w-[50%] table-auto border-separate border-spacing-y-4  ">
+      <Form onFinish={onFormFinish} layout="vertical">
+        <table className="w-[50%] table-auto border-separate border-spacing-y-4  ">
           <tbody>
             {inputEle.map((v) => (
               <tr>
@@ -57,21 +57,26 @@ function EditUserInfo() {
                 <td>
                   <FormItem<UserFormValue>
                     name={v.name}
-                    className="m-0 p-0"
+                    className="m-0 flex-grow p-0"
                     initialValue={v.initValue}
+                    wrapperCol={{ offset: 0, span: 24 }}
                   >
                     {v.render}
                   </FormItem>
                 </td>
               </tr>
             ))}
+            <tr>
+              <td>
+                <FormItem>
+                  <Button type="primary" htmlType="submit">
+                    Cập nhật
+                  </Button>
+                </FormItem>
+              </td>
+            </tr>
           </tbody>
         </table>
-        <FormItem>
-          <Button type="primary" htmlType="submit">
-            Cập nhập
-          </Button>
-        </FormItem>
       </Form>
     </div>
   );

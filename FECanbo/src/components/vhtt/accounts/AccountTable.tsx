@@ -18,16 +18,37 @@ function AccountTable() {
 
   const Columns: ColumnsType<AuthApi.FullUserData> = [
     {
-      title: "User name",
+      align: "center",
+      title: "Tên tài khoản",
       dataIndex: ["user", "ten_tk"],
       key: "ten_tk",
     },
     {
-      title: "Level",
-      dataIndex: ["user", "cap_tk"],
+      align: "center",
+      title: "Email",
+      dataIndex: ["user", "email"],
+      key: "email",
     },
     {
-      title: "Edit",
+      align: "center",
+      title: "Cấp tài khoản",
+      dataIndex: ["user", "cap_tk"],
+      render: (_r: string, v) => {
+        return (
+          <>
+            {_r === "district"
+              ? "Quản lý quận"
+              : _r === "ward"
+                ? "Quản lý phường"
+                : "Sở VH-TT"}
+          </>
+        );
+      },
+    },
+    {
+      title: "Thao tác",
+      align: "center",
+      width: "20%",
       render: (_r, v) => {
         return (
           <a
@@ -74,7 +95,7 @@ function AccountTable() {
         setClose={() => setSelectedUser(null)}
         initalValue={selectedUser || undefined}
       />
-      <Table dataSource={data?.data || []} columns={Columns} />
+      <Table bordered dataSource={data?.data || []} columns={Columns} />
     </>
   );
 }

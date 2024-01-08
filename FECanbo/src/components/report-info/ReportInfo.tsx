@@ -37,13 +37,13 @@ const ReportInfo = () => {
           minHeight: "100vh",
         }}
       >
-        <Col span={17}>
+        <Col span={!!selectedRow ? 17 : 24}>
           <div className=" relative left-0 right-0 z-10 h-8 bg-white">
             <WardCheckBoxList onWardListChange={onWardFilter} />
           </div>
           <ReportInfoTable data={data || []} onRowSelect={setSelectedRow} />
         </Col>
-        <Col span={7}>
+        <Col span={!!selectedRow ? 7 : 0}>
           {selectedRow && (
             <ReportInfoDetail {...selectedRow} lineClamp={true} />
           )}

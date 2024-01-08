@@ -23,7 +23,6 @@ function Sidebar() {
   return (
     <div>
       <Drawer
-        title="Basic Drawer"
         placement="left"
         closable={false}
         onClose={on_drawer_close}

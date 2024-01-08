@@ -19,7 +19,8 @@ export type AdChangeFormValue = Omit<AdsMethod, "id_htqc">;
 function AdsMethodPage() {
   const columns: ColumnsType<AdsMethod> = [
     {
-      title: "#",
+      align: "center",
+      title: "STT",
       dataIndex: "id_htqc",
       key: "id_htqc",
     },
@@ -134,6 +135,7 @@ function AdsMethodPage() {
         Thêm hình thức quảng cáo
       </Button>
       <Table
+        bordered
         columns={columns}
         dataSource={data}
         onRow={(record) => ({
@@ -142,7 +144,6 @@ function AdsMethodPage() {
           },
         })}
       />
-      ;
       <Modal
         open={isOpen}
         onOk={handleOk}

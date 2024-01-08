@@ -50,7 +50,7 @@ const ReportInfoDetail = ({
   };
 
   return (
-    <div style={containerStyle} className=" text-base">
+    <div style={containerStyle} className=" bg-cream text-base">
       <h2 className="font-bold"> CHI TIẾT THÔNG TIN BÁO CÁO </h2>
       <p>
         <span className="font-bold"> Họ tên người gửi: </span>

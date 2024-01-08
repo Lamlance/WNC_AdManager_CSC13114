@@ -15,7 +15,7 @@ const AdsRequest: React.FC<MainContentSectionProps> = ({
   onRowClick,
   selectedAd,
 }) => {
-  console.log("selctedad", selectedAd);
+  // console.log("selctedad", selectedAd);
   return (
     <Row
       gutter={20}
@@ -23,10 +23,10 @@ const AdsRequest: React.FC<MainContentSectionProps> = ({
         minHeight: "100vh",
       }}
     >
-      <Col span={17}>
+      <Col span={!!selectedAd ? 17 : 24}>
         <AdsRequestTable data={data} onRowClick={onRowClick} />
       </Col>
-      <Col span={7}>
+      <Col span={!!selectedAd ? 7 : 0}>
         <AdsRequestDetail ad={selectedAd} />
       </Col>
     </Row>

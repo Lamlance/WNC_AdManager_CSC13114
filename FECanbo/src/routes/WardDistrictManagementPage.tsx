@@ -10,6 +10,7 @@ import {
   useLazyGetAllPublicDistrict,
   useLazyGetAllPublicWard,
 } from "../slices/api/apiSlice";
+import { DeleteFilled, DeleteOutlined } from "@ant-design/icons";
 
 const { TabPane } = Tabs;
 
@@ -48,19 +49,23 @@ function WardDistrictManagementPage() {
       key: "id_quan",
     },
     {
-      title: "District Name",
+      title: "Tên quận",
       dataIndex: ["quan", "ten_quan"],
       key: "ten_quan",
     },
     {
-      title: "Action",
+      title: "Thao tác",
       key: "action",
       render: (text: any, record: { quan: District }) => (
         <Button
+          danger
           type="primary"
           onClick={() => handleDeleteDistrict(record.quan)}
         >
-          Delete
+          <span>
+            <DeleteOutlined />
+            <span className=" ml-2">Xóa</span>
+          </span>
         </Button>
       ),
     },
@@ -86,8 +91,15 @@ function WardDistrictManagementPage() {
       title: "Action",
       key: "action",
       render: (text: any, record: { phuong: Ward }) => (
-        <Button type="primary" onClick={() => handleDeleteWard(record.phuong)}>
-          Delete
+        <Button
+          danger
+          type="primary"
+          onClick={() => handleDeleteWard(record.phuong)}
+        >
+          <span>
+            <DeleteOutlined />
+            <span className=" ml-2">Xóa</span>
+          </span>
         </Button>
       ),
     },

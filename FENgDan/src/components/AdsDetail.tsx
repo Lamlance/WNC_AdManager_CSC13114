@@ -34,7 +34,7 @@ function AdsDetail({
         onCancel={handleCancel}
         width={850}
       >
-        <p className=" text-2xl font-bold">{Ad.bang_qc}</p>
+        <p className=" text-xl font-bold">{Ad.bang_qc}</p>
         <p className=" text-xl">{Place.dia_chi}</p>
         <p className=" text-xl">
           <span className=" font-bold">Ngày hết hạn:</span>{" "}

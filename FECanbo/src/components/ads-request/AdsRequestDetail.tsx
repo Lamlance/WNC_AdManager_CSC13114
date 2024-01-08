@@ -44,14 +44,21 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
   }, [ad]);
 
   return (
-    <div className=" bg-green-300 p-4">
+    <div className=" bg-cream rounded-md p-4 text-base">
       {ad ? (
-        <div>
-          <h2 className="font-bold">CHI TIẾT YÊU CẦU</h2>
+        <div className="flex flex-col gap-y-1">
+          <h2 className="text-center text-base font-semibold text-zinc-950">
+            Chi tiết yêu cầu
+          </h2>
           <div className=" mb-4">
-            <Carousel>
+            <Carousel className="m-0 h-fit overflow-hidden rounded-md">
               {imgUrl.map((i) => (
-                <img key={i} src={i} alt="Ads Img" className=" mb-4 w-full" />
+                <img
+                  key={i}
+                  src={i}
+                  alt="Ads Img"
+                  className=" m-0 mb-4 overflow-hidden rounded-md"
+                />
               ))}
             </Carousel>
           </div>
@@ -74,11 +81,11 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
           <p>
             <span className="font-semibold">Thời gian đặt: </span>
             <span>
-              {(ad.yeu_cau.ngay_hieu_luc as unknown as string).split("T")[1]}
+              {new Date(ad.yeu_cau.ngay_hieu_luc).toLocaleDateString()}
             </span>{" "}
             -{" "}
             <span>
-              {(ad.yeu_cau.ngay_het_han as unknown as string).split("T")[1]}
+              {new Date(ad.yeu_cau.ngay_het_han).toLocaleDateString()}
             </span>
           </p>
           <p>
@@ -91,7 +98,7 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
           </p>
         </div>
       ) : (
-        <p>Please select an ad from the table.</p>
+        <p>Hãy chọn một yêu cầu</p>
       )}
     </div>
   );

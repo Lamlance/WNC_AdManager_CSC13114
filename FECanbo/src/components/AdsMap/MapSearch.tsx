@@ -203,7 +203,7 @@ function MapSearchBar(props: MapSearchProps) {
   }
 
   return (
-    <div className=" flex w-1/2 flex-row">
+    <div className=" flex w-1/2 flex-row gap-x-2">
       <Select
         onFocus={() => setOpenSelect(true)}
         onBlur={() => setOpenSelect(undefined)}

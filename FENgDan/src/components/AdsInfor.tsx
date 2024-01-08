@@ -60,8 +60,8 @@ function EmptyAdItem({ Place, onReportSubmit }: EmptyAdItemProps) {
     <div className="ads-info-container relative ">
       <div className="ads-info-popup absolute w-full rounded-xl border-opacity-90 p-4 shadow-lg">
         <div className="ads-info-content">
-          <p className="ads_info_location text-base">{Place.dia_chi}</p>
-          <p className="text-base">
+          <p className="ads_info_location text-base">Vị trí: {Place.dia_chi}</p>
+          <p className="mt-2 text-center text-lg italic">
             <span className="font-semibold">{`Hiện chưa có dữ liệu quảng cáo`}</span>
           </p>
 

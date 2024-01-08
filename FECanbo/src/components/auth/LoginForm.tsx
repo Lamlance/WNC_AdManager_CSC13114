@@ -20,13 +20,12 @@ const LoginForm = () => {
   const openNotification = (type: string) => {
     if (type == "error") {
       api[type]({
-        message: "Login Failed!",
-        description:
-          "Your username and password is incorrected! Please check again or register new account.",
+        message: "Đăng nhập thất bại!",
+        description: "Tên đăng nhập hoặc mật khẩu không chính xác.",
       });
     } else if (type == "success") {
       api[type]({
-        message: "Login Successfully!",
+        message: "Đăng nhập thành công!",
       });
     }
   };
@@ -53,7 +52,7 @@ const LoginForm = () => {
   return (
     <div className="w-50 flex flex-col">
       {contextHolder}
-      <h3 className="my-5 self-center text-2xl font-semibold"> Sign In </h3>
+      <h3 className="my-5 self-center text-2xl font-semibold"> Đăng nhập </h3>
       <Form
         className="max-w-80"
         form={form}
@@ -65,13 +64,13 @@ const LoginForm = () => {
           rules={[
             {
               required: true,
-              message: "Please input your fullname!",
+              message: "Hãy nhập tên đăng nhập!",
             },
           ]}
         >
           <Input
             prefix={<UserOutlined className="mx-1" />}
-            placeholder="Username"
+            placeholder="Tên đăng nhập"
             name="username"
           />
         </Form.Item>
@@ -80,29 +79,21 @@ const LoginForm = () => {
           rules={[
             {
               required: true,
-              message: "Please input your password!",
+              message: "Hãy nhập mật khẩu!",
             },
           ]}
         >
           <Input
             prefix={<LockOutlined className="mx-1" />}
             type="password"
-            placeholder="Password"
+            placeholder="Mật khẩu"
           />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" className="w-full min-w-80">
-            Log in
+            Đăng nhập
           </Button>
         </Form.Item>
-        <div className="my-2 flex">
-          <div className="flex-1">
-            Or <a href="register">register now!</a>
-          </div>
-          <div>
-            <a href="forgot-password"> Forgot password? </a>
-          </div>
-        </div>
       </Form>
     </div>
   );

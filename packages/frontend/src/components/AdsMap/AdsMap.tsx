@@ -124,6 +124,13 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
     initialize_map(mapEleRef.current);
   }, []);
 
+  useEffect(
+    function () {
+      forceRefresh();
+    },
+    [AdsClusterInfo, ReportClusterInfo]
+  );
+
   return (
     <div className=" relative h-full w-full">
       <div id="locationIQ_map" ref={mapEleRef} className=" h-full w-full"></div>

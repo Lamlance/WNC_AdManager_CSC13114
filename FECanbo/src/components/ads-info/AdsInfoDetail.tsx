@@ -28,7 +28,7 @@ const AdInfoDetail = ({ ad, place, onRequestChange }: AdsInfoDetailProps) => {
   };
 
   return (
-    <div style={containerStyle} className="flex flex-col">
+    <div style={containerStyle} className="bg-cream flex flex-col">
       <h2 className="font-bold"> CHI TIẾT THÔNG TIN ĐIỂM QUẢNG CÁO </h2>
       <p>
         <span className="font-semibold"> Loại quảng cáo: </span>
@@ -69,7 +69,6 @@ const AdInfoDetail = ({ ad, place, onRequestChange }: AdsInfoDetailProps) => {
         Yêu cầu chỉnh sửa
       </Button>
     </div>
-    
   );
 };
 
@@ -81,7 +80,7 @@ function AdsInfoSlider(props: AdsInfoSliderProps) {
   const sliderRef = useRef<CarouselRef | null>(null);
 
   return (
-    <div className=" flex h-full flex-col gap-4">
+    <div className=" bg-cream flex flex-col gap-4">
       <Carousel ref={sliderRef} dotPosition="top" className=" p-2">
         {props.data.ads.map((v) => (
           <AdInfoDetail
