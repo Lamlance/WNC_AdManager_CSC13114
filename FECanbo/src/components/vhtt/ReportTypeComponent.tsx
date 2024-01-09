@@ -65,11 +65,6 @@ function ReportTypeComponent() {
 
   return (
     <>
-      <div className="flex h-1/5 w-full items-center justify-center">
-        <h1 className="h-fit text-5xl font-semibold">
-          Danh sách các loại hình báo cáo
-        </h1>
-      </div>
       <div className="flex justify-center">
         <Form className="flex w-1/2 justify-between">
           <FormItem className="w-9/12">

@@ -58,9 +58,6 @@ function EditRequestComponent() {
 
   return (
     <>
-      <div className="flex h-1/5 w-full items-center justify-center">
-        <h1 className="h-fit text-5xl font-semibold">Yêu cầu chỉnh sửa</h1>
-      </div>
       <EditSetpoint onFormSubmit={(data) => console.log(data)} />
       <Table
         columns={columns}
