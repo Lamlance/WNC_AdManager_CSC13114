@@ -5,6 +5,7 @@ import ReduxStore from "./Redux/ReduxStore";
 import { Provider } from "react-redux";
 
 import AdsMapPage from "./Pages/AdsMapPage";
+import SocketIoPage from "./Pages/SocketIoPage";
 
 function App() {
   return (
@@ -31,7 +32,10 @@ export default function () {
   }, []);
   return (
     <Provider store={ReduxStore}>
-      <App />
+      <>
+        <SocketIoPage />
+        <App />
+      </>
     </Provider>
   );
 }

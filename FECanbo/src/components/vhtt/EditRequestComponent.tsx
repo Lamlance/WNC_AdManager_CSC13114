@@ -15,7 +15,7 @@ type EditRequest =
 function EditRequestComponent() {
   const { data } = useGetAllPlaceChangeRequestQuery();
   const dispatch = useDispatch();
-  const modal = useSelector((state: RootState) => state.PlaceEditModal);
+  // const modal = useSelector((state: RootState) => state.PlaceEditModal);
   // const { isModalOpen, selectedPlace } = modal;
 
   const showModal = (record: PlaceChangeApi.PlaceChangeRequestResponse) => {

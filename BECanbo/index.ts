@@ -6,10 +6,12 @@ import authRouter from "./src/routes/auth";
 import { strategy as jwtStrategy, strategy } from "./src/utils/JwtPassport";
 import { configDotenv } from "dotenv";
 import passport from "passport";
-
+import { Server as SocketIoServer } from "socket.io";
 configDotenv();
 import MulterMw from "./src/utils/Multer.js";
 import { sendCodeToEmail } from "./src/utils/SendCodeToEmail";
+import { SocketIoApi } from "@admanager/shared";
+import z from "zod";
 
 const app = express();
 const PORT = process.env.PORT || 4030;
@@ -52,6 +54,38 @@ app.use(
   privateRouter
 );
 app.use("/geojson", GeoJsonRouter);
-app.listen(PORT, function () {
+
+const httpServer = app.listen(PORT, function () {
   console.log(`App BECanbo on http://localhost:${PORT}`);
+});
+
+const socketIo = new SocketIoServer(httpServer, {
+  path: "/io",
+  cors: {
+    origin: "*",
+  },
+});
+
+const reportNameSpace = socketIo.of("/" + SocketIoApi.Namespaces.report);
+app.set(SocketIoApi.Namespaces.report, reportNameSpace);
+
+reportNameSpace.use((socket, next) => {
+  const level = SocketIoApi.SocketLevelSchema.safeParse(
+    socket.handshake.query.level
+  );
+  if (level.success == false) {
+    console.log(level.error);
+    return next(new Error("Missing socket level"));
+  }
+  return next();
+});
+reportNameSpace.on("connection", (socket) => {
+  if (socket.handshake.query.level === "client") {
+    socket.join("update");
+    setTimeout(() => {
+      reportNameSpace.to("update").emit("update", "hello");
+    }, 1000);
+  } else {
+    socket.join("create");
+  }
 });

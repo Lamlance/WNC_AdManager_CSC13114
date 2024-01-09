@@ -41,6 +41,7 @@ import WardDistrictManagementPage from "./routes/WardDistrictManagementPage";
 import { useAppDispatch } from "./store";
 import { logout } from "./slices/authSlice";
 import PlaceManagemnetPlace from "./routes/PlaceManagementPage";
+import SocketIoPage from "./routes/SocketIoPage";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
@@ -322,5 +323,10 @@ export default function () {
       head.insertAdjacentElement("afterbegin", tailWindStyleTag);
     }
   }, []);
-  return <App />;
+  return (
+    <>
+      <SocketIoPage />
+      <App />
+    </>
+  );
 }

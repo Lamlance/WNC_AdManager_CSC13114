@@ -96,6 +96,29 @@ export async function createReportInfo(
   return rpGeo[0] || null;
 }
 
+export async function getReportById(id: number) {
+  const query = pg_client
+    .select({
+      bao_cao: AdsSchema.BaoCao,
+      loai_bc: AdsSchema.LoaiBaoCao.loai_bao_cao,
+    })
+    .from(AdsSchema.BaoCao)
+    .where(eq(AdsSchema.BaoCao.id_bao_cao, id))
+    .innerJoin(
+      AdsSchema.LoaiBaoCao,
+      eq(AdsSchema.BaoCao.id_loai_bc, AdsSchema.LoaiBaoCao.id_loai_bc)
+    )
+    .leftJoin(
+      AdsSchema.QuangCao,
+      eq(AdsSchema.BaoCao.id_quang_cao, AdsSchema.QuangCao.id_quang_cao)
+    )
+    .leftJoin(
+      AdsSchema.DiaDiem,
+      eq(AdsSchema.DiaDiem.id_dia_diem, AdsSchema.QuangCao.id_dia_diem)
+    );
+  return await query;
+}
+
 export async function updateStatusReport(params: ReportApi.ReportUpdate) {
   const data = await pg_client
     .update(AdsSchema.BaoCao)

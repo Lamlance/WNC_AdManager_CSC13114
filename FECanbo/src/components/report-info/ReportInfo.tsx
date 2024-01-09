@@ -2,7 +2,6 @@ import { Col, Row, Switch } from "antd";
 import ReportInfoTable from "./ReportInfoTable";
 import ReportInfoDetail from "./ReportInfoDetail";
 import { useLazyGetAllReportInfo } from "../../slices/api/apiSlice";
-import { fromReportResponse2ReportRecord } from "../../types/mapper";
 import { useEffect, useRef, useState } from "react";
 import { ReportApi } from "@admanager/shared";
 import WardCheckBoxList from "../FormComponents/WardCheckBox";
@@ -14,6 +13,16 @@ const ReportInfo = () => {
   const authState = useAppSelector((state) => state.auth);
   const [selectedRow, setSelectedRow] =
     useState<ReportApi.ReportResponse | null>(null);
+
+  useEffect(() => {
+    document.addEventListener("AdsManager:CreateReportEvent", (e) => {
+      console.log("Detail", e.detail);
+      if (!authState.isLoggedIn) return;
+      getAllReportInfo({
+        phuong_id: authState.user.managedWards,
+      });
+    });
+  }, []);
 
   useEffect(() => {
     if (!authState.isLoggedIn) return;

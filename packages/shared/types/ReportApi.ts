@@ -71,4 +71,5 @@ export {
   ReportPlaceSchema,
   ReportTypeSchema,
   ReportUpdateSchema,
+  ReportResponseSchema,
 };
