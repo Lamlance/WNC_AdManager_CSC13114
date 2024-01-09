@@ -41,7 +41,7 @@ import WardDistrictManagementPage from "./routes/WardDistrictManagementPage";
 import { useAppDispatch } from "./store";
 import { logout } from "./slices/authSlice";
 import PlaceManagemnetPlace from "./routes/PlaceManagementPage";
-import SocketIoPage from "./routes/SocketIoPage";
+import { ConnectSocketIo } from "./routes/SocketIoPage";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
@@ -312,6 +312,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
 
 export default function () {
   useEffect(() => {
+    ConnectSocketIo();
     const head = document.querySelector("head");
     if (!head) {
       return;
@@ -323,10 +324,5 @@ export default function () {
       head.insertAdjacentElement("afterbegin", tailWindStyleTag);
     }
   }, []);
-  return (
-    <>
-      <SocketIoPage />
-      <App />
-    </>
-  );
+  return <App />;
 }

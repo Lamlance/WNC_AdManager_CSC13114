@@ -5,7 +5,7 @@ import ReduxStore from "./Redux/ReduxStore";
 import { Provider } from "react-redux";
 
 import AdsMapPage from "./Pages/AdsMapPage";
-import SocketIoPage from "./Pages/SocketIoPage";
+import { ConnectSocketIo } from "./Pages/SocketIoPage";
 
 function App() {
   return (
@@ -19,6 +19,7 @@ function App() {
 
 export default function () {
   useEffect(() => {
+    ConnectSocketIo();
     const head = document.querySelector("head");
     if (!head) {
       return;
@@ -32,10 +33,7 @@ export default function () {
   }, []);
   return (
     <Provider store={ReduxStore}>
-      <>
-        <SocketIoPage />
-        <App />
-      </>
+      <App />
     </Provider>
   );
 }

@@ -6,7 +6,7 @@ import {
   LoaiBaoCao,
   QuangCao,
 } from "@admanager/backend/db/schema";
-import { SQL, eq, ilike, inArray, or } from "drizzle-orm";
+import { SQL, desc, eq, ilike, inArray, or } from "drizzle-orm";
 import { AdsGeoJson, ReportApi } from "@admanager/shared";
 import { VNCharToEN } from "../../utils/VNCharToEN.js";
 
@@ -40,7 +40,8 @@ export const getALLReportInfo = async function (
     .leftJoin(
       AdsSchema.DiaDiem,
       eq(AdsSchema.DiaDiem.id_dia_diem, AdsSchema.QuangCao.id_dia_diem)
-    );
+    )
+    .orderBy(desc(AdsSchema.BaoCao.thoi_diem_bc));
 
   if (ward_list) {
     const q = ward_list.reduce((acum, curr) => {

@@ -1,38 +1,42 @@
 import { AdsGeoJson, SocketIoApi } from "@admanager/shared";
-import { useEffect, useState } from "react";
-import { Manager, Socket, io } from "socket.io-client";
+import { Manager, Socket } from "socket.io-client";
 
-function SocketIoPage() {
-  const [socket, setSocket] = useState<Socket>();
-  useEffect(() => {
-    if (socket) return;
+const manager = new Manager("http://localhost:4030", {
+  path: "/io",
+  query: { level: "wardDist" },
+});
 
-    const manager = new Manager("http://localhost:4030", {
-      path: "/io",
-      query: { level: "wardDist" },
-    });
-    const ioSocket = manager.socket("/" + SocketIoApi.Namespaces.report);
-    setSocket(ioSocket);
-    ioSocket.on("connect", () => {
-      setSocket(ioSocket);
-      console.log("Connected");
-    });
+const ioSockets: {
+  reportSocket?: Socket;
+} = {};
 
-    ioSocket.on("create", (data: any) => {
-      console.log("Create event", data);
+function ConnectReportSocket() {
+  const ioSocket = manager.socket("/" + SocketIoApi.Namespaces.report);
 
-      const report = AdsGeoJson.ReportGeoJsonPropertySchema.safeParse(data);
-      if (report.success == false) return console.log(report.error);
-      document.dispatchEvent(
-        new CustomEvent<SocketIoApi.ReportCreateEvent>(
-          "AdsManager:CreateReportEvent",
-          {
-            detail: { report: report.data },
-          },
-        ),
-      );
-    });
-  }, []);
-  return <></>;
+  ioSocket.on("connect", () => {
+    console.log("Connected");
+    ioSockets.reportSocket = ioSocket;
+  });
+
+  ioSocket.on("create", (data: any) => {
+    console.log("Create event", data);
+
+    const report = AdsGeoJson.ReportGeoJsonPropertySchema.safeParse(data);
+    if (report.success == false) return console.log(report.error);
+    document.dispatchEvent(
+      new CustomEvent<SocketIoApi.ReportCreateEvent>(
+        "AdsManager:CreateReportEvent",
+        {
+          detail: { report: report.data },
+        },
+      ),
+    );
+  });
 }
-export default SocketIoPage;
+
+function ConnectSocketIo() {
+  console.log("Socket", ioSockets.reportSocket);
+  if (!ioSockets.reportSocket) ConnectReportSocket();
+}
+
+export { ConnectSocketIo };

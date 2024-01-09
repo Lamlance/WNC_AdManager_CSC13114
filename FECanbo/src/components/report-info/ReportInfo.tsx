@@ -1,9 +1,9 @@
-import { Col, Row, Switch } from "antd";
+import { Col, Row, Switch, notification } from "antd";
 import ReportInfoTable from "./ReportInfoTable";
 import ReportInfoDetail from "./ReportInfoDetail";
 import { useLazyGetAllReportInfo } from "../../slices/api/apiSlice";
 import { useEffect, useRef, useState } from "react";
-import { ReportApi } from "@admanager/shared";
+import { ReportApi, SocketIoApi } from "@admanager/shared";
 import WardCheckBoxList from "../FormComponents/WardCheckBox";
 import { useAppSelector } from "../../store";
 
@@ -14,14 +14,37 @@ const ReportInfo = () => {
   const [selectedRow, setSelectedRow] =
     useState<ReportApi.ReportResponse | null>(null);
 
-  useEffect(() => {
-    document.addEventListener("AdsManager:CreateReportEvent", (e) => {
-      console.log("Detail", e.detail);
-      if (!authState.isLoggedIn) return;
-      getAllReportInfo({
-        phuong_id: authState.user.managedWards,
-      });
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotification = () => {
+    api.info({
+      message: `Receive new report`,
+      placement: "topRight",
     });
+  };
+
+  function onReportCreateEvent(e: CustomEvent<SocketIoApi.ReportCreateEvent>) {
+    console.log("Detail", e.detail);
+    if (!authState.isLoggedIn) return;
+    openNotification();
+    getAllReportInfo({
+      phuong_id: authState.user.managedWards,
+    });
+  }
+
+  useEffect(() => {
+    document.addEventListener(
+      "AdsManager:CreateReportEvent",
+      onReportCreateEvent,
+    );
+
+    return () => {
+      document.removeEventListener(
+        "AdsManager:CreateReportEvent",
+        onReportCreateEvent,
+        true,
+      );
+    };
   }, []);
 
   useEffect(() => {
@@ -38,6 +61,7 @@ const ReportInfo = () => {
 
   return (
     <>
+      {contextHolder}
       {error && <div>There was an error</div>}
       {isLoading && <div>Loading page</div>}
       <Row
