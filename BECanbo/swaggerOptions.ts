@@ -1,9 +1,9 @@
 export const swaggerOptions = {
   swaggerDefinition: {
     info: {
-      title: "Your API Title",
+      title: "CityAds Manager APIs",
       version: "1.0.0",
-      description: "Description of your API",
+      description: "CityAds Manager APIs",
     },
   },
   apis: ["./src/routes/*.ts"],
