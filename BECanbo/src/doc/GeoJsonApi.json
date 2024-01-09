@@ -1,0 +1,19 @@
+{
+  "/geojson/": {
+    "get": {
+      "tags": ["geojson"],
+      "description": "Get ads geo json for map",
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdsGeoJsonSchema"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
