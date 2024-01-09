@@ -57,15 +57,11 @@ export const getALLReportInfo = async function (
   return await query;
 };
 
-export async function createReportInfo(
-  data: Zod.infer<typeof AdsZodSchema.createBaoCaoSchema>
-) {
+export async function createReportInfo(data: ReportApi.ReportCreateBody) {
   const res = await pg_client
     .insert(AdsSchema.BaoCao)
     .values({
       ...data,
-      trang_thai: data.trang_thai || undefined,
-      thoi_diem_bc: data.thoi_diem_bc || undefined,
     })
     .returning({
       insertId: AdsSchema.BaoCao.id_bao_cao,
