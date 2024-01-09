@@ -32,7 +32,8 @@
     "pg": "^8.11.3",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "zod-to-json-schema": "^3.22.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

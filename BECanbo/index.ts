@@ -9,11 +9,11 @@ import passport from "passport";
 import bodyParser from "body-parser";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
+import { swaggerOptions } from "./swaggerOptions";
 
 configDotenv();
 import MulterMw from "./src/utils/Multer.js";
 import { sendCodeToEmail } from "./src/utils/SendCodeToEmail";
-import { swaggerOptions } from "./swaggerOptions";
 
 const app = express();
 const PORT = process.env.PORT || 4030;
