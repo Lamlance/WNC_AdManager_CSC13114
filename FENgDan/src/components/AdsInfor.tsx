@@ -16,6 +16,7 @@ interface EmptyAdItemProps {
     place: AdsGeoJson.PlaceProperty | ReportApi.ReportPlace,
     ad?: AdsGeoJson.AdsProperty,
   ) => void;
+  disableEmptyMsg?: boolean;
 }
 
 interface AdsItemProps {
@@ -29,7 +30,11 @@ interface AdsItemProps {
   ) => void;
 }
 
-function EmptyAdItem({ Place, onReportSubmit }: EmptyAdItemProps) {
+function EmptyAdItem({
+  Place,
+  onReportSubmit,
+  disableEmptyMsg,
+}: EmptyAdItemProps) {
   const [isReportModalVisible, setIsReportModalVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -56,13 +61,15 @@ function EmptyAdItem({ Place, onReportSubmit }: EmptyAdItemProps) {
   };
 
   return (
-    <div className="ads-info-container relative ">
-      <div className="ads-info-popup absolute w-full rounded-xl border-opacity-90 p-4 shadow-lg">
+    <div>
+      <div className="ads-info-popup w-full rounded-xl border-opacity-90 p-4 shadow-lg">
         <div className="ads-info-content">
           <p className="ads_info_location text-base">Vị trí: {Place.dia_chi}</p>
-          <p className="mt-2 text-center text-lg italic">
-            <span className="font-semibold">{`Hiện chưa có dữ liệu quảng cáo`}</span>
-          </p>
+          {!!disableEmptyMsg ? null : (
+            <p className="mt-2 text-center text-lg italic">
+              <span className="font-semibold">{`Hiện chưa có dữ liệu quảng cáo`}</span>
+            </p>
+          )}
 
           <ReportModal
             visible={isReportModalVisible}
@@ -70,22 +77,26 @@ function EmptyAdItem({ Place, onReportSubmit }: EmptyAdItemProps) {
             onSubmit={handleReportModalSubmit}
           />
 
-          <div className="mt-4 flex justify-end">
+          <div className=" m-0 flex justify-end gap-x-2">
             <InfoCircleOutlined
               onClick={showModal}
-              className=" mt-2 cursor-pointer"
+              className=" flex-grow cursor-pointer"
               style={{ fontSize: "18px", color: "#1677ff" }}
             />
             <Button
               type="primary"
               danger
               onClick={handleReportClick}
-              className=" ml-auto mr-2"
+              className="m-0 mr-2"
             >
               Báo cáo vi phạm
             </Button>
 
-            <Button type="primary" onClick={handleRegisterClick}>
+            <Button
+              className="m-0"
+              type="primary"
+              onClick={handleRegisterClick}
+            >
               Đăng ký
             </Button>
           </div>
@@ -128,8 +139,8 @@ function AdItem({ Ad, Place, onReportSubmit }: AdsItemProps) {
     setIsModalOpen(false);
   };
   return (
-    <div className="ads-info-container relative ">
-      <div className="ads-info-popup absolute w-full rounded-xl border-opacity-90 p-4 shadow-lg">
+    <div className="">
+      <div className="w-full rounded-xl border-opacity-90 p-4 shadow-lg">
         <div className="ads-info-content">
           <p className=" text-lg font-bold">{Ad.bang_qc}</p>
           <p className="ads_info_location text-base">{Place.dia_chi}</p>
@@ -163,22 +174,26 @@ function AdItem({ Ad, Place, onReportSubmit }: AdsItemProps) {
             onSubmit={handleReportModalSubmit}
           />
 
-          <div className="mt-4 flex justify-end">
+          <div className="mt-4 flex justify-end gap-x-2">
             <InfoCircleOutlined
               onClick={showModal}
-              className=" mt-2 cursor-pointer"
+              className=" flex-grow cursor-pointer"
               style={{ fontSize: "18px", color: "#1677ff" }}
             />
             <Button
               type="primary"
               danger
               onClick={handleReportClick}
-              className=" ml-auto mr-2"
+              className=" m-0"
             >
               Báo cáo vi phạm
             </Button>
 
-            <Button type="primary" onClick={handleRegisterClick}>
+            <Button
+              className="m-0"
+              type="primary"
+              onClick={handleRegisterClick}
+            >
               Đăng ký
             </Button>
           </div>
@@ -265,3 +280,5 @@ function AdsInfos() {
 }
 
 export default AdsInfos;
+
+export { EmptyAdItem };
