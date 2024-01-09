@@ -2,7 +2,7 @@ import { AdsGeoJson, ReportApi } from "@admanager/shared";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { useAppSelector, useAppDispatch } from "../Redux/ReduxStore";
-import { addReportData, setSelectedReport } from "../Redux/ReportsDataSlice";
+import { setSelectedReport } from "../Redux/ReportsDataSlice";
 import { REPORT_KEY } from "../models/report_form_values";
 import { ClusterCreateData } from "../utils/AddClusterPoint";
 import MapLibreGL from "maplibre-gl";
@@ -10,7 +10,11 @@ import { setSelectedAdsLocation } from "../Redux/SelectedAdsSlice";
 import { setDblClick } from "../Redux/MapClickSlice";
 import { AdsClusterMarker, AdsMap } from "@admanager/frontend";
 import MapSearchBar from "../components/AdsMap/MapSearch";
-import { useGetAdsGeoJson, useGetReportGeoJson } from "../Redux/AdsServerApi";
+import {
+  useGetAdsGeoJson,
+  useGetReportGeoJson,
+  useLazyGetReportGeoJson,
+} from "../Redux/AdsServerApi";
 const DefaultMapProps = {
   InitialPosition: {
     lng: 106.69379445290143,
@@ -64,8 +68,7 @@ function createReportPopup(
 
 export default function AdsMapPage() {
   const { data: adsGeoJson, error } = useGetAdsGeoJson();
-  const { data: reportGeoJson } = useGetReportGeoJson();
-  const reportGeoProperty = useAppSelector((state) => state.ReportsData.data);
+  const [getReportData, { data: reportGeoJson }] = useLazyGetReportGeoJson();
   const dispatch = useAppDispatch();
 
   function get_ad_cluster_createData() {
@@ -95,7 +98,7 @@ export default function AdsMapPage() {
 
   function handle_report_marker_click(data: z.infer<typeof GeoPropArr>) {
     console.log(data);
-    dispatch(setSelectedReport(data[0]));
+    dispatch(setSelectedReport(data));
   }
 
   const AdsClusterData = get_ad_cluster_createData();
@@ -117,6 +120,13 @@ export default function AdsMapPage() {
       popUpBuilder={createReportPopup}
     />
   );
+
+  useEffect(() => {
+    getReportData();
+    document.addEventListener("AdsManager:CreateReportEvent", () => {
+      getReportData();
+    });
+  }, []);
 
   return (
     <AdsMap

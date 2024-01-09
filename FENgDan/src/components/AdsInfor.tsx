@@ -5,9 +5,8 @@ import { REPORT_KEY } from "../models/report_form_values";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../Redux/ReduxStore";
 import AdsDetail from "./AdsDetail";
-import { AdsGeoJson, ReportApi } from "@admanager/shared";
+import { AdsGeoJson, ReportApi, SocketIoApi } from "@admanager/shared";
 import { z } from "zod";
-import { addReportData } from "../Redux/ReportsDataSlice";
 import { uploadReportData } from "../Redux/AdsServerApi";
 
 interface EmptyAdItemProps {
@@ -233,12 +232,15 @@ function AdsInfos() {
 
       try {
         const geojson = await uploadReport(formData).unwrap();
-        oldReport.data.push(geojson);
-        localStorage.setItem(REPORT_KEY, JSON.stringify(oldReport.data));
-        dispatch(addReportData([geojson]));
       } catch (e) {
         console.warn(e);
       }
+
+      document.dispatchEvent(
+        new CustomEvent<SocketIoApi.ReportCreateEvent>(
+          "AdsManager:CreateReportEvent",
+        ),
+      );
     } catch (e) {
       console.warn(e);
     }

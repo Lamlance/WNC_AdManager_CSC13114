@@ -55,7 +55,13 @@ const ReportInfo = () => {
   }, [authState]);
 
   const onWardFilter = (phuong_ids: number[]) => {
-    getAllReportInfo({ phuong_id: phuong_ids });
+    if (phuong_ids.length > 0) {
+      getAllReportInfo({ phuong_id: phuong_ids });
+    } else if (authState.isLoggedIn) {
+      getAllReportInfo({
+        phuong_id: authState.user.managedWards,
+      });
+    }
     console.log(phuong_ids);
   };
 

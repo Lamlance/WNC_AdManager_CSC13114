@@ -80,12 +80,5 @@ reportNameSpace.use((socket, next) => {
   return next();
 });
 reportNameSpace.on("connection", (socket) => {
-  if (socket.handshake.query.level === "client") {
-    socket.join("update");
-    setTimeout(() => {
-      reportNameSpace.to("update").emit("update", "hello");
-    }, 1000);
-  } else {
-    socket.join("create");
-  }
+  console.log("Connected", socket.id);
 });
