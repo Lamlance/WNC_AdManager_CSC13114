@@ -44,7 +44,7 @@
       }
     },
     "delete": {
-      "tags": ["ward"],
+      "tags": ["phuong"],
       "summary": "Delete a ward",
       "requestBody": {
         "required": true,

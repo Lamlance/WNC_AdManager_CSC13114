@@ -1,0 +1,72 @@
+{
+  "/api/public/quan/": {
+    "get": {
+      "tags": ["quan"],
+      "description": "Get all districts",
+      "responses": {
+        "200": {
+          "description": "Successful response",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DistrictSchema"
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "tags": ["quan"],
+      "description": "Create a district",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateDistrictRequestSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Successful response",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDistrictResponseSchema"
+              }
+            }
+          }
+        }
+      }
+    },
+    "delete": {
+      "tags": ["quan"],
+      "summary": "Delete a district",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DeleteDistrictRequestSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Successful response",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteDistrictResponseSchema"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
