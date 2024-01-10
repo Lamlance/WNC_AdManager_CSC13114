@@ -38,15 +38,19 @@ function ValidatorMwBuilder<
     let b: any;
     if (query) {
       const data = query.safeParse(req.query);
-      if (data.success == false)
+      if (data.success == false) {
+        console.log(data.error);
         return res.status(400).json({ error: data.error });
+      }
       q = data.data;
     }
 
     if (body) {
       const data = body.safeParse(req.body);
-      if (data.success == false)
+      if (data.success == false) {
+        console.log(data.error);
         return res.status(400).json({ error: data.error });
+      }
       b = data.data;
     }
 

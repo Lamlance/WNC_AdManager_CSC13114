@@ -20,6 +20,7 @@ const ReportInfo = () => {
     api.info({
       message: `Receive new report`,
       placement: "topRight",
+      duration: 0,
     });
   };
 

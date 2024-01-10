@@ -1,19 +1,17 @@
 import type { SocketIoApi } from "@admanager/shared";
 
-interface CustomEventMap {
-  "AdsManager:CreateReportEvent": CustomEvent<SocketIoApi.ReportCreateEvent>;
-}
-
 declare global {
   interface Document {
-    addEventListener<K extends keyof CustomEventMap>(
+    addEventListener<K extends keyof SocketIoApi.CustomEventMap>(
       type: K,
-      listener: (this: Document, ev: CustomEventMap[K]) => void,
+      listener: (this: Document, ev: SocketIoApi.CustomEventMap[K]) => void,
     ): void;
-    dispatchEvent<K extends keyof CustomEventMap>(ev: CustomEventMap[K]): void;
-    removeEventListener<K extends keyof CustomEventMap>(
+    dispatchEvent<K extends keyof SocketIoApi.CustomEventMap>(
+      ev: SocketIoApi.CustomEventMap[K],
+    ): void;
+    removeEventListener<K extends keyof SocketIoApi.CustomEventMap>(
       type: K,
-      listener: (this: Document, ev: CustomEventMap[K]) => void,
+      listener: (this: Document, ev: SocketIoApi.CustomEventMap[K]) => void,
       useCapture?: boolean,
     ): void;
   }

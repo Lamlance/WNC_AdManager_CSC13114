@@ -1,4 +1,4 @@
-import { SocketIoApi } from "@admanager/shared";
+import { ReportApi, SocketIoApi } from "@admanager/shared";
 import { Manager, Socket } from "socket.io-client";
 
 const manager = new Manager("http://localhost:4030", {
@@ -11,13 +11,21 @@ const ioSockets: {
 } = {};
 
 function ConnectReportSocket() {
-  const ioSocket = manager.socket("/" + SocketIoApi.Namespaces.report);
+  const ioSocket = manager.socket("/" + SocketIoApi.SocketNameSpace[0]);
   ioSocket.on("connect", () => {
     console.log("Connected");
     ioSockets.reportSocket = ioSocket;
   });
-  ioSocket.on("update", (data: any) => {
-    console.log("Upadate event", data);
+  ioSocket.on(SocketIoApi.SocketEvents.report[0], (data: any) => {
+    console.log(data);
+    const report = ReportApi.ReportSchema.safeParse(data);
+    if (report.success == false) return console.log(report.error);
+
+    const event: SocketIoApi.CustomEventMap["AdsManager:UpdateReportEvent"] =
+      new CustomEvent("AdsManager:UpdateReportEvent", {
+        detail: report.data,
+      });
+    document.dispatchEvent(event);
   });
 }
 

@@ -57,6 +57,7 @@ const ReportPropertySchema = z.object({
   noi_dung: z.string(),
   trang_thai: z.string(),
   thoi_diem_bc: z.date().or(z.string()),
+  phan_hoi: z.string().nullish(),
 });
 
 const ReportGeoJsonPropertySchema = z.preprocess(

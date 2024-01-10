@@ -66,8 +66,8 @@ const socketIo = new SocketIoServer(httpServer, {
   },
 });
 
-const reportNameSpace = socketIo.of("/" + SocketIoApi.Namespaces.report);
-app.set(SocketIoApi.Namespaces.report, reportNameSpace);
+const reportNameSpace = socketIo.of("/" + SocketIoApi.SocketNameSpace[0]);
+app.set(SocketIoApi.SocketNameSpace[0], reportNameSpace);
 
 reportNameSpace.use((socket, next) => {
   const level = SocketIoApi.SocketLevelSchema.safeParse(
@@ -79,6 +79,7 @@ reportNameSpace.use((socket, next) => {
   }
   return next();
 });
+
 reportNameSpace.on("connection", (socket) => {
   console.log("Connected", socket.id);
 });

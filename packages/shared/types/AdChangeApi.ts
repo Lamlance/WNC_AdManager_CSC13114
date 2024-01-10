@@ -29,7 +29,7 @@ const AdChangeStatusRequestUpdateSchema = z.object({
 const AdChangeRequestSchema = z
   .object({
     id_yeu_cau: z.number(),
-    thoi_diem_chinh_sua: z.date(),
+    thoi_diem_chinh_sua: z.coerce.date(),
     trang_thai: z.string(),
     id_quang_cao: z.string(),
   })

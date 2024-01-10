@@ -1,4 +1,4 @@
-import { AdsGeoJson, ReportApi } from "@admanager/shared";
+import { AdsGeoJson, ReportApi, SocketIoApi } from "@admanager/shared";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { useAppSelector, useAppDispatch } from "../Redux/ReduxStore";
@@ -15,6 +15,7 @@ import {
   useGetReportGeoJson,
   useLazyGetReportGeoJson,
 } from "../Redux/AdsServerApi";
+import { notification } from "antd";
 const DefaultMapProps = {
   InitialPosition: {
     lng: 106.69379445290143,
@@ -69,8 +70,8 @@ function createReportPopup(
 export default function AdsMapPage() {
   const { data: adsGeoJson, error } = useGetAdsGeoJson();
   const [getReportData, { data: reportGeoJson }] = useLazyGetReportGeoJson();
+  const [api, contextHolder] = notification.useNotification();
   const dispatch = useAppDispatch();
-
   function get_ad_cluster_createData() {
     const AdsDataSoruce = !adsGeoJson
       ? undefined
@@ -121,23 +122,69 @@ export default function AdsMapPage() {
     />
   );
 
+  function handleCreateReportEvent() {
+    getReportData();
+    api.info({
+      message: "Đã tạo báo cáo",
+      placement: "topRight",
+      duration: 0,
+    });
+  }
+
+  function handleUpdateReportEvent(
+    e: SocketIoApi.CustomEventMap["AdsManager:UpdateReportEvent"],
+  ) {
+    let tmp = document.createElement("DIV");
+    tmp.innerHTML = e.detail?.phan_hoi || "";
+    const text_phanhoi = tmp.textContent || tmp.innerText || "";
+    tmp.remove();
+
+    api.info({
+      message: `Báo cáo đã được ${e.detail?.trang_thai}`,
+      description: `Báo cáo tại ${e.detail?.dia_chi} được phản hồi "${text_phanhoi}"`,
+      placement: "topRight",
+      duration: 0,
+    });
+    getReportData();
+  }
+
   useEffect(() => {
     getReportData();
-    document.addEventListener("AdsManager:CreateReportEvent", () => {
-      getReportData();
-    });
+    document.addEventListener(
+      "AdsManager:CreateReportEvent",
+      handleCreateReportEvent,
+    );
+    document.addEventListener(
+      "AdsManager:UpdateReportEvent",
+      handleUpdateReportEvent,
+    );
+    return () => {
+      document.removeEventListener(
+        "AdsManager:CreateReportEvent",
+        handleCreateReportEvent,
+        true,
+      );
+      document.removeEventListener(
+        "AdsManager:UpdateReportEvent",
+        handleUpdateReportEvent,
+        true,
+      );
+    };
   }, []);
 
   return (
-    <AdsMap
-      SearchBar={{
-        func: MapSearchBar,
-        args: [{ refresh: 0 }],
-      }}
-      onMapDblClick={(data) => dispatch(setDblClick(data))}
-      InitialPosition={DefaultMapProps.InitialPosition}
-      AdsClusterInfo={AdsCluster}
-      ReportClusterInfo={ReportCluster}
-    />
+    <>
+      {contextHolder}
+      <AdsMap
+        SearchBar={{
+          func: MapSearchBar,
+          args: [{ refresh: 0 }],
+        }}
+        onMapDblClick={(data) => dispatch(setDblClick(data))}
+        InitialPosition={DefaultMapProps.InitialPosition}
+        AdsClusterInfo={AdsCluster}
+        ReportClusterInfo={ReportCluster}
+      />
+    </>
   );
 }

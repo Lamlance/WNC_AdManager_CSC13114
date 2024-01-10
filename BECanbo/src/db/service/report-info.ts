@@ -121,6 +121,7 @@ export async function getReportById(id: number) {
 }
 
 export async function updateStatusReport(params: ReportApi.ReportUpdate) {
+  params.phan_hoi = decodeURI(params.phan_hoi);
   const data = await pg_client
     .update(AdsSchema.BaoCao)
     .set({
@@ -129,5 +130,5 @@ export async function updateStatusReport(params: ReportApi.ReportUpdate) {
     })
     .where(eq(AdsSchema.BaoCao.id_bao_cao, params.id_bao_cao))
     .returning({ updated: AdsSchema.BaoCao });
-  return data[0] ? data[0].updated : null;
+  return data[0] ? (data[0].updated as ReportApi.Report) : null;
 }

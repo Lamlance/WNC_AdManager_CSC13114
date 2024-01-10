@@ -68,7 +68,7 @@ export const apiSlice = createApi({
       GetALLReportInfoArgs
     >({
       query: (args) => ({
-        url: "api/bao-cao",
+        url: "/api/bao-cao",
         params: { phuong_id: args.phuong_id },
       }),
     }),
@@ -77,7 +77,7 @@ export const apiSlice = createApi({
       ReportApi.ReportUpdate
     >({
       query: (body) => ({
-        url: "/bao-cao",
+        url: "/api/bao-cao",
         method: "PUT",
         body: body,
         headers: { "Content-Type": "application/json" },

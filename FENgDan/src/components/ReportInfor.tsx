@@ -82,25 +82,40 @@ function ReportInfor() {
           />
         </div>
       )}
-      {selected?.map((v) => (
-        <div className="">
-          <div className=" w-full rounded-xl border-opacity-90 p-4 shadow-lg">
-            <div className="">
-              <p className="text-base">Báo cáo: {v.loai_bao_cao}</p>
-              <p className="text-base">Tình trạng: {v.bao_cao.trang_thai}</p>
+      {selected?.map((v) => {
+        console.log(v.bao_cao);
+        return (
+          <div className="" key={v.bao_cao.id_bao_cao}>
+            <div className=" w-full rounded-xl border-opacity-90 p-4 shadow-lg">
+              <div className="">
+                <p className="text-base">Báo cáo: {v.loai_bao_cao}</p>
+                <p className="text-base">Tình trạng: {v.bao_cao.trang_thai}</p>
 
-              <p className="text-base">
-                <span
-                  className="font-semibold "
-                  dangerouslySetInnerHTML={{
-                    __html: v.bao_cao.noi_dung || "",
-                  }}
-                ></span>
-              </p>
+                <p className="text-base">
+                  <span>Nội dung</span>
+                  <span
+                    className="font-semibold "
+                    dangerouslySetInnerHTML={{
+                      __html: v.bao_cao.noi_dung || "Không có nội dung",
+                    }}
+                  ></span>
+                </p>
+
+                <p className="text-base">
+                  <span>Phản hồi</span>
+
+                  <span
+                    className="font-semibold "
+                    dangerouslySetInnerHTML={{
+                      __html: v.bao_cao.phan_hoi || "",
+                    }}
+                  ></span>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

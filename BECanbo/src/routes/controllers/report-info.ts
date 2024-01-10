@@ -73,9 +73,11 @@ router.post(
         return res.status(500).json({ error: "Cant create BaoCao" });
 
       res.status(200).json(data.data);
-      const socket = req.app.get(SocketIoApi.Namespaces.report);
+      const socket = req.app.get(SocketIoApi.SocketNameSpace[0]);
       if (!socket) return;
-      (socket as Namespace).to("create").emit("create", { ...data.data });
+      (socket as Namespace).emit(SocketIoApi.SocketEvents.report[1], {
+        ...data.data,
+      });
     }
   )
 );
@@ -89,7 +91,13 @@ router.put(
       const data = await CallAndCatchAsync(updateStatusReport, res.locals.body);
       if (data.success == false)
         return res.status(500).json({ error: data.error });
-      return res.status(200).json(data.data);
+
+      res.status(200).json(data.data);
+      const socket = req.app.get(SocketIoApi.SocketNameSpace[0]);
+      if (!socket) return console.log("Not found name space");
+      (socket as Namespace).emit(SocketIoApi.SocketEvents.report[0], {
+        ...data.data,
+      });
     }
   )
 );

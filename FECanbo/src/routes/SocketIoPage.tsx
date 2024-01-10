@@ -11,14 +11,14 @@ const ioSockets: {
 } = {};
 
 function ConnectReportSocket() {
-  const ioSocket = manager.socket("/" + SocketIoApi.Namespaces.report);
+  const ioSocket = manager.socket("/" + SocketIoApi.SocketNameSpace[0]);
 
   ioSocket.on("connect", () => {
     console.log("Connected");
     ioSockets.reportSocket = ioSocket;
   });
 
-  ioSocket.on("create", (data: any) => {
+  ioSocket.on(SocketIoApi.SocketEvents.report[1], (data: any) => {
     console.log("Create event", data);
 
     const report = AdsGeoJson.ReportGeoJsonPropertySchema.safeParse(data);
