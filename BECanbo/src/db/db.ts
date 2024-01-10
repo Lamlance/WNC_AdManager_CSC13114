@@ -5,9 +5,9 @@ import pg_pkg from "pg";
 const { Client } = pg_pkg;
 const client = new Client({
   host: "127.0.0.1",
-  port: 6432,
+  port: 6543,
   user: "postgres",
-  password: "postgresql",
+  password: "postgres",
   database: "AdsManager",
 });
 await client.connect();
