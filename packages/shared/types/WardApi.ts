@@ -15,9 +15,9 @@ const CreateWardRequestSchema = z.object({
 const CreateWardResponseSchema = z.object({
   success: z.boolean(),
   data: z.object({
+    id: z.number(),
+    ten_phuong: z.string(),
     id_quan: z.number(),
-    ten_quan: z.string(),
-    id_phuong: z.number(),
   }),
   error: z.string().nullable(),
 });
