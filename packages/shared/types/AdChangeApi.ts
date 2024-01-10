@@ -38,6 +38,7 @@ const AdChangeRequestSchema = z
 const AdChangeRequestResponseSchema = z.object({
   chinh_sua: AdChangeRequestSchema,
   thong_tin_qc: AdsGeoJson.AdsPropertySchema,
+  dia_diem: AdsGeoJson.PlacePropertySchema,
 });
 
 type AdChangeRequest = z.infer<typeof AdChangeRequestSchema>;

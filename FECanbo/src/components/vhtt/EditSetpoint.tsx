@@ -4,15 +4,19 @@ import type { RootState } from "../../store.ts";
 // import { onChangeLocation, onChangeAddress } from '../../slices/pointSlice.tsx';
 import { setSelectedPlace, showModalClose } from "../../slices/modalSlice.tsx";
 import AdsMapModal from "../AdsMap/AdsMapModal.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlaceChangeApi } from "@admanager/shared";
+import { useForm } from "antd/es/form/Form";
 
-
-type EditPlaceFormValue =
+export type EditPlaceFormValue = (
   | PlaceChangeApi.PlaceChangeRequestCreate
-  | PlaceChangeApi.PlaceChangeRequestResponse;
+  | PlaceChangeApi.PlaceChangeRequestResponse
+) & {
+  ly_do_chinh_sua?: string;
+};
 
 interface EditSetpointProps {
+  showReason?: boolean;
   onFormSubmit: (data: EditPlaceFormValue) => void;
 }
 
@@ -23,12 +27,29 @@ function EditSetpoint(props: EditSetpointProps) {
     lat: number;
   } | null>(null);
   const dispatch = useDispatch();
+  const [formHook] = useForm<EditPlaceFormValue>();
   const modal = useSelector((state: RootState) => state.PlaceEditModal);
   const { isModalOpen, selectedPlace } = modal;
 
   function onFormSubmit(data: EditPlaceFormValue) {
-    props.onFormSubmit({ ...data, id_dia_diem: selectedPlace?.id_dia_diem });
+    props.onFormSubmit({
+      ...data,
+      lng: selectedLngLat?.lng,
+      lat: selectedLngLat?.lat,
+      id_dia_diem: selectedPlace?.id_dia_diem,
+    });
   }
+
+  useEffect(() => {
+    formHook.setFieldsValue(selectedPlace ? { ...selectedPlace } : {});
+    if (selectedPlace) {
+      console.log(selectedPlace.lng, selectedPlace.lat);
+      setSelectedLngLat({
+        lng: selectedPlace.lng || 0,
+        lat: selectedPlace.lat || 0,
+      });
+    }
+  }, [selectedPlace]);
 
   return (
     <>
@@ -51,6 +72,7 @@ function EditSetpoint(props: EditSetpointProps) {
         footer={null}
       >
         <Form
+          form={formHook}
           onFinish={onFormSubmit}
           name="wrap"
           labelCol={{ flex: "110px" }}
@@ -71,7 +93,6 @@ function EditSetpoint(props: EditSetpointProps) {
           </Form.Item>
           <Form.Item label="Vị trí">
             <Input
-              disabled
               className="w-5/6"
               value={
                 selectedLngLat
@@ -80,10 +101,17 @@ function EditSetpoint(props: EditSetpointProps) {
                     ? `${selectedPlace.lng} x ${selectedPlace.lat}`
                     : "Không chỉnh sửa"
               }
-            />{" "}
+            />
             <Button onClick={() => setAdMapOpen(true)}>🗺️</Button>
-            
           </Form.Item>
+          {props.showReason ? (
+            <Form.Item<EditPlaceFormValue>
+              name="ly_do_chinh_sua"
+              label={"Lý do chỉnh sửa"}
+            >
+              <Input.TextArea rows={4} />
+            </Form.Item>
+          ) : null}
 
           <Form.Item className="flex justify-center">
             <Button type="primary" htmlType="submit">

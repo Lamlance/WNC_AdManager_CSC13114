@@ -36,11 +36,12 @@ export async function getAllPlaceChangeRequest(
     .select({
       id_yeu_cau: AdsSchema.YeuCauChinhSuaDiaDiem.id_yeu_cau,
       id_dia_diem: AdsSchema.YeuCauChinhSuaDiaDiem.id_dia_diem,
-      lng: AdsSchema.DiaDiem.lng,
-      lat: AdsSchema.DiaDiem.lat,
-      ten_dia_diem: AdsSchema.DiaDiem.ten_dia_diem,
-      dia_chi: AdsSchema.DiaDiem.dia_chi,
+      lng: AdsSchema.YeuCauChinhSuaDiaDiem.lng,
+      lat: AdsSchema.YeuCauChinhSuaDiaDiem.lat,
+      ten_dia_diem: AdsSchema.YeuCauChinhSuaDiaDiem.ten_dia_diem,
+      dia_chi: AdsSchema.YeuCauChinhSuaDiaDiem.dia_chi,
       ly_do_chinh_sua: AdsSchema.YeuCauChinhSuaDiaDiem.ly_do_chinh_sua,
+      trang_thai: AdsSchema.YeuCauChinhSuaDiaDiem.trang_thai,
     })
     .from(AdsSchema.YeuCauChinhSuaDiaDiem)
     .innerJoin(
@@ -70,4 +71,27 @@ export async function createPlaceChangeRequest(
     .values(data)
     .returning({ insertedId: AdsSchema.YeuCauChinhSuaDiaDiem.id_yeu_cau });
   return res[0].insertedId;
+}
+
+export async function updatePlaceChangeRequest(
+  args: PlaceChangeApi.PlaceChangeRequestResponse
+) {
+  await pg_client
+    .update(AdsSchema.YeuCauChinhSuaDiaDiem)
+    .set({
+      ...args,
+      id_yeu_cau: undefined,
+    })
+    .where(eq(AdsSchema.YeuCauChinhSuaDiaDiem.id_yeu_cau, args.id_yeu_cau));
+  if (args.trang_thai === "Đã duyệt" && args.id_dia_diem) {
+    await pg_client
+      .update(AdsSchema.DiaDiem)
+      .set({
+        ten_dia_diem: args.ten_dia_diem || undefined,
+        dia_chi: args.dia_chi || undefined,
+        lng: args.lng || undefined,
+        lat: args.lat || undefined,
+      })
+      .where(eq(AdsSchema.DiaDiem.id_dia_diem, args.id_dia_diem));
+  }
 }

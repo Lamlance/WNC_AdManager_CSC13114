@@ -157,6 +157,7 @@ const YeuCauChinhSuaDiaDiem = pgTable("YeuCauChinhSuaDiaDiem", {
   ten_dia_diem: varchar("ten_dia_diem", { length: 255 }),
   dia_chi: varchar("dia_chi", { length: 255 }),
   ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
+  trang_thai: varchar("trang_thai", { length: 255 }).default("Đang chờ"),
 });
 
 const TKNguoiDung = pgTable("TKNguoiDung", {

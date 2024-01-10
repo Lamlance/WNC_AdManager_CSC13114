@@ -8,6 +8,7 @@ const PlaceChangeRequestResponseSchema = z.object({
   ten_dia_diem: z.string().nullish(),
   dia_chi: z.string().nullish(),
   ly_do_chinh_sua: z.string(),
+  trang_thai: z.string().nullish(),
 });
 
 const PlaceChangeRequestCreateSchema = PlaceChangeRequestResponseSchema.omit({

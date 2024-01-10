@@ -15,7 +15,7 @@ import {
   showModalClose,
   showModalOpen,
 } from "../../slices/modalSlice";
-import EditSetpoint from "../vhtt/EditSetpoint";
+import EditSetpoint, { EditPlaceFormValue } from "../vhtt/EditSetpoint";
 import { useAppSelector } from "../../hooks";
 
 const AdsInfo = () => {
@@ -71,23 +71,20 @@ const AdsInfo = () => {
     }).then((v) => console.log(v));
   }
 
-  async function onPlaceChangeSubmit(
-    data:
-      | PlaceChangeApi.PlaceChangeRequestCreate
-      | PlaceChangeApi.PlaceChangeRequestResponse,
-  ) {
+  async function onPlaceChangeSubmit(data: EditPlaceFormValue) {
     console.log(data);
-    submitPlaceChangeReq({ ...data, ly_do_chinh_sua: "Ly do nao do #2" }).then(
-      (v) => {
-        console.log(v);
-        dispatch(showModalClose());
-      },
-    );
+    submitPlaceChangeReq({
+      ...data,
+      ly_do_chinh_sua: data.ly_do_chinh_sua || "",
+    }).then((v) => {
+      console.log(v);
+      dispatch(showModalClose());
+    });
   }
 
   return (
     <>
-      <EditSetpoint onFormSubmit={onPlaceChangeSubmit} />
+      <EditSetpoint showReason={true} onFormSubmit={onPlaceChangeSubmit} />
       {selectedAd && (
         <EditAdForm
           onFormSubmit={onAdChangeSubmit}

@@ -187,6 +187,17 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    updatePlaceChangeRequest: builder.mutation<
+      any,
+      PlaceChangeApi.PlaceChangeRequestResponse
+    >({
+      query: (body) => ({
+        url: "api/dia-diem/chinh-sua",
+        method: "PUT",
+        body,
+        headers: { "Content-Type": "application/json" },
+      }),
+    }),
     getImageUrl: builder.query<
       ImageApi.GetImageQueryResponse,
       ImageApi.GetImageQuery
@@ -399,9 +410,11 @@ export const {
   useSubmitAdRequestMutation,
   useGetAllAdsReqQuery,
   useGetAllAdChangeRequestQuery,
+  useLazyGetAllAdChangeRequestQuery,
   useSubmitAdChangeRequestMutation,
   useGetAllPlaceChangeRequestQuery,
   useSubmitPlaceChangeRequestMutation,
+  useUpdatePlaceChangeRequestMutation,
   useGetAllAdsMethodQuery,
   useSubmitAdMethodMutation,
   useSubmitUpdateAdMethodMutation,

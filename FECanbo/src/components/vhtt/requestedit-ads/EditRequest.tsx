@@ -6,11 +6,12 @@ import EditAdForm from "../EditAdForm";
 import { AdChangeApi } from "@admanager/shared";
 import {
   useGetAllAdChangeRequestQuery,
+  useLazyGetAllAdChangeRequestQuery,
   useSubmitUpdateAdChangeRequestStatusMutation,
 } from "../../../slices/api/apiSlice";
 
 function EditRequest() {
-  const { data } = useGetAllAdChangeRequestQuery();
+  const [getChangeInfo, { data }] = useLazyGetAllAdChangeRequestQuery();
   const [selectedAds, setSelectedAds] =
     useState<AdChangeApi.AdChangeRequestResponse | null>(null);
 
@@ -22,6 +23,11 @@ function EditRequest() {
   };
 
   const columns: ColumnsType<AdChangeApi.AdChangeRequestResponse> = [
+    {
+      title: "Địa điểm",
+      dataIndex: ["dia_diem", "ten_dia_diem"],
+      key: "ten_dia_diem",
+    },
     {
       title: "Lý do chỉnh sửa ",
       dataIndex: ["chinh_sua", "ly_do_chinh_sua"],
@@ -75,25 +81,28 @@ function EditRequest() {
   const [submitAdChangeStatus] = useSubmitUpdateAdChangeRequestStatusMutation();
 
   useEffect(() => {
-    if (isApprove) {
+    if (isApprove && selectedAds) {
       const data: AdChangeApi.AdChangeStatusRequestUpdate = {
-        id_yeu_cau: selectedAds!.chinh_sua.id_yeu_cau,
-        trang_thai: "Approve",
+        id_yeu_cau: selectedAds.chinh_sua.id_yeu_cau,
+        trang_thai: "Đã duyệt",
       };
 
       submitAdChangeStatus(data).then((v) => console.log(v));
-      window.location.reload();
     }
-    if (isReject) {
+    if (isReject && selectedAds) {
       const data: AdChangeApi.AdChangeStatusRequestUpdate = {
-        id_yeu_cau: selectedAds!.chinh_sua.id_yeu_cau,
-        trang_thai: "Reject",
+        id_yeu_cau: selectedAds.chinh_sua.id_yeu_cau,
+        trang_thai: "Từ chối",
       };
 
       submitAdChangeStatus(data).then((v) => console.log(v));
-      window.location.reload();
     }
   }, [selectedAds, isApprove, isReject]);
+
+  useEffect(() => {
+    getChangeInfo();
+  }, []);
+
   const handleApprove = () => {
     setIsApprove(true);
   };
