@@ -5,13 +5,14 @@ import { privateRouter, publicRouter } from "./src/routes/index";
 import authRouter from "./src/routes/auth";
 import { strategy as jwtStrategy, strategy } from "./src/utils/JwtPassport";
 import { configDotenv } from "dotenv";
-import passport from "passport";
+import passport, { use } from "passport";
 import { Server as SocketIoServer } from "socket.io";
 configDotenv();
 import MulterMw from "./src/utils/Multer.js";
 import { sendCodeToEmail } from "./src/utils/SendCodeToEmail";
 import { SocketIoApi } from "@admanager/shared";
 import z from "zod";
+import { LogMiddleware } from "./src/utils/LogMIddleware";
 
 const app = express();
 const PORT = process.env.PORT || 4030;
@@ -19,12 +20,8 @@ const PORT = process.env.PORT || 4030;
 app.use(express.json());
 app.use(cors());
 app.use(passport.initialize());
-app.use((req, res, next) => {
-  console.log(req.cookies);
-  next();
-});
 passport.use(strategy);
-
+app.use(LogMiddleware);
 app.get("/", function (req, res) {
   return res.status(200).json({ Hello: "World" });
 });
