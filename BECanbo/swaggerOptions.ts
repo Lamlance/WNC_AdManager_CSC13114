@@ -1,10 +1,11 @@
 import { Options } from "swagger-jsdoc";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { AdsGeoJson, ReportApi,PlaceChangeApi } from "@admanager/shared";
+import { AdsGeoJson, ReportApi,PlaceChangeApi, WardApi } from "@admanager/shared";
 
 import GeoJsonApiDoc from "./src/doc/GeoJsonApi.json" with {type:"json"};
 import ReportApiDoc from "./src/doc/ReportApi.json" with {type:"json"};
 import PlaceChangeApiDoc from "./src/doc/PlaceChangeRoute.json" with {type:"json"};
+import WardApiDoc from "./src/doc/WardApi.json" with {type:"json"};
 
 const AdsGeoJsonSchemas = Object.entries(AdsGeoJson).reduce(
   (acc, value) => {
@@ -42,6 +43,18 @@ const PlaceEditReqSchemas = Object.entries(PlaceChangeApi).reduce(
   {} as { [key: string]: object }
 );
 
+const WardSchema = Object.entries(WardApi).reduce(
+  (acc, value) => {
+    acc[value[0]] = {
+      ...zodToJsonSchema(value[1], {
+        target: "openApi3",
+      }),
+    };
+    return acc;
+  },
+  {} as { [key: string]: object }
+);
+
 const jsonSchema = {
   openapi: "3.1.0",
   components: {
@@ -49,6 +62,7 @@ const jsonSchema = {
       ...AdsGeoJsonSchemas,
       ...ReportJsonSchemas,
       ...PlaceEditReqSchemas,
+      ...WardSchema
     },
   },
 };
@@ -70,6 +84,7 @@ const swaggerOptions: Options = {
       ...GeoJsonApiDoc,
       ...ReportApiDoc,
       ...PlaceChangeApiDoc,
+      ...WardApiDoc
     },
   },
   apis: ["./src/routes/**/*.ts"],
