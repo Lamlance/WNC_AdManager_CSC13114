@@ -7,9 +7,9 @@ export default {
   dbCredentials: {
     host: "127.0.0.1",
     //port: 5432,
-    port: 6543,
+    port: 6432,
     user: "postgres",
-    password: "postgres",
+    password: "postgresql",
     database: "AdsManager",
   },
 } satisfies Config;
