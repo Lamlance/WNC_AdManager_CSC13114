@@ -94,32 +94,27 @@ router.post(
           JWT_SECRET_KEY,
           { expiresIn: "5m" }
         );
-        return res.status(201).json({
-          token: authToken,
-          user: data,
-          confirmCodeToken: confirmCodeToken,
-        });
-        // sendCodeToEmail(data.email, data.name, confirmCode, "register")
-        //   .then((success) => {
-        //     const authToken = jwt.sign(data, JWT_SECRET_KEY);
-        //     const confirmCodeToken = jwt.sign(
-        //       {
-        //         userId: data.userId,
-        //         confirmCode: confirmCode,
-        //       },
-        //       JWT_SECRET_KEY,
-        //       { expiresIn: "5m" }
-        //     );
+        sendCodeToEmail(data.email, data.name, confirmCode, "register")
+          .then((success) => {
+            const authToken = jwt.sign(data, JWT_SECRET_KEY);
+            const confirmCodeToken = jwt.sign(
+              {
+                userId: data.userId,
+                confirmCode: confirmCode,
+              },
+              JWT_SECRET_KEY,
+              { expiresIn: "5m" }
+            );
 
-        //     return res.status(201).json({
-        //       token: authToken,
-        //       user: data,
-        //       confirmCodeToken: confirmCodeToken,
-        //     });
-        //   })
-        //   .catch((err) => {
-        //     return res.status(500).json({ msg: "Can not register right now!" });
-        //   });
+            return res.status(201).json({
+              token: authToken,
+              user: data,
+              confirmCodeToken: confirmCodeToken,
+            });
+          })
+          .catch((err) => {
+            return res.status(500).json({ msg: "Can not register right now!" });
+          });
       }
     }
   )

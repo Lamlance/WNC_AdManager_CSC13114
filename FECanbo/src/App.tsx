@@ -9,13 +9,11 @@ import {
   InfoCircleOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  PictureOutlined,
   UploadOutlined,
   UserAddOutlined,
   UserOutlined,
   VideoCameraOutlined,
   YuqueFilled,
-  YuqueOutlined,
 } from "@ant-design/icons";
 
 import AdsInfo from "./components/ads-info/AdsInfo";
@@ -32,7 +30,7 @@ import EditUserInfo from "./components/user/EditUserInfo";
 import ResolveReport from "./routes/ResolveReport";
 import LoginPage from "./routes/LoginPage";
 import RegisterPage from "./routes/RegisterPage";
-import ForgotPasswordPage from "./routes/ForgotPassword";
+import EmailConfirmationPage from "./routes/EmailConfirmationPage";
 import VerifyAccountPage from "./routes/VerifyAccountPage";
 import { useAppSelector } from "./hooks";
 import AccountManager from "./routes/AccountManager";
@@ -178,7 +176,18 @@ const App = () => {
         <Route path="/auth">
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
-          <Route path="forgot-password" element={<ForgotPasswordPage />} />
+          <Route
+            path="send-email-otp"
+            element={<EmailConfirmationPage type="email-verification" />}
+          />
+          <Route
+            path="forgot-password"
+            element={<EmailConfirmationPage type="forgot-password" />}
+          />
+          <Route
+            path="change-password"
+            element={<EmailConfirmationPage type="change-password" />}
+          />
           <Route path="verify-account" element={<VerifyAccountPage />} />
         </Route>
       </Routes>
