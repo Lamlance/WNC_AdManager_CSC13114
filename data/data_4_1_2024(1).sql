@@ -1,0 +1,42 @@
+INSERT INTO public."DiaDiem" (id_dia_diem, id_ban_do, ten_dia_diem, dia_chi, kinh_do, vi_do, id_phuong) VALUES
+(88, NULL, 'Bánh Mì Huỳnh Hoa', '26 Lê Thị Riêng, Phường Tân Định, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.688808, 10.789059, 1),
+(89, NULL, 'Cafe Apartment', '42 Nguyễn Huệ, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.702091, 10.773358, 1),
+(90, NULL, 'Chợ Bến Thành', 'Chợ Bến Thành, Lê Lợi, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.698542, 10.772910, 1),
+(91, NULL, 'Bitexco Financial Tower', '2 Hải Triều, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.703227, 10.773714, 1),
+(92, NULL, 'Bảo tàng Chứng tích Chiến tranh', '28 Võ Văn Tần, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Việt Nam', 106.689790, 10.777806, 1),
+(93, NULL, 'Nhà thờ Đức Bà', '01 Hồ Tùng Mậu, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.699597, 10.776682, 1),
+(94, NULL, 'Công viên 23 Tháng 9', '23/9, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.692007, 10.774018, 1),
+(95, NULL, 'Dinh Thống Nhất', '135 Nam Kỳ Khởi Nghĩa, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.699805, 10.780493, 1),
+(96, NULL, 'Lotte Legend Hotel Saigon', '2A-4A Tôn Đức Thắng, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.700219, 10.781128, 1),
+(97, NULL, 'Cafe Sài Gòn Rooftop Bar', '59 Đồng Du, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.700475, 10.774863, 1),
+(98, NULL, 'Sài Gòn River Cruise', '4 Tôn Đức Thắng, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.699612, 10.780380, 1),
+(99, NULL, 'The Coffee House - Pasteur', '19B Phan Bội Châu, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.699147, 10.776558, 1),
+(100, NULL, 'Bảo tàng Mỹ thuật TP.Hồ Chí Minh', '97A Phó Đức Chính, Phường Nguyễn Thái Bình, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.699011, 10.776408, 1),
+(101, NULL, 'Nhà hàng Baba`s Kitchen', '164 Bùi Viện, Phường Phạm Ngũ Lão, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.689797, 10.769186, 1),
+(102, NULL, 'Chùa Ngọc Hoàng', '73 Mai Thị Lựu, Phường Đa Kao, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.699999, 10.786190, 1),
+(103, NULL, 'Vincom Center B', '72 Lê Thánh Tôn, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.701497, 10.773583, 1),
+(104, NULL, 'Cà phê The Coffee House', '74 Hai Bà Trưng, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.699557, 10.773158, 1),
+(105, NULL, 'Công viên Tao Đàn', '55C Nguyễn Thiệp, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.699048, 10.776576, 1),
+(106, NULL, 'Vườn hoa Lê Văn Tam', '65 Lê Lai, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh, Việt Nam', 106.696833, 10.772379, 1);
+
+
+
+INSERT INTO public."QuangCao" (id, quy_hoach, ngay_hieu_luc, ngay_het_han, hinh_1, hinh_2, so_luong, chieu_dai_m, chieu_rong_m, id_loai_bang_qc, id_dia_diem, id_hinh_thuc, id_loai_vitri) VALUES 
+('a1c23365-5c59-4bca-b5dd-0a1e682e456d', true, '2023-01-01', '2023-12-31', 'hinh_150_path.jpg', 'hinh_151_path.jpg', 1, 2, 3, 1, 88, 1, 1),
+('b0e74d5b-5e56-4c62-914d-b17fe65a5ee3', false, '2023-02-01', '2023-11-30', 'hinh_152_path.jpg', 'hinh_153_path.jpg', 1, 2, 3, 1, 89, 2, 1),
+('c3a8d7b7-8ff1-4b03-9a42-bf4321a2f3d7', true, '2023-03-01', '2023-10-31', 'hinh_154_path.jpg', 'hinh_155_path.jpg', 1, 4, 6, 2, 90, 2, 3),
+('d4fcf63a-381b-4a42-99cf-1a98ba5240c2', true, '2023-04-01', '2023-09-30', 'hinh_156_path.jpg', 'hinh_157_path.jpg', 1, 4, 6, 3, 91, 5, 6),
+('e3d7a218-5f98-4da7-94e3-062292f41ae8', false, '2023-05-01', '2023-08-31', 'hinh_158_path.jpg', 'hinh_159_path.jpg', 1, 3, 5, 4, 92, 1, 7),
+('f2035a92-b59f-4de7-953a-1b28de9957bf', true, '2023-06-01', '2023-12-31', 'hinh_160_path.jpg', 'hinh_161_path.jpg', 2, 2, 3, 5, 93, 3, 1),
+('a127ed42-8b3b-4c46-ae02-2b83ee5e0b98', false, '2023-07-01', '2023-11-30', 'hinh_162_path.jpg', 'hinh_163_path.jpg', 1, 3, 4, 8, 94, 4, 2),
+('b54b2e35-6d8b-43d0-b58f-5f9f60ad4f90', true, '2023-08-01', '2023-10-31', 'hinh_164_path.jpg', 'hinh_165_path.jpg', 1, 2, 3, 2, 95, 1, 5),
+('b0b8a550-7781-4fb4-98e2-cf1c87915e4b', true, '2023-09-01', '2023-09-30', 'hinh_166_path.jpg', 'hinh_167_path.jpg', 1, 4, 6, 6, 96, 2, 4),
+('b8a20042-0541-4201-9062-4da86d007afe', false, '2023-10-01', '2023-08-31', 'hinh_168_path.jpg', 'hinh_169_path.jpg', 1, 3, 5, 3, 97, 5, 7),
+('b7e5c03e-8a36-4cf2-89d0-08c55ec6b9c6', true, '2023-11-01', '2023-12-31', 'hinh_170_path.jpg', 'hinh_171_path.jpg', 2, 2, 3, 4, 98, 3, 1),
+('b0c72287-1007-477c-98a0-95182efdbb87', false, '2023-12-01', '2023-12-31', 'hinh_172_path.jpg', 'hinh_173_path.jpg', 1, 2, 3, 7, 99, 1, 5),
+('b983a6a5-9d75-4d65-9242-3e9eb216f18a', true, '2024-01-01', '2024-12-31', 'hinh_174_path.jpg', 'hinh_175_path.jpg', 1, 4, 6, 9, 100, 2, 4),
+('b8c3bf88-5f90-4f1b-aa4d-2896e1e31d1c', false, '2024-02-01', '2024-11-30', 'hinh_176_path.jpg', 'hinh_177_path.jpg', 1, 3, 4, 1, 101, 4, 2),
+('b4f1c1f5-1bca-43e3-a6cd-03b1a0d40c69', true, '2024-03-01', '2024-10-31', 'hinh_178_path.jpg', 'hinh_179_path.jpg', 1, 2, 3, 10, 102, 1, 6),
+('b3d3dbf0-e993-42e8-9131-6a6e457731ef', true, '2024-04-01', '2024-09-30', 'hinh_180_path.jpg', 'hinh_181_path.jpg', 2, 2, 3, 5, 103, 3, 1),
+('b1d52e1c-414d-4b9b-9cf9-19893b00ea0b', false, '2024-05-01', '2024-08-31', 'hinh_182_path.jpg', 'hinh_183_path.jpg', 1, 3, 4, 8, 104, 4, 2),
+('b4b4e5bd-97d7-4d99-90a3-5d5a448e7c43', true, '2024-06-01', '2024-07-31', 'hinh_184_path.jpg', 'hinh_185_path.jpg', 2, 2, 3, 5, 105, 3, 1);

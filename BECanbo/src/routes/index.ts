@@ -16,7 +16,7 @@ import { CheckJwtMiddleware } from "../utils/AuthMiddleware.js";
 const privateRouter = Router();
 
 const publicRouter = Router();
-privateRouter.use(CheckJwtMiddleware);
+//privateRouter.use(CheckJwtMiddleware);
 
 privateRouter.use("/quang-cao", adsInfoRouter);
 privateRouter.use("/yeu-cau-quang-cao", adsRequestRouter);
