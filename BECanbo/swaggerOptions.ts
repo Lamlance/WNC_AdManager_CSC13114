@@ -42,9 +42,9 @@ const jsonSchema = {
 const swaggerOptions: Options = {
   swaggerDefinition: {
     info: {
-      title: "Your API",
+      title: "City Ads Manager APIs",
       version: "1.0.0",
-      description: "API documentation for Your Express App",
+      description: "API documentation for City Ads Manager Website",
     },
     servers: [
       {
