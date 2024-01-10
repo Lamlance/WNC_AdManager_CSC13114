@@ -3,7 +3,7 @@ import { createLogger, format, transports } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 const minuteTransport = new DailyRotateFile({
   filename: "./logs/%DATE%/application-%DATE%.log",
-  frequency: "m",
+  frequency: "1m",
   datePattern: "YYYY-MM-DD-HH-mm",
 });
 
