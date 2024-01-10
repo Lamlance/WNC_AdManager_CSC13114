@@ -9,7 +9,10 @@ import { notification } from "antd";
 import { useEffect } from "react";
 import { useAppDispatch } from "../../store";
 
-const LoginForm = () => {
+interface LoginFormProps {
+  redirectUrl: string;
+}
+const LoginForm = ({ redirectUrl }: LoginFormProps) => {
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -41,7 +44,7 @@ const LoginForm = () => {
     if (data) {
       dispatch(login(data));
       openNotification("success");
-      setTimeout(() => navigate("/"), 2000);
+      setTimeout(() => navigate(redirectUrl), 2000);
     }
     if (error) {
       openNotification("error");

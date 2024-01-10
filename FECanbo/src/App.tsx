@@ -160,15 +160,22 @@ const App = () => {
   return (
     <div className="h-screen w-screen">
       <Routes>
-        <Route path="/" element={<PageLayout items={items} />}>
+        <Route
+          path="/"
+          element={<PageLayout items={items} loginUrl="/login" />}
+        >
           <Route index element={<AdsRequestPage />} />
           <Route path="map" element={<AdsMapPage />} />
           <Route path="advertisements" element={<AdsInfo />} />
           <Route path="reports" element={<ReportInfo />} />
           <Route path="user" element={<EditUserInfo />} />
           <Route path="resolve/:report_id?" element={<ResolveReport />} />
+          <Route path="login" element={<LoginPage redirectUrl={"/"} />} />
         </Route>
-        <Route path="vhtt" element={<PageLayout items={itemVHTTs} />}>
+        <Route
+          path="vhtt"
+          element={<PageLayout items={itemVHTTs} loginUrl={"/vhtt/login"} />}
+        >
           <Route index element={<AdManagement />} />
           <Route path="place-manager" element={<PlaceManagemnetPlace />} />
           <Route path="requestad" element={<AdsRequestVHTTPage />} />
@@ -182,13 +189,14 @@ const App = () => {
             path="ward-district-management"
             element={<WardDistrictManagementPage />}
           />
+          <Route path="login" element={<LoginPage redirectUrl={"/vhtt"} />} />
         </Route>
-        <Route path="/auth">
+        {/* <Route path="/auth">
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="verify-account" element={<VerifyAccountPage />} />
-        </Route>
+        </Route> */}
       </Routes>
     </div>
   );
@@ -202,9 +210,10 @@ interface Item {
 }
 interface PageLayoutProps {
   items: Item[];
+  loginUrl: string;
 }
 
-const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
+const PageLayout: React.FC<PageLayoutProps> = ({ items, loginUrl }) => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const authUser = useAppSelector((state) => state.auth);
@@ -270,7 +279,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
 
           <div className=" pr-8">
             {!authUser.isLoggedIn ? (
-              <Link to={"/auth/login"} className="text-base font-semibold">
+              <Link to={loginUrl} className="text-base font-semibold">
                 Đăng nhập
               </Link>
             ) : (

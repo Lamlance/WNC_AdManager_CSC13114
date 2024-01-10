@@ -1,11 +1,14 @@
-import LoginForm from "../components/auth/LoginForm"
+import LoginForm from "../components/auth/LoginForm";
 
-const LoginPage = () => {
-  return (
-    <div className="flex justify-center items-center p-4">
-        <LoginForm />
-    </div>
-  )
+interface LoginFormProps {
+  redirectUrl: string;
 }
+const LoginPage = (props: LoginFormProps) => {
+  return (
+    <div className="flex items-center justify-center p-4">
+      <LoginForm redirectUrl={props.redirectUrl} />
+    </div>
+  );
+};
 
-export default LoginPage
+export default LoginPage;
