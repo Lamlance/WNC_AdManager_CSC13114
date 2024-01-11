@@ -3,10 +3,14 @@ import { Button } from "antd";
 import ApexCharts from "apexcharts";
 import React, { useRef } from "react";
 import { useEffect, useState } from "react";
+import { useLazyGetReportStatsEachWardQuery } from "../slices/api/apiSlice";
 
 export function StatsPage() {
   const barChartEle = useRef<HTMLDivElement | null>(null);
   const [apexBarChart, setApexBarChart] = useState<ApexCharts>();
+
+  const [getStatsEachWard, { data: statsEachWard }] =
+    useLazyGetReportStatsEachWardQuery();
 
   function initApexBarChart(stats: StatsApi.StatsResponse) {
     if (!barChartEle.current) return console.log("Missing element");
@@ -28,13 +32,16 @@ export function StatsPage() {
       chart: {
         type: "bar",
         height: 430,
-        width: 50 * 100,
+        width: Math.max(
+          Object.values(stats).length * 100,
+          barChartEle.current.offsetWidth,
+        ),
       },
       plotOptions: {
         bar: {
           horizontal: false,
           dataLabels: {
-            position: "left",
+            position: "top",
           },
         },
       },
@@ -51,25 +58,20 @@ export function StatsPage() {
         intersect: false,
       },
       xaxis: {
-        categories: [
-          ...Object.values(stats).map((v) => v.phuong.ten_phuong),
-          ...new Array(50).fill("a"),
-        ],
+        categories: [...Object.values(stats).map((v) => v.phuong.ten_phuong)],
       },
     };
     setApexBarChart(new ApexCharts(barChartEle.current, options));
   }
 
   useEffect(() => {
-    fetch("http://localhost:4030/api/thong-ke").then(async (v) => {
-      try {
-        const data = await v.json();
-        initApexBarChart(StatsApi.StatsResponseSchema.parse(data));
-      } catch (e) {
-        console.warn(e);
-      }
-    });
+    getStatsEachWard();
   }, []);
+
+  useEffect(() => {
+    if (!statsEachWard) return;
+    initApexBarChart(statsEachWard);
+  }, [statsEachWard]);
 
   return (
     <>

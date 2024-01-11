@@ -16,6 +16,7 @@ import {
   PlaceChangeApi,
   ReportApi,
   ReportTypeApi,
+  StatsApi,
 } from "@admanager/shared";
 import { RootState } from "../../store";
 
@@ -401,6 +402,9 @@ export const apiSlice = createApi({
     >({
       query: () => "/api/vi-tri",
     }),
+    getReportStatsEachWard: builder.query<StatsApi.StatsResponse, void>({
+      query: () => "/api/thong-ke",
+    }),
   }),
 });
 
@@ -464,4 +468,7 @@ export const {
   useLazyGetAllBoardTypeQuery,
   useGetAllLandTypeQuery,
   useLazyGetAllLandTypeQuery,
+
+  useGetReportStatsEachWardQuery,
+  useLazyGetReportStatsEachWardQuery,
 } = apiSlice;
