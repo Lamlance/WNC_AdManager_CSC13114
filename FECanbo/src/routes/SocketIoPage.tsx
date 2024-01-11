@@ -32,6 +32,12 @@ function ConnectReportSocket() {
       ),
     );
   });
+
+  ioSocket.on(SocketIoApi.SocketEvents.report[0], () => {
+    const event: SocketIoApi.CustomEventMap["AdsManager:UpdateReportEvent"] =
+      new CustomEvent("AdsManager:UpdateReportEvent");
+    document.dispatchEvent(event);
+  });
 }
 
 function ConnectSocketIo() {

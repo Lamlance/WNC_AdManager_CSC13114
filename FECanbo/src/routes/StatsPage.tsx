@@ -14,7 +14,7 @@ export function StatsPage() {
 
   function initApexBarChart(stats: StatsApi.StatsResponse) {
     if (!barChartEle.current) return console.log("Missing element");
-    if (apexBarChart) return console.log("Already init chart");
+    if (apexBarChart) return updateBarChartData(stats);
     const options = {
       series: Object.values(stats).reduce(
         (acum, v) => {
@@ -64,8 +64,34 @@ export function StatsPage() {
     setApexBarChart(new ApexCharts(barChartEle.current, options));
   }
 
+  function updateBarChartData(stats: StatsApi.StatsResponse) {
+    if (!apexBarChart) return console.warn("Cant update uninit bar chart");
+    const series = {
+      series: Object.values(stats).reduce(
+        (acum, v) => {
+          acum[0].data.push(v.chua_xu_ly);
+          acum[1].data.push(v.dang_xu_ly);
+          acum[2].data.push(v.da_xy_ly);
+          return acum;
+        },
+        [
+          { name: "Chưa xử lý", data: [] as number[] },
+          { name: "Đang xử lý", data: [] as number[] },
+          { name: "Đã xử lý", data: [] as number[] },
+        ],
+      ),
+    };
+    apexBarChart.updateSeries(series.series);
+  }
+
   useEffect(() => {
     getStatsEachWard();
+    document.addEventListener("AdsManager:CreateReportEvent", () => {
+      getStatsEachWard();
+    });
+    document.addEventListener("AdsManager:UpdateReportEvent", () => {
+      getStatsEachWard();
+    });
   }, []);
 
   useEffect(() => {
