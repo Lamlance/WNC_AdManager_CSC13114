@@ -1,0 +1,73 @@
+{
+  "/api/public/phuong/": {
+    "post": {
+      "tags": ["phuong"],
+      "description": "Create a ward",
+      "requestBody": {
+        "required": 1,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateWardRequestSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWardResponseSchema"
+              }
+            }
+          }
+        }
+      }
+    },
+    "get": {
+      "tags": ["phuong"],
+      "description": "Get all wards",
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/WardSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "delete": {
+      "tags": ["phuong"],
+      "summary": "Delete a ward",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DeleteWardRequestSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Successful response",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteWardResponseSchema"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

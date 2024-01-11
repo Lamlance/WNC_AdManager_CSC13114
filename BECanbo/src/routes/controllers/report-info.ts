@@ -49,7 +49,7 @@ router.post(
   MulterMw.array("hinh_anh"),
   ValidatorMwBuilder(
     undefined,
-    AdsZodSchema.createBaoCaoSchema,
+    ReportApi.ReportCreateSchema,
     async function (req, res) {
       const files = (req.files as Express.Multer.File[]) || [];
       const uploadImgs = await Promise.allSettled(

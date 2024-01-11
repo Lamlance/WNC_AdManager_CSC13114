@@ -14,8 +14,8 @@ const ReportPlaceSchema = z.object({
   id_phuong: z.number().nullish(),
   id_dia_diem: z.number().nullish(),
   place_id: z.string().nullish(),
-  lng: z.number(),
-  lat: z.number(),
+  lng: z.coerce.number(),
+  lat: z.coerce.number(),
 });
 
 const ReportCreateSchema = z

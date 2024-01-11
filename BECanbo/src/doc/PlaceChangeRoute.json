@@ -1,0 +1,22 @@
+{
+  "/api/dia-diem/chinh-sua": {
+    "get": {
+      "tags": ["Dia diem"],
+      "description": "Get all place change request",
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PlaceChangeRequestResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

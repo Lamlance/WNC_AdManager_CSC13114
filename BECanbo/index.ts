@@ -5,6 +5,10 @@ import { privateRouter, publicRouter } from "./src/routes/index";
 import authRouter from "./src/routes/auth";
 import { strategy as jwtStrategy, strategy } from "./src/utils/JwtPassport";
 import { configDotenv } from "dotenv";
+import bodyParser from "body-parser";
+import swaggerUi from "swagger-ui-express";
+import swaggerJSDoc from "swagger-jsdoc";
+import { swaggerOptions } from "./swaggerOptions";
 import passport, { use } from "passport";
 import { Server as SocketIoServer } from "socket.io";
 configDotenv();
@@ -21,6 +25,10 @@ app.use(express.json());
 app.use(cors());
 app.use(passport.initialize());
 passport.use(strategy);
+
+// Swagger documentation setup
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(LogMiddleware);
 app.get("/", function (req, res) {
   return res.status(200).json({ Hello: "World" });

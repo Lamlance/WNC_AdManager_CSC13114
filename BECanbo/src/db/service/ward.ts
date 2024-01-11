@@ -47,7 +47,6 @@ export async function CreateWard({ ten_phuong, id_quan }: CreateWardArgs) {
       })
       .from(Quan)
       .where(eq(Quan.id_quan, id_quan));
-
     if (!existingDistrict || existingDistrict.length === 0) {
       return { success: false, error: "District not found." };
     }

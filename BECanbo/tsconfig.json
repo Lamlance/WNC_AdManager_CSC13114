@@ -12,7 +12,8 @@
     "strict": true,
     "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
-    "inlineSourceMap": true
+    "inlineSourceMap": true,
+    "resolveJsonModule": true
   },
   "ts-node": {
     "experimentalSpecifierResolution": "node",
