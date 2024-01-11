@@ -1,48 +1,61 @@
-import { AdsGeoJson, SocketIoApi } from "@admanager/shared";
+import { AdsGeoJson, PlaceChangeApi, SocketIoApi } from "@admanager/shared";
 import { Manager, Socket } from "socket.io-client";
 
-const manager = new Manager("http://localhost:4030", {
-  path: "/io",
-  query: { level: "wardDist" },
-});
-
-const ioSockets: {
-  reportSocket?: Socket;
-} = {};
-
-function ConnectReportSocket() {
-  const ioSocket = manager.socket("/" + SocketIoApi.SocketNameSpace[0]);
-
-  ioSocket.on("connect", () => {
-    console.log("Connected");
-    ioSockets.reportSocket = ioSocket;
+class SocketIo {
+  public static manager = new Manager("http://localhost:4030", {
+    path: "/io",
+    query: { level: "wardDist" },
   });
 
-  ioSocket.on(SocketIoApi.SocketEvents.report[1], (data: any) => {
-    console.log("Create event", data);
-
-    const report = AdsGeoJson.ReportGeoJsonPropertySchema.safeParse(data);
-    if (report.success == false) return console.log(report.error);
-    document.dispatchEvent(
-      new CustomEvent<SocketIoApi.ReportCreateEvent>(
-        "AdsManager:CreateReportEvent",
-        {
-          detail: { report: report.data },
-        },
-      ),
+  public static _socket: Socket | null = null;
+  public static ConnectReportSocket() {
+    SocketIo._socket = SocketIo.manager.socket(
+      "/" + SocketIoApi.SocketNameSpace[0],
     );
-  });
 
-  ioSocket.on(SocketIoApi.SocketEvents.report[0], () => {
-    const event: SocketIoApi.CustomEventMap["AdsManager:UpdateReportEvent"] =
-      new CustomEvent("AdsManager:UpdateReportEvent");
-    document.dispatchEvent(event);
-  });
+    SocketIo._socket.on("connect", () => {
+      console.log("Connected");
+    });
+
+    SocketIo._socket.on(SocketIoApi.SocketEvents[1], (data: any) => {
+      console.log("Create event", data);
+
+      const report = AdsGeoJson.ReportGeoJsonPropertySchema.safeParse(data);
+      if (report.success == false) return console.log(report.error);
+      document.dispatchEvent(
+        new CustomEvent<SocketIoApi.ReportCreateEvent>(
+          "AdsManager:CreateReportEvent",
+          {
+            detail: { report: report.data },
+          },
+        ),
+      );
+    });
+
+    SocketIo._socket.on(SocketIoApi.SocketEvents[0], () => {
+      const event: SocketIoApi.CustomEventMap["AdsManager:UpdateReportEvent"] =
+        new CustomEvent("AdsManager:UpdateReportEvent");
+      document.dispatchEvent(event);
+    });
+
+    SocketIo._socket.on(SocketIoApi.SocketEvents[3], (data) => {
+      const req =
+        PlaceChangeApi.PlaceChangeRequestResponseSchema.safeParse(data);
+      if (req.success == false) return console.warn(req.error);
+
+      const event: SocketIoApi.CustomEventMap["AdsManager:UpdatePlaceChangeEvent"] =
+        new CustomEvent("AdsManager:UpdatePlaceChangeEvent", {
+          detail: req.data,
+        });
+      document.dispatchEvent(event);
+    });
+    return SocketIo._socket;
+  }
+
+  public static DisconnectReportSocket() {
+    SocketIo._socket?.disconnect();
+    SocketIo._socket = null;
+  }
 }
 
-function ConnectSocketIo() {
-  console.log("Socket", ioSockets.reportSocket);
-  if (!ioSockets.reportSocket) ConnectReportSocket();
-}
-
-export { ConnectSocketIo };
+export { SocketIo };

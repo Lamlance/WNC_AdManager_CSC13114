@@ -7,6 +7,7 @@ import AdsMapModal from "../AdsMap/AdsMapModal.tsx";
 import { useEffect, useState } from "react";
 import { PlaceChangeApi } from "@admanager/shared";
 import { useForm } from "antd/es/form/Form";
+import { useAppSelector } from "../../hooks.ts";
 
 export type EditPlaceFormValue = (
   | PlaceChangeApi.PlaceChangeRequestCreate
@@ -28,8 +29,9 @@ function EditSetpoint(props: EditSetpointProps) {
   } | null>(null);
   const dispatch = useDispatch();
   const [formHook] = useForm<EditPlaceFormValue>();
-  const modal = useSelector((state: RootState) => state.PlaceEditModal);
-  const { isModalOpen, selectedPlace } = modal;
+  const { isModalOpen, selectedPlace } = useAppSelector(
+    (state) => state.PlaceEditModal,
+  );
 
   function onFormSubmit(data: EditPlaceFormValue) {
     props.onFormSubmit({

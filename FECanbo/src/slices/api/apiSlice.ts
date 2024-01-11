@@ -86,9 +86,12 @@ export const apiSlice = createApi({
     }),
     getAllAdChangeRequest: builder.query<
       AdChangeApi.AdChangeRequestResponse[],
-      void
+      GetALLReportInfoArgs
     >({
-      query: () => "api/yeu-cau-quang-cao/chinh-sua",
+      query: ({ phuong_id }) => ({
+        url: "api/yeu-cau-quang-cao/chinh-sua",
+        params: { phuong_id },
+      }),
     }),
     submitAdChangeRequest: builder.mutation<
       void,
@@ -169,10 +172,11 @@ export const apiSlice = createApi({
     }),
     getAllPlaceChangeRequest: builder.query<
       PlaceChangeApi.PlaceChangeRequestResponse[],
-      void
+      GetALLReportInfoArgs
     >({
-      query: () => ({
+      query: ({ phuong_id }) => ({
         url: "api/dia-diem/chinh-sua",
+        params: { phuong_id },
       }),
     }),
     submitPlaceChangeRequest: builder.mutation<
@@ -417,6 +421,7 @@ export const {
   useLazyGetAllAdChangeRequestQuery,
   useSubmitAdChangeRequestMutation,
   useGetAllPlaceChangeRequestQuery,
+  useLazyGetAllPlaceChangeRequestQuery,
   useSubmitPlaceChangeRequestMutation,
   useUpdatePlaceChangeRequestMutation,
   useGetAllAdsMethodQuery,

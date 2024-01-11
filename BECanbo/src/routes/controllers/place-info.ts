@@ -9,9 +9,10 @@ import {
   updatePlaceInfo,
 } from "../../db/service/place-info";
 import { ValidatorMwBuilder } from "../../utils/ValidationMiddlewareBuilder";
-import { PlaceApi, PlaceChangeApi } from "@admanager/shared";
+import { PlaceApi, PlaceChangeApi, SocketIoApi } from "@admanager/shared";
 import z from "zod";
 import { WardArraySchema } from "../../utils/WardArray";
+import { Namespace } from "socket.io";
 const PlaceRouter = Router();
 
 PlaceRouter.get("/", async function (req, res) {
@@ -77,8 +78,6 @@ PlaceRouter.post(
       );
       if (data.success == false)
         return res.status(500).json({ error: data.error });
-
-      return res.status(200).json({ insertedId: data.data });
     }
   )
 );
@@ -94,7 +93,12 @@ PlaceRouter.put(
         res.locals.body
       );
       if (data.success == false) return res.status(500).json(data);
-      return res.status(200).json(data);
+      res.status(200).json(data);
+      const socket = req.app.get(SocketIoApi.SocketNameSpace[0]);
+      if (!socket) return console.log("Not found name space");
+      (socket as Namespace).emit(SocketIoApi.SocketEvents[3], {
+        ...res.locals.body,
+      });
     }
   )
 );

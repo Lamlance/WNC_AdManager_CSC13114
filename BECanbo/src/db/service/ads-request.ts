@@ -85,12 +85,10 @@ export async function getAllAdsChangeRequest(
     );
 
   if (args.phuong_id) {
-    data
-      .innerJoin(
-        AdsSchema.DiaDiem,
-        eq(AdsSchema.DiaDiem.id_dia_diem, AdsSchema.QuangCao.id_dia_diem)
-      )
-      .where(inArray(AdsSchema.DiaDiem.id_phuong, args.phuong_id));
+    const result = await data.where(
+      inArray(AdsSchema.DiaDiem.id_phuong, args.phuong_id)
+    );
+    return result;
   }
 
   return await data;

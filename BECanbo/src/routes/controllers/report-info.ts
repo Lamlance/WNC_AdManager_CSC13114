@@ -76,7 +76,7 @@ router.post(
       const socket = req.app.get(SocketIoApi.SocketNameSpace[0]);
       if (!socket) return console.log("Not found socket");
       console.log(data.data);
-      (socket as Namespace).emit(SocketIoApi.SocketEvents.report[1], {
+      (socket as Namespace).emit(SocketIoApi.SocketEvents[1], {
         ...data.data,
       });
     }
@@ -96,7 +96,7 @@ router.put(
       res.status(200).json(data.data);
       const socket = req.app.get(SocketIoApi.SocketNameSpace[0]);
       if (!socket) return console.log("Not found name space");
-      (socket as Namespace).emit(SocketIoApi.SocketEvents.report[0], {
+      (socket as Namespace).emit(SocketIoApi.SocketEvents[0], {
         ...data.data,
       });
     }

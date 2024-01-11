@@ -76,10 +76,8 @@ const AdsInfo = () => {
     submitPlaceChangeReq({
       ...data,
       ly_do_chinh_sua: data.ly_do_chinh_sua || "",
-    }).then((v) => {
-      console.log(v);
-      dispatch(showModalClose());
     });
+    dispatch(showModalClose());
   }
 
   return (

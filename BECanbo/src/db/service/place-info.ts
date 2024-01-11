@@ -58,8 +58,6 @@ export async function getAllPlaceChangeRequest(
 
     return data;
   }
-
-  const data: PlaceChangeApi.PlaceChangeRequestResponse[] = await res;
   return await res;
 }
 
