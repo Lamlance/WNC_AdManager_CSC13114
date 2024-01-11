@@ -2,11 +2,18 @@ import { Options } from "swagger-jsdoc";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { AdsGeoJson, ReportApi,PlaceChangeApi, WardApi, DistrictApi } from "@admanager/shared";
 
-import GeoJsonApiDoc from "./src/doc/GeoJsonApi.json" with {type:"json"};
-import ReportApiDoc from "./src/doc/ReportApi.json" with {type:"json"};
-import PlaceChangeApiDoc from "./src/doc/PlaceChangeRoute.json" with {type:"json"};
-import WardApiDoc from "./src/doc/WardApi.json" with {type:"json"};
-import DistrictApiDoc from "./src/doc/DistrictApi.json" with {type:"json"};
+// old source
+// import GeoJsonApiDoc from "./src/doc/GeoJsonApi.json" with {type:"json"};
+// import ReportApiDoc from "./src/doc/ReportApi.json" with {type:"json"};
+// import PlaceChangeApiDoc from "./src/doc/PlaceChangeRoute.json" with {type:"json"};
+// import WardApiDoc from "./src/doc/WardApi.json" with {type:"json"};
+// import DistrictApiDoc from "./src/doc/DistrictApi.json" with {type:"json"};
+
+import GeoJsonApiDoc from "./src/doc/GeoJsonApi.json" assert {type:"json"};
+import ReportApiDoc from "./src/doc/ReportApi.json" assert {type:"json"};
+import PlaceChangeApiDoc from "./src/doc/PlaceChangeRoute.json" assert {type:"json"};
+import WardApiDoc from "./src/doc/WardApi.json" assert {type:"json"};
+import DistrictApiDoc from "./src/doc/DistrictApi.json" assert {type:"json"};
 
 const AdsGeoJsonSchemas = Object.entries(AdsGeoJson).reduce(
   (acc, value) => {
