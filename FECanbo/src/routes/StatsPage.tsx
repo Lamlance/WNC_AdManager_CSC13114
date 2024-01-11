@@ -5,13 +5,12 @@ import React, { useRef } from "react";
 import { useEffect, useState } from "react";
 
 export function StatsPage() {
-  const [statsData, setStatsData] = useState<StatsApi.StatsResponse>();
-  const chartEle = useRef<HTMLDivElement | null>(null);
-  const [apexChart, setApexChart] = useState<ApexCharts>();
+  const barChartEle = useRef<HTMLDivElement | null>(null);
+  const [apexBarChart, setApexBarChart] = useState<ApexCharts>();
 
-  function initApexChart(stats: StatsApi.StatsResponse) {
-    if (!chartEle.current) return console.log("Missing element");
-    if (apexChart) return console.log("Already init chart");
+  function initApexBarChart(stats: StatsApi.StatsResponse) {
+    if (!barChartEle.current) return console.log("Missing element");
+    if (apexBarChart) return console.log("Already init chart");
     const options = {
       series: Object.values(stats).reduce(
         (acum, v) => {
@@ -58,15 +57,14 @@ export function StatsPage() {
         ],
       },
     };
-    setApexChart(new ApexCharts(chartEle.current, options));
+    setApexBarChart(new ApexCharts(barChartEle.current, options));
   }
 
   useEffect(() => {
     fetch("http://localhost:4030/api/thong-ke").then(async (v) => {
       try {
         const data = await v.json();
-        initApexChart(StatsApi.StatsResponseSchema.parse(data));
-        setStatsData(StatsApi.StatsResponseSchema.parse(data));
+        initApexBarChart(StatsApi.StatsResponseSchema.parse(data));
       } catch (e) {
         console.warn(e);
       }
@@ -77,12 +75,12 @@ export function StatsPage() {
     <>
       <Button
         onClick={() => {
-          apexChart?.render();
+          apexBarChart?.render();
         }}
       >
         Render chart
       </Button>
-      <div ref={chartEle} className=" overflow-auto"></div>
+      <div ref={barChartEle} className=" overflow-auto"></div>
     </>
   );
 }
