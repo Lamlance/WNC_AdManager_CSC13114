@@ -282,13 +282,6 @@ export const apiSlice = createApi({
         },
       }),
     }),
-    // getAccountProfile: builder.query<any, any>({
-    //   query: ({ authToken }) => ({
-    //     url: "user/",
-    //     params: { token: authToken },
-    //     method: "GET",
-    //   }),
-    // }),
     getAllAccount: builder.query<{ data: AuthApi.FullUserData[] }, void>({
       query: () => "/api/user/all",
     }),
@@ -409,11 +402,27 @@ export const apiSlice = createApi({
     getReportStatsEachWard: builder.query<StatsApi.StatsResponse, void>({
       query: () => "/api/thong-ke",
     }),
+
+    updateAdsInfo: builder.mutation<any, FormData>({
+      query: (body) => ({
+        url: "/api/quang-cao",
+        method: "PUT",
+        body,
+      }),
+    }),
+    createAdsInfo: builder.mutation<any, FormData>({
+      query: (body) => ({
+        url: "/api/quang-cao",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
 export const {
   useGetAllAdsInfoQuery,
+  useLazyGetAllAdsInfoQuery,
   useGetAllReportInfoQuery,
   useSubmitAdRequestMutation,
   useGetAllAdsReqQuery,
@@ -476,4 +485,7 @@ export const {
 
   useGetReportStatsEachWardQuery,
   useLazyGetReportStatsEachWardQuery,
+
+  useUpdateAdsInfoMutation,
+  useCreateAdsInfoMutation,
 } = apiSlice;

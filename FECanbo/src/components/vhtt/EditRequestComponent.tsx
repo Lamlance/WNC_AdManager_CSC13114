@@ -87,7 +87,7 @@ function EditRequestComponent() {
           render: (_, rec) => (
             <Button
               type="primary"
-              onClick={() => handleApproveClick(rec, true)}
+              onClick={() => handleApproveClick(rec, "Đã duyệt")}
             >
               Xét duyệt
             </Button>
@@ -100,7 +100,7 @@ function EditRequestComponent() {
             <Button
               danger
               type="primary"
-              onClick={() => handleApproveClick(rec, false)}
+              onClick={() => handleApproveClick(rec, "Từ chối")}
             >
               Từ chối
             </Button>
@@ -109,7 +109,6 @@ function EditRequestComponent() {
       ]);
       return;
     }
-    console.log(authState.user.managedWards);
     getAllPlaceChange({ phuong_id: authState.user.managedWards });
     setTableCol([
       {
@@ -147,6 +146,22 @@ function EditRequestComponent() {
           </Link>
         ),
       },
+      {
+        title: "Hủy yêu cầu",
+        align: "center",
+        render: (_, rec) => (
+          <Button
+            danger
+            type="primary"
+            disabled={
+              rec.trang_thai === "Đã duyệt" || rec.trang_thai === "Từ chối"
+            }
+            onClick={() => handleApproveClick(rec, "Đã hủy")}
+          >
+            Hủy yêu cầu
+          </Button>
+        ),
+      },
     ]);
   }, [authState]);
 
@@ -166,11 +181,11 @@ function EditRequestComponent() {
 
   function handleApproveClick(
     request: PlaceChangeApi.PlaceChangeRequestResponse,
-    accept: boolean,
+    status: "Đã duyệt" | "Từ chối" | "Đã hủy",
   ) {
     updatePlaceChange({
       ...request,
-      trang_thai: accept ? "Đã duyệt" : "Từ chối",
+      trang_thai: status,
     });
   }
 

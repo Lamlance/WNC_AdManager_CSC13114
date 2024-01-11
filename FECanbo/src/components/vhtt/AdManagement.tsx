@@ -1,10 +1,14 @@
-import React, { useState } from "react";
-import { Button, Table } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Table, UploadFile } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import EditAdForm from "./EditAdForm";
+import EditAdForm, { AdChangeFormValue } from "./EditAdForm";
 
 import { DeleteOutlined } from "@ant-design/icons";
-import { useGetAllAdsInfoQuery } from "../../slices/api/apiSlice";
+import {
+  useGetAllAdsInfoQuery,
+  useLazyGetAllAdsInfoQuery,
+  useUpdateAdsInfoMutation,
+} from "../../slices/api/apiSlice";
 import { AdsGeoJson } from "@admanager/shared";
 
 type AdsInfoRecord2 = AdsGeoJson.PlaceProperty & AdsGeoJson.AdsProperty;
@@ -48,7 +52,11 @@ const AdManagement = () => {
 
     {
       title: "Ngày hết hạn",
-      dataIndex: "ngay_het_han",
+      render(_, record) {
+        return record.ngay_het_han
+          ? new Date(record.ngay_het_han).toLocaleDateString()
+          : "Không có ngày hết hạn";
+      },
       key: "ngay_het_han",
     },
 
@@ -57,8 +65,14 @@ const AdManagement = () => {
       key: "operation",
       fixed: "right",
       width: 110,
-      render: () => (
-        <a className="text-blue-500 underline" onClick={() => openModal()}>
+      render: (_, rec) => (
+        <a
+          className="text-blue-500 underline"
+          onClick={() => {
+            setSelectedAds(rec);
+            openModal();
+          }}
+        >
           Xem chi tiết
         </a>
       ),
@@ -76,8 +90,9 @@ const AdManagement = () => {
       ),
     },
   ];
-  const { data, error, isLoading } = useGetAllAdsInfoQuery({});
-
+  const [getAllAdsInfo, { data, error, isLoading }] =
+    useLazyGetAllAdsInfoQuery();
+  const [updateAdsInfo] = useUpdateAdsInfoMutation();
   const [selectedAds, setSelectedAds] = useState<AdsInfoRecord2 | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,15 +101,37 @@ const AdManagement = () => {
   };
   const closeModal = () => {
     setIsModalOpen(false);
+    setSelectedAds(null);
   };
+
   const handleAddAd = () => {
     setSelectedAds(null);
-
     setIsModalOpen(true);
   };
 
   const handleDeleteAd = () => {};
-  console.log("data", data);
+
+  useEffect(() => {
+    getAllAdsInfo({});
+  }, []);
+
+  function handleUpdateAds(data: AdChangeFormValue) {
+    if (!selectedAds) return;
+    const formData = new FormData();
+    Object.entries(data).forEach((d) => {
+      if (d[0] === "hinh_anh") {
+        (d[1] as UploadFile[]).forEach((u) => {
+          if (u.originFileObj) formData.append("hinh_anh", u.originFileObj);
+        });
+        return;
+      }
+
+      if (d[1]) formData.append(d[0], d[1].toString());
+    });
+    formData.append("id_quang_cao", selectedAds.id_quang_cao);
+    updateAdsInfo(formData).then(() => getAllAdsInfo({}));
+  }
+
   return (
     <>
       {error && <div>There was an error</div>}
@@ -109,13 +146,13 @@ const AdManagement = () => {
         scroll={{ x: 1300 }}
         onRow={(record) => ({
           onClick: () => {
-            console.log("newres", record);
             setSelectedAds(record);
           },
         })}
       />
       <EditAdForm
         type="AdInfo"
+        onFormSubmit={handleUpdateAds}
         isModalOpen={isModalOpen}
         onClose={closeModal}
         ad={selectedAds}

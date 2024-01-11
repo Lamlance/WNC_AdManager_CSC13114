@@ -1,5 +1,15 @@
 import { FC, useEffect, useState } from "react";
-import { Select, DatePicker, InputNumber, Form, Input, Button } from "antd";
+import {
+  Select,
+  DatePicker,
+  InputNumber,
+  Form,
+  Input,
+  Button,
+  Switch,
+  Col,
+  Row,
+} from "antd";
 
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
@@ -33,6 +43,7 @@ export type AdChangeFormValue = Omit<
 > & {
   ngay_hieu_luc: Dayjs | undefined;
   ngay_het_han: Dayjs | undefined;
+  hinh_anh: UploadFile[];
 };
 
 type EditAdFormProps1 = {
@@ -68,6 +79,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [isLegal, setIsLegal] = useState<boolean>(false);
 
   const handleCancel = () => setPreviewOpen(false);
 
@@ -82,6 +94,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
         ? dayjs(new Date(ad.ngay_het_han))
         : undefined,
     });
+    setIsLegal(!!ad?.quy_hoach);
   }, [ad]);
 
   const handlePreview = async (file: UploadFile) => {
@@ -135,7 +148,12 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
     setComponentSize(size);
   };
 
-  const onMapSelect: MapSearchProps["onPlaceSelect"] = function (data) {};
+  function handleFormSubmit(value: AdChangeFormValue) {
+    value.hinh_anh = fileList;
+    value.quy_hoach = isLegal;
+    props.onFormSubmit?.(value);
+    handleOk();
+  }
 
   return (
     <>
@@ -151,10 +169,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
         </h1>
         <Form
           form={form}
-          onFinish={(v) => {
-            props.onFormSubmit?.(v);
-            handleOk();
-          }}
+          onFinish={handleFormSubmit}
           labelCol={{ span: 6 }}
           layout="horizontal"
           initialValues={{ size: componentSize }}
@@ -166,6 +181,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
             <Form.Item<AdChangeFormValue>
               label=" Loại quảng cáo"
               name={"id_loai_bang_qc"}
+              rules={[{ required: !ad, message: "Xin chọn loại bảng QC" }]}
             >
               <Select>
                 {(BoardType?.data || []).map((v) => (
@@ -181,6 +197,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
             <Form.Item<AdChangeFormValue>
               name={"id_hinh_thuc"}
               label=" Hình thức"
+              rules={[{ required: !ad, message: "Xin chọn hình thức QC" }]}
             >
               <Select>
                 {(AdsType || []).map((v) => (
@@ -193,6 +210,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
             <Form.Item<AdChangeFormValue>
               name={"id_loai_vitri"}
               label="Loại vị trí"
+              rules={[{ required: !ad, message: "Xin chọn loại vị trí" }]}
             >
               <Select>
                 {(LandType?.data || []).map((v) => (
@@ -207,6 +225,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
                 <Form.Item<AdChangeFormValue>
                   name={"chieu_dai_m"}
                   initialValue={ad?.chieu_dai_m || 0}
+                  rules={[{ required: !ad, message: "Nhập chiều dài bảng" }]}
                 >
                   <InputNumber className="h-8 w-12 " min={1} max={10} />
                 </Form.Item>
@@ -214,6 +233,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
                 <Form.Item<AdChangeFormValue>
                   name={"chieu_rong_m"}
                   initialValue={ad?.chieu_rong_m || 0}
+                  rules={[{ required: !ad, message: "Nhập chiều rộng bảng" }]}
                 >
                   <InputNumber className="h-8 w-12" min={1} max={10} />
                 </Form.Item>
@@ -224,14 +244,28 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
               name={"so_luong"}
               label="Số lượng"
               initialValue={ad?.so_luong || 0}
+              rules={[{ required: !ad, message: "Nhập số lượng" }]}
             >
               <InputNumber className="" min={1} />
             </Form.Item>
-            <div></div>
+            <div>
+              <Row>
+                <Col span={6}>Quy hoạch</Col>
+                <Col>
+                  <Switch
+                    onClick={() => setIsLegal(!isLegal)}
+                    checked={isLegal}
+                    checkedChildren={"Đã quy hoach"}
+                    unCheckedChildren={"Chưa quy hoạch"}
+                  />
+                </Col>
+              </Row>
+            </div>
             <Form.Item<AdChangeFormValue>
               name={"ngay_hieu_luc"}
               label="Ngày hiệu lực"
               initialValue={dayjs(`${ad?.ngay_hieu_luc || today}`, dateFormat)}
+              rules={[{ required: !ad, message: "Chọn ngày có hiệu lực" }]}
             >
               <DatePicker format={dateFormat} />
             </Form.Item>
@@ -240,6 +274,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
               name={"ngay_het_han"}
               label="Ngày hết hạn"
               initialValue={dayjs(`${ad?.ngay_het_han || today}`, dateFormat)}
+              rules={[{ required: !ad, message: "Chọn ngày có hết hiệu lực" }]}
             >
               <DatePicker format={dateFormat} />
             </Form.Item>

@@ -68,6 +68,7 @@ function EditModalComponent(props: EditPlaceComponentProps) {
         open={props.modalOpen}
         title="Chỉnh sửa địa điểm quảng cáo"
         onCancel={() => props.setModalOpen(false)}
+        onOk={() => props.setModalOpen(false)}
         footer={null}
       >
         <Form<PlaceFormValue>

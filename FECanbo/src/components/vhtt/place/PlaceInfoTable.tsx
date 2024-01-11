@@ -7,7 +7,7 @@ import { PlaceApi } from "@admanager/shared";
 import { ColumnsType } from "antd/es/table";
 import { useEffect } from "react";
 interface PlaceInfoTableProps {
-  onRowSelect?: (row: PlaceApi.PlaceProperty) => any;
+  onRowSelect?: (row: PlaceApi.PlaceProperty, openModal: boolean) => any;
 }
 function PlaceInfoTable(props: PlaceInfoTableProps) {
   const [getAllPlaceInfo, { data }] = useLazyGetAllPlaceInfoQuery();
@@ -33,12 +33,32 @@ function PlaceInfoTable(props: PlaceInfoTableProps) {
       title: "Thao tác",
       key: "Thao_tac",
       render: (_, r) => {
-        return <a onClick={() => props.onRowSelect?.(r.place)}>Xem chi tiết</a>;
+        return (
+          <a
+            onClick={(e) => {
+              e.stopPropagation();
+              props.onRowSelect?.(r.place, true);
+            }}
+          >
+            Xem chi tiết
+          </a>
+        );
       },
     },
   ];
 
-  return <Table columns={columns} dataSource={data?.data || []} />;
+  return (
+    <Table
+      columns={columns}
+      dataSource={data?.data || []}
+      onRow={(row) => ({
+        onClick: () => {
+          console.log("Row clicked");
+          props.onRowSelect?.(row.place, false);
+        },
+      })}
+    />
+  );
 }
 
 export default PlaceInfoTable;

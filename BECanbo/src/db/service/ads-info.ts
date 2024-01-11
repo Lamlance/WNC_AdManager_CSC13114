@@ -7,7 +7,8 @@ import {
 } from "@admanager/backend/db/schema";
 import { pg_client } from "../db";
 import { eq, inArray } from "drizzle-orm";
-import { AdsGeoJson } from "@admanager/shared";
+import { AdChangeApi, AdsGeoJson } from "@admanager/shared";
+import { AdsSchema } from "@admanager/backend";
 
 type GetQuangManyCaoDataArgs = { phuong_id?: number[] };
 export async function GetQuangManyCaoData(args: GetQuangManyCaoDataArgs) {
@@ -61,4 +62,28 @@ export async function GetQuangManyCaoData(args: GetQuangManyCaoDataArgs) {
   }
 
   return grp_by_location;
+}
+
+export async function UpdateAdsData(
+  args: AdChangeApi.AdChangeData & { id_quang_cao: string }
+) {
+  await pg_client
+    .update(AdsSchema.QuangCao)
+    .set({
+      ...args,
+      id_quang_cao: undefined,
+      id_loai_bang_qc: args.id_loai_bang_qc || undefined,
+      id_dia_diem: undefined,
+      id_hinh_thuc: args.id_hinh_thuc || undefined,
+      id_loai_vitri: args.id_loai_vitri || undefined,
+      ngay_het_han: args.ngay_het_han ? new Date(args.ngay_het_han) : undefined,
+      ngay_hieu_luc: args.ngay_hieu_luc
+        ? new Date(args.ngay_hieu_luc)
+        : undefined,
+    })
+    .where(eq(AdsSchema.QuangCao.id_quang_cao, args.id_quang_cao));
+}
+
+export async function CreateAds(args: AdChangeApi.AdCreateBody) {
+  await pg_client.insert(AdsSchema.QuangCao).values(args);
 }
