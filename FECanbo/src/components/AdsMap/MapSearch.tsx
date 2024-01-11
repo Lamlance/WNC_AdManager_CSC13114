@@ -37,7 +37,7 @@ const IdCoordDelimiter = "|^|";
 
 export type MapSearchProps = {
   MapRef?: Map | null;
-  refresh: number;
+  // refresh: number;
   initPos: { lng: number; lat: number };
   onMapDblClick?: (data: { lng: number; lat: number }) => void;
   onPlaceSelect: (place: PlacePropertyCreate) => void;
@@ -61,9 +61,7 @@ function MapSearchBar(props: MapSearchProps) {
   //console.log(predictions.data);
 
   function initialize_marker() {
-    console.log(props.refresh);
     if (MarkerRef.current || !props.MapRef) return;
-    if (props.refresh < 2) return;
 
     console.log("Init markers", props.initPos);
 
@@ -107,13 +105,12 @@ function MapSearchBar(props: MapSearchProps) {
     console.log(mapClick);
   }
 
-  useEffect(initialize_marker, [props.refresh]);
+  useEffect(initialize_marker, []);
 
   useEffect(on_map_dbClick, [mapClick]);
 
   useEffect(() => {
     if (!MarkerRef.current || !props.MapRef) return;
-    if (props.refresh < 2) return;
     MarkerRef.current.setLngLat(props.initPos);
   }, [props.initPos]);
 
@@ -197,6 +194,7 @@ function MapSearchBar(props: MapSearchProps) {
 
   function fly_to_maker() {
     if (!MarkerRef.current || !props.MapRef) return;
+    MarkerRef.current.addTo(props.MapRef);
     props.MapRef.jumpTo({
       center: MarkerRef.current.getLngLat(),
     });

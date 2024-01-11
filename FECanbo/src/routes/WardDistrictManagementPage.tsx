@@ -195,9 +195,6 @@ function WardDistrictManagementPage() {
 
   return (
     <>
-      <div className="flex items-center justify-center text-4xl font-bold">
-        <h1>Quản lý danh sách các Phường và Quận</h1>
-      </div>
       <div className="mb-3 flex justify-start">
         <Button
           onClick={() => {

@@ -5,13 +5,18 @@ import {
   GetAllAdsMethod,
 } from "../../types/request";
 import {
+  AdBoardApi,
   AdChangeApi,
   AdsGeoJson,
   AdsReqApi,
   AuthApi,
   ImageApi,
+  LandTypeApi,
+  PlaceApi,
   PlaceChangeApi,
   ReportApi,
+  ReportTypeApi,
+  StatsApi,
 } from "@admanager/shared";
 import { RootState } from "../../store";
 
@@ -64,7 +69,7 @@ export const apiSlice = createApi({
       GetALLReportInfoArgs
     >({
       query: (args) => ({
-        url: "api/bao-cao",
+        url: "/api/bao-cao",
         params: { phuong_id: args.phuong_id },
       }),
     }),
@@ -73,7 +78,7 @@ export const apiSlice = createApi({
       ReportApi.ReportUpdate
     >({
       query: (body) => ({
-        url: "/bao-cao",
+        url: "/api/bao-cao",
         method: "PUT",
         body: body,
         headers: { "Content-Type": "application/json" },
@@ -81,9 +86,12 @@ export const apiSlice = createApi({
     }),
     getAllAdChangeRequest: builder.query<
       AdChangeApi.AdChangeRequestResponse[],
-      void
+      GetALLReportInfoArgs
     >({
-      query: () => "api/yeu-cau-quang-cao/chinh-sua",
+      query: ({ phuong_id }) => ({
+        url: "api/yeu-cau-quang-cao/chinh-sua",
+        params: { phuong_id },
+      }),
     }),
     submitAdChangeRequest: builder.mutation<
       void,
@@ -164,10 +172,11 @@ export const apiSlice = createApi({
     }),
     getAllPlaceChangeRequest: builder.query<
       PlaceChangeApi.PlaceChangeRequestResponse[],
-      void
+      GetALLReportInfoArgs
     >({
-      query: () => ({
+      query: ({ phuong_id }) => ({
         url: "api/dia-diem/chinh-sua",
+        params: { phuong_id },
       }),
     }),
     submitPlaceChangeRequest: builder.mutation<
@@ -181,6 +190,17 @@ export const apiSlice = createApi({
         headers: {
           "Content-Type": "application/json",
         },
+      }),
+    }),
+    updatePlaceChangeRequest: builder.mutation<
+      any,
+      PlaceChangeApi.PlaceChangeRequestResponse
+    >({
+      query: (body) => ({
+        url: "api/dia-diem/chinh-sua",
+        method: "PUT",
+        body,
+        headers: { "Content-Type": "application/json" },
       }),
     }),
     getImageUrl: builder.query<
@@ -262,13 +282,6 @@ export const apiSlice = createApi({
         },
       }),
     }),
-    // getAccountProfile: builder.query<any, any>({
-    //   query: ({ authToken }) => ({
-    //     url: "user/",
-    //     params: { token: authToken },
-    //     method: "GET",
-    //   }),
-    // }),
     getAllAccount: builder.query<{ data: AuthApi.FullUserData[] }, void>({
       query: () => "/api/user/all",
     }),
@@ -346,18 +359,80 @@ export const apiSlice = createApi({
         headers: { "Content-Type": "application/json" },
       }),
     }),
+    getAllPlaceInfo: builder.query<
+      { data: PlaceApi.GetAllPlaceResponse[] },
+      void
+    >({
+      query: () => "/api/dia-diem",
+    }),
+    createPlaceInfo: builder.mutation<any, PlaceApi.CreatePlaceBody>({
+      query: (body) => ({
+        url: "/api/dia-diem",
+        method: "POST",
+        body,
+        headers: { "Content-Type": "application/json" },
+      }),
+    }),
+    updatePlaceInfo: builder.mutation<any, PlaceApi.UpdatePlaceBody>({
+      query: (body) => ({
+        url: "/api/dia-diem",
+        method: "PUT",
+        body,
+        headers: { "Content-Type": "application/json" },
+      }),
+    }),
+    getAllReportType: builder.query<
+      { data: ReportTypeApi.GetAllReportTypeResponse[] },
+      void
+    >({
+      query: () => "/api/loai-bc",
+    }),
+    getAllBoardType: builder.query<
+      { data: AdBoardApi.GetAllBoardTypeResponse[] },
+      void
+    >({
+      query: () => "/api/bang-qc",
+    }),
+    getAllLandType: builder.query<
+      { data: LandTypeApi.GetAllLandTypeResponse[] },
+      void
+    >({
+      query: () => "/api/vi-tri",
+    }),
+    getReportStatsEachWard: builder.query<StatsApi.StatsResponse, void>({
+      query: () => "/api/thong-ke",
+    }),
+
+    updateAdsInfo: builder.mutation<any, FormData>({
+      query: (body) => ({
+        url: "/api/quang-cao",
+        method: "PUT",
+        body,
+      }),
+    }),
+    createAdsInfo: builder.mutation<any, FormData>({
+      query: (body) => ({
+        url: "/api/quang-cao",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
 export const {
   useGetAllAdsInfoQuery,
+  useLazyGetAllAdsInfoQuery,
   useGetAllReportInfoQuery,
   useSubmitAdRequestMutation,
   useGetAllAdsReqQuery,
   useGetAllAdChangeRequestQuery,
+  useLazyGetAllAdChangeRequestQuery,
   useSubmitAdChangeRequestMutation,
   useGetAllPlaceChangeRequestQuery,
+  useLazyGetAllPlaceChangeRequestQuery,
   useSubmitPlaceChangeRequestMutation,
+  useUpdatePlaceChangeRequestMutation,
   useGetAllAdsMethodQuery,
   useSubmitAdMethodMutation,
   useSubmitUpdateAdMethodMutation,
@@ -395,4 +470,22 @@ export const {
   useLazyGetAllPublicWardQuery: useLazyGetAllPublicWard,
   useCreatePublicDistrictMutation: useCreatePublicDistrict,
   useCreatePublicWardMutation: useCreatePublicWard,
+
+  useGetAllPlaceInfoQuery,
+  useLazyGetAllPlaceInfoQuery,
+  useCreatePlaceInfoMutation,
+  useUpdatePlaceInfoMutation,
+
+  useGetAllReportTypeQuery,
+  useLazyGetAllReportTypeQuery,
+  useGetAllBoardTypeQuery,
+  useLazyGetAllBoardTypeQuery,
+  useGetAllLandTypeQuery,
+  useLazyGetAllLandTypeQuery,
+
+  useGetReportStatsEachWardQuery,
+  useLazyGetReportStatsEachWardQuery,
+
+  useUpdateAdsInfoMutation,
+  useCreateAdsInfoMutation,
 } = apiSlice;

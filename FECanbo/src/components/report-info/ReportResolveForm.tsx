@@ -17,12 +17,14 @@ function ReportResolveForm(props: ReportResolveFormProps) {
   function handleFormSubmit(value: ReportResolveFormValue) {
     if (!props.report) return;
     if (!quillRef.current) return;
-    const phan_hoi = quillRef.current.root.innerHTML.trim();
+    const phan_hoi = encodeURI(quillRef.current.root.innerHTML.trim());
     value.phan_hoi = phan_hoi;
-    updateReportStats({
+    const data = {
       ...value,
       id_bao_cao: props.report.bao_cao.id_bao_cao,
-    });
+    };
+    console.log("Update data", data);
+    updateReportStats(data).then((v) => console.log(v));
   }
 
   useEffect(() => {

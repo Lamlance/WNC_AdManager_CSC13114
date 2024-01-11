@@ -56,7 +56,6 @@ async function GetReportData(args: GetReportDataArgs) {
   const grp_by_location: {
     [key: string]: AdsGeoJson.ReportGeoJsonProperty[];
   } = {};
-
   for (let i = 0; i < data.length; i++) {
     const rp: AdsGeoJson.ReportGeoJsonProperty = data[i];
     const trim_rp = AdsGeoJson.ReportGeoJsonPropertySchema.safeParse(rp);

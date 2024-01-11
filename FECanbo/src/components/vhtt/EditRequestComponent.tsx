@@ -1,80 +1,205 @@
-import { Table } from "antd";
+import { Button, Table, notification } from "antd";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { PlaceChangeApi } from "@admanager/shared";
+import { PlaceChangeApi, SocketIoApi } from "@admanager/shared";
 import { showModalOpen, setSelectedPlace } from "../../slices/modalSlice.tsx";
-import type { RootState } from "../../store.ts";
 import EditSetpoint from "./EditSetpoint.tsx";
-
-type EditRequest =
-    | PlaceChangeApi.PlaceChangeRequestCreate
-    | PlaceChangeApi.PlaceChangeRequestResponse;
-
-
-const data: EditRequest[] = [
-    { "id_yeu_cau": 1, "ten_dia_diem": "agribank", "dia_chi": "159 nguyen thai hoc", "ly_do_chinh_sua": "cau ket gian duong dai dao", lng: 10, lat: 100 },
-    { "id_yeu_cau": 2, "ten_dia_diem": "agribank", "dia_chi": "159 nguyen thai hoc", "ly_do_chinh_sua": "cau ket gian duong dai dao", lng: 10, lat: 100 },
-    { "id_yeu_cau": 3, "ten_dia_diem": "agribank", "dia_chi": "159 nguyen thai hoc", "ly_do_chinh_sua": "cau ket gian duong dai dao", lng: 10, lat: 100 },
-    { "id_yeu_cau": 4, "ten_dia_diem": "agribank", "dia_chi": "159 nguyen thai hoc", "ly_do_chinh_sua": "cau ket gian duong dai dao", lng: 10, lat: 100 },
-];
+import {
+  useLazyGetAllPlaceChangeRequestQuery,
+  useUpdatePlaceChangeRequestMutation,
+} from "../../slices/api/apiSlice.ts";
+import type { ColumnsType } from "antd/es/table";
+import { useEffect, useState } from "react";
+import { useAppSelector } from "../../hooks.ts";
 
 function EditRequestComponent() {
+  const [getAllPlaceChange, { data }] = useLazyGetAllPlaceChangeRequestQuery();
+  const dispatch = useDispatch();
+  const authState = useAppSelector((state) => state.auth);
+  const [updatePlaceChange] = useUpdatePlaceChangeRequestMutation();
+  const [tableCol, setTableCol] = useState<
+    ColumnsType<PlaceChangeApi.PlaceChangeRequestResponse>
+  >([]);
 
-    const dispatch = useDispatch();
-    const modal = useSelector((state: RootState) => state.PlaceEditModal);
-    // const { isModalOpen, selectedPlace } = modal;
+  const [notifiApi, notifiCtx] = notification.useNotification();
 
-    const showModal = (record: EditRequest) => {
-        // dispatch(onChangeLocation(record.location));
-        // dispatch(onChangeAddress(record.address));
-        // dispatch(setLng(record.lng));
-        // dispatch(setLat(record.lat));
-        dispatch(showModalOpen());
-        dispatch(setSelectedPlace(record));
-    };
+  const showModal = (record: PlaceChangeApi.PlaceChangeRequestResponse) => {
+    dispatch(showModalOpen());
+    dispatch(setSelectedPlace(record));
+  };
 
-    const columns = [
-        {
-            title: "#",
-            dataIndex: "id_yeu_cau",
-            key: "id_yeu_cau",
-        },
-        {
-            title: "Địa điểm",
-            dataIndex: "ten_dia_diem",
-            key: "ten_dia_diem",
-        },
-        {
-            title: "Địa chỉ",
-            dataIndex: "dia_chi",
-            key: "dia_chi",
-        },
-        {
-            title: "Nội dung",
-            dataIndex: "ly_do_chinh_sua",
-            key: "ly_do_chinh_sua",
-        },
-        {
-            title: "",
-            dataIndex: "detail",
-            key: "detail",
-            render: ((text: string, record: EditRequest) => (<Link to='#' onClick={() => showModal(record)}>Chi tiết</Link>)),
-        },
-    ];
+  function handleUpdatePlaceChangeEvent(
+    e: SocketIoApi.CustomEventMap["AdsManager:UpdatePlaceChangeEvent"],
+  ) {
+    if (authState.isLoggedIn == false) return;
+    console.log("AdsManager:UpdatePlaceChangeEvent");
+    getAllPlaceChange({ phuong_id: authState.user.managedWards });
+    notifiApi.info({
+      message: `Yêu cầu chỉnh sửa địa điểm được: ${e.detail?.trang_thai}`,
+      description: `Tại ${e.detail?.dia_chi}`,
+      placement: "topRight",
+      duration: 0,
+    });
+  }
 
-    return (
-        <>
-            <div className="w-full h-1/5 flex justify-center items-center"><h1 className="h-fit text-5xl font-semibold">Yêu cầu chỉnh sửa</h1></div>
-            <EditSetpoint onFormSubmit={function (data: { id_yeu_cau: number; ly_do_chinh_sua: string; id_dia_diem?: number | null | undefined; lng?: number | null | undefined; lat?: number | null | undefined; ten_dia_diem?: string | null | undefined; dia_chi?: string | null | undefined; } | { ly_do_chinh_sua: string; lng?: number | null | undefined; lat?: number | null | undefined; id_dia_diem?: number | null | undefined; ten_dia_diem?: string | null | undefined; dia_chi?: string | null | undefined; }): void {
-                throw new Error("Function not implemented.");
-            }} />
-            <Table
-                columns={columns}
-                dataSource={data}
-                // onRow={(record) => ({ onClick: () => console.log(record) })}
-                pagination={{ pageSize: 5 }}
-            />
-        </>
+  useEffect(() => {
+    if (authState.isLoggedIn == false) {
+      getAllPlaceChange({});
+      setTableCol([
+        {
+          title: "#",
+          dataIndex: "id_yeu_cau",
+          key: "id_yeu_cau",
+        },
+        {
+          title: "Địa điểm",
+          dataIndex: "ten_dia_diem",
+          key: "ten_dia_diem",
+        },
+        {
+          title: "Địa chỉ",
+          dataIndex: "dia_chi",
+          key: "dia_chi",
+        },
+        {
+          title: "Trạng thái",
+          dataIndex: "trang_thai",
+        },
+        {
+          title: "Nội dung",
+          dataIndex: "ly_do_chinh_sua",
+          key: "ly_do_chinh_sua",
+        },
+        {
+          title: "Xem chi tiết",
+          align: "center",
+          dataIndex: "detail",
+          key: "detail",
+          render: (_, record) => (
+            <Link to="#" onClick={() => showModal(record)}>
+              Xem chi tiết
+            </Link>
+          ),
+        },
+        {
+          title: "Xét duyệt",
+          align: "center",
+          render: (_, rec) => (
+            <Button
+              type="primary"
+              onClick={() => handleApproveClick(rec, "Đã duyệt")}
+            >
+              Xét duyệt
+            </Button>
+          ),
+        },
+        {
+          title: "Từ chối",
+          align: "center",
+          render: (_, rec) => (
+            <Button
+              danger
+              type="primary"
+              onClick={() => handleApproveClick(rec, "Từ chối")}
+            >
+              Từ chối
+            </Button>
+          ),
+        },
+      ]);
+      return;
+    }
+    getAllPlaceChange({ phuong_id: authState.user.managedWards });
+    setTableCol([
+      {
+        title: "#",
+        dataIndex: "id_yeu_cau",
+        key: "id_yeu_cau",
+      },
+      {
+        title: "Địa điểm",
+        dataIndex: "ten_dia_diem",
+        key: "ten_dia_diem",
+      },
+      {
+        title: "Địa chỉ",
+        dataIndex: "dia_chi",
+        key: "dia_chi",
+      },
+      {
+        title: "Trạng thái",
+        dataIndex: "trang_thai",
+      },
+      {
+        title: "Nội dung",
+        dataIndex: "ly_do_chinh_sua",
+        key: "ly_do_chinh_sua",
+      },
+      {
+        title: "Xem chi tiết",
+        align: "center",
+        dataIndex: "detail",
+        key: "detail",
+        render: (_, record) => (
+          <Link to="#" onClick={() => showModal(record)}>
+            Xem chi tiết
+          </Link>
+        ),
+      },
+      {
+        title: "Hủy yêu cầu",
+        align: "center",
+        render: (_, rec) => (
+          <Button
+            danger
+            type="primary"
+            disabled={
+              rec.trang_thai === "Đã duyệt" || rec.trang_thai === "Từ chối"
+            }
+            onClick={() => handleApproveClick(rec, "Đã hủy")}
+          >
+            Hủy yêu cầu
+          </Button>
+        ),
+      },
+    ]);
+  }, [authState]);
+
+  useEffect(() => {
+    document.addEventListener(
+      "AdsManager:UpdatePlaceChangeEvent",
+      handleUpdatePlaceChangeEvent,
     );
-};
+    return () => {
+      document.removeEventListener(
+        "AdsManager:UpdatePlaceChangeEvent",
+        handleUpdatePlaceChangeEvent,
+        true,
+      );
+    };
+  }, []);
+
+  function handleApproveClick(
+    request: PlaceChangeApi.PlaceChangeRequestResponse,
+    status: "Đã duyệt" | "Từ chối" | "Đã hủy",
+  ) {
+    updatePlaceChange({
+      ...request,
+      trang_thai: status,
+    });
+  }
+
+  return (
+    <>
+      {notifiCtx}
+      <EditSetpoint onFormSubmit={(data) => console.log(data)} />
+      <Table
+        columns={tableCol}
+        dataSource={data || []}
+        // onRow={(record) => ({ onClick: () => console.log(record) })}
+        pagination={{ pageSize: 5 }}
+      />
+    </>
+  );
+}
 export default EditRequestComponent;

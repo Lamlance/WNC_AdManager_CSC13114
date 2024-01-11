@@ -6,7 +6,7 @@ import {
   LoaiBaoCao,
   QuangCao,
 } from "@admanager/backend/db/schema";
-import { SQL, eq, ilike, inArray, or } from "drizzle-orm";
+import { SQL, desc, eq, ilike, inArray, or } from "drizzle-orm";
 import { AdsGeoJson, ReportApi } from "@admanager/shared";
 import { VNCharToEN } from "../../utils/VNCharToEN.js";
 
@@ -40,7 +40,8 @@ export const getALLReportInfo = async function (
     .leftJoin(
       AdsSchema.DiaDiem,
       eq(AdsSchema.DiaDiem.id_dia_diem, AdsSchema.QuangCao.id_dia_diem)
-    );
+    )
+    .orderBy(desc(AdsSchema.BaoCao.thoi_diem_bc));
 
   if (ward_list) {
     const q = ward_list.reduce((acum, curr) => {
@@ -48,10 +49,12 @@ export const getALLReportInfo = async function (
       acum.push(
         ilike(AdsSchema.BaoCao.dia_chi, `%${VNCharToEN(curr.ten_phuong)}%`)
       );
+      acum.push(eq(AdsSchema.DiaDiem.id_phuong, curr.id_phuong));
       return acum;
     }, [] as SQL[]);
 
-    query.where(or(...q));
+    const data = await query.where(or(...q));
+    return data;
   }
 
   return await query;
@@ -92,7 +95,31 @@ export async function createReportInfo(data: ReportApi.ReportCreateBody) {
   return rpGeo[0] || null;
 }
 
+export async function getReportById(id: number) {
+  const query = pg_client
+    .select({
+      bao_cao: AdsSchema.BaoCao,
+      loai_bc: AdsSchema.LoaiBaoCao.loai_bao_cao,
+    })
+    .from(AdsSchema.BaoCao)
+    .where(eq(AdsSchema.BaoCao.id_bao_cao, id))
+    .innerJoin(
+      AdsSchema.LoaiBaoCao,
+      eq(AdsSchema.BaoCao.id_loai_bc, AdsSchema.LoaiBaoCao.id_loai_bc)
+    )
+    .leftJoin(
+      AdsSchema.QuangCao,
+      eq(AdsSchema.BaoCao.id_quang_cao, AdsSchema.QuangCao.id_quang_cao)
+    )
+    .leftJoin(
+      AdsSchema.DiaDiem,
+      eq(AdsSchema.DiaDiem.id_dia_diem, AdsSchema.QuangCao.id_dia_diem)
+    );
+  return await query;
+}
+
 export async function updateStatusReport(params: ReportApi.ReportUpdate) {
+  params.phan_hoi = decodeURI(params.phan_hoi);
   const data = await pg_client
     .update(AdsSchema.BaoCao)
     .set({
@@ -101,5 +128,5 @@ export async function updateStatusReport(params: ReportApi.ReportUpdate) {
     })
     .where(eq(AdsSchema.BaoCao.id_bao_cao, params.id_bao_cao))
     .returning({ updated: AdsSchema.BaoCao });
-  return data[0] ? data[0].updated : null;
+  return data[0] ? (data[0].updated as ReportApi.Report) : null;
 }
