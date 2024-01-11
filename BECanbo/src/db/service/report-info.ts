@@ -49,10 +49,12 @@ export const getALLReportInfo = async function (
       acum.push(
         ilike(AdsSchema.BaoCao.dia_chi, `%${VNCharToEN(curr.ten_phuong)}%`)
       );
+      acum.push(eq(AdsSchema.DiaDiem.id_phuong, curr.id_phuong));
       return acum;
     }, [] as SQL[]);
 
-    query.where(or(...q));
+    const data = await query.where(or(...q));
+    return data;
   }
 
   return await query;

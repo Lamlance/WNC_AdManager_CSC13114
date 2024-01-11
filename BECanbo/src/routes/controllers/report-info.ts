@@ -13,6 +13,7 @@ import { Minio_UploadImg, Minio_UploadMulterImgs } from "../../db/minio";
 import z from "zod";
 import { ReportApi, SocketIoApi } from "@admanager/shared";
 import { Namespace } from "socket.io";
+import { sendReportNotificationToEmail } from "../../utils/SendCodeToEmail";
 
 const GetALLReportInfoQuery = z.object({
   phuong_id: z
@@ -94,11 +95,18 @@ router.put(
         return res.status(500).json({ error: data.error });
 
       res.status(200).json(data.data);
+      if (!data.data) return;
+
       const socket = req.app.get(SocketIoApi.SocketNameSpace[0]);
       if (!socket) return console.log("Not found name space");
       (socket as Namespace).emit(SocketIoApi.SocketEvents[0], {
         ...data.data,
       });
+      const email = await CallAndCatchAsync(
+        sendReportNotificationToEmail,
+        data.data
+      );
+      if (email.success == false) console.log("Send email error", email.error);
     }
   )
 );

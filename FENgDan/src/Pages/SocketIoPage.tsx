@@ -16,7 +16,7 @@ function ConnectReportSocket() {
     console.log("Connected");
     ioSockets.reportSocket = ioSocket;
   });
-  ioSocket.on(SocketIoApi.SocketEvents.report[0], (data: any) => {
+  ioSocket.on(SocketIoApi.SocketEvents[0], (data: any) => {
     console.log(data);
     const report = ReportApi.ReportSchema.safeParse(data);
     if (report.success == false) return console.log(report.error);

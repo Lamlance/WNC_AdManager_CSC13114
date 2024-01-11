@@ -11,6 +11,7 @@ import Upload, { RcFile, UploadProps } from "antd/es/upload";
 import { PlusOutlined } from "@ant-design/icons";
 import { checkValidFile } from "../utils/ImageUpload";
 import { default as ReCAPTCHA } from "react-google-recaptcha";
+import { useGetAllReportType } from "../Redux/AdsServerApi";
 
 const { Option } = Select;
 
@@ -37,6 +38,8 @@ function ReportModal({
   const captchaRef = useRef<ReCAPTCHA | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
+  const { data: reportTypes } = useGetAllReportType();
+  console.log(reportTypes);
   const handleFinish = (values: ReportFormPropery) => {
     if (!quillRef.current) return;
     if (!captchaRef.current) return;
@@ -103,8 +106,11 @@ function ReportModal({
           ]}
         >
           <Select placeholder="Select type">
-            <Option value={1}>Lỗi</Option>
-            <Option value={2}>Nội dung không phù hợp</Option>
+            {(reportTypes?.data || []).map((r) => (
+              <Option key={r.loai_bc.id_loai_bc} value={r.loai_bc.id_loai_bc}>
+                {r.loai_bc.loai_bao_cao}
+              </Option>
+            ))}
           </Select>
         </Form.Item>
 
