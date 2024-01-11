@@ -123,10 +123,10 @@ export async function updateAdChangeStatusRequest(
       .set({
         ...data.data.thong_tin_sua,
         ngay_het_han: data.data.thong_tin_sua.ngay_het_han
-          ? new Date(data.data.thong_tin_sua.ngay_het_han).toISOString()
+          ? new Date(data.data.thong_tin_sua.ngay_het_han)
           : undefined,
         ngay_hieu_luc: data.data.thong_tin_sua.ngay_hieu_luc
-          ? new Date(data.data.thong_tin_sua.ngay_hieu_luc).toISOString()
+          ? new Date(data.data.thong_tin_sua.ngay_hieu_luc)
           : undefined,
         id_loai_bang_qc: data.data.thong_tin_sua.id_loai_bang_qc || undefined,
         id_dia_diem: data.data.thong_tin_sua.id_dia_diem || undefined,
@@ -137,7 +137,7 @@ export async function updateAdChangeStatusRequest(
   } else {
     data.success == false ? console.log(data.error) : "";
   }
-  return res;
+  return res[0];
 }
 
 type UpdateAdStatusRequestArgs = { id_yeu_cau: number; trang_thai: string };

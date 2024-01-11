@@ -35,7 +35,7 @@ const AdRequestUpdateStatusSchema2 = z.object({
 
 type ManyAdsRequestResponse = z.infer<typeof ManyAdsRequestResponseSchema>;
 type AdRequestCreate = z.infer<typeof AdRequestCreateSchema>;
-
+type AdsRequest = z.infer<typeof AdsRequestSchema>;
 type AdRequestUpdateStatus2 = z.infer<typeof AdRequestUpdateStatusSchema2>;
 
 export {
@@ -43,4 +43,9 @@ export {
   AdRequestCreateSchema,
   AdRequestUpdateStatusSchema2,
 };
-export type { ManyAdsRequestResponse, AdRequestCreate, AdRequestUpdateStatus2 };
+export type {
+  ManyAdsRequestResponse,
+  AdRequestCreate,
+  AdRequestUpdateStatus2,
+  AdsRequest,
+};

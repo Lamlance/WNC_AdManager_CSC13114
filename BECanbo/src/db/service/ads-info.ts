@@ -85,5 +85,9 @@ export async function UpdateAdsData(
 }
 
 export async function CreateAds(args: AdChangeApi.AdCreateBody) {
-  await pg_client.insert(AdsSchema.QuangCao).values(args);
+  return (
+    await pg_client.insert(AdsSchema.QuangCao).values(args).returning({
+      insertId: AdsSchema.QuangCao.id_quang_cao,
+    })
+  )[0];
 }

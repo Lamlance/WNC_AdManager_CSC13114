@@ -22,6 +22,12 @@ const AdChangeRequestCreateSchema = z.object({
   thong_tin_sua: AdChangeDataSchema,
 });
 
+const AdsUpdateDataSchema = AdChangeDataSchema.required({ id_quang_cao: true });
+const AdChangeRequestUpdateRespondSchema = AdChangeRequestCreateSchema.merge(
+  z.object({
+    id_yeu_cau: z.number(),
+  })
+);
 const AdChangeStatusRequestUpdateSchema = z.object({
   id_yeu_cau: z.number(),
   trang_thai: z.string(),
@@ -66,6 +72,9 @@ type AdChangeStatusRequestUpdate = z.infer<
 >;
 type AdChangeData = z.infer<typeof AdChangeDataSchema>;
 type AdCreateBody = z.infer<typeof AdCreateBodySchema>;
+type AdChangeRequestUpdateRespond = z.infer<
+  typeof AdChangeRequestUpdateRespondSchema
+>;
 export {
   AdChangeRequestSchema,
   AdChangeDataSchema,
@@ -73,6 +82,8 @@ export {
   AdChangeRequestCreateSchema,
   AdChangeStatusRequestUpdateSchema,
   AdCreateBodySchema,
+  AdsUpdateDataSchema,
+  AdChangeRequestUpdateRespondSchema,
 };
 export type {
   AdChangeRequest,
@@ -81,4 +92,5 @@ export type {
   AdChangeRequestCreate,
   AdChangeStatusRequestUpdate,
   AdCreateBody,
+  AdChangeRequestUpdateRespond,
 };

@@ -147,7 +147,7 @@ router.put(
       if (!result.success) {
         return res.status(500).json({ error: result.error.message });
       }
-      return res.status(200).json(result.data);
+      return res.status(200).json({ ...result, data: undefined });
     }
   )
 );
