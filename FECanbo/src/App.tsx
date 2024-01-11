@@ -177,7 +177,7 @@ const App = () => {
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route
-            path="send-email-otp"
+            path="email-verification"
             element={<EmailConfirmationPage type="email-verification" />}
           />
           <Route

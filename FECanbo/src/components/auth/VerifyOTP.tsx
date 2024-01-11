@@ -1,61 +1,17 @@
-import { Button, Form, notification } from "antd";
+import { Button, Form, } from "antd";
 import { InputOTP } from "antd-input-otp";
-import { useForm } from "antd/es/form/Form";
-import { useVerifyEmailMutation } from "../../slices/api/apiSlice";
-import { useAppSelector } from "../../store";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { FormInstance } from "antd/es/form/Form";
 
-const VerifyOTP = () => {
-  const [form] = useForm();
-  const navigate = useNavigate();
-  const authState = useAppSelector((state) => state.auth);
-  const [verifyEmail, { data, error }] = useVerifyEmailMutation();
-  const [api, contextHolder] = notification.useNotification();
+interface VerifyOTPProps {
+  callback: (code: string) => void;
+  form: FormInstance<any>;
+}
 
-  const openNotification = (type: string) => {
-    if (type == "error") {
-      api[type]({
-        message: "Verify failed!",
-        description:
-          JSON.stringify(error) ||
-          "Cannot verify account right now!. Please check your OTP or contact your admin to get support.",
-      });
-    } else if (type == "success") {
-      api[type]({
-        message:
-          "Verify account successfully! Now login to access your account!",
-      });
-    }
-  };
-
+const VerifyOTP = ({ callback, form }: VerifyOTPProps) => {
   const onFinish = (values: any) => {
     values.otp = values.otp.join("");
-    if (!authState.isLoggedIn) return;
-
-    console.log({
-      confirmToken: authState.confirmToken,
-      code: values.otp,
-    });
-    if (authState.confirmToken) {
-      verifyEmail({
-        confirmToken: authState.confirmToken,
-        code: values.otp,
-      });
-    }
+    callback(values.otp);
   };
-
-  useEffect(() => {
-    if (data) {
-      openNotification("success");
-      navigate("/auth/login");
-    }
-    if (error) {
-      console.log(error);
-      openNotification("error");
-      form.resetFields();
-    }
-  }, [data, error]);
 
   const layout = {
     labelCol: { span: 4 },
@@ -64,7 +20,6 @@ const VerifyOTP = () => {
 
   return (
     <div className="flex flex-col">
-      {contextHolder}
       <h3 className="my-8 self-center text-2xl font-semibold">
         Input your OTP
       </h3>
@@ -85,10 +40,10 @@ const VerifyOTP = () => {
                 if (value.length === 6) {
                   return Promise.resolve();
                 } else {
-                  return Promise.reject("Invalid OTP!");
+                  return Promise.reject("Mã OTP không hợp lệ!");
                 }
               },
-              message: "Please input your OTP!",
+              message: "Hãy nhập mã OTP của bạn!",
             },
           ]}
         >

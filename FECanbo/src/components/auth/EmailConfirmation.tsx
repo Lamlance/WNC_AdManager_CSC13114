@@ -2,14 +2,20 @@ import Form from "antd/es/form";
 import Input from "antd/es/input";
 import Button from "antd/es/button";
 import { useForm } from "antd/es/form/Form";
-import { LockOutlined, SendOutlined } from "@ant-design/icons";
-import { useSendVerificationCodeMutation } from "../../slices/api/apiSlice";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import {
+  useChangePasswordMutation,
+  useChangePasswordWithTokenMutation,
+  useSendVerificationCodeMutation,
+  useVerifyEmailMutation,
+} from "../../slices/api/apiSlice";
 import { notification } from "antd";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { verify } from "../../slices/authSlice";
 import VerifyOTP from "./VerifyOTP";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { useNavigate } from "react-router-dom";
+import { AuthApi } from "@admanager/shared";
 
 interface EmailConfirmationProps {
   type: "email-verification" | "change-password" | "forgot-password";
@@ -17,46 +23,134 @@ interface EmailConfirmationProps {
 
 const EmailConfirmation = ({ type }: EmailConfirmationProps) => {
   const [form] = useForm();
-  const dispatch = useDispatch();
+  const [otpForm] = useForm();
 
-  const [sendEmailVerificationCode, { data, error }] =
-    useSendVerificationCodeMutation();
+  const dispatch = useAppDispatch();
+  const authState = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
+
+  const [
+    sendEmailVerificationCode,
+    { data: emailVerificationData, error: emailVerificationError },
+  ] = useSendVerificationCodeMutation();
+
+  const [
+    changePasswordWithToken,
+    { data: changePwdTokenData, error: changePwdTokenError },
+  ] = useChangePasswordWithTokenMutation();
+
+  const [changePassword, { data: changePwdData, error: changePwdError }] =
+    useChangePasswordMutation();
+
+  const [verifyEmail, { data: verifyEmailData, error: verifyEmailError }] =
+    useVerifyEmailMutation();
+
   const [isInfoSubmitted, setInfoSubmitted] = useState<boolean>(false);
-
   const [api, contextHolder] = notification.useNotification();
 
-  const openNotification = (type: string) => {
+  const [changePwdTokenReq, setChangePwdTokenReq] =
+    useState<AuthApi.ChangePasswordTokenRequest | null>(null);
+
+  const openNotification = (type: string, msg: string, desc?: string) => {
     if (type == "error") {
       api[type]({
-        message: "Gửi mã xác thực thất bại!",
-        description:
-          JSON.stringify(error) ||
-          "Không thể xác thực tài khoản của bạn ngay bây giờ. Vui lòng kiểm tra với người quản lý của bạn.",
+        message: msg || "Thao tác thất bại",
+        description: desc,
       });
     } else if (type == "success") {
       api[type]({
-        message: "Mã OTP đã được gửi cho bạn. Vui lòng kiểm tra email của bạn!",
+        message: msg || "Thao tác thành công",
+        description: desc,
       });
     }
   };
 
   const onSubmitEmail = (values: any) => {
-    sendEmailVerificationCode({
-      email: values.email,
-    });
+    if (type == "email-verification" || type == "forgot-password") {
+      sendEmailVerificationCode({
+        email: values.email,
+      });
+    }
+    if (type == "change-password") {
+      changePassword({
+        newPassword: values.newPassword,
+        oldPassword: values.oldPassword,
+      });
+    } else if (type == "forgot-password") {
+      setChangePwdTokenReq({
+        newPassword: values.newPassword,
+        confirmToken: authState.confirmToken,
+        code: "",
+      });
+    }
+  };
+
+  const onSubmitOTPCode = (otpCode: string) => {
+    if (type === "forgot-password" && changePwdTokenReq !== null) {
+      changePasswordWithToken({
+        ...changePwdTokenReq,
+        confirmToken: authState.confirmToken,
+        code: otpCode,
+      });
+    }
+    if (type === "email-verification") {
+      verifyEmail({
+        confirmToken: authState.confirmToken,
+        code: otpCode,
+      });
+    }
   };
 
   useEffect(() => {
-    if (data) {
-      dispatch(verify(data));
-      setTimeout(() => openNotification("success"), 2000);
+    if (authState.isLoggedIn) {
+      navigate("/");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (emailVerificationData) {
+      dispatch(verify(emailVerificationData));
+      openNotification("success", "Đã gửi mã OTP tới email thành công.");
       setInfoSubmitted(true);
     }
-    if (error) {
-      openNotification("error");
+    if (emailVerificationError) {
+      openNotification("error", "Không thể gửi mã OTP tới email lúc này.");
       form.resetFields();
     }
-  }, [data, error]);
+    if (changePwdTokenData) {
+      openNotification("success", "Mật khẩu đã khôi phục thành công!");
+      setInfoSubmitted(true);
+    }
+    if (changePwdTokenError) {
+      openNotification("error", "Hiện tại không thể khôi phục mật khẩu!");
+      form.resetFields();
+    }
+    if (changePwdData) {
+      openNotification("success", "Đổi mật khẩu thành công");
+      setTimeout(() => navigate("/"), 2000);
+    }
+    if (changePwdError) {
+      openNotification("error", "Hiện tại không thể đổi mật khẩu!");
+      form.resetFields();
+    }
+    if (verifyEmailData) {
+      openNotification("success", "Xác thực email thành công!"),
+        setTimeout(() => navigate("/"));
+    }
+    if (verifyEmailError) {
+      openNotification("error", "Xác thực email thất bại!");
+      form.resetFields();
+    }
+  }, [
+    emailVerificationData,
+    emailVerificationError,
+    changePwdTokenData,
+    changePwdTokenError,
+    changePwdData,
+    changePwdError,
+    verifyEmailData,
+    verifyEmailError,
+  ]);
 
   return (
     <>
@@ -64,129 +158,170 @@ const EmailConfirmation = ({ type }: EmailConfirmationProps) => {
         <div className="flex flex-col">
           {contextHolder}
           <h3 className="my-5 self-center text-2xl font-semibold">
-            Forgot password
+            {type == "change-password" && <span> Đổi mật khẩu </span>}
+            {type == "email-verification" && <span> Xác nhận email </span>}
+            {type == "forgot-password" && <span> Quên mật khẩu </span>}
           </h3>
 
           <Form
-            layout="inline"
             form={form}
-            style={{ maxWidth: "none" }}
+            style={{ minWidth: 350 }}
             onFinish={onSubmitEmail}
             className="my-5 self-center"
           >
-            <Form.Item
-              label="Email"
-              style={{ minWidth: 350 }}
-              validateFirst
-              hasFeedback
-              rules={[
-                {
-                  required: true,
-                  message: "Nhập email của bạn!",
-                },
-                {
-                  type: "email",
-                  message: "Email không hợp lệ!",
-                },
-              ]}
-              name="email"
-            >
-              <Input placeholder="Email" type="email" />
-            </Form.Item>
-            {type == "change-password" && (
-              <>
-                <Form.Item
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy nhập mật khẩu!",
-                    },
-                  ]}
-                >
-                  <Input
-                    prefix={<LockOutlined className="mx-1" />}
-                    type="password"
-                    placeholder="Mật khẩu cũ"
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy nhập mật khẩu!",
-                    },
-                  ]}
-                >
-                  <Input
-                    prefix={<LockOutlined className="mx-1" />}
-                    type="password"
-                    placeholder="Mật khẩu mới"
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy nhập mật khẩu!",
-                    },
-                  ]}
-                >
-                  <Input
-                    prefix={<LockOutlined className="mx-1" />}
-                    type="password"
-                    placeholder="Xác nhận mật khẩu mới"
-                  />
-                </Form.Item>
-              </>
+            {type !== "change-password" && (
+              <Form.Item
+                style={{ minWidth: 350 }}
+                validateFirst
+                hasFeedback
+                rules={[
+                  {
+                    required: true,
+                    message: "Nhập email của bạn!",
+                  },
+                  {
+                    type: "email",
+                    message: "Email không hợp lệ!",
+                  },
+                ]}
+                name="email"
+              >
+                <Input
+                  placeholder="Email"
+                  type="email"
+                  prefix={<MailOutlined className="mx-1" />}
+                />
+              </Form.Item>
             )}
-            {type == "forgot-password" && (
-              <>
-                <Form.Item
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy nhập mật khẩu mới!",
-                    },
-                  ]}
-                >
-                  <Input
-                    prefix={<LockOutlined className="mx-1" />}
-                    type="password"
-                    placeholder="Mật khẩu mới"
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Hãy nhập mật khẩu mới!",
-                    },
-                  ]}
-                >
-                  <Input
-                    prefix={<LockOutlined className="mx-1" />}
-                    type="password"
-                    placeholder="Xác nhận mật khẩu mới"
-                  />
-                </Form.Item>
-              </>
-            )}
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                icon={<SendOutlined />}
-              />
-            </Form.Item>
+            <>
+              {type == "change-password" && (
+                <>
+                  <Form.Item
+                    name="oldPassword"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Hãy nhập mật khẩu!",
+                      },
+                    ]}
+                  >
+                    <Input
+                      prefix={<LockOutlined className="mx-1" />}
+                      type="password"
+                      placeholder="Mật khẩu cũ"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name="newPassword"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Hãy nhập mật khẩu!",
+                      },
+                    ]}
+                  >
+                    <Input
+                      prefix={<LockOutlined className="mx-1" />}
+                      type="password"
+                      placeholder="Mật khẩu mới"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    dependencies={["newPassword"]}
+                    name="confirmNewPassword"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Hãy nhập mật khẩu!",
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (
+                            !value ||
+                            getFieldValue("newPassword") === value
+                          ) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error("Không khớp mật khẩu!"),
+                          );
+                        },
+                      }),
+                    ]}
+                  >
+                    <Input
+                      prefix={<LockOutlined className="mx-1" />}
+                      type="password"
+                      placeholder="Xác nhận mật khẩu mới"
+                    />
+                  </Form.Item>
+                </>
+              )}
+              {type == "forgot-password" && (
+                <>
+                  <Form.Item
+                    name="newPassword"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Hãy nhập mật khẩu mới!",
+                      },
+                    ]}
+                  >
+                    <Input
+                      prefix={<LockOutlined className="mx-1" />}
+                      type="password"
+                      placeholder="Mật khẩu mới"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    dependencies={["newPassword"]}
+                    name="confirmNewPassword"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Hãy nhập lại mật khẩu mới!",
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (
+                            !value ||
+                            getFieldValue("newPassword") === value
+                          ) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error("Không khớp mật khẩu!"),
+                          );
+                        },
+                      }),
+                    ]}
+                  >
+                    <Input
+                      prefix={<LockOutlined className="mx-1" />}
+                      type="password"
+                      placeholder="Xác nhận mật khẩu mới"
+                    />
+                  </Form.Item>
+                </>
+              )}
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </Form.Item>
+            </>
           </Form>
         </div>
       )}
-      {isInfoSubmitted && <VerifyOTP />}
+      {isInfoSubmitted && type !== "change-password" && (
+        <VerifyOTP
+          callback={(code) => {
+            onSubmitOTPCode(code);
+          }}
+          form={otpForm}
+        />
+      )}
     </>
   );
 };
