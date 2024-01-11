@@ -6,6 +6,10 @@ import authRouter from "./src/routes/auth";
 import { strategy as jwtStrategy, strategy } from "./src/utils/JwtPassport";
 import { configDotenv } from "dotenv";
 import passport from "passport";
+import bodyParser from "body-parser";
+import swaggerUi from "swagger-ui-express";
+import swaggerJSDoc from "swagger-jsdoc";
+import { swaggerOptions } from "./swaggerOptions";
 
 configDotenv();
 import MulterMw from "./src/utils/Multer.js";
@@ -22,6 +26,10 @@ app.use((req, res, next) => {
   next();
 });
 passport.use(strategy);
+
+// Swagger documentation setup
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/", function (req, res) {
   return res.status(200).json({ Hello: "World" });

@@ -59,24 +59,23 @@ const ReportPropertySchema = z.object({
   thoi_diem_bc: z.date().or(z.string()),
 });
 
+const ReportGeoJsonPropertySchemaRaw = z.object({
+  bao_cao: z.preprocess(StringParsePreprocess, ReportPropertySchema),
+  loai_bao_cao: z.string(),
+  dia_diem: z.preprocess(StringParsePreprocess, PlacePropertySchema.nullish()),
+  quang_cao: z.preprocess(
+    StringParsePreprocess,
+    AdsPropertySchema.omit({
+      loai_vitri: true,
+      hinh_thuc: true,
+      bang_qc: true,
+    }).nullish()
+  ),
+});
+
 const ReportGeoJsonPropertySchema = z.preprocess(
   StringParsePreprocess,
-  z.object({
-    bao_cao: z.preprocess(StringParsePreprocess, ReportPropertySchema),
-    loai_bao_cao: z.string(),
-    dia_diem: z.preprocess(
-      StringParsePreprocess,
-      PlacePropertySchema.nullish()
-    ),
-    quang_cao: z.preprocess(
-      StringParsePreprocess,
-      AdsPropertySchema.omit({
-        loai_vitri: true,
-        hinh_thuc: true,
-        bang_qc: true,
-      }).nullish()
-    ),
-  })
+  ReportGeoJsonPropertySchemaRaw
 );
 
 const AdMethodSchema = z.object({
@@ -120,8 +119,23 @@ type GeoJson<P extends object> = {
   };
   features: GeoJsonProperty<P>[];
 };
+const AdsGeoJsonSchema = z.object({
+  type: z.literal("FeatureCollection"),
+  crs: z.object({
+    type: z.literal("name"),
+    properties: z.object({ name: z.literal("urn:ogc:def:crs:OGC:1.3:CRS84") }),
+  }),
 
-type AdsGeoJson = GeoJson<AdsGeoJsonProperty>;
+  features: z.object({
+    type: z.literal("Feature"),
+    properties: AdsGeoJsonPropertySchema,
+    geometry: z.object({
+      type: z.literal("Point"),
+      coordinates: z.number().array(),
+    }),
+  }),
+});
+type AdsGeoJson = z.infer<typeof AdsGeoJsonSchema>;
 type ReportGeoJson = GeoJson<ReportGeoJsonProperty[]>;
 
 export type {
@@ -146,4 +160,5 @@ export {
   AdMethodCreateSchema,
   AdMethodUpdateSchema,
   AdmethodDeleteSchema,
+  AdsGeoJsonSchema,
 };
