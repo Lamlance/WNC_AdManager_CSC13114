@@ -21,6 +21,7 @@
     "@reduxjs/toolkit": "^2.0.1",
     "antd": "^5.11.4",
     "antd-input-otp": "^2.0.5",
+    "apexcharts": "^3.45.1",
     "dayjs": "^1.11.10",
     "leaflet": "^1.9.4",
     "maplibre-gl": "^3.6.2",

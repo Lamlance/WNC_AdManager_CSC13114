@@ -42,6 +42,7 @@ import { useAppDispatch } from "./store";
 import { logout } from "./slices/authSlice";
 import PlaceManagemnetPlace from "./routes/PlaceManagementPage";
 import { ConnectSocketIo } from "./routes/SocketIoPage";
+import { StatsPage } from "./routes/StatsPage";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
@@ -190,6 +191,7 @@ const App = () => {
             element={<WardDistrictManagementPage />}
           />
           <Route path="login" element={<LoginPage redirectUrl={"/vhtt"} />} />
+          <Route path="stats" element={<StatsPage />} />
         </Route>
         {/* <Route path="/auth">
           <Route path="login" element={<LoginPage />} />

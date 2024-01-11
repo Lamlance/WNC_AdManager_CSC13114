@@ -10,6 +10,7 @@ import * as ReportTypeApi from "./types/ReportTypeApi.js";
 import * as AdBoardApi from "./types/AdBoardApi.js";
 import * as LandTypeApi from "./types/LandTypeApi.js";
 import * as SocketIoApi from "./types/SocketIoApi.js";
+import * as StatsApi from "./types/StatsApi.js";
 
 export {
   AdsGeoJson,
@@ -24,4 +25,5 @@ export {
   AdBoardApi,
   LandTypeApi,
   SocketIoApi,
+  StatsApi,
 };
