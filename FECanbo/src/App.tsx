@@ -277,15 +277,26 @@ const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
             ) : (
               <Popover
                 content={
-                  <Button
-                    danger
-                    type="primary"
-                    onClick={() => {
-                      dispatch(logout());
-                    }}
-                  >
-                    Đăng xuất
-                  </Button>
+                  <div className="flex flex-col items-center">
+                    <Button
+                      danger
+                      className="my-1"
+                      type="primary"
+                      onClick={() => {
+                        dispatch(logout());
+                      }}
+                    >
+                      Đăng xuất
+                    </Button>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        navigate("/auth/change-password");
+                      }}
+                    >
+                      Đổi mật khẩu
+                    </Button>{" "}
+                  </div>
                 }
               >
                 <span>

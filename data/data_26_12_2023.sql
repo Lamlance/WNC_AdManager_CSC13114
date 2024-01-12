@@ -221,8 +221,8 @@ INSERT INTO public."BaoCao" (id_bao_cao, ten_nguoi_gui, email, dien_thoai, noi_d
 -- Data for Name: YeuCauCapPhep; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public."YeuCauCapPhep" (id_yeu_cau, id_diem_dat, noi_dung_qc, ten_cty, dien_thoai_cty, email_cty, dia_chi_cty, ngay_hieu_luc, ngay_het_han, trang_thai, hinh_1) VALUES (6, NULL, 'Quảng cáo mặt trăng', 'CtyHlam', '0999388', 'lamlam@mail.com', 'Trái Đất', '2023-12-25 15:23:15.021', '2023-12-26 15:23:17.537', 'Waiting', NULL);
-INSERT INTO public."YeuCauCapPhep" (id_yeu_cau, id_diem_dat, noi_dung_qc, ten_cty, dien_thoai_cty, email_cty, dia_chi_cty, ngay_hieu_luc, ngay_het_han, trang_thai, hinh_1) VALUES (7, NULL, 'HBT ads', 'CtyHaha', '1112366', 'asd@mail.com', 'Mặt trăng', '2023-12-25 16:01:06.703', '2023-12-26 16:01:08.636', 'Waiting', NULL);
+-- INSERT INTO public."YeuCauCapPhep" (id_yeu_cau, id_diem_dat, noi_dung_qc, ten_cty, dien_thoai_cty, email_cty, dia_chi_cty, ngay_hieu_luc, ngay_het_han, trang_thai, hinh_1) VALUES (6, NULL, 'Quảng cáo mặt trăng', 'CtyHlam', '0999388', 'lamlam@mail.com', 'Trái Đất', '2023-12-25 15:23:15.021', '2023-12-26 15:23:17.537', 'Waiting', NULL);
+-- INSERT INTO public."YeuCauCapPhep" (id_yeu_cau, id_diem_dat, noi_dung_qc, ten_cty, dien_thoai_cty, email_cty, dia_chi_cty, ngay_hieu_luc, ngay_het_han, trang_thai, hinh_1) VALUES (7, NULL, 'HBT ads', 'CtyHaha', '1112366', 'asd@mail.com', 'Mặt trăng', '2023-12-25 16:01:06.703', '2023-12-26 16:01:08.636', 'Waiting', NULL);
 
 
 --

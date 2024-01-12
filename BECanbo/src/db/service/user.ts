@@ -159,7 +159,7 @@ export const getAnUserByUsername = async (username: string) => {
       phuong_quan_ly: true,
     },
   });
-  //console.log(data);
+  
   if (data) {
     const returnUser: ReturnUser = {
       userId: data.id_tk,

@@ -15,7 +15,6 @@ const opts: StrategyOptions = {
 };
 
 function isTokenExpired(payload: any) {
-  console.log(payload);
   const exp = payload.exp;
   const expired = Date.now() >= exp * 1000;
   return expired;

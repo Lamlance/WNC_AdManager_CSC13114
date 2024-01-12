@@ -48,7 +48,7 @@ app.use("/auth", authRouter);
 app.use("/api/public", publicRouter);
 app.use(
   "/api",
-  //passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   privateRouter
 );
 app.use("/geojson", GeoJsonRouter);
