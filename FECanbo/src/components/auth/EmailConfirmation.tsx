@@ -87,6 +87,11 @@ const EmailConfirmation = ({ type }: EmailConfirmationProps) => {
 
   const onSubmitOTPCode = (otpCode: string) => {
     if (type === "forgot-password" && changePwdTokenReq !== null) {
+      console.log({
+        ...changePwdTokenReq,
+        confirmToken: authState.confirmToken,
+        code: otpCode,
+      });
       changePasswordWithToken({
         ...changePwdTokenReq,
         confirmToken: authState.confirmToken,
@@ -102,7 +107,7 @@ const EmailConfirmation = ({ type }: EmailConfirmationProps) => {
   };
 
   useEffect(() => {
-    if (!authState.isLoggedIn) {
+    if (!authState.isLoggedIn && type === "change-password") {
       navigate("/");
     }
   }, []);
@@ -111,7 +116,7 @@ const EmailConfirmation = ({ type }: EmailConfirmationProps) => {
     if (emailVerificationData) {
       dispatch(verify(emailVerificationData));
       openNotification("success", "Đã gửi mã OTP tới email thành công.");
-      setInfoSubmitted(true);
+      setTimeout(() => setInfoSubmitted(true), 2000);
     }
     if (emailVerificationError) {
       openNotification("error", "Không thể gửi mã OTP tới email lúc này.");
@@ -119,7 +124,7 @@ const EmailConfirmation = ({ type }: EmailConfirmationProps) => {
     }
     if (changePwdTokenData) {
       openNotification("success", "Mật khẩu đã khôi phục thành công!");
-      setInfoSubmitted(true);
+      setTimeout(() => navigate("/auth/login"), 2000);
     }
     if (changePwdTokenError) {
       openNotification("error", "Hiện tại không thể khôi phục mật khẩu!");
@@ -134,8 +139,8 @@ const EmailConfirmation = ({ type }: EmailConfirmationProps) => {
       form.resetFields();
     }
     if (verifyEmailData) {
-      openNotification("success", "Xác thực email thành công!"),
-        setTimeout(() => navigate("/"));
+      openNotification("success", "Xác thực email thành công!");
+      setTimeout(() => navigate("/"), 2000);
     }
     if (verifyEmailError) {
       openNotification("error", "Xác thực email thất bại!");

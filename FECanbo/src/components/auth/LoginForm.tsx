@@ -93,6 +93,9 @@ const LoginForm = () => {
           <Button type="primary" htmlType="submit" className="w-full min-w-80">
             Đăng nhập
           </Button>
+          <div className="my-2">
+            <a href="/auth/forgot-password"> Quên mật khẩu </a>
+          </div>
         </Form.Item>
       </Form>
     </div>

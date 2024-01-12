@@ -15,7 +15,7 @@ type AuthState =
 
 const initialState = {
   isLoggedIn: false,
-  confirmToken: ""
+  confirmToken: "",
 } as AuthState;
 
 const authSlice = createSlice({
@@ -23,7 +23,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     verify: (state, action) => {
-      state.isLoggedIn = true;
       state.confirmToken = action.payload.confirmToken;
     },
     login: (state, action) => {
