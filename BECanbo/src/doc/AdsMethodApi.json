@@ -18,7 +18,7 @@
     },
     "post": {
       "tags": ["Ads Methods"],
-      "description": "Get all ads method",
+      "description": "Create an ads method",
       "requestBody": {
         "required": true,
         "content": {
@@ -44,7 +44,7 @@
     },
     "delete": {
       "tags": ["Ads Methods"],
-      "summary": "Get all ads method",
+      "summary": "Delete an ads method",
       "requestBody": {
         "required": true,
         "content": {
