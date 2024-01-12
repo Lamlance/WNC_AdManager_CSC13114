@@ -28,9 +28,13 @@ const ReportInfo = () => {
     console.log("Detail", e.detail);
     if (!authState.isLoggedIn) return;
     openNotification();
-    getAllReportInfo({
-      phuong_id: authState.user.managedWards,
-    });
+    if (authState.user.accLevel === "department") {
+      getAllReportInfo({});
+    } else {
+      getAllReportInfo({
+        phuong_id: authState.user.managedWards,
+      });
+    }
   }
 
   useEffect(() => {
@@ -50,9 +54,13 @@ const ReportInfo = () => {
 
   useEffect(() => {
     if (!authState.isLoggedIn) return;
-    getAllReportInfo({
-      phuong_id: authState.user.managedWards,
-    }).then((d) => console.log("Reprots", d));
+    if (authState.user.accLevel === "department") {
+      getAllReportInfo({});
+    } else {
+      getAllReportInfo({
+        phuong_id: authState.user.managedWards,
+      });
+    }
   }, [authState]);
 
   const onWardFilter = (phuong_ids: number[]) => {

@@ -30,9 +30,13 @@ function AdsRequestPage() {
   };
   useEffect(() => {
     if (!authState.isLoggedIn) return;
-    getAllAdsReq({
-      phuong_id: authState.user.managedWards,
-    });
+    if (authState.user.accLevel === "department") {
+      getAllAdsReq({});
+    } else {
+      getAllAdsReq({
+        phuong_id: authState.user.managedWards,
+      });
+    }
   }, [authState]);
 
   return (

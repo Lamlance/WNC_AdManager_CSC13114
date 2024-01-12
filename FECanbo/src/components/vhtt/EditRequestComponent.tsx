@@ -33,7 +33,11 @@ function EditRequestComponent() {
   ) {
     if (authState.isLoggedIn == false) return;
     console.log("AdsManager:UpdatePlaceChangeEvent");
-    getAllPlaceChange({ phuong_id: authState.user.managedWards });
+    if (authState.user.accLevel === "department") {
+      getAllPlaceChange({});
+    } else {
+      getAllPlaceChange({ phuong_id: authState.user.managedWards });
+    }
     notifiApi.info({
       message: `Yêu cầu chỉnh sửa địa điểm được: ${e.detail?.trang_thai}`,
       description: `Tại ${e.detail?.dia_chi}`,
@@ -43,7 +47,10 @@ function EditRequestComponent() {
   }
 
   useEffect(() => {
-    if (authState.isLoggedIn == false) {
+    if (
+      authState.isLoggedIn == false ||
+      authState.user.accLevel === "department"
+    ) {
       getAllPlaceChange({});
       setTableCol([
         {
