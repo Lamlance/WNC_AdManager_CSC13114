@@ -48,7 +48,7 @@ function ValidatorMwBuilder<
     if (body) {
       const data = body.safeParse(req.body);
       if (data.success == false) {
-        console.log(data.error);
+        console.log(data.error, req.body);
         return res.status(400).json({ error: data.error });
       }
       b = data.data;

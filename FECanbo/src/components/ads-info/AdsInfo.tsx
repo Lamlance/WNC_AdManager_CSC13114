@@ -59,7 +59,6 @@ const AdsInfo = () => {
 
   async function onAdChangeSubmit(data: AdChangeFormValue) {
     if (!selectedAd) return;
-
     submitAdChangeReq({
       id_quang_cao: selectedAd.id_quang_cao,
       ly_do_chinh_sua: "Ly do gi đó",

@@ -1,4 +1,9 @@
-import { AdsGeoJson, ReportApi, ReportTypeApi } from "@admanager/shared";
+import {
+  AdsGeoJson,
+  ImageApi,
+  ReportApi,
+  ReportTypeApi,
+} from "@admanager/shared";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const AdsServerApi = createApi({
@@ -20,6 +25,9 @@ const AdsServerApi = createApi({
     >({
       query: () => ({ url: "/api/loai-bc" }),
     }),
+    getImageFromName: builder.query<{ url?: string }, ImageApi.GetImageQuery>({
+      query: (params) => ({ url: "/api/image", params }),
+    }),
   }),
 });
 
@@ -31,5 +39,7 @@ export const {
   useLazyGetReportGeoJsonQuery: useLazyGetReportGeoJson,
   useGetAllReportTypeQuery: useGetAllReportType,
   useLazyGetAllReportTypeQuery: useLazyGetAllReportType,
+  useGetImageFromNameQuery: useGetImageFromName,
+  useLazyGetImageFromNameQuery: useLazyGetImageFromName,
 } = AdsServerApi;
 export default AdsServerApi;

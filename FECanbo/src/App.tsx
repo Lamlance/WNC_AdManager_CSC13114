@@ -169,6 +169,12 @@ const itemVHTTs: Item[] = [
     label: "Quản lý phường và quận",
     title: "/vhtt/ward-district-management",
   },
+  {
+    key: "12",
+    icon: <UploadOutlined />,
+    label: "Thống kê báo cáo",
+    title: "/vhtt/stats",
+  },
 ];
 const App = () => {
   return (
@@ -234,13 +240,17 @@ const PageLayout: React.FC<PageLayoutProps> = ({ items, loginUrl }) => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const authUser = useAppSelector((state) => state.auth);
-
+  const [curItems, setItems] = useState<Item[]>([]);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log(authUser);
-  }, [authUser]);
-
+    if (authUser.isLoggedIn == false) {
+      setItems([]);
+      navigate(loginUrl);
+    } else {
+      setItems(items);
+    }
+  }, [items, authUser]);
   return (
     <Layout className=" h-screen overflow-scroll pb-2">
       <Sider
@@ -262,7 +272,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ items, loginUrl }) => {
           mode="inline"
           className=" bg-blue-950 text-base font-semibold text-white"
           defaultSelectedKeys={["1"]}
-          items={items}
+          items={curItems}
           onSelect={({ key }) => {
             const redirectURL = items?.find((item) => item?.key == key)?.title;
             return redirectURL === undefined
