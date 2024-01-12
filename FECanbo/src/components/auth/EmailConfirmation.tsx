@@ -102,7 +102,7 @@ const EmailConfirmation = ({ type }: EmailConfirmationProps) => {
   };
 
   useEffect(() => {
-    if (authState.isLoggedIn) {
+    if (!authState.isLoggedIn) {
       navigate("/");
     }
   }, []);
