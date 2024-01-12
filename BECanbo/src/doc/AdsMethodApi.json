@@ -1,0 +1,72 @@
+{
+  "/api/hinh-thuc-quang-cao/": {
+    "get": {
+      "tags": ["Ads Methods"],
+      "description": "Get all ads method",
+      "responses": {
+        "200": {
+          "description": "Successful response",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdsMethodSchema"
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "tags": ["Ads Methods"],
+      "description": "Get all ads method",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateAdsMethodRequestSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Successful response",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAdsMethodResponseSchema"
+              }
+            }
+          }
+        }
+      }
+    },
+    "delete": {
+      "tags": ["Ads Methods"],
+      "summary": "Get all ads method",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DeleteAdsMethodRequestSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Successful response",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteAdsMethodResponseSchema"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
