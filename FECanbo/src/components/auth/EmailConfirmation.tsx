@@ -56,11 +56,13 @@ const EmailConfirmation = ({ type }: EmailConfirmationProps) => {
       api[type]({
         message: msg || "Thao tác thất bại",
         description: desc,
+        duration: 0,
       });
     } else if (type == "success") {
       api[type]({
         message: msg || "Thao tác thành công",
         description: desc,
+        duration: 0,
       });
     }
   };
@@ -108,7 +110,7 @@ const EmailConfirmation = ({ type }: EmailConfirmationProps) => {
 
   useEffect(() => {
     if (!authState.isLoggedIn && type === "change-password") {
-      navigate("/");
+      //navigate("/");
     }
   }, []);
 
@@ -124,7 +126,7 @@ const EmailConfirmation = ({ type }: EmailConfirmationProps) => {
     }
     if (changePwdTokenData) {
       openNotification("success", "Mật khẩu đã khôi phục thành công!");
-      setTimeout(() => navigate("/auth/login"), 2000);
+      //setTimeout(() => navigate("/auth/login"), 2000);
     }
     if (changePwdTokenError) {
       openNotification("error", "Hiện tại không thể khôi phục mật khẩu!");
@@ -132,7 +134,7 @@ const EmailConfirmation = ({ type }: EmailConfirmationProps) => {
     }
     if (changePwdData) {
       openNotification("success", "Đổi mật khẩu thành công");
-      setTimeout(() => navigate("/"), 2000);
+      //setTimeout(() => navigate("/"), 2000);
     }
     if (changePwdError) {
       openNotification("error", "Hiện tại không thể đổi mật khẩu!");
@@ -140,7 +142,7 @@ const EmailConfirmation = ({ type }: EmailConfirmationProps) => {
     }
     if (verifyEmailData) {
       openNotification("success", "Xác thực email thành công!");
-      setTimeout(() => navigate("/"), 2000);
+      //setTimeout(() => navigate("/"), 2000);
     }
     if (verifyEmailError) {
       openNotification("error", "Xác thực email thất bại!");

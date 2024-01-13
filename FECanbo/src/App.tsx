@@ -14,6 +14,7 @@ import {
   UserAddOutlined,
   UserOutlined,
   VideoCameraOutlined,
+  LockOutlined,
   YuqueFilled,
 } from "@ant-design/icons";
 
@@ -105,6 +106,12 @@ const items: Item[] = [
     label: "Chỉnh sửa thông tin cá nhân",
     title: "/user",
   },
+  {
+    key: "8",
+    icon: <LockOutlined />,
+    label: "Đổi mật khảu",
+    title: "/change-password",
+  },
 ];
 const itemVHTTs: Item[] = [
   {
@@ -173,6 +180,12 @@ const itemVHTTs: Item[] = [
     label: "Thống kê báo cáo",
     title: "/vhtt/stats",
   },
+  {
+    key: "8",
+    icon: <LockOutlined />,
+    label: "Đổi mật khảu",
+    title: "/vhtt/change-password",
+  },
 ];
 const App = () => {
   return (
@@ -191,6 +204,10 @@ const App = () => {
           <Route path="login" element={<LoginPage redirectUrl={"/"} />} />
           <Route path="edit-place-request" element={<EditRequestComponent />} />
           <Route path="edit-ad-request" element={<EditRequest />} />
+          <Route
+            path="change-password"
+            element={<EmailConfirmationPage type="change-password" />}
+          />
         </Route>
         <Route
           path="vhtt"
@@ -211,6 +228,10 @@ const App = () => {
           />
           <Route path="login" element={<LoginPage redirectUrl={"/vhtt"} />} />
           <Route path="stats" element={<StatsPage />} />
+          <Route
+            path="change-password"
+            element={<EmailConfirmationPage type="change-password" />}
+          />
         </Route>
         {/* <Route path="/auth">
           <Route path="login" element={<LoginPage />} />

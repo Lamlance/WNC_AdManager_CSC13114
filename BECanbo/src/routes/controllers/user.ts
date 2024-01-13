@@ -14,8 +14,8 @@ import jwt from "jsonwebtoken";
 
 configDotenv();
 
-const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "";
-const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || "0");
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "abc123";
+const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || "1");
 
 const router = Router();
 
@@ -47,13 +47,17 @@ router.post(
       const result = await CallAndCatchAsync(getUserById, user.userId);
 
       if (!result.success) {
+        console.log(result.error);
         return res.status(500).json({ err: result.error });
       }
       const userData = result.data;
       if (!userData) {
         return res.status(500).json({ err: "user not found" });
       }
-      const isPasswordMatch = await bcrypt.compare(res.locals.body.oldPassword, userData.pwd);
+      const isPasswordMatch = await bcrypt.compare(
+        res.locals.body.oldPassword,
+        userData.pwd
+      );
 
       if (isPasswordMatch) {
         const saltRounds = SALT_ROUNDS;
