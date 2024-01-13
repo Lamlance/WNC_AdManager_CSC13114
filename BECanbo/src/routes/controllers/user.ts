@@ -53,7 +53,7 @@ router.post(
       if (!userData) {
         return res.status(500).json({ err: "user not found" });
       }
-      const isPasswordMatch = await bcrypt.compare(user.pwd, userData.pwd);
+      const isPasswordMatch = await bcrypt.compare(res.locals.body.oldPassword, userData.pwd);
 
       if (isPasswordMatch) {
         const saltRounds = SALT_ROUNDS;

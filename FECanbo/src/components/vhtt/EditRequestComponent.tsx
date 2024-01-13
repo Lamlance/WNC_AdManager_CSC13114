@@ -1,7 +1,7 @@
 import { Button, Table, notification } from "antd";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { PlaceChangeApi, SocketIoApi } from "@admanager/shared";
+import { PlaceApi, SocketIoApi,PlaceChangeApi } from "@admanager/shared";
 import { showModalOpen, setSelectedPlace } from "../../slices/modalSlice.tsx";
 import EditSetpoint from "./EditSetpoint.tsx";
 import {
@@ -11,6 +11,13 @@ import {
 import type { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks.ts";
+import { useGetAllPlaceChangeRequestQuery } from "../../slices/api/apiSlice.ts";
+
+
+type EditRequest =
+    | PlaceChangeApi.PlaceChangeRequestCreate
+    | PlaceChangeApi.PlaceChangeRequestResponse;
+
 
 function EditRequestComponent() {
   const [getAllPlaceChange, { data }] = useLazyGetAllPlaceChangeRequestQuery();
@@ -22,6 +29,9 @@ function EditRequestComponent() {
   >([]);
 
   const [notifiApi, notifiCtx] = notification.useNotification();
+    const dispatch = useDispatch();
+    const modal = useSelector((state: RootState) => state.PlaceEditModal);
+    const { data } = useGetAllPlaceChangeRequestQuery();
 
   const showModal = (record: PlaceChangeApi.PlaceChangeRequestResponse) => {
     dispatch(showModalOpen());
@@ -59,34 +69,39 @@ function EditRequestComponent() {
           key: "id_yeu_cau",
         },
         {
-          title: "Địa điểm",
-          dataIndex: "ten_dia_diem",
-          key: "ten_dia_diem",
+            title: "Địa điểm",
+            dataIndex: "ten_dia_diem",
+            key: "ten_dia_diem",
+            width: '15%',
         },
         {
-          title: "Địa chỉ",
-          dataIndex: "dia_chi",
-          key: "dia_chi",
+            title: "Địa chỉ",
+            dataIndex: "dia_chi",
+            key: "dia_chi",
+            width: '25%',
         },
         {
-          title: "Trạng thái",
-          dataIndex: "trang_thai",
+            title: "Tọa độ",
+            dataIndex: "lngxlat",
+            key: "lngxlat",
+            width: '25%',
+            render: ((text: string, record: EditRequest) => (<span>{record.lng} x {record.lat}</span>)),
         },
         {
-          title: "Nội dung",
-          dataIndex: "ly_do_chinh_sua",
-          key: "ly_do_chinh_sua",
+            title: "Nội dung",
+            dataIndex: "ly_do_chinh_sua",
+            key: "ly_do_chinh_sua",
+            width: '18%',
         },
         {
-          title: "Xem chi tiết",
-          align: "center",
-          dataIndex: "detail",
-          key: "detail",
-          render: (_, record) => (
-            <Link to="#" onClick={() => showModal(record)}>
-              Xem chi tiết
-            </Link>
-          ),
+            title: "",
+            dataIndex: "detail",
+            key: "detail",
+            render: (text: string, record: EditRequest) => (
+                <Link to="#" onClick={() => showModal(record)}>
+                    Chi tiết
+                </Link>
+            ),
         },
         {
           title: "Xét duyệt",

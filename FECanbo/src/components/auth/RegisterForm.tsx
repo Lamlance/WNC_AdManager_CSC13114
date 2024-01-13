@@ -9,10 +9,7 @@ import { Select, notification } from "antd";
 import Button from "antd/es/button";
 import Form from "antd/es/form";
 import Input from "antd/es/input";
-import {
-  useGetAllWards,
-  useRegisterAccountMutation,
-} from "../../slices/api/apiSlice";
+import { useRegisterAccountMutation } from "../../slices/api/apiSlice";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -22,15 +19,6 @@ import { AuthApi } from "@admanager/shared";
 
 type PhuongType = { id_phuong: number; ten_phuong: string; id_quan: number };
 
-type DistrictElement = {
-  districtId: number;
-  districtName: string;
-};
-
-type WardElement = {
-  wardId: number;
-  wardName: string;
-};
 interface RegisterFormProps {
   overrideSubmit?: (values: AuthApi.RegisterRequest) => void;
   initalValue?: Partial<AuthApi.RegisterRequest>;
@@ -47,19 +35,18 @@ const RegisterForm = (props: RegisterFormProps) => {
   const [registerAccount, { data: registerResponse, error }] =
     useRegisterAccountMutation();
   const [api, contextHolder] = notification.useNotification();
-  console.log(props.initalValue);
+
   const openNotification = (type: string) => {
     if (type == "error") {
       api[type]({
-        message: "Register failed!",
+        message: "Đăng ký thất bại!",
         description:
           JSON.stringify(error) ||
-          "Cannot register account right now!. Contact your admin to check this error.",
+          "Không thể đăng ký tài khoản ngay lúc này. Liên hệ người quản lý của bạn để biết thêm thông tin chi tiết.",
       });
     } else if (type == "success") {
       api[type]({
-        message:
-          "Register successfully! Please check your email to get OTP to verify account!",
+        message: "Đăng ký thành công! Hãy xác thực email của bạn!",
       });
     }
   };
@@ -88,10 +75,10 @@ const RegisterForm = (props: RegisterFormProps) => {
 
   useEffect(() => {
     if (registerResponse) {
-      openNotification("success");
       console.log(registerResponse);
+      openNotification("success");
       dispatch(verify(registerResponse));
-      navigate("/auth/verify-account");
+      setTimeout(() => navigate("/auth/verify-account"), 2000);
     }
     if (error) {
       openNotification("error");
@@ -118,6 +105,7 @@ const RegisterForm = (props: RegisterFormProps) => {
         form={form}
         {...layout}
         style={{ minWidth: 500 }}
+        labelAlign="left"
         className="max-w-80"
         onFinish={onFinish}
         initialValues={{
@@ -135,7 +123,7 @@ const RegisterForm = (props: RegisterFormProps) => {
             },
           ]}
           name="name"
-          label="fullName"
+          label="Họ tên"
         >
           <Input
             prefix={<FileTextOutlined className="mx-1" />}
@@ -150,7 +138,7 @@ const RegisterForm = (props: RegisterFormProps) => {
             },
           ]}
           name="username"
-          label="Username"
+          label="Tên tài khoản"
         >
           <Input
             prefix={<UserOutlined className="mx-1" />}
@@ -165,7 +153,7 @@ const RegisterForm = (props: RegisterFormProps) => {
             },
           ]}
           name="pwd"
-          label="Password"
+          label="Mật khẩu"
         >
           <Input
             prefix={<LockOutlined className="mx-1" />}
@@ -174,7 +162,7 @@ const RegisterForm = (props: RegisterFormProps) => {
           />
         </Form.Item>
         <Form.Item
-          dependencies={["password"]}
+          dependencies={["pwd"]}
           rules={[
             {
               required: true,
@@ -192,7 +180,7 @@ const RegisterForm = (props: RegisterFormProps) => {
             }),
           ]}
           name="confirmPassword"
-          label="Retype password"
+          label="Mật khẩu"
         >
           <Input
             prefix={<LockOutlined className="mx-1" />}
@@ -228,7 +216,7 @@ const RegisterForm = (props: RegisterFormProps) => {
             },
           ]}
           name="phone"
-          label="Phone"
+          label="Số điện thoại"
         >
           <Input
             prefix={<PhoneOutlined className="mx-1" />}

@@ -42,3 +42,4 @@ export async function deleteAdMethod(data: AdsGeoJson.AdMethodDeleteProperty) {
 
   return res;
 }
+
