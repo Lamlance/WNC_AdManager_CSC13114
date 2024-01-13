@@ -96,7 +96,7 @@ function AdsMethodPage() {
 
       if (deleteData.success == false) return console.log(deleteData.error);
       deleteAdMethod(deleteData.data).then((v) => console.log(v));
-      window.location.reload();
+      //window.location.reload();
     }
   }, [selectedAds, form, isDelete]);
 
@@ -113,7 +113,7 @@ function AdsMethodPage() {
     if (data.success == false) return console.log(data.error);
     submitAdMethod(data.data).then((v) => console.log(v));
     handleOk();
-    window.location.reload();
+    //window.location.reload();
   };
   const onFinish2 = (values: AdMethodUpdateValue) => {
     const realData: AdsMethod = {
@@ -125,7 +125,7 @@ function AdsMethodPage() {
     if (data.success == false) return console.log(data.error);
     submitUpdateAdMethod(data.data).then((v) => console.log(v));
     handleOk();
-    window.location.reload();
+    //window.location.reload();
   };
   return (
     <>

@@ -41,16 +41,6 @@ function AdsRequestPage() {
 
   return (
     <>
-      <Button
-        onClick={showForm}
-        style={{
-          marginBottom: 16,
-          backgroundColor: "#1890ff",
-          color: "#fff",
-        }}
-      >
-        Thêm yêu cầu
-      </Button>
       <AdsRequest
         data={data ? data : []}
         onRowClick={showDetails}

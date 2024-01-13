@@ -12,6 +12,7 @@ import { AdsClusterMarker, AdsMap } from "@admanager/frontend";
 import MapSearchBar from "../components/AdsMap/MapSearch";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../hooks";
+import { Button } from "antd";
 
 const DefaultMapProps = {
   InitialPosition: {
@@ -63,12 +64,9 @@ function createReportPopup(
     </div>`);
 }
 function AdsMapPage() {
-  const [getAdsGeoJson, { data: adsGeoJson, currentData: currAdsGeoJson }] =
-    useLazyGetAdsGeoJsonQuery();
-  const [
-    getReportGeoJson,
-    { data: reportGeoJson, currentData: currentReportData },
-  ] = useLazyGetReportGeoJsonQuery();
+  const [getAdsGeoJson, { data: adsGeoJson }] = useLazyGetAdsGeoJsonQuery();
+  const [getReportGeoJson, { data: reportGeoJson }] =
+    useLazyGetReportGeoJsonQuery();
 
   const authSate = useAppSelector((state) => state.auth);
 
@@ -76,6 +74,8 @@ function AdsMapPage() {
     useState<ClusterCreateData | null>(null);
   const [reportClusterCreateData, setReportClusterCreate] =
     useState<ClusterCreateData | null>(null);
+
+  const [mapDblClick, setOnMapDblClick] = useState({ lng: 0, lat: 0 });
 
   useEffect(() => {
     console.log(adsGeoJson, reportGeoJson);
@@ -119,42 +119,68 @@ function AdsMapPage() {
     return ReportClusterCreate;
   }
 
+  function handleUpdatePlaceChangeEvent() {
+    authSate.isLoggedIn
+      ? getReportGeoJson({ phuong_id: authSate.user.managedWards })
+      : getReportGeoJson({});
+    authSate.isLoggedIn
+      ? getAdsGeoJson({ phuong_id: authSate.user.managedWards })
+      : getAdsGeoJson({});
+  }
+
+  useEffect(() => {
+    document.addEventListener(
+      "AdsManager:UpdatePlaceChangeEvent",
+      handleUpdatePlaceChangeEvent,
+    );
+    return () => {
+      document.removeEventListener(
+        "AdsManager:UpdatePlaceChangeEvent",
+        handleUpdatePlaceChangeEvent,
+        true,
+      );
+    };
+  }, []);
+
   return (
-    <div className=" relative h-full w-full">
-      <AdsMap
-        SearchBar={{
-          func: MapSearchBar,
-          args: [
-            {
-              onPlaceSelect: (place) => {
-                console.log(place);
+    <>
+      <Button onClick={() => handleUpdatePlaceChangeEvent()}> ♻️ </Button>
+      <div className=" relative h-full w-full">
+        <AdsMap
+          SearchBar={{
+            func: MapSearchBar,
+            args: [
+              {
+                onPlaceSelect: (place) => {
+                  console.log(place);
+                },
+                initPos: DefaultMapProps.InitialPosition,
               },
-              initPos: DefaultMapProps.InitialPosition,
-            },
-          ],
-        }}
-        InitialPosition={DefaultMapProps.InitialPosition}
-        AdsClusterInfo={
-          !adsClusterCreateData ? undefined : (
-            <AdsClusterMarker<typeof AdsGeoJson.AdsGeoJsonPropertySchema>
-              geoJsonPropertySchema={AdsGeoJson.AdsGeoJsonPropertySchema}
-              markerData={adsClusterCreateData}
-              popUpBuilder={createAdPopup}
-            />
-          )
-        }
-        ReportClusterInfo={
-          !reportClusterCreateData ? undefined : (
-            <AdsClusterMarker<typeof GeoPropArr>
-              geoJsonPropertySchema={GeoPropArr}
-              markerData={reportClusterCreateData}
-              popUpBuilder={createReportPopup}
-            />
-          )
-        }
-        onMapDblClick={(coord) => console.log(coord)}
-      />
-    </div>
+            ],
+          }}
+          InitialPosition={DefaultMapProps.InitialPosition}
+          AdsClusterInfo={
+            !adsClusterCreateData ? undefined : (
+              <AdsClusterMarker<typeof AdsGeoJson.AdsGeoJsonPropertySchema>
+                geoJsonPropertySchema={AdsGeoJson.AdsGeoJsonPropertySchema}
+                markerData={adsClusterCreateData}
+                popUpBuilder={createAdPopup}
+              />
+            )
+          }
+          ReportClusterInfo={
+            !reportClusterCreateData ? undefined : (
+              <AdsClusterMarker<typeof GeoPropArr>
+                geoJsonPropertySchema={GeoPropArr}
+                markerData={reportClusterCreateData}
+                popUpBuilder={createReportPopup}
+              />
+            )
+          }
+          onMapDblClick={(coord) => setOnMapDblClick(coord)}
+        />
+      </div>
+    </>
   );
 }
 

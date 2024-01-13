@@ -53,7 +53,11 @@ export const getAllAdsRequests = async (
 export async function createAdRequest(data: AdsReqApi.AdRequestCreate) {
   const res = await pg_client
     .insert(AdsSchema.YeuCauCapPhep)
-    .values({ ...data, trang_thai: data.trang_thai || undefined })
+    .values({
+      ...data,
+      id_dia_diem: data.id_dia_diem || 1,
+      trang_thai: data.trang_thai || undefined,
+    })
     .returning({ insertedId: AdsSchema.YeuCauCapPhep.id_yeu_cau });
   return res[0].insertedId;
 }
@@ -145,7 +149,18 @@ export async function updateAdStatusRequest(args: UpdateAdStatusRequestArgs) {
   const res = await pg_client
     .update(AdsSchema.YeuCauCapPhep)
     .set({ trang_thai: args.trang_thai })
-    .where(eq(AdsSchema.YeuCauCapPhep.id_yeu_cau, args.id_yeu_cau));
-
+    .where(eq(AdsSchema.YeuCauCapPhep.id_yeu_cau, args.id_yeu_cau))
+    .returning({ yeu_cau: YeuCauCapPhep });
+  if (args.trang_thai === "Approve" && res[0] && res[0].yeu_cau.id_diem_dat) {
+    await pg_client.insert(AdsSchema.QuangCao).values({
+      ...res[0],
+      chieu_dai_m: res[0].yeu_cau.chieu_dai_m,
+      chieu_rong_m: res[0].yeu_cau.chieu_rong_m,
+      id_dia_diem: res[0].yeu_cau.id_diem_dat,
+      id_hinh_thuc: 1,
+      id_loai_bang_qc: 1,
+      id_loai_vitri: 1,
+    });
+  }
   return res;
 }

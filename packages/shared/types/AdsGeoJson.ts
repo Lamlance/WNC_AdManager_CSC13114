@@ -127,14 +127,19 @@ const AdsGeoJsonSchema = z.object({
     properties: z.object({ name: z.literal("urn:ogc:def:crs:OGC:1.3:CRS84") }),
   }),
 
-  features: z.object({
-    type: z.literal("Feature"),
-    properties: AdsGeoJsonPropertySchema,
-    geometry: z.object({
-      type: z.literal("Point"),
-      coordinates: z.number().array(),
-    }),
-  }),
+  features: z.preprocess(
+    StringParsePreprocess,
+    z
+      .object({
+        type: z.literal("Feature"),
+        properties: AdsGeoJsonPropertySchema,
+        geometry: z.object({
+          type: z.literal("Point"),
+          coordinates: z.number().array(),
+        }),
+      })
+      .array()
+  ),
 });
 type AdsGeoJson = z.infer<typeof AdsGeoJsonSchema>;
 type ReportGeoJson = GeoJson<ReportGeoJsonProperty[]>;

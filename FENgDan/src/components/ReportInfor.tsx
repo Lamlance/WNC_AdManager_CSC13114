@@ -88,11 +88,21 @@ function ReportInfor() {
           <div className="" key={v.bao_cao.id_bao_cao}>
             <div className=" w-full rounded-xl border-opacity-90 p-4 shadow-lg">
               <div className="">
-                <p className="text-base">Báo cáo: {v.loai_bao_cao}</p>
-                <p className="text-base">Tình trạng: {v.bao_cao.trang_thai}</p>
+                <p className="text-base">
+                  <span className=" font-bold">Báo cáo:</span> {v.loai_bao_cao}
+                </p>
+                <p className="text-base">
+                  <span className=" font-bold">Tình trạng:</span>
+                  {v.bao_cao.trang_thai}
+                </p>
 
                 <p className="text-base">
-                  <span>Nội dung</span>
+                  <span className=" font-bold">Thời điểm báo cáo:</span>
+                  {new Date(v.bao_cao.thoi_diem_bc).toLocaleDateString()}
+                </p>
+
+                <p className="text-base">
+                  <span className=" font-bold">Nội dung</span>
                   <span
                     className="font-semibold "
                     dangerouslySetInnerHTML={{
@@ -102,12 +112,12 @@ function ReportInfor() {
                 </p>
 
                 <p className="text-base">
-                  <span>Phản hồi</span>
+                  <span className=" font-bold">Phản hồi</span>
 
                   <span
                     className="font-semibold "
                     dangerouslySetInnerHTML={{
-                      __html: v.bao_cao.phan_hoi || "",
+                      __html: v.bao_cao.phan_hoi || "Chưa có phản hồi",
                     }}
                   ></span>
                 </p>
