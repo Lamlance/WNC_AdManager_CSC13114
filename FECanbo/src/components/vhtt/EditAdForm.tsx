@@ -1,5 +1,15 @@
 import { FC, useEffect, useState } from "react";
-import { Select, DatePicker, InputNumber, Form, Input, Button } from "antd";
+import {
+  Select,
+  DatePicker,
+  InputNumber,
+  Form,
+  Input,
+  Button,
+  Switch,
+  Col,
+  Row,
+} from "antd";
 
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
@@ -7,32 +17,16 @@ import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
 
 const { Option } = Select;
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { AdChangeApi, AdsGeoJson } from "@admanager/shared";
 import AdsMapModal from "../AdsMap/AdsMapModal";
 import { MapSearchProps } from "../AdsMap/MapSearch";
-const AdTableType = [
-  "Trụ bảng hiflex",
-  "Trụ màn hình điện tử LED",
-  "Trụ hộp đèn",
-  "Bảng hiflex ốp tường",
-  "Màn hình điện tử ốp tường",
-  "Trụ treo băng rôn dọc",
-  "Trụ treo băng rôn ngang",
-  "Trụ/Cụm pano",
-  "Cổng chào",
-  "Trung tâm thương mại",
-];
-const LocateType = [
-  "Đất công/Công viên/Hành lang an toàn giao thông",
-  "Đất tư nhân/Nhà ở riêng lẻ",
-  "Trung tâm thương mại",
-  "Chợ",
-  "Cây xăng",
-  "Nhà chờ xe buýt",
-];
-const AdType = ["Cổ động chính trị", "Quảng cáo thương mại", "Xã hội hoá"];
+import {
+  useGetAllAdsMethodQuery,
+  useGetAllBoardTypeQuery,
+  useGetAllLandTypeQuery,
+} from "../../slices/api/apiSlice";
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -43,11 +37,18 @@ const getBase64 = (file: RcFile): Promise<string> =>
   });
 type SizeType = Parameters<typeof Form>[0]["size"];
 
-export type AdChangeFormValue = Omit<AdChangeApi.AdChangeData, "id_quang_cao">;
+export type AdChangeFormValue = Omit<
+  AdChangeApi.AdChangeData,
+  "id_quang_cao" | "ngay_hieu_luc" | "ngay_het_han"
+> & {
+  ngay_hieu_luc: Dayjs | undefined;
+  ngay_het_han: Dayjs | undefined;
+  hinh_anh: UploadFile[];
+};
 
 type EditAdFormProps1 = {
   type: "AdInfo";
-  ad: (AdsGeoJson.PlaceProperty & AdsGeoJson.AdsProperty) | null;
+  ad: AdsGeoJson.AdsProperty | null;
   isModalOpen: boolean;
   onClose: () => void;
   onFormSubmit?: (data: AdChangeFormValue) => void;
@@ -66,51 +67,34 @@ const dateFormat = "YYYY-MM-DD";
 const today = dayjs().format("YYYY-MM-DD");
 
 const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
-  const { type, ad, isModalOpen, onClose } = props;
+  const { ad, isModalOpen, onClose } = props;
+
+  const { data: AdsType } = useGetAllAdsMethodQuery();
+  const { data: BoardType } = useGetAllBoardTypeQuery();
+  const { data: LandType } = useGetAllLandTypeQuery();
+
   const [form] = Form.useForm<AdChangeFormValue>();
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [fileList2, setFileList2] = useState<UploadFile[]>([]);
-  const [mapModalOpen, setOpenMapModal] = useState<boolean>(false);
-  const [address, setAddress] = useState<string>("");
+  const [isLegal, setIsLegal] = useState<boolean>(false);
 
   const handleCancel = () => setPreviewOpen(false);
 
   useEffect(() => {
-    const files: UploadFile[] = [];
-    if (ad?.hinh_1) {
-      files.push({ uid: "1", name: "Image 1", status: "done", url: ad.hinh_1 });
-      setFileList(
-        files.filter((file) => {
-          return file.uid === "1";
-        }),
-      );
-    }
-    if (ad?.hinh_2) {
-      files.push({ uid: "2", name: "Image 2", status: "done", url: ad.hinh_2 });
-      setFileList2(
-        files.filter((file) => {
-          return file.uid === "2";
-        }),
-      );
-    }
-
-    if (ad && type === "AdInfo") {
-      setAddress(ad.dia_chi);
-    }
-
+    console.log(ad);
     form.setFieldsValue({
-      so_luong: ad?.so_luong,
-      chieu_dai_m: ad?.chieu_dai_m,
-      chieu_rong_m: ad?.chieu_rong_m,
-      bang_qc: ad?.bang_qc,
-      loai_vitri: ad?.loai_vitri,
-      hinh_thuc: ad?.hinh_thuc,
-      ten_dia_diem: ad?.ten_dia_diem,
+      ...(ad as AdChangeFormValue),
+      ngay_hieu_luc: ad?.ngay_hieu_luc
+        ? dayjs(new Date(ad.ngay_hieu_luc))
+        : undefined,
+      ngay_het_han: ad?.ngay_het_han
+        ? dayjs(new Date(ad.ngay_het_han))
+        : undefined,
     });
+    setIsLegal(!!ad?.quy_hoach);
   }, [ad]);
 
   const handlePreview = async (file: UploadFile) => {
@@ -136,17 +120,6 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
       setFileList(newFileList);
     }
   };
-  const handleChange2: UploadProps["onChange"] = async ({
-    fileList: newFileList,
-    file,
-  }) => {
-    if (file && file.type && file.type.startsWith("image/")) {
-      const preview = await getBase64(file.originFileObj as RcFile);
-      setFileList2([{ ...file, status: "done", url: preview }]);
-    } else {
-      setFileList2(newFileList);
-    }
-  };
 
   const uploadButton = (
     <div>
@@ -161,9 +134,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
 
   const handleCancelModal = () => {
     onClose();
-    setAddress("");
     setFileList([]);
-    setFileList2([]);
   };
   const [isOpen, setIsopen] = useState(false);
   useEffect(() => {
@@ -177,21 +148,15 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
     setComponentSize(size);
   };
 
-  const onMapSelect: MapSearchProps["onPlaceSelect"] = function (data) {
-    setAddress(data.formatted_address);
-  };
+  function handleFormSubmit(value: AdChangeFormValue) {
+    value.hinh_anh = fileList;
+    value.quy_hoach = isLegal;
+    props.onFormSubmit?.(value);
+    handleOk();
+  }
 
   return (
     <>
-      {!ad || type === "AdChange" ? null : (
-        <AdsMapModal
-          open={mapModalOpen}
-          onClose={() => setOpenMapModal(false)}
-          initPos={{ lng: ad.lng, lat: ad.lat }}
-          onPlaceSelect={onMapSelect}
-        />
-      )}
-
       <Modal
         open={isOpen}
         onOk={handleOk}
@@ -204,9 +169,8 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
         </h1>
         <Form
           form={form}
-          onFinish={(v) => console.log(v)}
+          onFinish={handleFormSubmit}
           labelCol={{ span: 6 }}
-          wrapperCol={{ span: 16 }}
           layout="horizontal"
           initialValues={{ size: componentSize }}
           onValuesChange={onFormLayoutChange}
@@ -216,50 +180,52 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
           <div className="grid grid-cols-2 gap-5  ">
             <Form.Item<AdChangeFormValue>
               label=" Loại quảng cáo"
-              name={"bang_qc"}
+              name={"id_loai_bang_qc"}
+              rules={[{ required: !ad, message: "Xin chọn loại bảng QC" }]}
             >
-              <Select value={ad?.bang_qc}>
-                {AdTableType.map((value) => (
-                  <Option key={value} value={value}>
-                    {value}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item<AdChangeFormValue> name={"hinh_thuc"} label=" Hình thức">
-              <Select defaultValue={ad?.hinh_thuc}>
-                {AdType.map((value) => (
-                  <Option key={value} value={value}>
-                    {value}
+              <Select>
+                {(BoardType?.data || []).map((v) => (
+                  <Option
+                    key={v.bang_qc.id_loai_bang_qc}
+                    value={v.bang_qc.id_loai_bang_qc}
+                  >
+                    {v.bang_qc.loai_bang_qc}
                   </Option>
                 ))}
               </Select>
             </Form.Item>
             <Form.Item<AdChangeFormValue>
-              name={"loai_vitri"}
+              name={"id_hinh_thuc"}
+              label=" Hình thức"
+              rules={[{ required: !ad, message: "Xin chọn hình thức QC" }]}
+            >
+              <Select>
+                {(AdsType || []).map((v) => (
+                  <Option key={v.id_htqc} value={v.id_htqc}>
+                    {v.hinh_thuc_qc}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item<AdChangeFormValue>
+              name={"id_loai_vitri"}
               label="Loại vị trí"
+              rules={[{ required: !ad, message: "Xin chọn loại vị trí" }]}
             >
-              <Select defaultValue={ad?.loai_vitri}>
-                {LocateType.map((value) => (
-                  <Option key={value} value={value}>
-                    {value}
+              <Select>
+                {(LandType?.data || []).map((v) => (
+                  <Option key={v.vi_tri.id_loai_vt} value={v.vi_tri.id_loai_vt}>
+                    {v.vi_tri.loai_vitri}
                   </Option>
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item<AdChangeFormValue>
-              label="Vị trí"
-              name={"ten_dia_diem"}
-              initialValue={ad?.ten_dia_diem}
-            >
-              <Input />
-            </Form.Item>
-
             <Form.Item<AdChangeFormValue> label="Kích thước">
               <div className=" flex flex-row">
                 <Form.Item<AdChangeFormValue>
                   name={"chieu_dai_m"}
                   initialValue={ad?.chieu_dai_m || 0}
+                  rules={[{ required: !ad, message: "Nhập chiều dài bảng" }]}
                 >
                   <InputNumber className="h-8 w-12 " min={1} max={10} />
                 </Form.Item>
@@ -267,6 +233,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
                 <Form.Item<AdChangeFormValue>
                   name={"chieu_rong_m"}
                   initialValue={ad?.chieu_rong_m || 0}
+                  rules={[{ required: !ad, message: "Nhập chiều rộng bảng" }]}
                 >
                   <InputNumber className="h-8 w-12" min={1} max={10} />
                 </Form.Item>
@@ -277,14 +244,28 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
               name={"so_luong"}
               label="Số lượng"
               initialValue={ad?.so_luong || 0}
+              rules={[{ required: !ad, message: "Nhập số lượng" }]}
             >
-              <InputNumber className="h-8 w-12 " min={1} />
+              <InputNumber className="" min={1} />
             </Form.Item>
-
+            <div>
+              <Row>
+                <Col span={6}>Quy hoạch</Col>
+                <Col>
+                  <Switch
+                    onClick={() => setIsLegal(!isLegal)}
+                    checked={isLegal}
+                    checkedChildren={"Đã quy hoach"}
+                    unCheckedChildren={"Chưa quy hoạch"}
+                  />
+                </Col>
+              </Row>
+            </div>
             <Form.Item<AdChangeFormValue>
               name={"ngay_hieu_luc"}
               label="Ngày hiệu lực"
               initialValue={dayjs(`${ad?.ngay_hieu_luc || today}`, dateFormat)}
+              rules={[{ required: !ad, message: "Chọn ngày có hiệu lực" }]}
             >
               <DatePicker format={dateFormat} />
             </Form.Item>
@@ -293,13 +274,13 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
               name={"ngay_het_han"}
               label="Ngày hết hạn"
               initialValue={dayjs(`${ad?.ngay_het_han || today}`, dateFormat)}
+              rules={[{ required: !ad, message: "Chọn ngày có hết hiệu lực" }]}
             >
               <DatePicker format={dateFormat} />
             </Form.Item>
 
-            <Form.Item label="Hình ảnh 1">
+            <Form.Item label="Hình ảnh">
               <Upload
-                action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                 listType="picture-card"
                 fileList={fileList}
                 onPreview={handlePreview}
@@ -320,42 +301,7 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
                 />
               </Modal>
             </Form.Item>
-            <Form.Item label="Hình ảnh 2">
-              <Upload
-                action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                listType="picture-card"
-                fileList={fileList2}
-                onPreview={handlePreview}
-                onChange={handleChange2}
-              >
-                {fileList2.length >= 2 ? null : uploadButton}
-              </Upload>
-              <Modal
-                open={previewOpen}
-                title={previewTitle}
-                footer={null}
-                onCancel={handleCancel}
-              >
-                <img
-                  alt="example"
-                  style={{ width: "100%" }}
-                  src={previewImage}
-                />
-              </Modal>
-            </Form.Item>
           </div>
-          <div className=" flex flex-row">
-            <Form.Item<AdChangeFormValue>
-              label="Địa chỉ"
-              className=" flex-1"
-              labelCol={{ span: 3 }}
-              wrapperCol={{ span: 20 }}
-            >
-              <Input value={address} />
-            </Form.Item>
-            <Button onClick={() => setOpenMapModal(true)}>🗺️</Button>
-          </div>
-
           <Form.Item className="mt-5 flex items-center justify-center">
             <Button type="primary" htmlType="submit">
               Cập nhật

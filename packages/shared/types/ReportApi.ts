@@ -14,8 +14,8 @@ const ReportPlaceSchema = z.object({
   id_phuong: z.number().nullish(),
   id_dia_diem: z.number().nullish(),
   place_id: z.string().nullish(),
-  lng: z.number(),
-  lat: z.number(),
+  lng: z.coerce.number(),
+  lat: z.coerce.number(),
 });
 
 const ReportCreateSchema = z
@@ -27,15 +27,17 @@ const ReportCreateSchema = z
   .merge(ReportPlaceSchema)
   .merge(ReportFormValuesSchema);
 
+const ReportSchema = z
+  .object({
+    id_bao_cao: z.number(),
+    trang_thai: z.string(),
+    thoi_diem_bc: z.coerce.date(),
+    phan_hoi: z.string().nullish(),
+  })
+  .merge(ReportCreateSchema.omit({ ten_dia_diem: true }));
+
 const ReportResponseSchema = z.object({
-  bao_cao: z
-    .object({
-      id_bao_cao: z.number(),
-      trang_thai: z.string(),
-      thoi_diem_bc: z.date(),
-      phan_hoi: z.string().nullish(),
-    })
-    .merge(ReportCreateSchema.omit({ ten_dia_diem: true })),
+  bao_cao: ReportSchema,
   loai_bc: z.string(),
 });
 
@@ -56,7 +58,7 @@ type ReportPlace = z.infer<typeof ReportPlaceSchema>;
 type ReportResponse = z.infer<typeof ReportResponseSchema>;
 type ReportType = z.infer<typeof ReportTypeSchema>;
 type ReportUpdate = z.infer<typeof ReportUpdateSchema>;
-
+type Report = z.infer<typeof ReportSchema>;
 export type {
   ReportResponse,
   ReportCreateBody,
@@ -64,6 +66,7 @@ export type {
   ReportPlace,
   ReportType,
   ReportUpdate,
+  Report,
 };
 export {
   ReportCreateSchema,
@@ -71,4 +74,6 @@ export {
   ReportPlaceSchema,
   ReportTypeSchema,
   ReportUpdateSchema,
+  ReportResponseSchema,
+  ReportSchema,
 };

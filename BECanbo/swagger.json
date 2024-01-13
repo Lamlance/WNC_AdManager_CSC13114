@@ -1,0 +1,12 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "City Ads Manager APIs",
+    "version": "1.0.0",
+    "description": "City Ads Manager APIs"
+  },
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {},
+  "definitions": {}
+}

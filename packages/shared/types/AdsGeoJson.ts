@@ -13,15 +13,15 @@ const AdsPropertySchema = z.object({
   id_quang_cao: z.string(),
   quy_hoach: z.coerce.boolean(),
 
-  ngay_hieu_luc: z.string().nullish(),
-  ngay_het_han: z.string().nullish(),
+  ngay_hieu_luc: z.string().or(z.date()).nullish(),
+  ngay_het_han: z.string().or(z.date()).nullish(),
 
   hinh_1: z.string().nullish(),
   hinh_2: z.string().nullish(),
 
-  so_luong: z.number().nullish().default(1),
-  chieu_dai_m: z.number().nullish(),
-  chieu_rong_m: z.number().nullish(),
+  so_luong: z.coerce.number().nullish().default(1),
+  chieu_dai_m: z.coerce.number().nullish(),
+  chieu_rong_m: z.coerce.number().nullish(),
 
   loai_vitri: z.string(),
   hinh_thuc: z.string(),
@@ -57,26 +57,26 @@ const ReportPropertySchema = z.object({
   noi_dung: z.string(),
   trang_thai: z.string(),
   thoi_diem_bc: z.date().or(z.string()),
+  phan_hoi: z.string().nullish(),
+});
+
+const ReportGeoJsonPropertySchemaRaw = z.object({
+  bao_cao: z.preprocess(StringParsePreprocess, ReportPropertySchema),
+  loai_bao_cao: z.string(),
+  dia_diem: z.preprocess(StringParsePreprocess, PlacePropertySchema.nullish()),
+  quang_cao: z.preprocess(
+    StringParsePreprocess,
+    AdsPropertySchema.omit({
+      loai_vitri: true,
+      hinh_thuc: true,
+      bang_qc: true,
+    }).nullish()
+  ),
 });
 
 const ReportGeoJsonPropertySchema = z.preprocess(
   StringParsePreprocess,
-  z.object({
-    bao_cao: z.preprocess(StringParsePreprocess, ReportPropertySchema),
-    loai_bao_cao: z.string(),
-    dia_diem: z.preprocess(
-      StringParsePreprocess,
-      PlacePropertySchema.nullish()
-    ),
-    quang_cao: z.preprocess(
-      StringParsePreprocess,
-      AdsPropertySchema.omit({
-        loai_vitri: true,
-        hinh_thuc: true,
-        bang_qc: true,
-      }).nullish()
-    ),
-  })
+  ReportGeoJsonPropertySchemaRaw
 );
 
 const AdMethodSchema = z.object({
@@ -120,8 +120,23 @@ type GeoJson<P extends object> = {
   };
   features: GeoJsonProperty<P>[];
 };
+const AdsGeoJsonSchema = z.object({
+  type: z.literal("FeatureCollection"),
+  crs: z.object({
+    type: z.literal("name"),
+    properties: z.object({ name: z.literal("urn:ogc:def:crs:OGC:1.3:CRS84") }),
+  }),
 
-type AdsGeoJson = GeoJson<AdsGeoJsonProperty>;
+  features: z.object({
+    type: z.literal("Feature"),
+    properties: AdsGeoJsonPropertySchema,
+    geometry: z.object({
+      type: z.literal("Point"),
+      coordinates: z.number().array(),
+    }),
+  }),
+});
+type AdsGeoJson = z.infer<typeof AdsGeoJsonSchema>;
 type ReportGeoJson = GeoJson<ReportGeoJsonProperty[]>;
 
 export type {
@@ -146,4 +161,5 @@ export {
   AdMethodCreateSchema,
   AdMethodUpdateSchema,
   AdmethodDeleteSchema,
+  AdsGeoJsonSchema,
 };

@@ -1,0 +1,47 @@
+{
+  "/api/bao-cao/": {
+    "post": {
+      "tags": ["report"],
+      "description": "Create a report",
+      "requestBody": {
+        "required": 1,
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "$ref": "#/components/schemas/ReportCreateSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportGeoJsonPropertySchema"
+              }
+            }
+          }
+        }
+      }
+    },
+    "get": {
+      "tags": ["report"],
+      "description": "Get all a report",
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ReportResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

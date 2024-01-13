@@ -1,8 +1,5 @@
 import MapLibreGL, { GeoJSONSource, Map, Popup } from "maplibre-gl";
-import {
-  AddClusterPoints,
-  ClusterCreateData,
-} from "../../utils/AddClusterPoint";
+import { ClusterCreateData } from "../../utils/AddClusterPoint";
 import { useEffect, useRef } from "react";
 import { ZodType, infer as ZodInfer } from "zod";
 interface AdsClusterMarkerProps<S extends ZodType> {
@@ -23,6 +20,65 @@ function AdsClusterMarker<S extends ZodType>({
   const hadInitMarker = useRef<boolean>(false);
   const popUpRef = useRef<Popup | null>(null);
 
+  function AddClusterPoints(data: ClusterCreateData) {
+    if (!mapRef) return;
+    if (mapRef.getSource(data.DataSource.id)) {
+      return;
+    }
+
+    mapRef.addSource(data.DataSource.id, {
+      type: "geojson",
+      data: data.DataSource.data,
+      cluster: true,
+      clusterMaxZoom: 14,
+      clusterRadius: 50,
+    });
+    mapRef.addLayer({
+      id: data.Cluster.id,
+      type: "circle",
+      source: data.DataSource.id,
+      filter: ["has", "point_count"],
+      paint: {
+        "circle-color": [
+          "step",
+          ["get", "point_count"],
+          data.Cluster.color,
+          100,
+          data.Cluster.color,
+          750,
+          data.Cluster.color,
+        ],
+        "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
+      },
+    });
+
+    mapRef.addLayer({
+      id: data.ClusterCount.id,
+      type: "symbol",
+      source: data.DataSource.id,
+      filter: ["has", "point_count"],
+      layout: {
+        "text-field": "{point_count_abbreviated}",
+        "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+        "text-size": 12,
+      },
+    });
+    mapRef.addLayer({
+      id: data.Uncluster.id,
+      type: "circle",
+      source: data.DataSource.id,
+      filter: ["!", ["has", "point_count"]],
+      paint: {
+        "circle-color": data.Uncluster.color,
+        "circle-radius": 8,
+        "circle-stroke-width": 1,
+        "circle-stroke-color": "#fff",
+      },
+    });
+
+    mapRef.redraw();
+  }
+
   function create_markers() {
     if (!mapRef) return;
 
@@ -30,7 +86,7 @@ function AdsClusterMarker<S extends ZodType>({
       | GeoJSONSource
       | undefined;
     console.log(source, markerData.DataSource.id);
-    if (!source) AddClusterPoints(mapRef, markerData);
+    if (!source) AddClusterPoints(markerData);
     else if (source.type === "geojson" && markerData.DataSource.data)
       source.setData(markerData.DataSource.data);
 

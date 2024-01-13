@@ -7,7 +7,7 @@ const createBaoCaoSchema = z.object({
   dien_thoai: z.string().nullish(),
   noi_dung: z.string(),
   trang_thai: z.string().nullish(),
-  thoi_diem_bc: z.date().nullish(),
+  thoi_diem_bc: z.coerce.date().nullish(),
 
   dia_chi: z.string(),
   id_quang_cao: z.string().nullish(),

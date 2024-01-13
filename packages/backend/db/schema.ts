@@ -59,8 +59,8 @@ const QuangCao = pgTable("QuangCao", {
   id_quang_cao: uuid("id").primaryKey().defaultRandom(),
   quy_hoach: boolean("quy_hoach").notNull().default(false),
 
-  ngay_hieu_luc: date("ngay_hieu_luc"),
-  ngay_het_han: date("ngay_het_han"),
+  ngay_hieu_luc: timestamp("ngay_hieu_luc"),
+  ngay_het_han: timestamp("ngay_het_han"),
 
   hinh_1: varchar("hinh_1", { length: 255 }),
   hinh_2: varchar("hinh_2", { length: 255 }),
@@ -157,6 +157,7 @@ const YeuCauChinhSuaDiaDiem = pgTable("YeuCauChinhSuaDiaDiem", {
   ten_dia_diem: varchar("ten_dia_diem", { length: 255 }),
   dia_chi: varchar("dia_chi", { length: 255 }),
   ly_do_chinh_sua: varchar("ly_do_chinh_sua", { length: 255 }).notNull(),
+  trang_thai: varchar("trang_thai", { length: 255 }).default("Đang chờ"),
 });
 
 const TKNguoiDung = pgTable("TKNguoiDung", {

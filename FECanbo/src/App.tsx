@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { Button, Layout, Menu, Popover } from "antd";
 import { ReactElement } from "react";
+import { Manager, Socket } from "socket.io-client";
 
 import {
   FileAddOutlined,
@@ -38,11 +39,14 @@ import AdsMapPage from "./routes/AdsMapPage";
 import WardDistrictManagementPage from "./routes/WardDistrictManagementPage";
 import { useAppDispatch } from "./store";
 import { logout } from "./slices/authSlice";
+import PlaceManagemnetPlace from "./routes/PlaceManagementPage";
+import { SocketIo } from "./routes/SocketIoPage";
+import { StatsPage } from "./routes/StatsPage";
 
 const { Header, Sider, Content } = Layout;
 const items: Item[] = [
   {
-    key: "5",
+    key: "1",
     icon: (
       <span>
         <svg
@@ -66,25 +70,37 @@ const items: Item[] = [
     title: "/map",
   },
   {
-    key: "1",
+    key: "2",
     icon: <FileAddOutlined />,
     label: "Yêu cầu cấp phép",
     title: "/",
   },
   {
-    key: "2",
+    key: "3",
     icon: <InfoCircleOutlined />,
     label: "Thông tin điểm quảng cáo",
     title: "/advertisements",
   },
   {
-    key: "3",
+    key: "4",
     icon: <FlagOutlined />,
     label: "Báo cáo từ người dân",
     title: "/reports",
   },
   {
-    key: "4",
+    key: "5",
+    icon: <UploadOutlined />,
+    label: "Yêu cầu chỉnh sửa địa điểm",
+    title: "/edit-place-request",
+  },
+  {
+    key: "6",
+    icon: <UploadOutlined />,
+    label: "Yêu cầu chỉnh sửa QC",
+    title: "/edit-ad-request",
+  },
+  {
+    key: "7",
     icon: <UserOutlined />,
     label: "Chỉnh sửa thông tin cá nhân",
     title: "/user",
@@ -96,6 +112,12 @@ const itemVHTTs: Item[] = [
     icon: <VideoCameraOutlined />,
     label: "Quản lý bảng quảng cáo",
     title: "/vhtt",
+  },
+  {
+    key: "11",
+    icon: <VideoCameraOutlined />,
+    label: "Quản lý điểm quảng cáo",
+    title: "/vhtt/place-manager",
   },
   {
     key: "4",
@@ -150,18 +172,27 @@ const App = () => {
   return (
     <div className="h-screen w-screen">
       <Routes>
-        <Route path="/" element={<PageLayout items={items} />}>
+        <Route
+          path="/"
+          element={<PageLayout items={items} loginUrl="/login" />}
+        >
           <Route index element={<AdsRequestPage />} />
           <Route path="map" element={<AdsMapPage />} />
           <Route path="advertisements" element={<AdsInfo />} />
           <Route path="reports" element={<ReportInfo />} />
           <Route path="user" element={<EditUserInfo />} />
           <Route path="resolve/:report_id?" element={<ResolveReport />} />
+          <Route path="login" element={<LoginPage redirectUrl={"/"} />} />
+          <Route path="edit-place-request" element={<EditRequestComponent />} />
+          <Route path="edit-ad-request" element={<EditRequest />} />
         </Route>
-        <Route path="vhtt" element={<PageLayout items={itemVHTTs} />}>
+        <Route
+          path="vhtt"
+          element={<PageLayout items={itemVHTTs} loginUrl={"/vhtt/login"} />}
+        >
           <Route index element={<AdManagement />} />
+          <Route path="place-manager" element={<PlaceManagemnetPlace />} />
           <Route path="requestad" element={<AdsRequestVHTTPage />} />
-          <Route path="createaccount" element={<CreateAccount />} />
           <Route path="edit-ad-request" element={<EditRequest />} />
           <Route path="edit-place-request" element={<EditRequestComponent />} />
           <Route path="manage-ad-method" element={<AdsMethodPage />} />
@@ -172,8 +203,10 @@ const App = () => {
             path="ward-district-management"
             element={<WardDistrictManagementPage />}
           />
+          <Route path="login" element={<LoginPage redirectUrl={"/vhtt"} />} />
+          <Route path="stats" element={<StatsPage />} />
         </Route>
-        <Route path="/auth">
+        {/* <Route path="/auth">
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route
@@ -189,7 +222,7 @@ const App = () => {
             element={<EmailConfirmationPage type="change-password" />}
           />
           <Route path="verify-account" element={<VerifyAccountPage />} />
-        </Route>
+        </Route> */}
       </Routes>
     </div>
   );
@@ -203,9 +236,10 @@ interface Item {
 }
 interface PageLayoutProps {
   items: Item[];
+  loginUrl: string;
 }
 
-const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
+const PageLayout: React.FC<PageLayoutProps> = ({ items, loginUrl }) => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const authUser = useAppSelector((state) => state.auth);
@@ -271,7 +305,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
 
           <div className=" pr-8">
             {!authUser.isLoggedIn ? (
-              <Link to={"/auth/login"} className="text-base font-semibold">
+              <Link to={loginUrl} className="text-base font-semibold">
                 Đăng nhập
               </Link>
             ) : (
@@ -324,6 +358,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({ items }) => {
 
 export default function () {
   useEffect(() => {
+    SocketIo.ConnectReportSocket();
+
     const head = document.querySelector("head");
     if (!head) {
       return;
@@ -334,6 +370,9 @@ export default function () {
     if (tailWindStyleTag) {
       head.insertAdjacentElement("afterbegin", tailWindStyleTag);
     }
+    return () => {
+      SocketIo.DisconnectReportSocket();
+    };
   }, []);
   return <App />;
 }
