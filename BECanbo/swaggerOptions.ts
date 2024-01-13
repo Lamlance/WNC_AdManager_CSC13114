@@ -1,6 +1,6 @@
 import { Options } from "swagger-jsdoc";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { AdsGeoJson, ReportApi,PlaceChangeApi, WardApi, DistrictApi, AdsMethodApi } from "@admanager/shared";
+import { AdsGeoJson, ReportApi,PlaceChangeApi, WardApi, DistrictApi, AdsMethodApi,AuthApi } from "@admanager/shared";
 
 // old source
 // import GeoJsonApiDoc from "./src/doc/GeoJsonApi.json" with {type:"json"};
@@ -14,6 +14,7 @@ import ReportApiDoc from "./src/doc/ReportApi.json" assert {type:"json"};
 import PlaceChangeApiDoc from "./src/doc/PlaceChangeRoute.json" assert {type:"json"};
 import WardApiDoc from "./src/doc/WardApi.json" assert {type:"json"};
 import DistrictApiDoc from "./src/doc/DistrictApi.json" assert {type:"json"};
+import UserApiDoc from "./src/doc/UserApi.json" assert {type:"json"};
 import AdsMethodApiDoc from "./src/doc/AdsMethodApi.json" assert {type:"json"};
 
 const AdsGeoJsonSchemas = Object.entries(AdsGeoJson).reduce(
@@ -76,6 +77,18 @@ const DistrictSchema = Object.entries(DistrictApi).reduce(
   {} as { [key: string]: object }
 );
 
+const UserSchema = Object.entries(AuthApi).reduce(
+  (acc, value) => {
+    acc[value[0]] = {
+      ...zodToJsonSchema(value[1], {
+        target: "openApi3",
+      }),
+    };
+    return acc;
+  },
+  {} as { [key: string]: object }
+);
+
 const AdsMethodSchema = Object.entries(AdsMethodApi).reduce(
   (acc, value) => {
     acc[value[0]] = {
@@ -97,6 +110,7 @@ const jsonSchema = {
       ...PlaceEditReqSchemas,
       ...WardSchema,
       ...DistrictSchema,
+      ...UserSchema
       ...AdsMethodSchema,
     },
   },
@@ -121,6 +135,7 @@ const swaggerOptions: Options = {
       ...PlaceChangeApiDoc,
       ...WardApiDoc,
       ...DistrictApiDoc,
+      ...UserApiDoc,
       ...AdsMethodApiDoc,
     },
   },

@@ -1,0 +1,88 @@
+{
+  "/api/user/change-password": {
+    "post": {
+      "tags": ["user"],
+      "description": "User change password",
+      "requestBody": {
+        "required": 1,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ChangePasswordRequestSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequestSchema"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/user/all": {
+    "get": {
+      "tags": ["user"],
+      "description": "Get all users",
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UserDataSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/user/{user_id}": {
+    "put": {
+      "tags": ["user"],
+      "description": "Update user information",
+      "requestBody": {
+        "required": 1,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UserUpdateRequestSchema"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "user_id",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UserUpdateRequestSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
