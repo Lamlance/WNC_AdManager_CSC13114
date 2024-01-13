@@ -282,6 +282,19 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    changePassword: builder.mutation<
+      AuthApi.ChangePasswordRespone,
+      AuthApi.ChangePasswordRequest
+    >({
+      query: (body) => ({
+        url: "api/user/change-password",
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
     getAllAccount: builder.query<{ data: AuthApi.FullUserData[] }, void>({
       query: () => "/api/user/all",
     }),
@@ -455,6 +468,7 @@ export const {
   useVerifyEmailMutation,
   useChangePasswordWithTokenMutation,
   // useGetAccountProfileQuery,
+  useChangePasswordMutation,
 
   useUpdateReportStatusMutation,
   useGetAllAccountQuery,

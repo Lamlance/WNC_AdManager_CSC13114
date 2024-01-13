@@ -159,7 +159,7 @@ export const getAnUserByUsername = async (username: string) => {
       phuong_quan_ly: true,
     },
   });
-  //console.log(data);
+  
   if (data) {
     const returnUser: ReturnUser = {
       userId: data.id_tk,
@@ -180,7 +180,7 @@ export const getAnUserByUsername = async (username: string) => {
 
 export const getAnUserByEmail = async (email: string) => {
   const data = await pg_client.query.TKNguoiDung.findFirst({
-    where: (TKNguoiDung, { eq }) => eq(TKNguoiDung.ten_tk, email),
+    where: (TKNguoiDung, { eq }) => eq(TKNguoiDung.email, email),
     with: {
       quan_quan_ly: true,
       phuong_quan_ly: true,

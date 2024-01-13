@@ -85,41 +85,27 @@ router.post(
         const data = result.data;
         const confirmCode = generate({ length: 6, charset: "numeric" });
 
-        const authToken = jwt.sign(data, JWT_SECRET_KEY);
-        const confirmCodeToken = jwt.sign(
-          {
-            userId: data.userId,
-            confirmCode: confirmCode,
-          },
-          JWT_SECRET_KEY,
-          { expiresIn: "5m" }
-        );
-        return res.status(201).json({
-          token: authToken,
-          user: data,
-          confirmCodeToken: confirmCodeToken,
-        });
-        // sendCodeToEmail(data.email, data.name, confirmCode, "register")
-        //   .then((success) => {
-        //     const authToken = jwt.sign(data, JWT_SECRET_KEY);
-        //     const confirmCodeToken = jwt.sign(
-        //       {
-        //         userId: data.userId,
-        //         confirmCode: confirmCode,
-        //       },
-        //       JWT_SECRET_KEY,
-        //       { expiresIn: "5m" }
-        //     );
+        sendCodeToEmail(data.email, data.name, confirmCode, "register")
+          .then((success) => {
+            const authToken = jwt.sign(data, JWT_SECRET_KEY);
+            const confirmCodeToken = jwt.sign(
+              {
+                userId: data.userId,
+                confirmCode: confirmCode,
+              },
+              JWT_SECRET_KEY,
+              { expiresIn: "5m" }
+            );
 
-        //     return res.status(201).json({
-        //       token: authToken,
-        //       user: data,
-        //       confirmCodeToken: confirmCodeToken,
-        //     });
-        //   })
-        //   .catch((err) => {
-        //     return res.status(500).json({ msg: "Can not register right now!" });
-        //   });
+            return res.status(201).json({
+              token: authToken,
+              user: data,
+              confirmToken: confirmCodeToken,
+            });
+          })
+          .catch((err) => {
+            return res.status(500).json({ msg: "Can not register right now!" });
+          });
       }
     }
   )
@@ -138,7 +124,7 @@ router.post(
           JWT_SECRET_KEY
         ) as VerificationPayload;
       } catch (err) {
-        return res.status(400).json({ err: "Invalid token" });
+        return res.status(400).json({ msg: "Invalid token" });
       }
 
       const result = await CallAndCatchAsync(getUserById, user.userId);
@@ -148,7 +134,7 @@ router.post(
       }
 
       if (res.locals.body.code !== user.confirmCode) {
-        return res.status(400).json({ err: "Invalid token" });
+        return res.status(400).json({ msg: "Invalid token" });
       }
 
       const data = result.data;
@@ -171,7 +157,7 @@ router.post(
         });
       } else {
         return res.status(400).json({
-          err: "Invalid token",
+          msg: "Invalid token",
         });
       }
     }
@@ -224,7 +210,7 @@ router.post(
         .catch((error) => {
           return res
             .status(500)
-            .json({ err: "Can not verify email right now!" });
+            .json({ msg: "Can not verify email right now!" });
         });
     }
   )
@@ -243,11 +229,11 @@ router.post(
           JWT_SECRET_KEY
         ) as VerificationPayload;
       } catch (err) {
-        return res.status(400).json({ err: "Invalid token" });
+        return res.status(400).json({ msg: "Invalid token" });
       }
 
       if (res.locals.body.code !== user.confirmCode) {
-        return res.status(400).json({ err: "Invalid token" });
+        return res.status(400).json({ msg: "Invalid token" });
       }
 
       const result = await CallAndCatchAsync(getUserById, user.userId);
@@ -283,7 +269,7 @@ router.post(
 
         return res.status(200).json({ authToken: authToken });
       } else {
-        return res.status(400).json({ err: "Invalid token " });
+        return res.status(400).json({ msg: "Invalid token " });
       }
     }
   )
