@@ -6,11 +6,14 @@ import EditAdForm from "../EditAdForm";
 import { AdChangeApi } from "@admanager/shared";
 import {
   useGetAllAdChangeRequestQuery,
+  useLazyGetAllAdChangeRequestQuery,
   useSubmitUpdateAdChangeRequestStatusMutation,
 } from "../../../slices/api/apiSlice";
+import { useAppSelector } from "../../../store";
 
 function EditRequest() {
-  const { data } = useGetAllAdChangeRequestQuery();
+  const [getChangeInfo, { data }] = useLazyGetAllAdChangeRequestQuery();
+  const authState = useAppSelector((state) => state.auth);
   const [selectedAds, setSelectedAds] =
     useState<AdChangeApi.AdChangeRequestResponse | null>(null);
 
@@ -21,79 +24,131 @@ function EditRequest() {
     setIsModalOpen(false);
   };
 
-  const columns: ColumnsType<AdChangeApi.AdChangeRequestResponse> = [
-    {
-      title: "Lý do chỉnh sửa ",
-      dataIndex: ["chinh_sua", "ly_do_chinh_sua"],
-      key: "ly_do_chinh_sua",
-    },
-    {
-      title: "Thông tin mới",
-      key: "newinfo",
-      width: "150px",
-      align: "center",
-      render: () => (
-        <a
-          className="text-blue-500 underline"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Xem chi tiết
-        </a>
-      ),
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: ["chinh_sua", "trang_thai"],
-      key: "trang_thai",
-      align: "center",
-    },
-    {
-      title: "Xét duyệt",
-      width: "130px",
-      key: "xetduyet",
-      align: "center",
+  const [tableCol, setTableCol] = useState<
+    ColumnsType<AdChangeApi.AdChangeRequestResponse>
+  >([]);
 
-      render: () => (
-        <Button type="primary" onClick={handleApprove}>
-          Xét duyệt
-        </Button>
-      ),
-    },
-    {
-      title: "Từ chối",
-      width: "130px",
-      key: "newinfo",
-      align: "center",
-
-      render: () => (
-        <Button type="primary" className="bg-red-500" onClick={handleReject}>
-          Từ chối
-        </Button>
-      ),
-    },
-  ];
   const [submitAdChangeStatus] = useSubmitUpdateAdChangeRequestStatusMutation();
 
   useEffect(() => {
-    if (isApprove) {
+    if (isApprove && selectedAds) {
       const data: AdChangeApi.AdChangeStatusRequestUpdate = {
-        id_yeu_cau: selectedAds!.chinh_sua.id_yeu_cau,
-        trang_thai: "Approve",
+        id_yeu_cau: selectedAds.chinh_sua.id_yeu_cau,
+        trang_thai: "Đã duyệt",
       };
 
       submitAdChangeStatus(data).then((v) => console.log(v));
-      window.location.reload();
     }
-    if (isReject) {
+    if (isReject && selectedAds) {
       const data: AdChangeApi.AdChangeStatusRequestUpdate = {
-        id_yeu_cau: selectedAds!.chinh_sua.id_yeu_cau,
-        trang_thai: "Reject",
+        id_yeu_cau: selectedAds.chinh_sua.id_yeu_cau,
+        trang_thai: "Từ chối",
       };
 
       submitAdChangeStatus(data).then((v) => console.log(v));
-      window.location.reload();
     }
   }, [selectedAds, isApprove, isReject]);
+
+  useEffect(() => {
+    if (authState.isLoggedIn == false) {
+      getChangeInfo({});
+      setTableCol([
+        {
+          title: "Địa điểm",
+          dataIndex: ["dia_diem", "ten_dia_diem"],
+          key: "ten_dia_diem",
+        },
+        {
+          title: "Lý do chỉnh sửa ",
+          dataIndex: ["chinh_sua", "ly_do_chinh_sua"],
+          key: "ly_do_chinh_sua",
+        },
+        {
+          title: "Thông tin mới",
+          key: "newinfo",
+          width: "150px",
+          align: "center",
+          render: () => (
+            <a
+              className="text-blue-500 underline"
+              onClick={() => setIsModalOpen(true)}
+            >
+              Xem chi tiết
+            </a>
+          ),
+        },
+        {
+          title: "Trạng thái",
+          dataIndex: ["chinh_sua", "trang_thai"],
+          key: "trang_thai",
+          align: "center",
+        },
+        {
+          title: "Xét duyệt",
+          width: "130px",
+          key: "xetduyet",
+          align: "center",
+
+          render: () => (
+            <Button type="primary" onClick={handleApprove}>
+              Xét duyệt
+            </Button>
+          ),
+        },
+        {
+          title: "Từ chối",
+          width: "130px",
+          key: "newinfo",
+          align: "center",
+
+          render: () => (
+            <Button
+              type="primary"
+              className="bg-red-500"
+              onClick={handleReject}
+            >
+              Từ chối
+            </Button>
+          ),
+        },
+      ]);
+      return;
+    }
+    setTableCol([
+      {
+        title: "Địa điểm",
+        dataIndex: ["dia_diem", "ten_dia_diem"],
+        key: "ten_dia_diem",
+      },
+      {
+        title: "Lý do chỉnh sửa ",
+        dataIndex: ["chinh_sua", "ly_do_chinh_sua"],
+        key: "ly_do_chinh_sua",
+      },
+      {
+        title: "Thông tin mới",
+        key: "newinfo",
+        width: "150px",
+        align: "center",
+        render: () => (
+          <a
+            className="text-blue-500 underline"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Xem chi tiết
+          </a>
+        ),
+      },
+      {
+        title: "Trạng thái",
+        dataIndex: ["chinh_sua", "trang_thai"],
+        key: "trang_thai",
+        align: "center",
+      },
+    ]);
+    getChangeInfo({ phuong_id: authState.user.managedWards });
+  }, [authState]);
+
   const handleApprove = () => {
     setIsApprove(true);
   };
@@ -104,7 +159,7 @@ function EditRequest() {
   return (
     <div>
       <Table
-        columns={columns}
+        columns={tableCol}
         dataSource={data}
         onRow={(record: AdChangeApi.AdChangeRequestResponse) => ({
           onClick: () => {
@@ -118,7 +173,7 @@ function EditRequest() {
           isModalOpen={isModalOpen}
           onClose={closeModal}
           type="AdChange"
-          ad={selectedAds ? selectedAds?.thong_tin_qc : null}
+          ad={selectedAds ? selectedAds?.chinh_sua.thong_tin_sua : null}
         />
       }
     </div>

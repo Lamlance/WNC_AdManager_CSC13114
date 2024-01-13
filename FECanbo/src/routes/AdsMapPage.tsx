@@ -4,11 +4,14 @@ import z from "zod";
 import {
   useGetAdsGeoJsonQuery,
   useGetReportGeoJsonQuery,
+  useLazyGetAdsGeoJsonQuery,
+  useLazyGetReportGeoJsonQuery,
 } from "../slices/api/apiSlice";
 import { ClusterCreateData } from "@admanager/frontend/src/utils/AddClusterPoint";
 import { AdsClusterMarker, AdsMap } from "@admanager/frontend";
 import MapSearchBar from "../components/AdsMap/MapSearch";
 import { useEffect, useState } from "react";
+import { useAppSelector } from "../hooks";
 
 const DefaultMapProps = {
   InitialPosition: {
@@ -60,10 +63,14 @@ function createReportPopup(
     </div>`);
 }
 function AdsMapPage() {
-  const { data: adsGeoJson } = useGetAdsGeoJsonQuery({});
-  const { data: reportGeoJson } = useGetReportGeoJsonQuery({});
+  const [getAdsGeoJson, { data: adsGeoJson, currentData: currAdsGeoJson }] =
+    useLazyGetAdsGeoJsonQuery();
+  const [
+    getReportGeoJson,
+    { data: reportGeoJson, currentData: currentReportData },
+  ] = useLazyGetReportGeoJsonQuery();
 
-  const [refresh, setRefresh] = useState<number>(0);
+  const authSate = useAppSelector((state) => state.auth);
 
   const [adsClusterCreateData, setAdsClusterCreate] =
     useState<ClusterCreateData | null>(null);
@@ -72,15 +79,24 @@ function AdsMapPage() {
 
   useEffect(() => {
     console.log(adsGeoJson, reportGeoJson);
-    if (adsGeoJson) {
+    if (adsGeoJson && adsGeoJson.features.length > 0) {
       setAdsClusterCreate(get_ad_cluster_createData(adsGeoJson) || null);
     }
-    if (reportGeoJson) {
+    if (reportGeoJson && reportGeoJson.features.length > 0) {
       setReportClusterCreate(
         get_report_cluster_createData(reportGeoJson) || null,
       );
     }
   }, [adsGeoJson, reportGeoJson]);
+
+  useEffect(() => {
+    authSate.isLoggedIn
+      ? getReportGeoJson({ phuong_id: authSate.user.managedWards })
+      : getReportGeoJson({});
+    authSate.isLoggedIn
+      ? getAdsGeoJson({ phuong_id: authSate.user.managedWards })
+      : getAdsGeoJson({});
+  }, [authSate]);
 
   function get_ad_cluster_createData(data: AdsGeoJson.AdsGeoJson) {
     const AdsDataSoruce = !adsGeoJson
@@ -103,26 +119,6 @@ function AdsMapPage() {
     return ReportClusterCreate;
   }
 
-  const AdsCluster = !adsClusterCreateData ? undefined : (
-    <AdsClusterMarker<typeof AdsGeoJson.AdsGeoJsonPropertySchema>
-      geoJsonPropertySchema={AdsGeoJson.AdsGeoJsonPropertySchema}
-      markerData={adsClusterCreateData}
-      popUpBuilder={createAdPopup}
-    />
-  );
-
-  const ReportCluster = !reportClusterCreateData ? undefined : (
-    <AdsClusterMarker<typeof GeoPropArr>
-      geoJsonPropertySchema={GeoPropArr}
-      markerData={reportClusterCreateData}
-      popUpBuilder={createReportPopup}
-    />
-  );
-
-  if (!adsGeoJson || !reportGeoJson) {
-    return <></>;
-  }
-
   return (
     <div className=" relative h-full w-full">
       <AdsMap
@@ -130,7 +126,6 @@ function AdsMapPage() {
           func: MapSearchBar,
           args: [
             {
-              refresh: 0,
               onPlaceSelect: (place) => {
                 console.log(place);
               },
@@ -139,8 +134,24 @@ function AdsMapPage() {
           ],
         }}
         InitialPosition={DefaultMapProps.InitialPosition}
-        AdsClusterInfo={AdsCluster}
-        ReportClusterInfo={ReportCluster}
+        AdsClusterInfo={
+          !adsClusterCreateData ? undefined : (
+            <AdsClusterMarker<typeof AdsGeoJson.AdsGeoJsonPropertySchema>
+              geoJsonPropertySchema={AdsGeoJson.AdsGeoJsonPropertySchema}
+              markerData={adsClusterCreateData}
+              popUpBuilder={createAdPopup}
+            />
+          )
+        }
+        ReportClusterInfo={
+          !reportClusterCreateData ? undefined : (
+            <AdsClusterMarker<typeof GeoPropArr>
+              geoJsonPropertySchema={GeoPropArr}
+              markerData={reportClusterCreateData}
+              popUpBuilder={createReportPopup}
+            />
+          )
+        }
         onMapDblClick={(coord) => console.log(coord)}
       />
     </div>

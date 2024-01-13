@@ -1,10 +1,9 @@
-import { Col, Row, Switch } from "antd";
+import { Col, Row, Switch, notification } from "antd";
 import ReportInfoTable from "./ReportInfoTable";
 import ReportInfoDetail from "./ReportInfoDetail";
 import { useLazyGetAllReportInfo } from "../../slices/api/apiSlice";
-import { fromReportResponse2ReportRecord } from "../../types/mapper";
 import { useEffect, useRef, useState } from "react";
-import { ReportApi } from "@admanager/shared";
+import { ReportApi, SocketIoApi } from "@admanager/shared";
 import WardCheckBoxList from "../FormComponents/WardCheckBox";
 import { useAppSelector } from "../../store";
 
@@ -15,6 +14,40 @@ const ReportInfo = () => {
   const [selectedRow, setSelectedRow] =
     useState<ReportApi.ReportResponse | null>(null);
 
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotification = () => {
+    api.info({
+      message: `Receive new report`,
+      placement: "topRight",
+      duration: 0,
+    });
+  };
+
+  function onReportCreateEvent(e: CustomEvent<SocketIoApi.ReportCreateEvent>) {
+    console.log("Detail", e.detail);
+    if (!authState.isLoggedIn) return;
+    openNotification();
+    getAllReportInfo({
+      phuong_id: authState.user.managedWards,
+    });
+  }
+
+  useEffect(() => {
+    document.addEventListener(
+      "AdsManager:CreateReportEvent",
+      onReportCreateEvent,
+    );
+
+    return () => {
+      document.removeEventListener(
+        "AdsManager:CreateReportEvent",
+        onReportCreateEvent,
+        true,
+      );
+    };
+  }, []);
+
   useEffect(() => {
     if (!authState.isLoggedIn) return;
     getAllReportInfo({
@@ -23,12 +56,19 @@ const ReportInfo = () => {
   }, [authState]);
 
   const onWardFilter = (phuong_ids: number[]) => {
-    getAllReportInfo({ phuong_id: phuong_ids });
+    if (phuong_ids.length > 0) {
+      getAllReportInfo({ phuong_id: phuong_ids });
+    } else if (authState.isLoggedIn) {
+      getAllReportInfo({
+        phuong_id: authState.user.managedWards,
+      });
+    }
     console.log(phuong_ids);
   };
 
   return (
     <>
+      {contextHolder}
       {error && <div>There was an error</div>}
       {isLoading && <div>Loading page</div>}
       <Row

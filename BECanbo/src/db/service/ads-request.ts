@@ -72,9 +72,11 @@ export async function getAllAdsChangeRequest(
         hinh_thuc: HinhThucQC.hinh_thuc_qc,
         bang_qc: LoaiBangQC.loai_bang_qc,
       },
+      dia_diem: AdsSchema.DiaDiem,
     })
     .from(YeuCauChinhSua)
     .innerJoin(QuangCao, eq(QuangCao.id_quang_cao, YeuCauChinhSua.id_quang_cao))
+    .innerJoin(DiaDiem, eq(DiaDiem.id_dia_diem, QuangCao.id_dia_diem))
     .innerJoin(LoaiViTri, eq(LoaiViTri.id_loai_vt, QuangCao.id_loai_vitri))
     .innerJoin(HinhThucQC, eq(HinhThucQC.id_htqc, QuangCao.id_hinh_thuc))
     .innerJoin(
@@ -83,12 +85,10 @@ export async function getAllAdsChangeRequest(
     );
 
   if (args.phuong_id) {
-    data
-      .innerJoin(
-        AdsSchema.DiaDiem,
-        eq(AdsSchema.DiaDiem.id_dia_diem, AdsSchema.QuangCao.id_dia_diem)
-      )
-      .where(inArray(AdsSchema.DiaDiem.id_phuong, args.phuong_id));
+    const result = await data.where(
+      inArray(AdsSchema.DiaDiem.id_phuong, args.phuong_id)
+    );
+    return result;
   }
 
   return await data;
@@ -110,8 +110,33 @@ export async function updateAdChangeStatusRequest(
   const res = await pg_client
     .update(AdsSchema.YeuCauChinhSua)
     .set({ trang_thai: args.trang_thai })
-    .where(eq(AdsSchema.YeuCauChinhSua.id_yeu_cau, args.id_yeu_cau));
+    .where(eq(AdsSchema.YeuCauChinhSua.id_yeu_cau, args.id_yeu_cau))
+    .returning({
+      yeu_cau: AdsSchema.YeuCauChinhSua,
+    });
 
+  const data = AdChangeApi.AdChangeRequestSchema.safeParse(res[0]?.yeu_cau);
+  if (args.trang_thai === "Đã duyệt" && data.success === true) {
+    console.log(data.data);
+    await pg_client
+      .update(AdsSchema.QuangCao)
+      .set({
+        ...data.data.thong_tin_sua,
+        ngay_het_han: data.data.thong_tin_sua.ngay_het_han
+          ? new Date(data.data.thong_tin_sua.ngay_het_han).toISOString()
+          : undefined,
+        ngay_hieu_luc: data.data.thong_tin_sua.ngay_hieu_luc
+          ? new Date(data.data.thong_tin_sua.ngay_hieu_luc).toISOString()
+          : undefined,
+        id_loai_bang_qc: data.data.thong_tin_sua.id_loai_bang_qc || undefined,
+        id_dia_diem: data.data.thong_tin_sua.id_dia_diem || undefined,
+        id_hinh_thuc: data.data.thong_tin_sua.id_hinh_thuc || undefined,
+        id_loai_vitri: data.data.thong_tin_sua.id_loai_vitri || undefined,
+      })
+      .where(eq(AdsSchema.QuangCao.id_quang_cao, res[0].yeu_cau.id_quang_cao));
+  } else {
+    data.success == false ? console.log(data.error) : "";
+  }
   return res;
 }
 

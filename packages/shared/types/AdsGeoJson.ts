@@ -13,15 +13,15 @@ const AdsPropertySchema = z.object({
   id_quang_cao: z.string(),
   quy_hoach: z.coerce.boolean(),
 
-  ngay_hieu_luc: z.string().nullish(),
-  ngay_het_han: z.string().nullish(),
+  ngay_hieu_luc: z.string().or(z.date()).nullish(),
+  ngay_het_han: z.string().or(z.date()).nullish(),
 
   hinh_1: z.string().nullish(),
   hinh_2: z.string().nullish(),
 
-  so_luong: z.number().nullish().default(1),
-  chieu_dai_m: z.number().nullish(),
-  chieu_rong_m: z.number().nullish(),
+  so_luong: z.coerce.number().nullish().default(1),
+  chieu_dai_m: z.coerce.number().nullish(),
+  chieu_rong_m: z.coerce.number().nullish(),
 
   loai_vitri: z.string(),
   hinh_thuc: z.string(),
@@ -57,6 +57,7 @@ const ReportPropertySchema = z.object({
   noi_dung: z.string(),
   trang_thai: z.string(),
   thoi_diem_bc: z.date().or(z.string()),
+  phan_hoi: z.string().nullish(),
 });
 
 const ReportGeoJsonPropertySchemaRaw = z.object({

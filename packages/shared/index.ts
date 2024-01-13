@@ -8,6 +8,11 @@ import * as ImageApi from "./types/ImagesApi.js";
 import * as PlaceApi from "./types/PlaceApi.js";
 import * as WardApi from "./types/WardApi.js";
 import * as DistrictApi from "./types/DistrictApi.js";
+import * as ReportTypeApi from "./types/ReportTypeApi.js";
+import * as AdBoardApi from "./types/AdBoardApi.js";
+import * as LandTypeApi from "./types/LandTypeApi.js";
+import * as SocketIoApi from "./types/SocketIoApi.js";
+import * as StatsApi from "./types/StatsApi.js";
 
 export {
   AdsGeoJson,
@@ -20,4 +25,9 @@ export {
   PlaceApi,
   WardApi,
   DistrictApi,
+  ReportTypeApi,
+  AdBoardApi,
+  LandTypeApi,
+  SocketIoApi,
+  StatsApi,
 };
