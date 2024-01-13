@@ -13,6 +13,7 @@ import * as AdBoardApi from "./types/AdBoardApi.js";
 import * as LandTypeApi from "./types/LandTypeApi.js";
 import * as SocketIoApi from "./types/SocketIoApi.js";
 import * as StatsApi from "./types/StatsApi.js";
+import * as AdsMethodApi from "./types/AdsMethodApi.js";
 
 export {
   AdsGeoJson,
@@ -30,4 +31,5 @@ export {
   LandTypeApi,
   SocketIoApi,
   StatsApi,
+  AdsMethodApi
 };
