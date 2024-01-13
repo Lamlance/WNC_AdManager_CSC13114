@@ -1,0 +1,170 @@
+{
+  "/api/yeu-cau-quang-cao": {
+    "get": {
+      "tags": ["Yeu cau quang cao"],
+      "description": "Get all ad requests",
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ManyAdsRequestResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "tags": ["Yeu cau quang cao"],
+      "description": "Create an ad request",
+      "requestBody": {
+        "required": 1,
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "$ref": "#/components/schemas/AdRequestCreateSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/yeu-cau-quang-cao/{id}": {
+    "put": {
+      "tags": ["Yeu cau quang cao"],
+      "description": "Update an ad requests status",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "schema": {
+            "type": "integer"
+          },
+          "required": 1
+        }
+      ],
+      "requestBody": {
+        "required": 1,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AdRequestUpdateStatusSchema2"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "/api/yeu-cau-quang-cao/chinh-sua": {
+    "get": {
+      "tags": ["Yeu cau chinh sua quang cao"],
+      "description": "Get all ad change requests",
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AdChangeRequestResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "tags": ["Yeu cau chinh sua quang cao"],
+      "description": "Create ad change requests",
+      "requestBody": {
+        "required": 1,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AdChangeRequestCreateSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/yeu-cau-quang-cao/chinh-sua/{id}": {
+    "put": {
+      "tags": ["Yeu cau chinh sua quang cao"],
+      "description": "Update an ad requests status",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "schema": {
+            "type": "integer"
+          },
+          "required": 1
+        }
+      ],
+      "requestBody": {
+        "required": 1,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AdChangeStatusRequestUpdateSchema"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemasAdChangeStatusRequestUpdateSchema"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

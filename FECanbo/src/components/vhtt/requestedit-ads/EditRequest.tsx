@@ -50,7 +50,10 @@ function EditRequest() {
   }, [selectedAds, isApprove, isReject]);
 
   useEffect(() => {
-    if (authState.isLoggedIn == false) {
+    if (
+      authState.isLoggedIn == false ||
+      authState.user.accLevel === "department"
+    ) {
       getChangeInfo({});
       setTableCol([
         {

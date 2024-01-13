@@ -60,7 +60,7 @@ export const apiSlice = createApi({
       GetALLReportInfoArgs
     >({
       query: (args) => ({
-        url: "api/cap-phep-quang-cao",
+        url: "api/yeu-cau-quang-cao",
         params: { phuong_id: args.phuong_id },
       }),
     }),
@@ -108,7 +108,7 @@ export const apiSlice = createApi({
     }),
     submitAdRequest: builder.mutation<any, FormData>({
       query: (formData) => ({
-        url: "api/cap-phep-quang-cao/",
+        url: "api/yeu-cau-quang-cao/",
         method: "POST",
         body: formData,
       }),
@@ -149,7 +149,7 @@ export const apiSlice = createApi({
       AdsReqApi.AdRequestUpdateStatus2
     >({
       query: (body) => ({
-        url: `api/cap-phep-quang-cao/${body.id_yeu_cau}`,
+        url: `api/yeu-cau-quang-cao/${body.id_yeu_cau}`,
         method: "PUT",
         body: body,
         headers: {

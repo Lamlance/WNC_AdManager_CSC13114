@@ -154,7 +154,7 @@ function MapSearchBar(props: MapSearchProps) {
       const { lng, lat } = result.data.result.geometry.location;
       console.log(lng, lat);
       MarkerRef.current?.setLngLat([lng, lat]);
-
+      props.MapRef?.flyTo({ center: [lng, lat] });
       set_select_place({ ...result.data.result, lng, lat });
       return;
     }
@@ -166,6 +166,7 @@ function MapSearchBar(props: MapSearchProps) {
     );
     if (!place) return;
     MarkerRef.current?.setLngLat(place.geometry.location);
+    props.MapRef?.flyTo({ center: place.geometry.location });
     set_select_place({ ...place, ...place.geometry.location });
   }
 

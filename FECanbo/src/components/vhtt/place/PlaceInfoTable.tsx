@@ -8,12 +8,16 @@ import { ColumnsType } from "antd/es/table";
 import { useEffect } from "react";
 interface PlaceInfoTableProps {
   onRowSelect?: (row: PlaceApi.PlaceProperty, openModal: boolean) => any;
+  refresh?: number;
 }
 function PlaceInfoTable(props: PlaceInfoTableProps) {
   const [getAllPlaceInfo, { data }] = useLazyGetAllPlaceInfoQuery();
   useEffect(() => {
     getAllPlaceInfo();
   }, []);
+  useEffect(() => {
+    if (props.refresh) getAllPlaceInfo();
+  }, [props]);
   const columns: ColumnsType<PlaceApi.GetAllPlaceResponse> = [
     {
       title: "id",

@@ -124,6 +124,26 @@ const YeuCauCapPhep = pgTable("YeuCauCapPhep", {
   id_diem_dat: integer("id_diem_dat").references(() => DiaDiem.id_dia_diem),
   noi_dung_qc: varchar("noi_dung_qc", { length: 255 }).notNull(),
 
+  id_loai_bang_qc: integer("id_loai_bang_qc")
+    .notNull()
+    .references(() => LoaiBangQC.id_loai_bang_qc),
+
+  id_dia_diem: integer("id_dia_diem")
+    .notNull()
+    .references(() => DiaDiem.id_dia_diem),
+
+  id_hinh_thuc: integer("id_hinh_thuc")
+    .notNull()
+    .references(() => HinhThucQC.id_htqc),
+
+  id_loai_vitri: integer("id_loai_vitri")
+    .notNull()
+    .references(() => LoaiViTri.id_loai_vt),
+
+  so_luong: integer("so_luong").default(1),
+  chieu_dai_m: real("chieu_dai_m"),
+  chieu_rong_m: real("chieu_rong_m"),
+
   dia_chi_qc: varchar("dia_chi_qc", { length: 255 }).notNull(),
 
   ten_cty: varchar("ten_cty", { length: 255 }).notNull(),

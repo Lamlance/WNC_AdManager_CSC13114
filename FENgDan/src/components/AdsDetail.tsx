@@ -1,6 +1,8 @@
 import { Modal } from "antd";
 import { useAppSelector } from "../Redux/ReduxStore";
 import { AdsGeoJson, ReportApi } from "@admanager/shared";
+import { useLazyGetImageFromName } from "../Redux/AdsServerApi";
+import { useEffect, useState } from "react";
 
 interface AdsDetailProps {
   isModalOpen: boolean;
@@ -17,7 +19,35 @@ function AdsDetail({
   Ad,
   Place,
 }: AdsDetailProps) {
+  const [getImgFromName] = useLazyGetImageFromName();
   const selected = useAppSelector((state) => state.SelectedAds);
+  const [imgs, setImgs] = useState({ hinh_1: "", hinh_2: "" });
+
+  async function GetImages() {
+    const data1 = Ad.hinh_1
+      ? getImgFromName({ filename: Ad.hinh_1, bkname: "adsrequest" })
+      : null;
+    const data2 = Ad.hinh_2
+      ? getImgFromName({ filename: Ad.hinh_2, bkname: "adsrequest" })
+      : null;
+
+    const allImg = await Promise.allSettled([data1, data2]);
+    setImgs({
+      hinh_1:
+        allImg[0].status === "fulfilled"
+          ? allImg[0].value?.data?.url || ""
+          : "",
+      hinh_2:
+        allImg[1].status === "fulfilled"
+          ? allImg[1].value?.data?.url || ""
+          : "",
+    });
+  }
+
+  console.log(imgs);
+  useEffect(() => {
+    GetImages();
+  }, [Ad]);
 
   const customTitle = (
     <div className="text-center text-2xl">
@@ -37,21 +67,15 @@ function AdsDetail({
         <p className=" text-xl font-bold">{Ad.bang_qc}</p>
         <p className=" text-xl">{Place.dia_chi}</p>
         <p className=" text-xl">
-          <span className=" font-bold">Ngày hết hạn:</span>{" "}
-          {Ad.ngay_het_han || "Không có"}
+          <span className=" font-bold">Ngày hết hạn:</span>
+          {Ad.ngay_het_han
+            ? new Date(Ad.ngay_het_han).toLocaleDateString()
+            : "Không có"}
         </p>
 
-        <div className="mt-5 flex justify-center">
-          <img
-            src="https://cdn.vectorstock.com/i/preview-1x/65/30/default-image-icon-missing-picture-page-vector-40546530.jpg"
-            alt="Image 1"
-            className="h-50 w-120 mr-10"
-          />
-          <img
-            src="https://cdn.vectorstock.com/i/preview-1x/65/30/default-image-icon-missing-picture-page-vector-40546530.jpg"
-            alt="Image 2"
-            className="h-50 w-120"
-          />
+        <div className="mt-2 grid grid-cols-2 gap-x-2 bg-slate-200 p-4">
+          <img src={imgs.hinh_1} alt="Image 1" className="" />
+          <img src={imgs.hinh_2} alt="Image 2" className="" />
         </div>
       </Modal>
     </div>

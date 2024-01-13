@@ -214,12 +214,6 @@ function AdsInfos() {
     ad,
   ) => {
     try {
-      console.log(report, place, ad);
-      const oldReport = z
-        .array(AdsGeoJson.ReportGeoJsonPropertySchema)
-        .safeParse(JSON.parse(localStorage.getItem(REPORT_KEY) || "[]"));
-      if (oldReport.success == false) return console.log(oldReport.error);
-
       const formData = new FormData();
       Object.entries(report).forEach(([k, v]) => {
         if (!v) return;

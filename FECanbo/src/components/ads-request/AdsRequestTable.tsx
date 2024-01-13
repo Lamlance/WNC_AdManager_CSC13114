@@ -4,8 +4,9 @@ import { Table, Input, Button, Space } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { AdsReqApi } from "@admanager/shared";
+import { ColumnsType } from "antd/es/table";
 
-const columns = [
+const columns: ColumnsType<AdsReqApi.ManyAdsRequestResponse> = [
   {
     title: "Nội dung pano",
     dataIndex: ["yeu_cau", "noi_dung_qc"],
@@ -19,13 +20,23 @@ const columns = [
     key: "ten_cty",
   },
   {
+    title: "Trạng thái",
+    align: "center",
+    dataIndex: ["yeu_cau", "trang_thai"],
+    key: "trang_thai",
+  },
+  {
     title: "Thời gian đặt",
     align: "center",
     key: "effectedDate",
     render: (v: AdsReqApi.ManyAdsRequestResponse) =>
-      `${(v.yeu_cau.ngay_hieu_luc as unknown as string).split("T")[0]} - ${
-        (v.yeu_cau.ngay_het_han as unknown as string).split("T")[0]
-      }`,
+      v.yeu_cau.ngay_hieu_luc && v.yeu_cau.ngay_het_han
+        ? `${new Date(
+            v.yeu_cau.ngay_hieu_luc,
+          ).toLocaleDateString()} - ${new Date(
+            v.yeu_cau.ngay_het_han,
+          ).toLocaleDateString()}`
+        : "",
   },
 ];
 
@@ -123,23 +134,8 @@ const AdsRequestTable: React.FC<AdsRequestTableProps> = ({
 
   return (
     <Table
-      columns={[
-        {
-          ...columns[0],
-          ...getColumnSearchProps("noi_dung_qc"),
-        },
-        {
-          ...columns[1],
-          ...getColumnSearchProps("ten_cty"),
-        },
-        {
-          ...columns[2],
-          sorter: true,
-          sortOrder:
-            sortedInfo.columnKey === "effectedDate" && sortedInfo.order,
-        },
-      ]}
-      dataSource={data}
+      columns={columns}
+      dataSource={data || []}
       onRow={(record) => ({
         onClick: () => onRowClick(record),
       })}

@@ -28,7 +28,7 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
     };
 
     submitAdMethod(data).then((v) => console.log(v));
-    window.location.reload();
+    //window.location.reload();
   };
   const handleReject = () => {
     const data: AdsReqApi.AdRequestUpdateStatus2 = {
@@ -37,7 +37,7 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
     };
 
     submitAdMethod(data).then((v) => console.log(v));
-    window.location.reload();
+    //window.location.reload();
   };
 
   return (

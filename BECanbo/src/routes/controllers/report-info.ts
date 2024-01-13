@@ -76,7 +76,6 @@ router.post(
       res.status(200).json(data.data);
       const socket = req.app.get(SocketIoApi.SocketNameSpace[0]);
       if (!socket) return console.log("Not found socket");
-      console.log(data.data);
       (socket as Namespace).emit(SocketIoApi.SocketEvents[1], {
         ...data.data,
       });

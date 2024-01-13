@@ -17,6 +17,7 @@ import {
 } from "../../slices/modalSlice";
 import EditSetpoint, { EditPlaceFormValue } from "../vhtt/EditSetpoint";
 import { useAppSelector } from "../../hooks";
+import AdsRequestForm from "../ads-request/AdsRequestForm";
 
 const AdsInfo = () => {
   const [getAllAds, { data, error, isLoading }] = useLazyGetAllAdsInfo();
@@ -29,6 +30,7 @@ const AdsInfo = () => {
   const [selectedAd, setSelectedAd] = useState<
     (AdsGeoJson.AdsProperty & AdsGeoJson.PlaceProperty) | null
   >(null);
+  const [isFormVisible, setIsFormVisible] = useState(false);
 
   useEffect(() => {
     if (!authState.isLoggedIn) return;
@@ -59,7 +61,6 @@ const AdsInfo = () => {
 
   async function onAdChangeSubmit(data: AdChangeFormValue) {
     if (!selectedAd) return;
-
     submitAdChangeReq({
       id_quang_cao: selectedAd.id_quang_cao,
       ly_do_chinh_sua: "Ly do gi đó",
@@ -82,6 +83,12 @@ const AdsInfo = () => {
 
   return (
     <>
+      <AdsRequestForm
+        Place={selectedRow || undefined}
+        onCancel={() => setIsFormVisible(false)}
+        isVisible={isFormVisible}
+      />
+
       <EditSetpoint showReason={true} onFormSubmit={onPlaceChangeSubmit} />
       {selectedAd && (
         <EditAdForm
@@ -97,6 +104,14 @@ const AdsInfo = () => {
       {isLoading && <div>Loading data </div>}
       <Row gutter={20} style={{ minHeight: "100vh" }}>
         <Col span={!!selectedRow ? 17 : 24}>
+          <Button
+            disabled={!selectedRow}
+            type="primary"
+            className=" mb-4"
+            onClick={() => setIsFormVisible(true)}
+          >
+            Yêu cầu thêm QC
+          </Button>
           <AdsInfoTable
             data={(data || []).map((v) => ({
               ...v,

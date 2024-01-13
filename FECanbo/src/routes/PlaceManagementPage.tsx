@@ -24,6 +24,8 @@ function PlaceManagemnetPlace() {
   const [updatePlace] = useUpdatePlaceInfoMutation();
   const [createPlace] = useCreatePlaceInfoMutation();
 
+  const [refresh, setRefres] = useState(0);
+
   function handleCloseModal(setOpen: boolean) {
     setModalOpen(setOpen);
     setAdsModalOpen(false);
@@ -41,11 +43,17 @@ function PlaceManagemnetPlace() {
   function onFormSubmit(value: PlaceFormValue) {
     //console.log(value);
     if (value.id_dia_diem) {
-      updatePlace({ ...value, id_dia_diem: value.id_dia_diem }).then((v) =>
-        console.log(v),
-      );
+      updatePlace({ ...value, id_dia_diem: value.id_dia_diem })
+        .then((v) => console.log(v))
+        .then((v) => {
+          console.log(v);
+          setRefres(refresh + 1);
+        });
     } else {
-      createPlace(value).then((v) => console.log(v));
+      createPlace(value).then((v) => {
+        console.log(v);
+        setRefres(refresh + 1);
+      });
     }
     handleCloseModal(false);
   }
@@ -74,7 +82,10 @@ function PlaceManagemnetPlace() {
       if (h.originFileObj) formData.append("hinh_anh", h.originFileObj);
     });
 
-    createAds(formData);
+    createAds(formData).then((v) => {
+      console.log(v);
+      setRefres(refresh + 1);
+    });
   }
 
   return (
@@ -105,7 +116,7 @@ function PlaceManagemnetPlace() {
         </Button>
       </div>
 
-      <PlaceInfoTable onRowSelect={hadnleTableRowSelect} />
+      <PlaceInfoTable refresh={refresh} onRowSelect={hadnleTableRowSelect} />
     </div>
   );
 }

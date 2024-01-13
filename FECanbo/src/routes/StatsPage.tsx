@@ -1,26 +1,47 @@
 import { StatsApi } from "@admanager/shared";
-import { Button } from "antd";
+import { Button, Select } from "antd";
 import ApexCharts from "apexcharts";
 import React, { useRef } from "react";
 import { useEffect, useState } from "react";
-import { useLazyGetReportStatsEachWardQuery } from "../slices/api/apiSlice";
+import {
+  useGetAllWards,
+  useLazyGetReportStatsEachWardQuery,
+} from "../slices/api/apiSlice";
+
+type Quan = { id_quan: number; ten_quan: string };
 
 export function StatsPage() {
   const barChartEle = useRef<HTMLDivElement | null>(null);
+  const { data: wardData } = useGetAllWards({});
   const [apexBarChart, setApexBarChart] = useState<ApexCharts>();
-
+  const [quanList, setQuanList] = useState<Quan[]>([]);
+  const [selectedQuan, setSelectedQuan] = useState<number | null>(null);
   const [getStatsEachWard, { data: statsEachWard }] =
     useLazyGetReportStatsEachWardQuery();
 
   function initApexBarChart(stats: StatsApi.StatsResponse) {
     if (!barChartEle.current) return console.log("Missing element");
+    if (!wardData) return console.log("Missing ward data");
+    if (!selectedQuan) return console.log("Chọn quận");
     if (apexBarChart) return updateBarChartData(stats);
+    const stats_arr = Object.entries(stats).filter(
+      (s) => s[1].phuong.id_quan === selectedQuan,
+    );
+    console.log(stats_arr, selectedQuan, Object.entries(stats));
+    const missing_ward = wardData.filter(
+      (w) =>
+        w.quan.id_quan === selectedQuan &&
+        stats_arr.findIndex(
+          (s) => s[1].phuong.id_phuong === w.phuong.id_phuong,
+        ) < 0,
+    );
+
     const options = {
-      series: Object.values(stats).reduce(
+      series: stats_arr.reduce(
         (acum, v) => {
-          acum[0].data.push(v.chua_xu_ly);
-          acum[1].data.push(v.dang_xu_ly);
-          acum[2].data.push(v.da_xy_ly);
+          acum[0].data.push(v[1].chua_xu_ly);
+          acum[1].data.push(v[1].dang_xu_ly);
+          acum[2].data.push(v[1].da_xy_ly);
           return acum;
         },
         [
@@ -33,7 +54,7 @@ export function StatsPage() {
         type: "bar",
         height: 430,
         width: Math.max(
-          Object.values(stats).length * 100,
+          (stats_arr.length + missing_ward.length) * 100,
           barChartEle.current.offsetWidth,
         ),
       },
@@ -58,31 +79,71 @@ export function StatsPage() {
         intersect: false,
       },
       xaxis: {
-        categories: [...Object.values(stats).map((v) => v.phuong.ten_phuong)],
+        categories: [
+          ...stats_arr.map((v) => v[1].phuong.ten_phuong),
+          ...missing_ward.map((w) => w.phuong.ten_phuong),
+        ],
       },
     };
-    setApexBarChart(new ApexCharts(barChartEle.current, options));
+    const chart = new ApexCharts(barChartEle.current, options);
+    setApexBarChart(chart);
+    if (barChartEle.current.childElementCount <= 0) chart.render();
   }
 
   function updateBarChartData(stats: StatsApi.StatsResponse) {
     if (!apexBarChart) return console.warn("Cant update uninit bar chart");
-    const series = {
-      series: Object.values(stats).reduce(
+    if (!selectedQuan) return console.log("Chọn quận");
+    if (!wardData) return console.log("Missing ward data");
+    if (!barChartEle.current) return console.log("Missing element");
+
+    const stats_arr = Object.entries(stats).filter(
+      (s) => s[1].phuong.id_quan === selectedQuan,
+    );
+    const missing_ward = wardData.filter(
+      (w) =>
+        w.quan.id_quan === selectedQuan &&
+        stats_arr.findIndex(
+          (s) => s[1].phuong.id_phuong === w.phuong.id_phuong,
+        ) < 0,
+    );
+
+    const options = {
+      series: stats_arr.reduce(
         (acum, v) => {
-          acum[0].data.push(v.chua_xu_ly);
-          acum[1].data.push(v.dang_xu_ly);
-          acum[2].data.push(v.da_xy_ly);
+          acum[0].data.push(v[1].chua_xu_ly);
+          acum[1].data.push(v[1].dang_xu_ly);
+          acum[2].data.push(v[1].da_xy_ly);
           return acum;
         },
         [
           { name: "Chưa xử lý", data: [] as number[] },
           { name: "Đang xử lý", data: [] as number[] },
           { name: "Đã xử lý", data: [] as number[] },
-        ],
+        ] as const,
       ),
+      xaxis: {
+        categories: [
+          ...stats_arr.map((v) => v[1].phuong.ten_phuong),
+          ...missing_ward.map((w) => w.phuong.ten_phuong),
+        ],
+      },
     };
-    apexBarChart.updateSeries(series.series);
+    // apexBarChart.updateSeries(series.series);
+    apexBarChart.updateOptions(options);
+    if (barChartEle.current.childElementCount <= 0) apexBarChart.render();
   }
+
+  useEffect(() => {
+    if (!wardData) return;
+
+    setQuanList(
+      wardData.reduce((a, v) => {
+        if (a.findIndex((cur) => cur.id_quan === v.quan.id_quan) < 0)
+          a.push(v.quan);
+        return a;
+      }, [] as Quan[]),
+    );
+  }, [wardData]);
 
   useEffect(() => {
     getStatsEachWard();
@@ -95,19 +156,25 @@ export function StatsPage() {
   }, []);
 
   useEffect(() => {
-    if (!statsEachWard) return;
+    if (!statsEachWard || !selectedQuan) return;
     initApexBarChart(statsEachWard);
-  }, [statsEachWard]);
+  }, [statsEachWard, selectedQuan]);
 
   return (
     <>
-      <Button
-        onClick={() => {
-          apexBarChart?.render();
-        }}
-      >
-        Render chart
-      </Button>
+      <div>
+        <span>Quận: </span>
+        <Select
+          className=" min-w-24"
+          onChange={(v) => {
+            setSelectedQuan(v || null);
+          }}
+          options={quanList.map((q) => ({
+            value: q.id_quan,
+            label: q.ten_quan,
+          }))}
+        />
+      </div>
       <div ref={barChartEle} className=" overflow-auto"></div>
     </>
   );

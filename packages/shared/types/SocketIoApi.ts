@@ -1,5 +1,5 @@
 import z from "zod";
-import { ReportGeoJsonProperty } from "./AdsGeoJson.js";
+import { AdsProperty, ReportGeoJsonProperty } from "./AdsGeoJson.js";
 import { Report } from "./ReportApi.js";
 import { PlaceChangeRequestResponse } from "./PlaceChangeApi.js";
 type ArrayElement<ArrayType extends readonly unknown[]> =
@@ -9,6 +9,7 @@ export const SocketNameSpace = ["report"] as const;
 export const SocketEvents = [
   "Report:Update",
   "Report:Create",
+  "AdReq:Update",
   "AdChange:Update",
   "PlaceChange:Update",
 ] as const;
@@ -28,6 +29,9 @@ export interface CustomEventMap {
   "AdsManager:UpdateReportEvent": CustomEvent<Report | undefined>;
   "AdsManager:UpdatePlaceChangeEvent": CustomEvent<
     PlaceChangeRequestResponse | undefined
+  >;
+  "AdsManager:UpdateAdReqEvent": CustomEvent<
+    Omit<AdsProperty, "loai_vitri" | "hinh_thuc" | "bang_qc"> | undefined
   >;
 }
 

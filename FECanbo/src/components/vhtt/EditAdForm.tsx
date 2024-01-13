@@ -114,10 +114,10 @@ const EditAdForm: FC<EditAdFormProps1 | EditAdFormProps2> = (props) => {
     file,
   }) => {
     if (file && file.type && file.type.startsWith("image/")) {
-      const preview = await getBase64(file.originFileObj as RcFile);
-      setFileList([{ ...file, status: "done", url: preview }]);
-    } else {
-      setFileList(newFileList);
+      if (!file.url && fileList.findIndex((v) => v.name === file.name) < 0) {
+        const preview = await getBase64(file.originFileObj as RcFile);
+        setFileList([...fileList, { ...file, status: "done", url: preview }]);
+      }
     }
   };
 

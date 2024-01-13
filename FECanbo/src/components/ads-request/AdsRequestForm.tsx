@@ -7,23 +7,32 @@ import {
   DatePicker,
   Upload,
   Row,
+  InputNumber,
   Col,
   message,
+  Select,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
-import { useSubmitAdRequestMutation } from "../../slices/api/apiSlice";
+import {
+  useGetAllAdsMethodQuery,
+  useGetAllBoardTypeQuery,
+  useGetAllLandTypeQuery,
+  useSubmitAdRequestMutation,
+} from "../../slices/api/apiSlice";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
-import { AdsReqApi } from "@admanager/shared";
+import { AdsGeoJson, AdsReqApi } from "@admanager/shared";
 import AdsMapModal from "../AdsMap/AdsMapModal";
 import dayjs from "dayjs";
+import { useForm } from "antd/es/form/Form";
 
 const { TextArea } = Input;
 
 interface AdsRequestFormProps {
   onCancel: () => void;
   isVisible: boolean;
+  Place?: AdsGeoJson.AdsGeoJsonProperty;
 }
 
 type AdReqFormValue = Omit<
@@ -64,12 +73,16 @@ const checkValidFile = (
 const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
   isVisible,
   onCancel,
+  Place,
 }) => {
   const [submitAdRequest, { isLoading }] = useSubmitAdRequestMutation();
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [previewTitle, setPreviewTitle] = useState<string | null>(null);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
+  const { data: AdsType } = useGetAllAdsMethodQuery();
+  const { data: BoardType } = useGetAllBoardTypeQuery();
+  const { data: LandType } = useGetAllLandTypeQuery();
+  const [formHook] = useForm();
   const [isMapOpen, setMapOpen] = useState<boolean>(false);
   const [selectedLoc, setSelectedLoc] = useState<{
     lng: number;
@@ -125,11 +138,14 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
   };
 
   const onFinish = async (values: AdReqFormValue) => {
+    console.log("A");
     const submitData: AdsReqApi.AdRequestCreate = {
       ...values,
       dia_chi_qc: selectedLoc?.formatted_address || "",
       ngay_hieu_luc: values.ngay_bat_dau.toDate(),
       ngay_het_han: values.ngay_ket_thuc.toDate(),
+      id_diem_dat: Place?.place.id_dia_diem,
+      id_dia_diem: Place?.place.id_dia_diem,
     };
     const data = AdsReqApi.AdRequestCreateSchema.safeParse(submitData);
     if (data.success == false) return console.log(data.error);
@@ -155,13 +171,30 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
     </div>
   );
 
+  function onPlaceSelect(args: {
+    lng: number;
+    lat: number;
+    formatted_address: string;
+  }) {
+    setSelectedLoc(args);
+    formHook.setFieldValue("dia_chi_qc", args.formatted_address);
+    console.log("Place selected", args);
+  }
   return (
     <>
+      <Modal
+        open={!!previewImage}
+        title={previewTitle}
+        footer={null}
+        onCancel={() => setupPreviewImg()}
+      >
+        <img alt="example" style={{ width: "100%" }} src={previewImage || ""} />
+      </Modal>
       <AdsMapModal
         open={isMapOpen}
         onClose={() => setMapOpen(false)}
         initPos={{ lng: 106.69385883068848, lat: 10.78873001700875 }}
-        onPlaceSelect={(data) => setSelectedLoc(data)}
+        onPlaceSelect={onPlaceSelect}
       />
       <Modal
         title="TẠO YÊU CẦU CẤP PHÉP"
@@ -170,165 +203,190 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
         footer={null}
         onCancel={handleCancel}
       >
-        <Form onFinish={onFinish} layout="horizontal" labelAlign="left">
-          <Row gutter={15}>
-            <Col span={12}>
-              <Form.Item
-                label="Hình ảnh pano"
-                labelCol={commonLabelCol}
-                wrapperCol={commonWrapperCol}
+        <Form
+          form={formHook}
+          onFinish={onFinish}
+          layout="horizontal"
+          labelAlign="left"
+          labelCol={{ span: 6 }}
+        >
+          <div className=" grid grid-cols-2 gap-x-4">
+            <Form.Item
+              label="Hình ảnh pano"
+              labelCol={commonLabelCol}
+              wrapperCol={commonWrapperCol}
+            >
+              <Upload
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={handlePreview}
+                beforeUpload={() => false}
+                onChange={handleChangeUpload}
               >
-                <Upload
-                  listType="picture-card"
-                  fileList={fileList}
-                  onPreview={handlePreview}
-                  beforeUpload={() => false}
-                  onChange={handleChangeUpload}
-                >
-                  {fileList.length >= 2 ? null : uploadButton}
-                </Upload>
-              </Form.Item>
-              <Modal
-                open={!!previewImage}
-                title={previewTitle}
-                footer={null}
-                onCancel={() => setupPreviewImg()}
-              >
-                <img
-                  alt="example"
-                  style={{ width: "100%" }}
-                  src={previewImage || ""}
-                />
-              </Modal>
-            </Col>
+                {fileList.length >= 2 ? null : uploadButton}
+              </Upload>
+            </Form.Item>
 
-            <Col span={12}>
+            <div className=" flex flex-row">
+              <Form.Item<AdReqFormValue>
+                name="dia_chi_qc"
+                label="Chọn điểm đặt"
+                className=" flex-grow"
+                rules={[{ required: true, message: "Xin hãy chọn điểm đặt" }]}
+              >
+                <Input
+                  value={
+                    selectedLoc ? selectedLoc.formatted_address : undefined
+                  }
+                />
+              </Form.Item>
+              <Button onClick={() => setMapOpen(true)}>🗺️</Button>
+            </div>
+
+            <Form.Item<AdReqFormValue>
+              label=" Loại quảng cáo"
+              name={"id_loai_bang_qc"}
+              rules={[{ required: true, message: "Xin chọn loại bảng QC" }]}
+            >
+              <Select>
+                {(BoardType?.data || []).map((v) => (
+                  <Select.Option
+                    key={v.bang_qc.id_loai_bang_qc}
+                    value={v.bang_qc.id_loai_bang_qc}
+                  >
+                    {v.bang_qc.loai_bang_qc}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item<AdReqFormValue>
+              name={"id_hinh_thuc"}
+              label=" Hình thức"
+              rules={[{ required: true, message: "Xin chọn hình thức QC" }]}
+            >
+              <Select>
+                {(AdsType || []).map((v) => (
+                  <Select.Option key={v.id_htqc} value={v.id_htqc}>
+                    {v.hinh_thuc_qc}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item<AdReqFormValue>
+              name={"id_loai_vitri"}
+              label="Loại vị trí"
+              rules={[{ required: true, message: "Xin chọn loại vị trí" }]}
+            >
+              <Select>
+                {(LandType?.data || []).map((v) => (
+                  <Select.Option
+                    key={v.vi_tri.id_loai_vt}
+                    value={v.vi_tri.id_loai_vt}
+                  >
+                    {v.vi_tri.loai_vitri}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item<AdReqFormValue> label="Kích thước">
               <div className=" flex flex-row">
                 <Form.Item<AdReqFormValue>
-                  name="dia_chi_qc"
-                  label="Chọn điểm đặt"
-                  // rules={[{ required: true, message: "Xin hãy chọn điểm đặt" }]}
-                  labelCol={commonLabelCol}
-                  wrapperCol={commonWrapperCol}
-                  className=" flex-1"
+                  name={"chieu_dai_m"}
+                  rules={[{ required: true, message: "Nhập chiều dài bảng" }]}
                 >
-                  <Input
-                    placeholder={
-                      selectedLoc?.formatted_address || "Chọn điểm đặt"
-                    }
-                    value={selectedLoc?.formatted_address || ""}
-                  />
+                  <InputNumber className="h-8 w-12 " min={1} max={10} />
                 </Form.Item>
-                <Button onClick={() => setMapOpen(true)}>🗺️</Button>
+                <span className="mx-2">x</span>
+                <Form.Item<AdReqFormValue>
+                  name={"chieu_rong_m"}
+                  rules={[{ required: true, message: "Nhập chiều rộng bảng" }]}
+                >
+                  <InputNumber className="h-8 w-12" min={1} max={10} />
+                </Form.Item>
+                <span className="mx-2">(mxm)</span>
               </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={23}>
-              <Form.Item<AdReqFormValue>
-                name="noi_dung_qc"
-                label="Nội dung pano"
-                labelCol={{ span: 4 }}
-                wrapperCol={{ span: 19 }}
-              >
-                <TextArea rows={5} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={15}>
-            <Col span={12}>
-              <Form.Item<AdReqFormValue>
-                name="ten_cty"
-                label="Tên công ty"
-                rules={[
-                  { required: true, message: "Xin hãy nhập tên công ty!" },
-                ]}
-                labelCol={commonLabelCol}
-                wrapperCol={commonWrapperCol}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item<AdReqFormValue>
-                name="email_cty"
-                label="Email"
-                rules={[
-                  { required: true, message: "Xin hãy nhập email công ty" },
-                  {
-                    type: "email",
-                    message: "Xin hãy nhập email hợp lệ",
-                  },
-                ]}
-                labelCol={commonLabelCol}
-                wrapperCol={commonWrapperCol}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-          </Row>
+            </Form.Item>
+            <Form.Item<AdReqFormValue>
+              name={"so_luong"}
+              label="Số lượng"
+              rules={[{ required: true, message: "Nhập số lượng" }]}
+            >
+              <InputNumber className="" min={1} />
+            </Form.Item>
+          </div>
 
-          <Row gutter={15}>
-            <Col span={12}>
-              <Form.Item<AdReqFormValue>
-                name="dia_chi_cty"
-                label="Địa chỉ"
-                rules={[{ required: true, message: "Xin hãy nhập địa chỉ!" }]}
-                labelCol={commonLabelCol}
-                wrapperCol={commonWrapperCol}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item<AdReqFormValue>
-                name="dien_thoai_cty"
-                label="Số điện thoại"
-                rules={[
-                  { required: true, message: "Xin hãy nhập số điện thoại!" },
-                ]}
-                labelCol={commonLabelCol}
-                wrapperCol={commonWrapperCol}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-          </Row>
+          <div className="grid grid-cols-2 gap-x-4">
+            <Form.Item<AdReqFormValue>
+              name="noi_dung_qc"
+              label="Nội dung pano"
+              className=" col-span-2"
+              labelCol={{ span: 3 }}
+            >
+              <Input.TextArea rows={5} />
+            </Form.Item>
 
-          <Row gutter={15}>
-            <Col span={12}>
-              <Form.Item<AdReqFormValue>
-                name="ngay_bat_dau"
-                label="Ngày bắt đầu hợp đồng"
-                rules={[
-                  {
-                    required: true,
-                    message: "Xin hãy chọn ngày bắt đầu hợp đồng!",
-                  },
-                ]}
-                labelCol={commonLabelCol}
-                wrapperCol={commonWrapperCol}
-              >
-                <DatePicker />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item<AdReqFormValue>
-                name="ngay_ket_thuc"
-                label="Ngày kết thúc hợp đồng"
-                rules={[
-                  {
-                    required: true,
-                    message: "Xin hãy chọn ngày kết thúc hợp đồng!",
-                  },
-                ]}
-                labelCol={commonLabelCol}
-                wrapperCol={commonWrapperCol}
-              >
-                <DatePicker />
-              </Form.Item>
-            </Col>
-          </Row>
+            <Form.Item<AdReqFormValue>
+              name="ten_cty"
+              label="Tên công ty"
+              rules={[{ required: true, message: "Xin hãy nhập tên công ty!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item<AdReqFormValue>
+              name="email_cty"
+              label="Email"
+              rules={[
+                { required: true, message: "Xin hãy nhập email công ty" },
+                {
+                  type: "email",
+                  message: "Xin hãy nhập email hợp lệ",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item<AdReqFormValue>
+              name="dia_chi_cty"
+              label="Địa chỉ"
+              rules={[{ required: true, message: "Xin hãy nhập địa chỉ!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item<AdReqFormValue>
+              name="dien_thoai_cty"
+              label="Số điện thoại"
+              rules={[
+                { required: true, message: "Xin hãy nhập số điện thoại!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item<AdReqFormValue>
+              name="ngay_bat_dau"
+              label="Ngày bắt đầu hợp đồng"
+              rules={[
+                {
+                  required: true,
+                  message: "Xin hãy chọn ngày bắt đầu hợp đồng!",
+                },
+              ]}
+            >
+              <DatePicker />
+            </Form.Item>
+            <Form.Item<AdReqFormValue>
+              name="ngay_ket_thuc"
+              label="Ngày kết thúc hợp đồng"
+              rules={[
+                {
+                  required: true,
+                  message: "Xin hãy chọn ngày kết thúc hợp đồng!",
+                },
+              ]}
+            >
+              <DatePicker />
+            </Form.Item>
+          </div>
 
           <Form.Item className="flex items-center justify-center">
             <Button type="primary" htmlType="submit">

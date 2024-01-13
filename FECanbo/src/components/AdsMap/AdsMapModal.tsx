@@ -28,24 +28,23 @@ function AdsMapModal({
     console.log(lngLat);
   };
   const onPlace: MapSearchProps["onPlaceSelect"] = function (data) {
-    onPlaceSelect?.(data);
+    console.log("Bubling", onPlaceSelect);
+    if (onPlaceSelect) onPlaceSelect(data);
     onClose();
   };
 
-  const [mapSearchArgs, setMapSearchArgs] = useState<any>();
+  //const [mapSearchArgs, setMapSearchArgs] = useState<any>();
 
-  function onMapLoaded() {
-    setMapSearchArgs({
-      func: MapSearchBar,
-      args: [{ onPlaceSelect: onPlace, initPos: initPos }],
-    });
-  }
+  function onMapLoaded() {}
 
   return (
     <Drawer width={"100vw"} open={open} onClose={onClose}>
       <div className=" relative h-full w-full">
         <AdsMap<MapSearchProps>
-          SearchBar={mapSearchArgs}
+          SearchBar={{
+            func: MapSearchBar,
+            args: [{ onPlaceSelect: onPlace, initPos: initPos }],
+          }}
           onMapLoaded={onMapLoaded}
           InitialPosition={DefaultMapProps.InitialPosition}
           onMapDblClick={onMapClick}

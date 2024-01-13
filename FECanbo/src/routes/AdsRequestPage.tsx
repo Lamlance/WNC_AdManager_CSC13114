@@ -30,23 +30,17 @@ function AdsRequestPage() {
   };
   useEffect(() => {
     if (!authState.isLoggedIn) return;
-    getAllAdsReq({
-      phuong_id: authState.user.managedWards,
-    });
+    if (authState.user.accLevel === "department") {
+      getAllAdsReq({});
+    } else {
+      getAllAdsReq({
+        phuong_id: authState.user.managedWards,
+      });
+    }
   }, [authState]);
 
   return (
     <>
-      <Button
-        onClick={showForm}
-        style={{
-          marginBottom: 16,
-          backgroundColor: "#1890ff",
-          color: "#fff",
-        }}
-      >
-        Thêm yêu cầu
-      </Button>
       <AdsRequest
         data={data ? data : []}
         onRowClick={showDetails}

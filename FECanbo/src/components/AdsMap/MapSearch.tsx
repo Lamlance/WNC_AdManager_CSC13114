@@ -48,7 +48,11 @@ function MapSearchBar(props: MapSearchProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [openSelect, setOpenSelect] = useState<boolean | undefined>(undefined);
 
-  const [mapClick, setMapClick] = useState<{ lng: number; lat: number }>();
+  const [mapClick, setMapClick] = useState<{
+    lng: number;
+    lat: number;
+    formatted_address?: string;
+  }>();
 
   const [getPlaceDetail, predictions] = useLazyGetPlaceDetail();
   const [getPredicts] = useLazyGetPredicts();
@@ -184,12 +188,21 @@ function MapSearchBar(props: MapSearchProps) {
           lat: placeData.lat,
         })
         .addTo(props.MapRef);
-      currPlace.current = placeData;
+      currPlace.current = {
+        lng: placeData.lng,
+        lat: placeData.lat,
+        formatted_address: placeData.formatted_address,
+      };
+      //console.log(currPlace.current);
     }
   }
 
   function selectPlace() {
-    if (currPlace.current) props.onPlaceSelect(currPlace.current);
+    console.log("Select", currPlace.current);
+    if (currPlace.current) {
+      console.log("Calling", props.onPlaceSelect);
+      props.onPlaceSelect({ ...currPlace.current });
+    }
   }
 
   function fly_to_maker() {
@@ -216,7 +229,7 @@ function MapSearchBar(props: MapSearchProps) {
         className=" flex-1"
       />
       <Button onClick={fly_to_maker}>📌</Button>
-      <Button type="primary" onClick={selectPlace}>
+      <Button type="primary" onClick={() => selectPlace()}>
         Chọn địa điểm
       </Button>
     </div>

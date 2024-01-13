@@ -61,7 +61,7 @@ router.post(
 
       const data = await CallAndCatchAsync(CreateAds, res.locals.body);
       if (data.success == false) return res.status(500).json(data);
-      return res.status(200).json(data);
+      return res.status(200).json(data.data);
     }
   )
 );

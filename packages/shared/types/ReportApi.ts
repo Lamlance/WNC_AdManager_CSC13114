@@ -11,9 +11,9 @@ const ReportFormValuesSchema = z.object({
 const ReportPlaceSchema = z.object({
   ten_dia_diem: z.string(),
   dia_chi: z.string(),
-  id_phuong: z.number().nullish(),
-  id_dia_diem: z.number().nullish(),
-  place_id: z.string().nullish(),
+  id_phuong: z.coerce.number().nullish(),
+  id_dia_diem: z.coerce.number().nullish(),
+  place_id: z.coerce.string().nullish(),
   lng: z.coerce.number(),
   lat: z.coerce.number(),
 });
