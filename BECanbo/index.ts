@@ -17,6 +17,7 @@ import { sendCodeToEmail } from "./src/utils/SendCodeToEmail";
 import { SocketIoApi } from "@admanager/shared";
 import z from "zod";
 import { LogMiddleware } from "./src/utils/LogMIddleware";
+import ImageRouter from "./src/routes/controllers/images";
 
 const app = express();
 const PORT = process.env.PORT || 4030;
@@ -53,9 +54,10 @@ app.use("/testmail", async function (req, res) {
 
 app.use("/auth", authRouter);
 app.use("/api/public", publicRouter);
+app.use("/api/image", ImageRouter);
 app.use(
   "/api",
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate("jwt", { session: false }),
   privateRouter
 );
 app.use("/geojson", GeoJsonRouter);

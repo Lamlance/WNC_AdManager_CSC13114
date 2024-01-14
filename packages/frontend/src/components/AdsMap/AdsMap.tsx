@@ -128,7 +128,7 @@ function AdsMap<S extends MapSearchProps = MapSearchProps>({
 
   useEffect(
     function () {
-      forceRefresh();
+      mapRef?.current.redraw();
       console.log(AdsClusterInfo, ReportClusterInfo);
     },
     [AdsClusterInfo, ReportClusterInfo, SearchBar]

@@ -1,11 +1,12 @@
 import { ImageApi } from "@admanager/shared";
 import { Client as MinioClient, UploadedObjectInfo } from "minio";
+import "dotenv/config";
 export const minio_client = new MinioClient({
   endPoint: "localhost",
   port: 8900,
   useSSL: false,
-  accessKey: "RsectoLaDYzfvhrHVUTT",
-  secretKey: "r391TfyYwtmvKnp6dttW9SN6BkiNtEgEsNZ0NCBy",
+  accessKey: process.env.MINIO_ACCESS_KEY || "123",
+  secretKey: process.env.MINIO_SECRET_KEY || "123",
 });
 
 type BucketName = "adsrequest" | "adsreports";

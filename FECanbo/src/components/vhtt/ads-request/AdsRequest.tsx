@@ -37,7 +37,7 @@ const AdsRequest: React.FC<MainContentSectionProps> = ({
         <AdsRequestTable data={data || []} onRowClick={onRowClick} />
       </Col>
       <Col span={!!selectedAd ? 7 : 0}>
-        <AdsRequestDetail ad={selectedAd} />
+        <AdsRequestDetail ad={selectedAd} onStatus={() => getAllAdsReq({})} />
       </Col>
     </Row>
   );

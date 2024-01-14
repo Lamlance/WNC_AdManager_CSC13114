@@ -25,7 +25,7 @@ privateRouter.use("/cap-phep-quang-cao", adsRequestRouter);
 privateRouter.use("/bao-cao", reportInfoRouter);
 privateRouter.use("/dia-diem", PlaceRouter);
 privateRouter.use("/hinh-thuc-quang-cao", adMethodRouter);
-privateRouter.use("/image", ImageRouter);
+//privateRouter.use("/image", ImageRouter);
 privateRouter.use("/user", UserRouter);
 privateRouter.use("/loai-bc", ReportTypeRouter);
 privateRouter.use("/bang-qc", AdsBoardRouter);

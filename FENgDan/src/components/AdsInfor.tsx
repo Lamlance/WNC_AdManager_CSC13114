@@ -158,7 +158,9 @@ function AdItem({ Ad, Place, onReportSubmit }: AdsItemProps) {
             <span className="font-semibold">Số lượng: </span>{" "}
             {`${Ad.so_luong} trụ/bảng`}
           </p>
-          <p className="mt-1 text-base font-bold italic">Đã quy hoạch</p>
+          <p className="mt-1 text-base font-bold italic">
+            {Ad.quy_hoach ? "Đã quy hoạch" : "Chưa quy hoạch"}
+          </p>
 
           <AdsDetail
             Place={Place}

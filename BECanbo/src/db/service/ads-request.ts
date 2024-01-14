@@ -153,13 +153,14 @@ export async function updateAdStatusRequest(args: UpdateAdStatusRequestArgs) {
     .returning({ yeu_cau: YeuCauCapPhep });
   if (args.trang_thai === "Approve" && res[0] && res[0].yeu_cau.id_diem_dat) {
     await pg_client.insert(AdsSchema.QuangCao).values({
-      ...res[0],
+      ...res[0].yeu_cau,
       chieu_dai_m: res[0].yeu_cau.chieu_dai_m,
       chieu_rong_m: res[0].yeu_cau.chieu_rong_m,
       id_dia_diem: res[0].yeu_cau.id_diem_dat,
-      id_hinh_thuc: 1,
-      id_loai_bang_qc: 1,
-      id_loai_vitri: 1,
+      id_hinh_thuc: res[0].yeu_cau.id_hinh_thuc,
+      id_loai_bang_qc: res[0].yeu_cau.id_loai_bang_qc,
+      id_loai_vitri: res[0].yeu_cau.id_loai_vitri,
+      so_luong: res[0].yeu_cau.so_luong || 1,
     });
   }
   return res;

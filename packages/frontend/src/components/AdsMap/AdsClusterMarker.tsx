@@ -76,7 +76,7 @@ function AdsClusterMarker<S extends ZodType>({
       },
     });
 
-    mapRef.redraw();
+    //mapRef.redraw();
   }
 
   function create_markers() {

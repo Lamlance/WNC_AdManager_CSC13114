@@ -5,9 +5,13 @@ import { useSubmitUpdateAdRequestStatusMutation } from "../../../slices/api/apiS
 
 interface AdDetailsSectionProps {
   ad: AdsReqApi.ManyAdsRequestResponse | null;
+  onStatus?: (isApprove: boolean) => void;
 }
 
-const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
+const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({
+  ad,
+  onStatus,
+}) => {
   const containerStyle = {
     padding: "10px",
     borderRadius: "8px",
@@ -27,7 +31,10 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
       trang_thai: "Approve",
     };
 
-    submitAdMethod(data).then((v) => console.log(v));
+    submitAdMethod(data).then((v) => {
+      onStatus?.(true);
+      console.log(v);
+    });
     //window.location.reload();
   };
   const handleReject = () => {
@@ -36,7 +43,10 @@ const AdDetailsSection: React.FC<AdDetailsSectionProps> = ({ ad }) => {
       trang_thai: "Reject",
     };
 
-    submitAdMethod(data).then((v) => console.log(v));
+    submitAdMethod(data).then((v) => {
+      onStatus?.(false);
+      console.log(v);
+    });
     //window.location.reload();
   };
 

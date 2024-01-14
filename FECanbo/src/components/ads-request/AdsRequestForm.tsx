@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Form,
@@ -141,7 +141,7 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
     console.log("A");
     const submitData: AdsReqApi.AdRequestCreate = {
       ...values,
-      dia_chi_qc: selectedLoc?.formatted_address || "",
+      dia_chi_qc: Place?.place.dia_chi || selectedLoc?.formatted_address || "",
       ngay_hieu_luc: values.ngay_bat_dau.toDate(),
       ngay_het_han: values.ngay_ket_thuc.toDate(),
       id_diem_dat: Place?.place.id_dia_diem,
@@ -180,6 +180,11 @@ const AdsRequestForm: React.FC<AdsRequestFormProps> = ({
     formHook.setFieldValue("dia_chi_qc", args.formatted_address);
     console.log("Place selected", args);
   }
+
+  useEffect(() => {
+    if (Place) formHook.setFieldValue("dia_chi_qc", Place.place.dia_chi);
+  }, [Place]);
+
   return (
     <>
       <Modal

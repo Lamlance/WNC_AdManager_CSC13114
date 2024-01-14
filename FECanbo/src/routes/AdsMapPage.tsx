@@ -13,6 +13,7 @@ import MapSearchBar from "../components/AdsMap/MapSearch";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../hooks";
 import { Button } from "antd";
+import AdsInfoModal from "../components/AdsMap/AdsInfoModal";
 
 const DefaultMapProps = {
   InitialPosition: {
@@ -63,17 +64,20 @@ function createReportPopup(
       <p class=" line-clamp-4">${data.bao_cao.noi_dung}</p>
     </div>`);
 }
+
 function AdsMapPage() {
   const [getAdsGeoJson, { data: adsGeoJson }] = useLazyGetAdsGeoJsonQuery();
   const [getReportGeoJson, { data: reportGeoJson }] =
     useLazyGetReportGeoJsonQuery();
 
   const authSate = useAppSelector((state) => state.auth);
-
   const [adsClusterCreateData, setAdsClusterCreate] =
     useState<ClusterCreateData | null>(null);
   const [reportClusterCreateData, setReportClusterCreate] =
     useState<ClusterCreateData | null>(null);
+  const [selectedAds, setSelectedAds] =
+    useState<AdsGeoJson.AdsGeoJsonProperty | null>(null);
+  console.log(adsGeoJson, reportGeoJson, selectedAds);
 
   const [mapDblClick, setOnMapDblClick] = useState({ lng: 0, lat: 0 });
 
@@ -128,6 +132,11 @@ function AdsMapPage() {
       : getAdsGeoJson({});
   }
 
+  function on_ads_marker_click(data: AdsGeoJson.AdsGeoJsonProperty) {
+    console.log(data);
+    setSelectedAds(data);
+  }
+
   useEffect(() => {
     document.addEventListener(
       "AdsManager:UpdatePlaceChangeEvent",
@@ -142,8 +151,33 @@ function AdsMapPage() {
     };
   }, []);
 
+  const AdsCluster = !adsClusterCreateData ? undefined : (
+    <AdsClusterMarker<typeof AdsGeoJson.AdsGeoJsonPropertySchema>
+      geoJsonPropertySchema={AdsGeoJson.AdsGeoJsonPropertySchema}
+      markerData={adsClusterCreateData}
+      onMarkerClick={(data) => on_ads_marker_click(data)}
+      popUpBuilder={createAdPopup}
+    />
+  );
+
+  const ReportCluster = !reportClusterCreateData ? undefined : (
+    <AdsClusterMarker<typeof GeoPropArr>
+      geoJsonPropertySchema={GeoPropArr}
+      markerData={reportClusterCreateData}
+      onMarkerClick={(d) => console.log(d)}
+      popUpBuilder={createReportPopup}
+    />
+  );
+
   return (
     <>
+      {selectedAds && (
+        <AdsInfoModal
+          data={selectedAds}
+          isShow={!!selectedAds}
+          onClose={() => setSelectedAds(null)}
+        />
+      )}
       <Button onClick={() => handleUpdatePlaceChangeEvent()}> ♻️ </Button>
       <div className=" relative h-full w-full">
         <AdsMap
@@ -159,24 +193,8 @@ function AdsMapPage() {
             ],
           }}
           InitialPosition={DefaultMapProps.InitialPosition}
-          AdsClusterInfo={
-            !adsClusterCreateData ? undefined : (
-              <AdsClusterMarker<typeof AdsGeoJson.AdsGeoJsonPropertySchema>
-                geoJsonPropertySchema={AdsGeoJson.AdsGeoJsonPropertySchema}
-                markerData={adsClusterCreateData}
-                popUpBuilder={createAdPopup}
-              />
-            )
-          }
-          ReportClusterInfo={
-            !reportClusterCreateData ? undefined : (
-              <AdsClusterMarker<typeof GeoPropArr>
-                geoJsonPropertySchema={GeoPropArr}
-                markerData={reportClusterCreateData}
-                popUpBuilder={createReportPopup}
-              />
-            )
-          }
+          AdsClusterInfo={AdsCluster}
+          ReportClusterInfo={ReportCluster}
           onMapDblClick={(coord) => setOnMapDblClick(coord)}
         />
       </div>
