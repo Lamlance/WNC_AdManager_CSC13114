@@ -52,9 +52,7 @@ router.post(
         return res.status(400).json({ msg: "Invalid username or password" });
       }
 
-      const authToken = jwt.sign(user, JWT_SECRET_KEY, {
-        expiresIn: "10d",
-      });
+      const authToken = jwt.sign(user, JWT_SECRET_KEY);
 
       const loginResponse: AuthApi.LoginResponse = {
         authToken,

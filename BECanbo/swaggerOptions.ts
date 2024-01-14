@@ -10,6 +10,7 @@ import UserApiDoc from "./src/doc/UserApi.json" with {type:"json"};
 import AdsMethodApiDoc from "./src/doc/AdsMethodApi.json" with {type:"json"};
 import AdsChangeApiDoc from "./src/doc/AdsChangeApi.json" with {type:"json"};
 import AdsReqApiDoc from "./src/doc/AdsReqApi.json" with {type:"json"};
+import AuthApiDoc from "./src/doc/AuthApiDoc.json" with {type:"json"};
 
 const AdsGeoJsonSchemas = Object.entries(AdsGeoJson).reduce(
   (acc, value) => {
@@ -120,6 +121,13 @@ const AdsMethodSchema = Object.entries(AdsMethodApi).reduce(
 const jsonSchema = {
   openapi: "3.1.0",
   components: {
+    securitySchemes:{
+      bearerAuth:{
+        type:"http",
+        scheme: "bearer",
+        bearerFormat: "JWT"
+      }
+    },
     schemas: {
       ...AdsGeoJsonSchemas,
       ...ReportJsonSchemas,
@@ -157,6 +165,7 @@ const swaggerOptions: Options = {
       ...AdsReqApiDoc,
       ...UserApiDoc,
       ...AdsMethodApiDoc,
+      ...AuthApiDoc
     },
   },
   apis: ["./src/routes/**/*.ts"],

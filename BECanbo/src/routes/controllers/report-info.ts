@@ -44,44 +44,42 @@ router.get(
   )
 );
 
-router.post(
-  "/",
-  MulterMw.array("hinh_anh"),
-  ValidatorMwBuilder(
-    undefined,
-    ReportApi.ReportCreateSchema,
-    async function (req, res) {
-      const files = (req.files as Express.Multer.File[]) || [];
-      const uploadImgs = await Promise.allSettled(
-        Minio_UploadMulterImgs({
-          bkName: "adsreports",
-          files,
-        })
-      );
+export const CreateReportMw = ValidatorMwBuilder(
+  undefined,
+  ReportApi.ReportCreateSchema,
+  async function (req, res) {
+    const files = (req.files as Express.Multer.File[]) || [];
+    const uploadImgs = await Promise.allSettled(
+      Minio_UploadMulterImgs({
+        bkName: "adsreports",
+        files,
+      })
+    );
 
-      if (uploadImgs[0]?.status === "fulfilled" && files[0]) {
-        res.locals.body.hinh_1 = files[0].filename;
-      }
-
-      if (uploadImgs[1]?.status === "fulfilled" && files[1]) {
-        res.locals.body.hinh_2 = files[1].filename;
-      }
-
-      const data = await CallAndCatchAsync(createReportInfo, res.locals.body);
-      if (data.success == false)
-        return res.status(500).json({ error: data.error });
-      if (!data.data)
-        return res.status(500).json({ error: "Cant create BaoCao" });
-
-      res.status(200).json(data.data);
-      const socket = req.app.get(SocketIoApi.SocketNameSpace[0]);
-      if (!socket) return console.log("Not found socket");
-      (socket as Namespace).emit(SocketIoApi.SocketEvents[1], {
-        ...data.data,
-      });
+    if (uploadImgs[0]?.status === "fulfilled" && files[0]) {
+      res.locals.body.hinh_1 = files[0].filename;
     }
-  )
+
+    if (uploadImgs[1]?.status === "fulfilled" && files[1]) {
+      res.locals.body.hinh_2 = files[1].filename;
+    }
+
+    const data = await CallAndCatchAsync(createReportInfo, res.locals.body);
+    if (data.success == false)
+      return res.status(500).json({ error: data.error });
+    if (!data.data)
+      return res.status(500).json({ error: "Cant create BaoCao" });
+
+    res.status(200).json(data.data);
+    const socket = req.app.get(SocketIoApi.SocketNameSpace[0]);
+    if (!socket) return console.log("Not found socket");
+    (socket as Namespace).emit(SocketIoApi.SocketEvents[1], {
+      ...data.data,
+    });
+  }
 );
+
+router.post("/", MulterMw.array("hinh_anh"), CreateReportMw);
 
 router.put(
   "/",

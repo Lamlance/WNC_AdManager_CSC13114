@@ -121,6 +121,7 @@ export {
   FullUserDataSchema,
   UserDataSchema,
   UserUpdateRequestSchema,
+  LoginResponseSchema,
 };
 
 export type {

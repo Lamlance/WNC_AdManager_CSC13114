@@ -1,18 +1,21 @@
 import { Router } from "express";
 import adsInfoRouter from "./controllers/ads-info.js";
 import adsRequestRouter from "./controllers/ads-request.js";
-import reportInfoRouter from "./controllers/report-info.js";
+import reportInfoRouter, { CreateReportMw } from "./controllers/report-info.js";
 import PlaceRouter from "./controllers/place-info.js";
 import adMethodRouter from "./controllers/ads-method.js";
 import ImageRouter from "./controllers/images.js";
 import WardRouter from "./controllers/ward.js";
 import UserRouter from "./controllers/user.js";
 import DistrictRouter from "./controllers/district.js";
-import ReportTypeRouter from "./controllers/report-type.js";
+import ReportTypeRouter, {
+  GetAllReportTypeMw,
+} from "./controllers/report-type.js";
 import AdsBoardRouter from "./controllers/ad-board.js";
 import LandTypeRouter from "./controllers/land-type.js";
 import { CheckJwtMiddleware } from "../utils/AuthMiddleware.js";
 import StatsRouter from "./controllers/stats.js";
+import MulterMw from "../utils/Multer.js";
 
 const privateRouter = Router();
 
@@ -34,5 +37,6 @@ privateRouter.use("/thong-ke", StatsRouter);
 
 publicRouter.use("/phuong", WardRouter);
 publicRouter.use("/quan", DistrictRouter);
-
+publicRouter.post("/report", MulterMw.array("hinh_anh"), CreateReportMw);
+publicRouter.get("/loai-bc", GetAllReportTypeMw);
 export { privateRouter, publicRouter };

@@ -11,7 +11,7 @@ const AdsServerApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:4030/" }),
   endpoints: (builder) => ({
     uploadReport: builder.mutation<AdsGeoJson.ReportGeoJsonProperty, FormData>({
-      query: (body) => ({ url: "/api/bao-cao", method: "POST", body }),
+      query: (body) => ({ url: "/api/public/report", method: "POST", body }),
     }),
     getAdsGeoJson: builder.query<AdsGeoJson.AdsGeoJson, void>({
       query: () => ({ url: "/geojson" }),
@@ -23,7 +23,7 @@ const AdsServerApi = createApi({
       { data: ReportTypeApi.GetAllReportTypeResponse[] },
       void
     >({
-      query: () => ({ url: "/api/loai-bc" }),
+      query: () => ({ url: "/api/public/loai-bc" }),
     }),
     getImageFromName: builder.query<{ url?: string }, ImageApi.GetImageQuery>({
       query: (params) => ({ url: "/api/image", params }),
