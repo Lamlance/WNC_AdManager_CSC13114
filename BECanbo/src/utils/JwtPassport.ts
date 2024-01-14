@@ -7,7 +7,7 @@ import { configDotenv } from "dotenv";
 
 configDotenv();
 
-const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "";
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "abc123";
 
 const opts: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
