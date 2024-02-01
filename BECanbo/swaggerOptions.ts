@@ -95,6 +95,7 @@ const UserSchema = Object.entries(AuthApi).reduce(
   {} as { [key: string]: object }
 );
 // hohooho
+//comment ihi
 const AdsReqSchema = Object.entries(AdsReqApi).reduce(
   (acc, value) => {
     acc[value[0]] = {
